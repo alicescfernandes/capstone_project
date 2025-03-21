@@ -1,174 +1,153 @@
 # Template Guide
 
-This guide covers template best practices, styling, and common patterns used in the project.
+This guide explains how to work with templates in the Django project.
 
-## Basic Template Structure
+## Template Structure
 
-Every template should follow this basic structure:
+The project uses a single app called `app` with the following template structure:
 
+```
+app/
+└── templates/
+    └── app/              # App-specific templates
+        ├── base.html     # Base template
+        ├── home.html     # Home page
+        └── about.html    # About page
+```
+
+## Base Template
+
+The `base.html` template serves as the foundation for all other templates. It contains:
+
+1. Common HTML structure
+2. Shared CSS and JavaScript
+3. Navigation menu
+4. Content blocks
+
+Example `base.html`:
 ```html
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Page Title</title>
-    <!-- CSS styles -->
+    <title>{% block title %}Django Project{% endblock %}</title>
+    <style>
+        /* Common styles */
+    </style>
 </head>
 <body>
-    <div class="header">
-        <h1>Page Title</h1>
-        <!-- Navigation -->
-    </div>
-    <div class="content">
-        <!-- Main content -->
-    </div>
+    <nav>
+        <a href="{% url 'home' %}">Home</a>
+        <a href="{% url 'about' %}">About</a>
+    </nav>
+    
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+    
+    <footer>
+        <p>&copy; 2024 Django Project</p>
+    </footer>
 </body>
 </html>
 ```
 
-## Navigation
+## Extending Templates
 
-Add this navigation section to your template's header:
+All page templates should extend the base template:
 
 ```html
-<div class="nav">
-    <a href="{% url 'home' %}">Home</a>
-    <a href="{% url 'about' %}">About</a>
-    <!-- Add more navigation links -->
-</div>
-```
+{% extends "app/base.html" %}
 
-## Styling
+{% block title %}Page Title{% endblock %}
 
-### Base Styles
-Add these styles to your template for consistent design:
-
-```css
-body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    line-height: 1.6;
-    margin: 0;
-    padding: 0;
-    background-color: #f5f5f5;
-}
-
-.container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 2rem;
-}
-
-.header {
-    background-color: #2c3e50;
-    color: white;
-    padding: 2rem 0;
-    text-align: center;
-}
-
-.content {
-    background-color: white;
-    padding: 2rem;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    margin-top: 2rem;
-}
-
-.nav {
-    margin-bottom: 1rem;
-}
-
-.nav a {
-    color: white;
-    text-decoration: none;
-    margin: 0 1rem;
-    padding: 0.5rem 1rem;
-    border-radius: 4px;
-    transition: background-color 0.3s;
-}
-
-.nav a:hover {
-    background-color: #34495e;
-}
-
-.button {
-    display: inline-block;
-    padding: 0.8rem 1.5rem;
-    background-color: #3498db;
-    color: white;
-    text-decoration: none;
-    border-radius: 4px;
-    margin-top: 1rem;
-    transition: background-color 0.3s;
-}
-
-.button:hover {
-    background-color: #2980b9;
-}
-```
-
-## Template Best Practices
-
-1. **Consistent Structure**
-   - Use the same HTML structure across all pages
-   - Keep navigation in the same place
-   - Maintain consistent spacing and indentation
-
-2. **Semantic HTML**
-   - Use appropriate HTML5 elements
-   - Include proper meta tags
-   - Use descriptive class names
-
-3. **Responsive Design**
-   - Test on different screen sizes
-   - Use relative units (rem, em)
-   - Include viewport meta tag
-
-4. **Performance**
-   - Minimize CSS
-   - Optimize images
-   - Use efficient selectors
-
-## Common Components
-
-### Header Section
-```html
-<div class="header">
-    <div class="container">
-        <h1>Page Title</h1>
-        <p>Page description or subtitle</p>
-        <div class="nav">
-            <!-- Navigation links -->
-        </div>
-    </div>
-</div>
-```
-
-### Content Section
-```html
+{% block content %}
 <div class="container">
-    <div class="content">
-        <h2>Section Title</h2>
-        <p>Content goes here...</p>
-        <a href="#" class="button">Call to Action</a>
-    </div>
+    <h1>Page Content</h1>
+    <p>Your content here...</p>
 </div>
+{% endblock %}
 ```
 
-### Form Styling
-```css
-.form-group {
-    margin-bottom: 1rem;
-}
+## Template Tags
 
-.form-group label {
-    display: block;
-    margin-bottom: 0.5rem;
-}
+Common Django template tags:
 
-.form-group input,
-.form-group textarea {
-    width: 100%;
-    padding: 0.5rem;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-}
-``` 
+1. **URL Tags**:
+```html
+<a href="{% url 'home' %}">Home</a>
+```
+
+2. **Static Files**:
+```html
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+```
+
+3. **Conditionals**:
+```html
+{% if user.is_authenticated %}
+    <p>Welcome, {{ user.username }}!</p>
+{% else %}
+    <p>Please log in.</p>
+{% endif %}
+```
+
+4. **Loops**:
+```html
+{% for item in items %}
+    <div class="item">{{ item.name }}</div>
+{% endfor %}
+```
+
+## Best Practices
+
+1. **Template Organization**:
+   - Keep all templates in `app/templates/app/`
+   - Use descriptive filenames
+   - Group related templates in subdirectories
+
+2. **Template Inheritance**:
+   - Always extend the base template
+   - Use blocks for content sections
+   - Keep common elements in the base template
+
+3. **Template Logic**:
+   - Keep logic in views, not templates
+   - Use template tags for simple operations
+   - Avoid complex calculations in templates
+
+4. **Template Variables**:
+   - Use descriptive variable names
+   - Pass only necessary data from views
+   - Use context processors for global data
+
+## Common Issues
+
+1. **Template Not Found**:
+   - Check template path in view
+   - Verify template directory structure
+   - Ensure app is in INSTALLED_APPS
+
+2. **Template Inheritance Issues**:
+   - Verify base template exists
+   - Check block names match
+   - Ensure proper template loading
+
+3. **Static Files Not Loading**:
+   - Check STATIC_URL setting
+   - Verify static files directory
+   - Run collectstatic if needed
+
+## Testing Templates
+
+1. Start the development server:
+```bash
+python manage.py runserver
+```
+
+2. Visit your pages and check:
+   - Template inheritance
+   - Static files loading
+   - Template tags working
+   - Responsive design 

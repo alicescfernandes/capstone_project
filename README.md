@@ -43,15 +43,16 @@ If you encounter any issues, please check the [Troubleshooting Guide](docs/troub
 
 ```
 final_project/
-├── final_project/     # Main project directory
-│   ├── settings.py   # Project settings
-│   ├── urls.py       # Main URL configuration
-│   └── wsgi.py       # WSGI configuration
-├── pages/            # Pages app
-│   ├── templates/    # HTML templates
-│   ├── views.py      # View functions
-│   └── urls.py       # App URL configuration
-└── manage.py         # Django management script
+├── app/                # Main app directory
+│   ├── templates/     # HTML templates
+│   ├── views.py       # View functions
+│   └── urls.py        # App URL configuration
+├── manage.py          # Django management script
+├── settings.py        # Project settings
+├── urls.py           # Main URL configuration
+├── asgi.py           # ASGI configuration
+├── wsgi.py           # WSGI configuration
+└── __init__.py       # Python package marker
 ```
 
 ## Common Commands
