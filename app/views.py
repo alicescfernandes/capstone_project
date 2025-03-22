@@ -1,19 +1,19 @@
-from django.shortcuts import render, get_object_or_404
-from .models import Post
+from django.shortcuts import render
+from .models import Chart
 
 # Create your views here.
 
 def home(request):
-    posts = Post.objects.filter(status='published').order_by('-published_date')[:3]
-    return render(request, 'app/home.html', {'posts': posts})
+    charts = Chart.objects.filter(is_active=True)
+    return render(request, 'app/home.html', {'charts': charts})
 
 def about(request):
     return render(request, 'app/about.html')
 
-def post_list(request):
-    posts = Post.objects.filter(status='published').order_by('-published_date')
-    return render(request, 'app/post_list.html', {'posts': posts})
-
-def post_detail(request, pk):
-    post = get_object_or_404(Post, pk=pk, status='published')
-    return render(request, 'app/post_detail.html', {'post': post})
+def charts(request):
+    charts = Chart.objects.filter(is_active=True)
+    print("Number of charts:", charts.count())  # Debug print
+    for chart in charts:
+        print(f"Chart {chart.id}: {chart.title}")  # Debug print
+        print(f"Config: {chart.get_chart_config()}")  # Debug print
+    return render(request, 'app/charts.html', {'charts': charts})

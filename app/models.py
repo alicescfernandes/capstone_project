@@ -1,39 +1,75 @@
 from django.db import models
-from django.utils import timezone
+import json
 
-class Post(models.Model):
-    STATUS_CHOICES = [
-        ('draft', 'Draft'),
-        ('published', 'Published'),
-        ('archived', 'Archived'),
+class Chart(models.Model):
+    CHART_TYPES = [
+        ('line', 'Line Chart'),
+        ('bar', 'Bar Chart'),
+        ('pie', 'Pie Chart'),
+        ('area', 'Area Chart'),
+        ('scatter', 'Scatter Plot'),
     ]
 
     title = models.CharField(max_length=200)
-    slug = models.SlugField(max_length=200, unique=True, null=True, blank=True)
-    content = models.TextField()
-    created_date = models.DateTimeField(default=timezone.now)
-    published_date = models.DateTimeField(blank=True, null=True)
-    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='draft')
-
+    description = models.TextField(blank=True)
+    chart_type = models.CharField(max_length=20, choices=CHART_TYPES)
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    # JSON field to store chart configuration
+    config = models.JSONField(default=dict, help_text="Chart configuration including data, labels, and styling")
+    
+    # Fields for data source configuration
+    x_axis_label = models.CharField(max_length=100, blank=True)
+    y_axis_label = models.CharField(max_length=100, blank=True)
+    
     class Meta:
-        ordering = ['-created_date']
+        ordering = ['-created_at']
         indexes = [
-            models.Index(fields=['created_date']),
-            models.Index(fields=['status']),
+            models.Index(fields=['chart_type']),
+            models.Index(fields=['is_active']),
         ]
 
     def __str__(self):
-        return self.title
+        return f"{self.title} ({self.get_chart_type_display()})"
 
-    def publish(self):
-        self.status = 'published'
-        self.published_date = timezone.now()
+    def get_chart_config(self):
+        """Returns the chart configuration as a dictionary"""
+        return self.config if isinstance(self.config, dict) else json.loads(self.config)
+
+    def set_chart_config(self, config_dict):
+        """Sets the chart configuration from a dictionary"""
+        self.config = config_dict
         self.save()
 
-    def archive(self):
-        self.status = 'archived'
-        self.save()
-
-    @property
-    def is_published(self):
-        return self.status == 'published'
+    def get_default_config(self):
+        """Returns a default configuration based on chart type"""
+        base_config = {
+            'height': 350,
+            'toolbar': {'show': False},
+        }
+        
+        if self.chart_type in ['line', 'bar', 'area']:
+            return {
+                **base_config,
+                'type': self.chart_type,
+                'series': [{'name': 'Data', 'data': []}],
+                'xaxis': {'categories': []},
+            }
+        elif self.chart_type == 'pie':
+            return {
+                **base_config,
+                'type': 'pie',
+                'series': [],
+                'labels': [],
+            }
+        elif self.chart_type == 'scatter':
+            return {
+                **base_config,
+                'type': 'scatter',
+                'series': [{'name': 'Data', 'data': []}],
+                'xaxis': {'type': 'numeric'},
+                'yaxis': {'type': 'numeric'},
+            }
+        return base_config
