@@ -7,9 +7,9 @@ The project is an website that can display graphs. The graphs are based on data 
 - Each group can upload XLSX files.
 - Each group can also delete XLSX files.
 - The upload will be split by quarters, where the group has to create a quarter on the platform and then upload files to that quarter. The quarters are identified by string "Quarter" and a number, like "Quarter 2" (for the identifier, it will be identified as "Q{N}" being N the quarter number given by the quarter ).
+- User authentication will be done using Django's default authentication scheme (https://docs.djangoproject.com/en/5.1/topics/auth/default/)
 
 ### Charts
-- Each XLSX file comes identified with the section and quarter that it belongs to (CostumerNeeds-Q2.xlsx)
 - The graph can display data from that section, but for multiple graphs.
 - Graphs can also have advanced filtering to allow for a more granular search
 - Graphs are fixed, and cannot be changed
@@ -17,8 +17,10 @@ The project is an website that can display graphs. The graphs are based on data 
 
 ## XLSX
 The XLXS files are strucutured in the following way.  
+- Each XLSX file comes identified with the section and quarter that it belongs to (CostumerNeeds-Q2.xlsx)
 - The first line is a header, the name of the graph
-- The first column will always be the "X axis" to identify the data. The column can can change, but it's always the first
+- The first column will always be the subject of the data, eg: if a dataset is about patterns, the first column will be said patterns. This column is the "X axis" of the graphs
+
 
 ## Pages
 "Create Account / Login" - Allows the groups to create account
