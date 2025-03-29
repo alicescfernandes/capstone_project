@@ -6,7 +6,7 @@ The project is an website that can display graphs. The graphs are based on data 
 - Each group has a single account on the platform
 - Each group can upload XLSX files.
 - Each group can also delete XLSX files.
-- The upload will be split by quarters, where the group has to create a quarter on the platform and then upload files to that quarter. The quarters are identified by string "Quarter" and a number, like "Quarter 2" (on the backend, it will be identified as "Q2").
+- The upload will be split by quarters, where the group has to create a quarter on the platform and then upload files to that quarter. The quarters are identified by string "Quarter" and a number, like "Quarter 2" (for the identifier, it will be identified as "Q{N}" being N the quarter number given by the quarter ).
 
 ### Charts
 - Each XLSX file comes identified with the section and quarter that it belongs to (CostumerNeeds-Q2.xlsx)
