@@ -14,6 +14,12 @@ The project is an website that can display graphs. The graphs are based on data 
 - Graphs can also have advanced filtering to allow for a more granular search
 - Graphs are fixed, and cannot be changed
 
+
+## XLSX
+The XLXS files are strucutured in the following way.  
+- The first line is a header, the name of the graph
+- The first column will always be the "X axis" to identify the data. The column can can change, but it's always the first
+
 ## Pages
 "Create Account / Login" - Allows the groups to create account
 "Recover Password" - Allows the groups to recover the account password
