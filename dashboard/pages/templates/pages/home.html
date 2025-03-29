@@ -7,17 +7,19 @@
 {% endblock %}
 
 {% block content %}
-<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-    {% for chart in charts %}
-    <div class="bg-white rounded-lg shadow-lg p-6">
-        <!--<h2 class="text-xl font-semibold mb-4 text-gray-800">{{ chart.title }}</h2>-->
-        <div class="w-full overflow-x-auto">
-            {{ chart.html|safe }}
-        </div>
-        <div class="mt-2 text-sm text-gray-500">
-            Source: {{ chart.filename }}
-        </div>
+
+<div class="grid grid-cols-1 lg:grid-cols-1 gap-6">
+{% for chart in charts %}
+    <div class="p-6 bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700">
+            <h2 class="text-xl font-semibold mb-4 text-gray-800">{{ chart.title }}</h2>
+            <div class="w-full overflow-x-auto">
+                {{ chart.html|safe }}
+            </div>
+            <div class="mt-2 text-sm text-gray-500">
+                Source: {{ chart.filename }}
+            </div>
     </div>
+
     {% empty %}
     <div class="col-span-2 text-center py-12">
         <p class="text-gray-500">No charts available. Please ensure XLSX files are present in the xlsx directory.</p>

@@ -17,7 +17,6 @@ def home(request):
     
     # Process each XLSX file in the directory
     files = os.listdir(xlsx_dir)
-    print(f"Found files: {files}")
     
     for filename in files:
         if filename.endswith('.xlsx'):
@@ -38,36 +37,55 @@ def home(request):
                 
                 # Create a line chart
                 fig = px.line(df,
-                            title=title,
                             labels={"index": "Product Category", "value": "Score", "variable": "Customer Need"})
                 
                 # Update layout for better appearance
                 fig.update_layout(
                     height=600,  # Taller graph
                     width=1200,  # Wider graph
-                    margin=dict(l=20, r=20, t=40, b=80),  # More bottom margin for labels
-                    showlegend=True,
+                    showlegend=False,
                     legend=dict(
                         yanchor="top",
                         y=0.99,
                         xanchor="right",
                         x=0.99,
-                        bgcolor="rgba(255, 255, 255, 0.8)",  # Semi-transparent white background
                         traceorder="normal"
                     ),
                     xaxis=dict(
                         tickangle=45,  # Rotate labels 45 degrees
                     ),
-                    plot_bgcolor='white',  # White background
-                    paper_bgcolor='white'
+                    template="plotly_dark",
+                    paper_bgcolor='rgba(0, 0, 0, 0)',
+                    modebar={
+                        'orientation': 'h',
+                        'bgcolor': 'rgba(0,0,0,0)',
+                        'color': 'white',
+                        'activecolor': 'lightgray'
+                    }
                 )
                 
                 # Add gridlines
                 fig.update_xaxes(showgrid=True, gridwidth=1, gridcolor='LightGray')
                 fig.update_yaxes(showgrid=True, gridwidth=1, gridcolor='LightGray')
                 
-                # Convert the plot to HTML
-                chart_html = fig.to_html(full_html=False)
+                # Convert the plot to HTML with proper modebar configuration
+                chart_html = fig.to_html(
+                    full_html=False,
+                    config={
+                        'displayModeBar': True,
+                        'displaylogo': False,
+                        'modeBarButtonsToRemove': [
+                            'lasso2d',
+                            'select2d',
+                            'autoScale2d',
+                            'toggleSpikelines',
+                            'hoverClosestCartesian',
+                            'hoverCompareCartesian'
+                        ],
+                        'toImageButtonOptions': {'height': None, 'width': None}
+                    }
+                )
+       
                 charts.append({
                     'title': title,
                     'html': chart_html,
