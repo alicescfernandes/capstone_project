@@ -36,8 +36,8 @@ def home(request):
                 df = df.set_index(df.columns[0]).transpose()
                 
                 # Create a line chart
-                fig = px.line(df,
-                            labels={"index": "Product Category", "value": "Score", "variable": "Customer Need"})
+                fig = px.line(df,title=title,
+                                labels={"index": "Product Category", "value": "Score", "variable": "Customer Need"})
                 
                 # Update layout for better appearance
                 fig.update_layout(
