@@ -1,6 +1,11 @@
 ## Description
 The project is an website that can display graphs. The graphs are based on data submitted by the users, that are XLSX files extracted from another platform. The purpose of the the app is to allow users to see and manipulate that data. The platform should also provide advanced filtering capabilities that are not possible on the platform that the data is exported from.
 
+### Problem Statement
+In ISCAL, the students use a business simulator (Marketplace Simulations - International Corporate Management) for a class on the last semester of the year. That simulator allows the student to apply the lessons learned during previous semesters. The purpose of the simulator is to allow students to group, and play against other groups of the same class. During that simulation, the students have to make bussiness decisions to improve, and whem making those decisions, the students need to crunch the data from platform to understand the market where the product is sold. 
+
+However, when making those decisions, the students need to skip between a lot of sections, manually write on a notebook or export to Excell to visualize it since most of the sections don't have graphs, and just show tables with information. This project attempts to cover that gab by allowing groups to upload the data exported from the platform, and allow for better UX and advanced filtering of the data.
+
 ### Users
 - Users are split in groups of users
 - Each group has a single account on the platform
