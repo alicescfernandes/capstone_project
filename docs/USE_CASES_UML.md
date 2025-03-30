@@ -8,7 +8,7 @@ Use https://github.com/mermaid-js/mermaid/pull/6141
 usecase-beta
     title Data Visualization Platform Use Cases
 
-    actor GroupUser
+    actor User
     service XLSXFiles
     service EmailSystem
 
@@ -22,12 +22,12 @@ usecase-beta
         (Manage Account)
     end
 
-    GroupUser -> (Manage Quarters)
-    GroupUser -> (Upload XLSX Files) -> XLSXFiles
-    GroupUser -> (Delete XLSX Files) -> XLSXFiles
-    GroupUser -> (View Data Visualizations)
-    GroupUser -> (Apply Advanced Filters)
-    GroupUser -> (Manage Account)
+    User -> (Manage Quarters)
+    User -> (Upload XLSX Files) -> XLSXFiles
+    User -> (Delete XLSX Files) -> XLSXFiles
+    User -> (View Data Visualizations)
+    User -> (Apply Advanced Filters)
+    User -> (Manage Account)
 ```
 
 ## Account Management Use Cases
@@ -36,7 +36,7 @@ usecase-beta
 usecase-beta
     title Account Management Use Cases
 
-    actor GroupUser
+    actor User
     service EmailSystem
 
     systemboundary
@@ -47,10 +47,10 @@ usecase-beta
         (Recover Password)
     end
 
-    GroupUser -> (Login)
-    GroupUser -> (Create Account)
-    GroupUser -> (Change Password)
-    GroupUser -> (Recover Password) -> EmailSystem
+    User -> (Login)
+    User -> (Create Account)
+    User -> (Change Password)
+    User -> (Recover Password) -> EmailSystem
 ```
 
 ## Data Management Use Cases
@@ -59,7 +59,7 @@ usecase-beta
 usecase-beta
     title Data Management Use Cases
 
-    actor GroupUser
+    actor User
     service XLSXFiles
 
     systemboundary
@@ -71,11 +71,11 @@ usecase-beta
         (Apply Filters)
     end
 
-    GroupUser -> (Create Quarter)
-    GroupUser -> (Upload XLSX) -> XLSXFiles
-    GroupUser -> (Delete XLSX) -> XLSXFiles
-    GroupUser -> (View Charts)
-    GroupUser -> (Apply Filters)
+    User -> (Create Quarter)
+    User -> (Upload XLSX) -> XLSXFiles
+    User -> (Delete XLSX) -> XLSXFiles
+    User -> (View Charts)
+    User -> (Apply Filters)
 ```
 
 ## System Context
@@ -84,7 +84,7 @@ usecase-beta
 usecase-beta
     title System Context
 
-    actor GroupUser
+    actor User
     service XLSXFiles
     service EmailSystem
 
@@ -94,6 +94,6 @@ usecase-beta
         (Send Email Notifications)
     end
 
-    GroupUser -> (Process XLSX Data) -> XLSXFiles
+    User -> (Process XLSX Data) -> XLSXFiles
     (Send Email Notifications) -> EmailSystem
 ``` 

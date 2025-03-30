@@ -3,8 +3,8 @@
 ## Functional Requirements (FR)
 
 ### FR01. User Authentication
-- The system must allow a group of users to create an account.
-- The system must allow a group to log in using email and password.
+- The system must allow a user to create an account.
+- The system must allow a user to log in using email and password.
 - The system must allow users to recover their password via email.
 - The system must allow users to change their password after logging in.
 
@@ -15,15 +15,15 @@
 
 ### FR03. Quarter Management
 - The system must allow users to create quarters identified by "Quarter N".
-- The system must list all quarters created by the group.
+- The system must list all quarters created by the User.
 
 ### FR04. Data Visualization
 - The system must display charts based on the uploaded `.xlsx` files.
 - The system must support advanced filtering on the charts.
 
-### FR05. Group Isolation
-- Each group must only have access to its own data and quarters.
-- Data must be compartmentalized per group to ensure privacy.
+### FR05. User Isolation
+- Each User must only have access to its own data and quarters.
+- Data must be compartmentalized per User to ensure privacy.
 
 ---
 
@@ -35,7 +35,7 @@
 
 ### NFR02. Security
 - Authentication must follow Django’s default authentication system.
-- The system must ensure that groups can only access their own data.
+- The system must ensure that users can only access their own data.
 - Passwords must be securely stored using hashing.
 
 ### NFR03. Performance

@@ -1,0 +1,8 @@
+Charts will be rendered on the frontend with the data being parsed by the backend.
+
+It will use the endpoint:
+
+/charts/<str:chart_id>/<str:quarter>/, eg /charts/segments-by-need/1/
+
+Each chart_id will then have its own parsing of a XLSX file, and this will make sure that the graphs are controlled and intentional.
+The endpoint will be in charge of crunching the data, and return a JSON strucuture that can allow the user to manipulate the graph as they see fit. 

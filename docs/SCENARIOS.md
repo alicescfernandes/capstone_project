@@ -1,10 +1,10 @@
 Feature: Data Visualization Platform
-  As a group user
+  As a user
   I want to visualize and analyze data from XLSX files
   So that I can better understand and filter the data
 
   Background:
-    Given I am logged in as a group user
+    Given I am logged in as a user
     And I have access to the platform
 
   Scenario: Creating a new quarter
