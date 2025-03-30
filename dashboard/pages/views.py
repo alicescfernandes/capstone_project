@@ -22,11 +22,12 @@ def home(request):
         if filename.endswith('.xlsx'):
             file_path = os.path.join(xlsx_dir, filename)
             try:
-                # Read the Excel file
-                df = pd.read_excel(file_path)
+              
+                # Read the first row to get the graph name
+                title = pd.read_excel(file_path, nrows=0).columns[0]
                 
-                # Get the title from the first row
-                title = df.columns[0]
+                # Read the Excel file, skipping the first row (graph name)
+                df = pd.read_excel(file_path, skiprows=1)
                 
                 # Convert all columns except the first one to numeric
                 for col in df.columns[1:]:
@@ -43,7 +44,7 @@ def home(request):
                 fig.update_layout(
                     height=600,  # Taller graph
                     width=1200,  # Wider graph
-                    showlegend=False,
+                    showlegend=True,
                     legend=dict(
                         yanchor="top",
                         y=0.99,
@@ -74,14 +75,6 @@ def home(request):
                     config={
                         'displayModeBar': True,
                         'displaylogo': False,
-                        'modeBarButtonsToRemove': [
-                            'lasso2d',
-                            'select2d',
-                            'autoScale2d',
-                            'toggleSpikelines',
-                            'hoverClosestCartesian',
-                            'hoverCompareCartesian'
-                        ],
                         'toImageButtonOptions': {'height': None, 'width': None}
                     }
                 )
