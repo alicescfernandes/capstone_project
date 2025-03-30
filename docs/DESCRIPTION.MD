@@ -50,6 +50,6 @@ To allow for a phased development, we will split the work into milestoens
 
 1. Create the app without any access control, where the app reads from XLSX files locally
 2. We can then work on creating the upload functionality, and display the graphs based on the data uploaded
-3. Using Django's Authentication System, we will then create access control for groups, and allow for uploads per group
+3. Using Django's Authentication System, we will then create access control for users, and allow for uploads per user
+4. Only allow logged in users, and use the files uploaded by each user 
  
-
