@@ -10,7 +10,8 @@ However, when making those decisions, the students need to skip between a lot of
 - Each user has a single account on the platform
 - We assume that users of the same group will duplicate files, but this structure keeps the project simple without adding custom capabilities to the user 
 - Each user can upload XLSX files, and those files will be processed and able to be removed
-- The upload will be split by quarters, where the user has to create a quarter on the platform and then upload files to that quarter. - The quarters are identified by string "Quarter" and a number, like "Quarter 2" (for the identifier, it will be identified as "Q{N}" being N the quarter number given by the quarter ).
+- The upload will be split by quarters, where the user has to create a quarter on the platform and then upload files to that quarter. 
+- The quarters are identified by string "Quarter" and a number, like "Quarter 2" (for the identifier, it will be identified as "Q{N}" being N the quarter number given by the quarter ).
 - User authentication will be done using Django's default authentication scheme (https://docs.djangoproject.com/en/5.1/topics/auth/default/)
 - [Nice to Have] Users can be deactivated automatically or manually after a semester
 - User Model:
@@ -24,7 +25,7 @@ However, when making those decisions, the students need to skip between a lot of
 - Each quarter will be unique to the user, Quarters from User A are different than Quarters from User B
 - Quarters work like "buckets" for XLSX files, where the user uploads files to that bucket.
 - The app will always show the latest quarter on the backend, and on the frontend the user will be able to move from quarter to quarter. 
-- When a quarter is created, a folder in the media/uploads/ directory will be created. The name of that folder will be a randomly generated UUID. This avoids guess attacks, eg `media/uploads/<quarterUUID>`
+- When a quarter is created, a folder in the media/uploads/ directory will be created. The name of that folder will be a randomly generated UUID. This ensures that the files belong only to a user and to a quarter.
 
 
 ### Charts
