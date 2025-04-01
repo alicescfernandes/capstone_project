@@ -10,7 +10,7 @@ However, when making those decisions, the students need to skip between a lot of
 - Each user has a single account on the platform
 - We assume that users of the same group will duplicate files, but this structure keeps the project simple without adding custom capabilities to the user 
 - Each user can upload XLSX files, and those files will be processed and able to be removed
-- The upload will be split by quarters, where the user has to create a quarter on the platform and then upload files to that quarter. The quarters are identified by string "Quarter" and a number, like "Quarter 2" (for the identifier, it will be identified as "Q{N}" being N the quarter number given by the quarter ).
+- The upload will be split by quarters, where the user has to create a quarter on the platform and then upload files to that quarter. - The quarters are identified by string "Quarter" and a number, like "Quarter 2" (for the identifier, it will be identified as "Q{N}" being N the quarter number given by the quarter ).
 - User authentication will be done using Django's default authentication scheme (https://docs.djangoproject.com/en/5.1/topics/auth/default/)
 - [Nice to Have] Users can be deactivated automatically or manually after a semester
 - User Model:
@@ -53,7 +53,7 @@ The XLXS files are strucutured in the following way.
 - Upon upload of this files, they will be converted into CSV and stored under a specific naming structure that will provide the metadata. This will ensure normalization of the uploaded files, and that are known under predictable names.
 - Only one file of the same section can be present, if a user uploads a new file with the same "origin" name, it will overwrite the processed file. 
 - The platform will only support specific files, the ones that were bucketed and deemed useful for the user analysis
-- The files shall be uploaded to specific directories, pertaining to the user that is uploading them. The Quarter UUID
+- The files shall be uploaded to specific directories, pertaining to the user that is uploading them. The Quarter UUID is described on the quarter section.
 ```
 /uploads/
   └── <quarterUUID>/
