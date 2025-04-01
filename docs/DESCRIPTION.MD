@@ -24,7 +24,7 @@ However, when making those decisions, the students need to skip between a lot of
 - Each quarter will be unique to the user, Quarters from User A are different than Quarters from User B
 - Quarters work like "buckets" for XLSX files, where the user uploads files to that bucket.
 - The app will always show the latest quarter on the backend, and on the frontend the user will be able to move from quarter to quarter. 
-- When a quarter is created, a folder in the media/uploads/ directory will be created. The name of that folder will be a randomly generated UUID. This avoids guess attacks, eg `media/uploads/<quarterUUID>
+- When a quarter is created, a folder in the media/uploads/ directory will be created. The name of that folder will be a randomly generated UUID. This avoids guess attacks, eg `media/uploads/<quarterUUID>`
 
 
 ### Charts
