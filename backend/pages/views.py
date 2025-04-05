@@ -17,8 +17,6 @@ from .serializers import QuarterSerializer
 current_dir = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
 xlsx_dir = os.path.join(current_dir, 'xlsx')
 
-
-
 class QuarterListAPIView(APIView):
     def get(self, request):
         # Preparar a lista de quarters
@@ -44,7 +42,6 @@ class QuarterListAPIView(APIView):
             "isFirst": quarter.number == first_quarter.number,
             "isLast": quarter.number == last_quarter.number,
         })
-
 
 def home(request):
     # Prepare default case

@@ -3,10 +3,3 @@
 @tailwind components;
 @tailwind utilities;
 @import 'flowbite';
-
-@import "flowbite/src/themes/default";
-@plugin "flowbite/plugin";
-
-p{
-    color:red
-}
