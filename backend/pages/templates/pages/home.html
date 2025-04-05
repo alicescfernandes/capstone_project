@@ -76,58 +76,26 @@
 
 <div id="charts-container" class="space-y-8" style="display: none;">
     <div class="flex justify-center my-8 gap-3">
-
-
-        {% if hasPrevious %}
-        <button type="button"
-            class="hover:text-blue-700 text-gray-500 focus:outline-none focus:ring-blue-300 font-medium rounded-full text-sm text-center inline-flex items-center dark:text-blue-500 dark:hover:text-white dark:focus:ring-blue-800 dark:hover:bg-blue-500">
-
-            <svg class="w-6 h-6 transition-colors duration-200 ease-in-out" viewBox="0 0 24 24" fill="none"
-                xmlns="http://www.w3.org/2000/svg">
-                <path d="M5 12h14M5 12l4-4m-4 4 4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                    stroke-linejoin="round" />
-            </svg>
-
-            <span class="sr-only">Icon description</span>
-        </button>
-        {% endif %}
-
-
-        <h2 class="text-2xl font-semibold text-gray-800 dark:text-white">
-            Quarter {{ quarter.number }}
-        </h2>
-
-        {% if hasNext %}
-        <button type="button"
-            class="hover:text-blue-700 text-gray-500 focus:outline-none focus:ring-blue-300 font-medium rounded-full text-sm text-center inline-flex items-center dark:text-blue-500 dark:hover:text-white dark:focus:ring-blue-800 dark:hover:bg-blue-500">
-            <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M19 12H5m14 0-4 4m4-4-4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                    stroke-linejoin="round" />
-            </svg>
-
-            <span class="sr-only">Icon description</span>
-        </button>
-        {% endif %}
+        {% include 'pages/sections/quarters.html' %}
     </div>
-</div>
-<script>
-    const app_context = {
-        quarter_uuid: "{{ quarter.uuid }}",
-        quarter_number: "{{ quarter.number }}",
-        previous_quarter: null,
-        next_quarter: null,
-    }
+    <script>
+        const app_context = {
+            quarter_uuid: "{{ quarter.uuid }}",
+            quarter_number: "{{ quarter.number }}",
+            previous_quarter: null,
+            next_quarter: null,
+        }
 
+        document.addEventListener('DOMContentLoaded', function () {
+            const loadingContainer = document.getElementById('loading-container');
+            const chartsContainer = document.getElementById('charts-container');
 
-    document.addEventListener('DOMContentLoaded', function () {
-        const loadingContainer = document.getElementById('loading-container');
-        const chartsContainer = document.getElementById('charts-container');
-
-        // Wait for all images and resources to load
-        window.addEventListener('load', function () {
-            loadingContainer.style.display = 'none';
-            chartsContainer.style.display = 'block';
+            // Wait for all images and resources to load
+            window.addEventListener('load', function () {
+                loadingContainer.style.display = 'none';
+                chartsContainer.style.display = 'block';
+            });
         });
-    });
-</script>
-{% endblock %}
+    </script>
+
+    {% endblock %}
