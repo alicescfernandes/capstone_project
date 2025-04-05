@@ -3,7 +3,7 @@ export function Navbar() {
     return (
         <FlowbiteNavbar fluid rounded>
             <NavbarBrand href="https://flowbite-react.com">
-                <span className="self-center whitespace-nowrap text-xl font-semibold dark:text-white">Flowbite React</span>
+                <span className="self-center whitespace-nowrap text-xl font-semibold">Flowbite React</span>
             </NavbarBrand>
             <NavbarToggle />
             <NavbarCollapse>

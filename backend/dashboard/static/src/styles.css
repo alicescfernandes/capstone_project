@@ -1,0 +1,12 @@
+/* static/css/tailwind.css or input.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import 'flowbite';
+
+@import "flowbite/src/themes/default";
+@plugin "flowbite/plugin";
+
+p{
+    color:red
+}

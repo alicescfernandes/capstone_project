@@ -39,10 +39,8 @@ class QuarterListAPIView(APIView):
 
         # Resposta JSON personalizada
         return Response({
-            "quarter": {
-                "number": quarter.number,
-                "uuid": str(quarter.uuid),
-            },
+            "number": quarter.number,
+            "uuid": str(quarter.uuid),
             "isFirst": quarter.number == first_quarter.number,
             "isLast": quarter.number == last_quarter.number,
         })

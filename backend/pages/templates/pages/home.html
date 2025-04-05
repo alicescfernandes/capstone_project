@@ -57,11 +57,10 @@
 
 {% block content %}
 
-<div id="loading-container"
-    class="flex flex-row items-center justify-center min-h-[400px] text-gray-500 list-inside dark:text-gray-400">
+<div id="loading-container" class="flex flex-row items-center justify-center min-h-[400px] text-gray-500 list-inside">
     <div role="status" class="flex items-center">
-        <svg aria-hidden="true" class="w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
-            viewBox="0 0 100 101" xmlns="http://www.w3.org/2000/svg">
+        <svg aria-hidden="true" class="w-8 h-8 text-gray-200 animate-spin fill-blue-600" viewBox="0 0 100 101"
+            xmlns="http://www.w3.org/2000/svg">
             <path
                 d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
                 fill="currentColor" />
@@ -81,9 +80,7 @@
     <script>
         const app_context = {
             quarter_uuid: "{{ quarter.uuid }}",
-            quarter_number: "{{ quarter.number }}",
-            previous_quarter: null,
-            next_quarter: null,
+            quarter_number: parseInt("{{ quarter.number }}"),
         }
 
         document.addEventListener('DOMContentLoaded', function () {
@@ -96,6 +93,103 @@
                 chartsContainer.style.display = 'block';
             });
         });
+    </script>
+
+
+    <script>
+        function app() {
+            let appState = {
+
+            }
+
+
+            function setState(newState) {
+                appState = { ...appState, ...newState };
+                document.dispatchEvent(new CustomEvent('appStateChange', { detail: appState }));
+            }
+
+
+            function getState() {
+                return appState;
+            }
+
+
+            // Move this into its own file
+            const BASE_API = "http://localhost:8000/api"
+
+            // DOM Elements
+            const prevQuarter = document.querySelector('[data-action="prev_quarter"]')
+            const nextQuarter = document.querySelector('[data-action="next_quarter"]')
+            const quarterDisplay = document.getElementById('quarter-display')
+
+            // API functions
+            function getQuarter(direction) {
+
+                const { quarter } = getState()
+
+                let nextQuarter = quarter?.number;
+
+                if (direction === 'next') {
+                    nextQuarter++
+                }
+
+                if (direction == 'prev') {
+                    nextQuarter--;
+                }
+
+
+                let queryParams = new URLSearchParams()
+                if (nextQuarter && nextQuarter >= 1) {
+                    queryParams.set("q", nextQuarter)
+                }
+
+                fetch(`${BASE_API}/quarters/${queryParams.size > 0 ? "?" + queryParams.toString() : ""}`)
+                    .then(res => res.json())
+                    .then((data) => {
+                        setState({
+                            quarter: data
+                        })
+                    })
+            }
+
+
+
+            // UI Functions
+            function updateQuarterUI(data) {
+                quarterDisplay.textContent = `Quarter `
+            }
+
+
+            document.addEventListener('appStateChange', (e) => {
+                const { quarter } = getState()
+
+                // Update quarter information
+                quarterDisplay.textContent = `Quarter ${quarter.number}`
+
+                if (quarter.isLast) {
+                    nextQuarter.setAttribute('disabled', true)
+                } else {
+                    nextQuarter.removeAttribute('disabled')
+                }
+
+                if (quarter.isFirst) {
+                    prevQuarter.setAttribute('disabled', true)
+                } else {
+                    prevQuarter.removeAttribute('disabled')
+                }
+
+            });
+
+            // Add events
+            nextQuarter.addEventListener("click", () => getQuarter('next'))
+            prevQuarter.addEventListener("click", () => getQuarter('prev'))
+
+            // Get initial quarter
+            getQuarter()
+        }
+
+        app()
+
     </script>
 
     {% endblock %}
