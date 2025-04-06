@@ -10,38 +10,12 @@ import pandas as pd
 from django.http import JsonResponse
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .models import Quarter, ExcellFile
+from .models import Quarter, ExcellFile, CSVFile
 from .serializers import QuarterSerializer
 
 # Get the path to the xlsx directory
 current_dir = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
 xlsx_dir = os.path.join(current_dir, 'xlsx')
-
-class QuarterListAPIView(APIView):
-    def get(self, request):
-        # Preparar a lista de quarters
-        quarters = Quarter.objects.all()
-        if not quarters:
-            return Response({"error": "No quarters found"}, status=404)
-
-        last_quarter = quarters[0]            # mais recente
-        first_quarter = quarters[::-1][0]     # mais antigo
-
-        # Obter o número do quarter pedido (ou usar o último por defeito)
-        query_quarter = request.query_params.get("q", last_quarter.number)
-
-        try:
-            quarter = Quarter.objects.get(number=int(query_quarter))
-        except Quarter.DoesNotExist:
-            return Response({"error": "Quarter not found"}, status=404)
-
-        # Resposta JSON personalizada
-        return Response({
-            "number": quarter.number,
-            "uuid": str(quarter.uuid),
-            "isFirst": quarter.number == first_quarter.number,
-            "isLast": quarter.number == last_quarter.number,
-        })
 
 def home(request):
     # Prepare default case
@@ -53,15 +27,13 @@ def home(request):
     query_quarter = request.GET.get("q",last_quarter.number)
     quarter = Quarter.objects.get(number=int(query_quarter))
 
-    qf = ExcellFile.objects.first()
-    print(qf.file.name)
-    for csv in qf.csvs.all():
-        print(csv.csv_path, os.path.exists(csv.csv_path))
-
+    unique_slugs = list(CSVFile.objects.values_list('sheet_name_slug', flat=True).distinct())    
+    print(unique_slugs)
+    
     return render(request, 'pages/home.html', {
-        "quarter":quarter,
-        "hasPrevious": quarter.number > first_quarter.number,
-        "hasNext": quarter.number < last_quarter.number,
-        "last":last_quarter.number,
-        "first": first_quarter.number,
+        "app_context":{
+            "qn":quarter.number,
+            "quuid":quarter.uuid,            
+        },
+        "chart_slugs": unique_slugs
     })

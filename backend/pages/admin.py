@@ -23,4 +23,4 @@ class QuarterAdmin(admin.ModelAdmin):
 
 @admin.register(CSVFile)
 class QuarterCSVAdmin(admin.ModelAdmin):
-    list_display = ('csv_path','sheet_name','quarter_file')
+    list_display = ('csv_path','sheet_name','quarter_file', 'quarter_uuid','sheet_name_slug')

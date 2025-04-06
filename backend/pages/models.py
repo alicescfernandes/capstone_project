@@ -2,11 +2,20 @@ from django.db import models
 import os
 import uuid
 from django.contrib.auth.models import User
+import os
+import uuid
+import pandas as pd
+from django.db import models
+from django.conf import settings
 
 # Create your models here.
 def user_quarter_upload_path(instance, filename):
     # Caminho: media/uploads/<uuid4>/<filename>
     return os.path.join("uploads", str(instance.quarter.uuid), filename)
+
+def user_quarter_upload_path(instance, filename):
+    return os.path.join("uploads", str(instance.quarter.uuid), filename)
+
 
 class Quarter(models.Model):
     number = models.PositiveIntegerField(unique=True)
@@ -19,15 +28,6 @@ class Quarter(models.Model):
     def __str__(self):
         return f"Q{self.number}"
     
-    
-import os
-import uuid
-import pandas as pd
-from django.db import models
-from django.conf import settings
-
-def user_quarter_upload_path(instance, filename):
-    return os.path.join("uploads", str(instance.quarter.uuid), filename)
 
 class ExcellFile(models.Model):
     quarter = models.ForeignKey("Quarter", on_delete=models.CASCADE, related_name="files")
@@ -62,6 +62,8 @@ class ExcellFile(models.Model):
                 CSVFile.objects.create(
                     quarter_file=self,
                     sheet_name=sheet_name,
+                    sheet_name_slug=sheet_name.lower().replace(' ', '_'),
+                    quarter_uuid=self.quarter.uuid,
                     csv_path=csv_path
                 )
 
@@ -82,6 +84,9 @@ class ExcellFile(models.Model):
 class CSVFile(models.Model):
     quarter_file = models.ForeignKey("ExcellFile", on_delete=models.CASCADE, related_name="csvs")
     sheet_name = models.CharField(max_length=255)
+    sheet_name_slug = models.CharField(max_length=255)
     csv_path = models.FilePathField(path=settings.MEDIA_ROOT, max_length=500)
+    quarter_uuid = models.UUIDField(null=True, editable=False)
+
     def __str__(self):
         return f"{self.sheet_name} ({self.csv_path})"
