@@ -21,10 +21,10 @@ class QuarterListAPIView(APIView):
     def get(self, request):
         # Preparar a lista de quarters
         quarters = Quarter.objects.all()
+        last_quarter = quarters[0]
         if not quarters:
             return Response({"error": "No quarters found"}, status=404)
 
-        last_quarter = quarters[0]            # mais recente
         first_quarter = quarters[::-1][0]     # mais antigo
 
         # Obter o número do quarter pedido (ou usar o último por defeito)
@@ -43,34 +43,51 @@ class QuarterListAPIView(APIView):
             "isLast": quarter.number == last_quarter.number,
         })
 
-# http://localhost:8000/api/chart/?slug=customer_needs_and_wants&q=1
+def get_quarter_navigation_object(quarter_number, slug):
+    # Obter todos os quarter_uuids associados ao slug
+    quarter_uuids = (
+        CSVFile.objects
+        .filter(sheet_name_slug=slug)
+        .values_list('quarter_uuid', flat=True)
+        .distinct()
+    )
+    
+    # Obter os objetos Quarter correspondentes, ordenados por número
+    all_quarters = list(
+        Quarter.objects
+        .filter(uuid__in=quarter_uuids)
+        .order_by('number')
+    )
 
-def get_quarter_navigation_object(quarter_number):
-    all_quarters = list(Quarter.objects.order_by('number'))
     curr_q = get_object_or_404(Quarter, number=quarter_number)
 
     try:
-        current_index = all_quarters.index(curr_q)
-    except ValueError:
-        return {'quarter': None}
+        current_index = next(i for i, q in enumerate(all_quarters) if q.pk == curr_q.pk)
+    except StopIteration:
+        return None  # current quarter não está na lista filtrada
 
-    next_q = all_quarters[current_index - 1] if current_index > 0 else None
-    prev_q = all_quarters[current_index + 1] if current_index < len(all_quarters) - 1 else None
+    prev_q = all_quarters[current_index - 1] if current_index > 0 else None
+    next_q = all_quarters[current_index + 1] if current_index < len(all_quarters) - 1 else None
 
     return {
-            'current': curr_q.number,
-            'next': prev_q.number if prev_q else None,
-            'prev': next_q.number if next_q else None,
+        'current': curr_q.number,
+        'prev': prev_q.number if prev_q else None,
+        'next': next_q.number if next_q else None,
     }
+
+# http://localhost:8000/api/chart/?slug=customer_needs_and_wants&q=1
 class ChartDataAPIView(APIView):
     def get(self, request, format=None):
+        quarters = Quarter.objects.all()
+        last_quarter = quarters[0]            # mais recente
+
         slug = request.query_params.get('slug')
-        quarter_number = request.query_params.get('q')
+        quarter_number = request.query_params.get('q', last_quarter.number)
         filter = request.query_params.get('opt')  # opcional
 
-        if not slug or not quarter_number:
+        if not slug:
             return Response(
-                {"error": "Both 'slug' and 'quarter' query parameters are required."},
+                {"error": "Both 'slug' query parameters are required."},
                 status=status.HTTP_400_BAD_REQUEST
             )
         
@@ -102,7 +119,7 @@ class ChartDataAPIView(APIView):
             return Response({"error": f"Error reading file: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
         return Response({
-            'quarter':get_quarter_navigation_object(quarter_number),
+            'quarter':get_quarter_navigation_object(quarter_number, slug),
             "data": {
                 "type": "bar", #TODO: Mapping for slugs to chart types
                 "x": applications,

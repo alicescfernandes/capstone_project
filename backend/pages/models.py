@@ -38,8 +38,8 @@ class ExcellFile(models.Model):
         return f"{self.file.name} ({self.quarter})"
 
     def process_and_store_csv(self):
-        section_name = self.extract_section_from_filename()
-        quarter_number = self.quarter.number
+        # section_name = self.extract_section_from_filename()
+        # quarter_number = self.quarter.number
         folder = os.path.join(settings.MEDIA_ROOT, 'uploads', str(self.quarter.uuid))
 
         xlsx_path = self.file.path
@@ -52,6 +52,7 @@ class ExcellFile(models.Model):
                 df.columns = df.iloc[0]    # primeira linha como header
                 df = df[1:]                # remove a linha do header
                 df = df.reset_index(drop=True)
+                df = df[~df.apply(lambda row: row.astype(str).str.contains("End of worksheet", case=False)).any(axis=1)]
 
                 name = f"{sheet_name.lower().replace(' ', '_')}.csv"
                 csv_path = os.path.join(folder, name)

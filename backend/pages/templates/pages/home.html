@@ -65,7 +65,11 @@
         <plotly-chart type="bar" x='["Dogs", "Cats", "Birds"]' y='[30, 45, 25]' title="Animais Adotados"></plotly-chart>
     -->
         {% for item in chart_slugs %}
-        <plotly-chart chart_slug="{{ item }}"></plotly-chart>
+        {% endfor %}
+
+
+        {% for chart in chart_slugs %}
+        <plotly-chart chart_slug="{{ chart.slug }}" q="{{ chart.quarter_number }}"></plotly-chart>
         {% endfor %}
     </div>
 
@@ -186,7 +190,7 @@
             this.state = {
                 chartSlug: this.getAttribute("chart_slug"),
                 initialLoad: true,
-                quarterNumber: app_context.quarter_number,
+                quarterNumber: this.getAttribute("q"),
                 data: {
                 }
             };
