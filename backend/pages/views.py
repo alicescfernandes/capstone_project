@@ -28,6 +28,16 @@ xlsx_dir = os.path.join(current_dir, 'xlsx')
 def home(request):
     # Prepare default case
     quarters = Quarter.objects.all()
+    if(len(quarters) <= 0):
+        return render(request, 'pages/home.html', {
+        "app_context":{
+            "qn":None,
+            "quuid":None,            
+        },
+        "empty":True,
+        "chart_slugs": []
+    })
+    
     last_quarter = quarters[0]
     first_quarter = quarters[::-1][0]
         
@@ -58,8 +68,7 @@ def home(request):
                 "quarter_number": csv.quarter_file.quarter.number,
             })
             
-    print(chart_slugs)
-    
+
     return render(request, 'pages/home.html', {
         "app_context":{
             "qn":quarter.number,
@@ -97,9 +106,21 @@ def delete_file(request, uuid):
 
 def edit_quarter(request, uuid):
     quarter = get_object_or_404(Quarter, uuid=uuid)
+
     if request.method == 'POST':
+        # Atualizar número do quarter
         new_number = request.POST.get('number')
         if new_number:
             quarter.number = new_number
             quarter.save()
+
+        # Upload de múltiplos ficheiros
+        files = request.FILES.getlist('files')
+        print("files", files)
+        for f in files:
+            excell_file = ExcellFile.objects.create(
+                quarter=quarter,
+                file=f
+            )
+
     return redirect('manage_quarters')

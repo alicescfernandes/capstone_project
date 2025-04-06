@@ -100,7 +100,7 @@
                     ✕
                 </button>
             </div>
-            <form method="post" id="edit-quarter-form" class="upload-form-wrapper">
+            <form method="post" id="edit-quarter-form" class="upload-form-wrapper" enctype="multipart/form-data">
                 {% csrf_token %}
                 <div>
                     <label for="edit-quarter-number" class="upload-label ">
@@ -109,6 +109,16 @@
                     <input type="number" name="number" id="edit-quarter-number"
                         class="upload-input">
                 </div>
+
+                <!-- Uploader múltiplo -->
+                <div>
+                    <label for="edit-quarter-files" class="upload-label">
+                        Adicionar Ficheiros (.xlsx)
+                    </label>
+                    <input type="file" name="files" id="edit-quarter-files" multiple accept=".xlsx" class="upload-input">
+    
+                </div>
+
                 <div class="flex justify-end">
                     <button type="submit"
                         class="upload-modal-submit-btn">
