@@ -65,8 +65,7 @@
         <plotly-chart type="bar" x='["Dogs", "Cats", "Birds"]' y='[30, 45, 25]' title="Animais Adotados"></plotly-chart>
     -->
         {% for item in chart_slugs %}
-        <plotly-chart chart_slug="{{ item }}" type="bar" x='["Dogs", "Cats", "Birds"]' y='[30, 45, 25]'
-            title="Animais Adotados"></plotly-chart>
+        <plotly-chart chart_slug="{{ item }}"></plotly-chart>
         {% endfor %}
     </div>
 
@@ -177,49 +176,102 @@
 
 <script>
     // Web componet do ad i
+
+    const API_BASE_URL = 'http://localhost:8000/api/'
     class PlotlyChart extends HTMLElement {
         constructor() {
             super();
             this.className = 'col-span-4 p-6 bg-white border border-gray-200 rounded-lg shadow-sm'
             this.id = `chart_${Math.floor(Math.random() * 1e6)}`;
             this.state = {
-                isLoading: true
+                chartSlug: this.getAttribute("chart_slug"),
+                initialLoad: true,
+                quarterNumber: app_context.quarter_number,
+                data: {
+                }
             };
 
-            window.setTimeout(() => {
-                this.setState({
-                    isLoading: false
-                })
-            }, 1000)
         }
 
         static get observedAttributes() {
-            return ['chart_slug', 'title', 'type', 'x', 'y', 'options'];
+            return ['chart_slug'];
+        }
+
+        fetchData() {
+            // ?slug=customer_needs_and_wants&quarter=1eac6e9c-f4a3-4d28-b9e5-0837b2e2c0e3`
+            const params = new URLSearchParams()
+
+            params.set('slug', this.state.chartSlug)
+            params.set('q', this.state.quarterNumber)
+
+            if (this.state.selectedOption) {
+                params.set('opt', this.state.selectedOption)
+            }
+
+            fetch(`${API_BASE_URL}chart/?${params.toString()}`)
+                .then((res) => res.json())
+                .then((data) => {
+                    const { selected_option, ...rest } = data
+                    this.setState({
+                        initialLoad: false,
+                        selectedOption: Boolean(selected_option) ? selected_option : "", // save what comes from the server
+                        ...rest,
+                    })
+                })
         }
 
         setState(newState) {
             this.state = { ...this.state, ...newState };
-            this.render();
+            this.render()
+            console.log(this.state)
         }
 
-        render() {
-            const hasOptions = this.hasAttribute('options');
+        renderQuarterNavigation() {
+            const select = this.querySelector(`#${this.id} .chart-quarter-navigation`);
 
-            if (this.state.isLoading) {
-                this.innerHTML = "<p>loading</p>"
+            const { quarter } = this.state
+            select.innerHTML = `
+            <button ${!quarter.prev && 'disabled'} aria-label="Previous Quarter" class="prev-quarter disabled:text-gray-100 text-gray-500 text-xl">←</button>
+            <button ${!quarter.next && 'disabled'} aria-label="Next Quarter" class="next-quarter disabled:text-gray-100 text-gray-500 text-xl">→</button>`
+        }
+
+        renderSpinner() {
+            this.innerHTML = `<div role="status" class="flex justify-center items-center">
+                                <svg aria-hidden="true" class="w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor"/>
+                                    <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill"/>
+                                </svg>
+                                <span class="sr-only">Loading...</span>
+                            </div>
+                        `
+        }
+        render() {
+            const hasOptions = Boolean(this.state.options);
+
+            if (this.state.initialLoad) {
+                this.renderSpinner()
                 return;
             }
 
             this.innerHTML = `<div id="${this.id}">
-                    <h5 class="chart-title mb-2 text-2xl font-semibold tracking-tight"></h5>
+                    
+                    <div class="chart-header flex justify-between mb-2">
+                        <h5 class="chart-title text-2xl font-semibold tracking-tight  flex-1">
+                            Padrão de Utilização (Q1-2025)
+                            </h5>
+                        <div class="chart-quarter-navigation">
+                        </div>
+                    </div>
+                    
                     ${hasOptions ? `
-                        <p> Escolha uma opção: 
+                        <p> Filter By: 
                         <select class="chart-filter mb-4 p-2 border rounded-md text-sm"></select>
                         </p>` : ''}
                     <div class="chart" style="width:100%;height:400px;"></div>
                     </div>`;
 
             this.renderChart();
+            this.renderQuarterNavigation()
             if (hasOptions) {
                 this.renderOptions();
                 this.setupEvents();
@@ -228,7 +280,7 @@
         }
 
         attributeChangedCallback() {
-            const hasOptions = this.hasAttribute('options');
+            const hasOptions = Boolean(this.state.option)
 
             if (hasOptions) {
                 this.renderOptions();
@@ -242,34 +294,21 @@
             const select = this.querySelector(`#${this.id} .chart-filter`);
             if (!select) return;
 
-            const rawOptions = this.getAttribute('options') || '[]';
-            let options = [];
-
-            try {
-                options = JSON.parse(rawOptions);
-            } catch (err) {
-                console.error('Erro ao fazer parse de options:', err);
-                return;
-            }
+            const { options, selectedOption } = this.state
 
             select.innerHTML = '';
 
             for (const opt of options) {
                 const optionEl = document.createElement('option');
-                if (typeof opt === 'object') {
-                    optionEl.value = opt.value;
-                    optionEl.textContent = opt.label;
-                } else {
-                    optionEl.value = opt;
-                    optionEl.textContent = opt;
-                }
+                optionEl.value = opt;
+                optionEl.textContent = opt;
+                optionEl.selected = opt === selectedOption;
                 select.appendChild(optionEl);
             }
         }
 
-
-
         connectedCallback() {
+            this.fetchData()
             this.render()
         }
 
@@ -279,12 +318,42 @@
                 select.addEventListener('change', (e) => {
                     const value = e.target.value;
                     console.log(`Dropdown mudou: ${value}`);
-                    this.setAttribute('type', value === 'option1' ? 'pie' : 'bar');
+                    this.setState({
+                        selectedOption: value
+                    })
+
+                    this.fetchData()
+                });
+            }
+
+            const prev_quarter_btn = this.querySelector(`#${this.id} .prev-quarter`);
+            if (prev_quarter_btn) {
+                prev_quarter_btn.addEventListener('click', (e) => {
+                    this.setState({
+                        quarterNumber: this.state.quarter.prev
+                    })
+
+                    this.fetchData()
+                });
+            }
+
+            const next_quarter_btn = this.querySelector(`#${this.id} .next-quarter`);
+            if (next_quarter_btn) {
+                next_quarter_btn.addEventListener('click', (e) => {
+                    this.setState({
+                        quarterNumber: this.state.quarter.next
+                    })
+
+                    this.fetchData()
                 });
             }
         }
 
-        normalizeData(type, x, y) {
+        normalizeData() {
+            const { data } = this.state
+            const { type, x, y } = data
+
+
             switch (type) {
                 case 'pie':
                     return [{
@@ -311,10 +380,11 @@
         }
 
         async renderChart() {
-            if (!this.isConnected) return;
+            if (!this.isConnected || this.state.isLoading) return;
 
-            const type = this.getAttribute('type') || 'bar';
-            const title = this.getAttribute('title') || 'Gráfico';
+            const { data, title } = this.state
+
+            const type = data.type
             let x = [], y = [];
 
             try {
@@ -325,19 +395,19 @@
                 return;
             }
 
-            const data = this.normalizeData(type, x, y);
+            const normalizeData = this.normalizeData(type, x, y);
             const layout = { title: '' };
 
             const container = this.querySelector(`#${this.id} .chart`);
             const titleEl = this.querySelector(`#${this.id} .chart-title`);
-            if (titleEl) titleEl.textContent = title;
+            if (titleEl) titleEl.textContent = `${title} - Q${this.state.quarter.current}`;
 
             if (!window.Plotly) {
                 await import('https://cdn.plot.ly/plotly-2.30.0.min.js');
             }
 
             if (container) {
-                Plotly.newPlot(container, data, layout, {
+                Plotly.newPlot(container, normalizeData, layout, {
                     responsive: true,
                 });
             }

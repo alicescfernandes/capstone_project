@@ -1,17 +1,11 @@
 import os
 import pandas as pd
-import plotly.express as px
-from django.shortcuts import render
-from django.http import JsonResponse, Http404
-from django.views import View
 from pages.models import Quarter
 import os
 import pandas as pd
-from django.http import JsonResponse
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .models import Quarter, ExcellFile, CSVFile
-from .serializers import QuarterSerializer
+from .models import Quarter, CSVFile
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -49,41 +43,72 @@ class QuarterListAPIView(APIView):
             "isLast": quarter.number == last_quarter.number,
         })
 
-# http://localhost:8000/api/chart/?slug=customer_needs_and_wants&quarter=1eac6e9c-f4a3-4d28-b9e5-0837b2e2c0e3
+# http://localhost:8000/api/chart/?slug=customer_needs_and_wants&q=1
+
+def get_quarter_navigation_object(quarter_number):
+    all_quarters = list(Quarter.objects.order_by('number'))
+    curr_q = get_object_or_404(Quarter, number=quarter_number)
+
+    try:
+        current_index = all_quarters.index(curr_q)
+    except ValueError:
+        return {'quarter': None}
+
+    next_q = all_quarters[current_index - 1] if current_index > 0 else None
+    prev_q = all_quarters[current_index + 1] if current_index < len(all_quarters) - 1 else None
+
+    return {
+            'current': curr_q.number,
+            'next': prev_q.number if prev_q else None,
+            'prev': next_q.number if next_q else None,
+    }
 class ChartDataAPIView(APIView):
     def get(self, request, format=None):
         slug = request.query_params.get('slug')
-        quarter_uuid = request.query_params.get('quarter')
+        quarter_number = request.query_params.get('q')
+        filter = request.query_params.get('opt')  # opcional
 
-        if not slug or not quarter_uuid:
+        if not slug or not quarter_number:
             return Response(
                 {"error": "Both 'slug' and 'quarter' query parameters are required."},
                 status=status.HTTP_400_BAD_REQUEST
             )
-
+        
+        curr_q = get_object_or_404(Quarter, number=quarter_number)
+        
         csv_file = get_object_or_404(
             CSVFile,
-            sheet_name_slug='customer_needs_and_wants',
-            quarter_uuid='1eac6e9c-f4a3-4d28-b9e5-0837b2e2c0e3'
+            sheet_name_slug=slug,
+            quarter_uuid=curr_q.uuid
         )
-        
 
+        file_path = csv_file.csv_path
+                
         try:
-            df = pd.read_csv(csv_file.csv_path)
-        except Exception as e:
-            return Response(
-                {"error": f"Erro ao ler o ficheiro CSV: {str(e)}"},
-                status=status.HTTP_500_INTERNAL_SERVER_ERROR
-            )
+            df = pd.read_csv(file_path)
 
-        # Limita a 100 linhas, por exemplo
-        first_col_name = df.columns[0]
-        print("hello")
-        first_col_data = df[first_col_name].to_string()
-        
-        print("data 2:" + first_col_data)
+            application_col = df.columns[0]
+            filter_cols = df.columns[1:]
+
+            df[filter_cols] = df[filter_cols].apply(pd.to_numeric, errors='coerce')
+
+            available_filters = filter_cols.tolist()
+            selected_filter = filter if filter in available_filters else available_filters[0]
+
+            applications = df[application_col].fillna("").tolist()
+            values = df[selected_filter].fillna(0).tolist()
+
+        except Exception as e:
+            return Response({"error": f"Error reading file: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
         return Response({
-            "slug2": slug,
-            "quarter_uuid": quarter_uuid,
-            "data": "data"
+            'quarter':get_quarter_navigation_object(quarter_number),
+            "data": {
+                "type": "bar", #TODO: Mapping for slugs to chart types
+                "x": applications,
+                "y": values
+            },
+            'title': csv_file.sheet_name,
+            "options": available_filters,
+            'selected_option': selected_filter
         })
