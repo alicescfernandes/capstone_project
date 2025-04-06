@@ -33,6 +33,7 @@ class ExcellFile(models.Model):
     quarter = models.ForeignKey("Quarter", on_delete=models.CASCADE, related_name="files")
     file = models.FileField(upload_to=user_quarter_upload_path)
     uploaded_at = models.DateTimeField(auto_now_add=True)
+    uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
 
     def __str__(self):
         return f"{self.file.name} ({self.quarter})"

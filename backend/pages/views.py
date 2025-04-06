@@ -13,6 +13,13 @@ from rest_framework.response import Response
 from .models import Quarter, ExcellFile, CSVFile
 from .serializers import QuarterSerializer
 from django.db.models import Max
+# views.py
+from django.shortcuts import render, redirect, get_object_or_404
+from .models import Quarter
+from .forms import QuarterForm
+from django.shortcuts import render, redirect, get_object_or_404
+from .models import Quarter
+from .forms import QuarterForm
 
 # Get the path to the xlsx directory
 current_dir = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
@@ -60,3 +67,39 @@ def home(request):
         },
         "chart_slugs": chart_slugs
     })
+
+def manage_quarters(request):
+    quarters = Quarter.objects.all()
+    form = QuarterForm()
+
+    if request.method == 'POST':
+        form = QuarterForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('manage_quarters')
+
+    return render(request, 'pages/manage_quarters.html', {
+        'form': form,
+        'quarters': quarters,
+    })
+
+def delete_quarter(request, uuid):
+    quarter = get_object_or_404(Quarter, uuid=uuid)
+    quarter.delete()
+    return redirect('manage_quarters')
+
+
+def delete_file(request, uuid):
+    quarter = get_object_or_404(ExcellFile, uuid=uuid)
+    quarter.delete()
+    return redirect('manage_quarters')
+
+
+def edit_quarter(request, uuid):
+    quarter = get_object_or_404(Quarter, uuid=uuid)
+    if request.method == 'POST':
+        new_number = request.POST.get('number')
+        if new_number:
+            quarter.number = new_number
+            quarter.save()
+    return redirect('manage_quarters')

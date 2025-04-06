@@ -2,78 +2,23 @@
 
 {% block title %}Home - Dashboard{% endblock %}
 
-{% block extra_head %}
-<style>
-    .loading-container {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        min-height: 200px;
-    }
-
-    .loading-text {
-        margin-top: 10px;
-        color: #666;
-    }
-
-    .section-title {
-        font-size: 1.5rem;
-        font-weight: 600;
-        margin-bottom: 1rem;
-        color: #1a1a1a;
-        padding: 0.5rem 0;
-        border-bottom: 2px solid #e5e7eb;
-    }
-
-    .dark .section-title {
-        color: #e5e7eb;
-        border-bottom-color: #374151;
-    }
-
-    .section-type {
-        font-size: 0.875rem;
-        color: #6b7280;
-        margin-bottom: 0.5rem;
-    }
-
-    .dark .section-type {
-        color: #9ca3af;
-    }
-
-    .section-content {
-        margin-top: 1rem;
-    }
-
-    .chart-container {
-        margin-bottom: 2rem;
-    }
-
-    .chart-container:last-child {
-        margin-bottom: 0;
-    }
-</style>
-{% endblock %}
-
 {% block content %}
 
-<div class="container mx-auto">
-    <div class="grid grid-cols-8 gap-4">
-        <!--
+<div class="grid grid-cols-8 gap-4">
+    <!--
         <plotly-chart chart_slug="chart_slug" options='["Opção 1", "Opção 2", "Opção 3"]' type="pie"
             x='["Dogs", "Cats", "Birds"]' y='[30, 45, 25]' title="Animais Adotados"></plotly-chart>
         <plotly-chart type="bar" x='["Dogs", "Cats", "Birds"]' y='[30, 45, 25]' title="Animais Adotados"></plotly-chart>
     -->
-        {% for item in chart_slugs %}
-        {% endfor %}
+    {% for item in chart_slugs %}
+    {% endfor %}
 
 
-        {% for chart in chart_slugs %}
-        <plotly-chart chart_slug="{{ chart.slug }}" q="{{ chart.quarter_number }}"></plotly-chart>
-        {% endfor %}
-    </div>
-
+    {% for chart in chart_slugs %}
+    <plotly-chart chart_slug="{{ chart.slug }}" q="{{ chart.quarter_number }}"></plotly-chart>
+    {% endfor %}
 </div>
+
 <script>
     const app_context = {
         quarter_uuid: "{{app_context.quuid }}",
