@@ -29,7 +29,7 @@ from django.conf import settings
 def user_quarter_upload_path(instance, filename):
     return os.path.join("uploads", str(instance.quarter.uuid), filename)
 
-class QuarterFile(models.Model):
+class ExcellFile(models.Model):
     quarter = models.ForeignKey("Quarter", on_delete=models.CASCADE, related_name="files")
     file = models.FileField(upload_to=user_quarter_upload_path)
     uploaded_at = models.DateTimeField(auto_now_add=True)
@@ -38,10 +38,6 @@ class QuarterFile(models.Model):
         return f"{self.file.name} ({self.quarter})"
 
     def process_and_store_csv(self):
-        """
-        Converte todas as sheets do ficheiro XLSX para CSVs normalizados.
-        Guarda-os em: /uploads/<uuid>/<nome_conhecido>_q<numero>.csv
-        """
         section_name = self.extract_section_from_filename()
         quarter_number = self.quarter.number
         folder = os.path.join(settings.MEDIA_ROOT, 'uploads', str(self.quarter.uuid))
@@ -57,14 +53,17 @@ class QuarterFile(models.Model):
                 df = df[1:]                # remove a linha do header
                 df = df.reset_index(drop=True)
 
-                name = f"{section_name}_{sheet_name.lower().replace(' ', '_')}_q{quarter_number}.csv"
+                name = f"{sheet_name.lower().replace(' ', '_')}.csv"
                 csv_path = os.path.join(folder, name)
 
                 df.to_csv(csv_path, index=False)
 
-                #  Eliminar o ficheiro XLSX original
-                if os.path.exists(xlsx_path):
-                    os.remove(xlsx_path)
+                # Criar entrada na base de dados
+                CSVFile.objects.create(
+                    quarter_file=self,
+                    sheet_name=sheet_name,
+                    csv_path=csv_path
+                )
 
         except Exception as e:
             # TODO: logar ou lançar exceção visível
@@ -78,3 +77,11 @@ class QuarterFile(models.Model):
         filename = os.path.basename(self.file.name)
         name = filename.split('-')[0]
         return name.lower()
+
+
+class CSVFile(models.Model):
+    quarter_file = models.ForeignKey("ExcellFile", on_delete=models.CASCADE, related_name="csvs")
+    sheet_name = models.CharField(max_length=255)
+    csv_path = models.FilePathField(path=settings.MEDIA_ROOT, max_length=500)
+    def __str__(self):
+        return f"{self.sheet_name} ({self.csv_path})"

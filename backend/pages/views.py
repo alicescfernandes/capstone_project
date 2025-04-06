@@ -10,7 +10,7 @@ import pandas as pd
 from django.http import JsonResponse
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .models import Quarter
+from .models import Quarter, ExcellFile
 from .serializers import QuarterSerializer
 
 # Get the path to the xlsx directory
@@ -53,6 +53,10 @@ def home(request):
     query_quarter = request.GET.get("q",last_quarter.number)
     quarter = Quarter.objects.get(number=int(query_quarter))
 
+    qf = ExcellFile.objects.first()
+    print(qf.file.name)
+    for csv in qf.csvs.all():
+        print(csv.csv_path, os.path.exists(csv.csv_path))
 
     return render(request, 'pages/home.html', {
         "quarter":quarter,
