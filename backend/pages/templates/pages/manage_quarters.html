@@ -2,6 +2,11 @@
 
 {% block title %}Home - Dashboard{% endblock %}
 
+{% block extra_head %}
+<link href="https://unpkg.com/filepond@^4/dist/filepond.css" rel="stylesheet" />
+<script src="https://unpkg.com/filepond@^4/dist/filepond.js"></script>
+{% endblock %}
+
 {% block content %}
 
 {% load custom_tags %}
@@ -115,8 +120,9 @@
                     <label for="edit-quarter-files" class="upload-label">
                         Adicionar Ficheiros (.xlsx)
                     </label>
-                    <input type="file" name="files" id="edit-quarter-files" multiple accept=".xlsx" class="upload-input">
-    
+                    <!--<input type="file" name="files" id="edit-quarter-files" multiple accept=".xlsx" class="upload-input">-->
+                    <input type="file" name="files" id="filepond" multiple accept=".xlsx" />
+
                 </div>
 
                 <div class="flex justify-end">
@@ -142,6 +148,12 @@
         input.value = number;
         form.action = `/quarters/edit/${uuid}/`;
     }
+
+    FilePond.create(document.querySelector('#filepond'), {
+        allowMultiple: true,
+        storeAsFile: true,
+        acceptedFileTypes: ['application/vnd.openxmlformats-officedocument.spreadsheetml.sheet']
+    });
 </script>
 
 {% endblock %}

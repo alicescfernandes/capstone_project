@@ -67,7 +67,8 @@
 }
 
 .upload-modal-box {
-    @apply relative max-w-md max-h-full;
+    @apply relative max-w-md max-h-full w-full;
+
 }
 
 .upload-modal-inner {
