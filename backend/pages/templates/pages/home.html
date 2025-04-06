@@ -57,7 +57,8 @@
 
 {% block content %}
 
-<div id="loading-container" class="flex flex-row items-center justify-center min-h-[400px] text-gray-500 list-inside">
+<div id="loading-container" style="display: none;"
+    class="flex flex-row items-center justify-center min-h-[400px] text-gray-500 list-inside">
     <div role="status" class="flex items-center">
         <svg aria-hidden="true" class="w-8 h-8 text-gray-200 animate-spin fill-blue-600" viewBox="0 0 100 101"
             xmlns="http://www.w3.org/2000/svg">
@@ -73,123 +74,275 @@
     <p class="ml-2 text-gray-500">Loading charts</p>
 </div>
 
-<div id="charts-container" class="space-y-8" style="display: none;">
-    <div class="flex justify-center my-8 gap-3">
-        {% include 'pages/sections/quarters.html' %}
+<main id="charts-container">
+    <div class="container mx-auto">
+        <div class="grid grid-cols-8 gap-4">
+            <plotly-chart options='["Opção 1", "Opção 2", "Opção 3"]' type="pie" x='["Dogs", "Cats", "Birds"]'
+                y='[30, 45, 25]' title="Animais Adotados"></plotly-chart>
+
+            <plotly-chart type="bar" x='["Dogs", "Cats", "Birds"]' y='[30, 45, 25]'
+                title="Animais Adotados"></plotly-chart>
+        </div>
     </div>
-    <script>
-        const app_context = {
-            quarter_uuid: "{{ quarter.uuid }}",
-            quarter_number: parseInt("{{ quarter.number }}"),
-        }
+</main>
+<script>
+    const app_context = {
+        quarter_uuid: "{{ quarter.uuid }}",
+        quarter_number: parseInt("{{ quarter.number }}"),
+    }
 
-        document.addEventListener('DOMContentLoaded', function () {
-            const loadingContainer = document.getElementById('loading-container');
-            const chartsContainer = document.getElementById('charts-container');
+    document.addEventListener('DOMContentLoaded', function () {
+        const loadingContainer = document.getElementById('loading-container');
+        const chartsContainer = document.getElementById('charts-container');
 
-            // Wait for all images and resources to load
-            window.addEventListener('load', function () {
-                loadingContainer.style.display = 'none';
-                chartsContainer.style.display = 'block';
-            });
+        // Wait for all images and resources to load
+        window.addEventListener('load', function () {
+            loadingContainer.style.display = 'none';
+            chartsContainer.style.display = 'block';
         });
-    </script>
+    });
+</script>
 
 
-    <script>
-        function app() {
-            let appState = {
+<script>
+    function app() {
+        let appState = {
 
-            }
-
-
-            function setState(newState) {
-                appState = { ...appState, ...newState };
-                document.dispatchEvent(new CustomEvent('appStateChange', { detail: appState }));
-            }
-
-
-            function getState() {
-                return appState;
-            }
-
-
-            // Move this into its own file
-            const BASE_API = "http://localhost:8000/api"
-
-            // DOM Elements
-            const prevQuarter = document.querySelector('[data-action="prev_quarter"]')
-            const nextQuarter = document.querySelector('[data-action="next_quarter"]')
-            const quarterDisplay = document.getElementById('quarter-display')
-
-            // API functions
-            function getQuarter(direction) {
-
-                const { quarter } = getState()
-
-                let nextQuarter = quarter?.number;
-
-                if (direction === 'next') {
-                    nextQuarter++
-                }
-
-                if (direction == 'prev') {
-                    nextQuarter--;
-                }
-
-
-                let queryParams = new URLSearchParams()
-                if (nextQuarter && nextQuarter >= 1) {
-                    queryParams.set("q", nextQuarter)
-                }
-
-                fetch(`${BASE_API}/quarters/${queryParams.size > 0 ? "?" + queryParams.toString() : ""}`)
-                    .then(res => res.json())
-                    .then((data) => {
-                        setState({
-                            quarter: data
-                        })
-                    })
-            }
-
-
-
-            // UI Functions
-            function updateQuarterUI(data) {
-                quarterDisplay.textContent = `Quarter `
-            }
-
-
-            document.addEventListener('appStateChange', (e) => {
-                const { quarter } = getState()
-
-                // Update quarter information
-                quarterDisplay.textContent = `Quarter ${quarter.number}`
-
-                if (quarter.isLast) {
-                    nextQuarter.setAttribute('disabled', true)
-                } else {
-                    nextQuarter.removeAttribute('disabled')
-                }
-
-                if (quarter.isFirst) {
-                    prevQuarter.setAttribute('disabled', true)
-                } else {
-                    prevQuarter.removeAttribute('disabled')
-                }
-
-            });
-
-            // Add events
-            nextQuarter.addEventListener("click", () => getQuarter('next'))
-            prevQuarter.addEventListener("click", () => getQuarter('prev'))
-
-            // Get initial quarter
-            getQuarter()
         }
 
-        app()
 
-    </script>
+        function setState(newState) {
+            appState = { ...appState, ...newState };
+            document.dispatchEvent(new CustomEvent('appStateChange', { detail: appState }));
+        }
 
-    {% endblock %}
+
+        function getState() {
+            return appState;
+        }
+
+
+        // Move this into its own file
+        const BASE_API = "http://localhost:8000/api"
+
+        // DOM Elements
+        const prevQuarter = document.querySelector('[data-action="prev_quarter"]')
+        const nextQuarter = document.querySelector('[data-action="next_quarter"]')
+        const quarterDisplay = document.getElementById('quarter-display')
+
+        // API functions
+        function getQuarter(direction) {
+
+            const { quarter } = getState()
+
+            let nextQuarter = quarter?.number;
+
+            if (direction === 'next') {
+                nextQuarter++
+            }
+
+            if (direction == 'prev') {
+                nextQuarter--;
+            }
+
+
+            let queryParams = new URLSearchParams()
+            if (nextQuarter && nextQuarter >= 1) {
+                queryParams.set("q", nextQuarter)
+            }
+
+            fetch(`${BASE_API}/quarters/${queryParams.size > 0 ? "?" + queryParams.toString() : ""}`)
+                .then(res => res.json())
+                .then((data) => {
+                    setState({
+                        quarter: data
+                    })
+                })
+        }
+
+
+
+        // UI Functions
+        function updateQuarterUI(data) {
+            quarterDisplay.textContent = `Quarter `
+        }
+
+
+        document.addEventListener('appStateChange', (e) => {
+            const { quarter } = getState()
+
+            // Update quarter information
+            quarterDisplay.textContent = `Quarter ${quarter.number}`
+
+            if (quarter.isLast) {
+                nextQuarter.setAttribute('disabled', true)
+            } else {
+                nextQuarter.removeAttribute('disabled')
+            }
+
+            if (quarter.isFirst) {
+                prevQuarter.setAttribute('disabled', true)
+            } else {
+                prevQuarter.removeAttribute('disabled')
+            }
+
+        });
+
+        // Add events
+        nextQuarter.addEventListener("click", () => getQuarter('next'))
+        prevQuarter.addEventListener("click", () => getQuarter('prev'))
+
+        // Get initial quarter
+        getQuarter()
+    }
+
+    // app()
+</script>
+
+<script>
+    // Web componet do ad i
+    class PlotlyChart extends HTMLElement {
+        constructor() {
+            super();
+            this.className = 'col-span-4 p-6 bg-white border border-gray-200 rounded-lg shadow-sm'
+            this.id = `chart_${Math.floor(Math.random() * 1e6)}`;
+        }
+
+        static get observedAttributes() {
+            return ['title', 'type', 'x', 'y', 'options'];
+        }
+
+        attributeChangedCallback() {
+            const hasOptions = this.hasAttribute('options');
+
+            if (hasOptions) {
+                this.renderOptions();
+                this.setupEvents();
+            }
+
+            this.renderChart();
+        }
+
+        renderOptions() {
+            const select = this.querySelector(`#${this.id} .chart-filter`);
+            if (!select) return;
+
+            const rawOptions = this.getAttribute('options') || '[]';
+            let options = [];
+
+            try {
+                options = JSON.parse(rawOptions);
+            } catch (err) {
+                console.error('Erro ao fazer parse de options:', err);
+                return;
+            }
+
+            select.innerHTML = '';
+
+            for (const opt of options) {
+                const optionEl = document.createElement('option');
+                if (typeof opt === 'object') {
+                    optionEl.value = opt.value;
+                    optionEl.textContent = opt.label;
+                } else {
+                    optionEl.value = opt;
+                    optionEl.textContent = opt;
+                }
+                select.appendChild(optionEl);
+            }
+        }
+
+        connectedCallback() {
+            const hasOptions = this.hasAttribute('options');
+
+            this.innerHTML = `<div id="${this.id}">
+                <h5 class="chart-title mb-2 text-2xl font-semibold tracking-tight"></h5>
+                ${hasOptions ? `
+                    <p> Escolha uma opção: 
+                    <select class="chart-filter mb-4 p-2 border rounded-md text-sm"></select>
+                    </p>` : ''}
+                <div class="chart" style="width:100%;height:400px;"></div>
+                </div>`;
+
+            this.renderChart();
+            if (hasOptions) {
+                this.renderOptions();
+                this.setupEvents();
+            }
+        }
+
+        setupEvents() {
+            const select = this.querySelector(`#${this.id} .chart-filter`);
+            if (select) {
+                select.addEventListener('change', (e) => {
+                    const value = e.target.value;
+                    console.log(`Dropdown mudou: ${value}`);
+                    this.setAttribute('type', value === 'option1' ? 'pie' : 'bar');
+                });
+            }
+        }
+
+        normalizeData(type, x, y) {
+            switch (type) {
+                case 'pie':
+                    return [{
+                        type,
+                        labels: x,
+                        values: y,
+                    }];
+                case 'bar':
+                case 'line':
+                case 'scatter':
+                    return [{
+                        type,
+                        x,
+                        y,
+                        mode: (type === 'scatter' || type === 'line') ? 'lines+markers' : undefined
+                    }];
+                default:
+                    return [{
+                        type,
+                        x,
+                        y
+                    }];
+            }
+        }
+
+        async renderChart() {
+            if (!this.isConnected) return;
+
+            const type = this.getAttribute('type') || 'bar';
+            const title = this.getAttribute('title') || 'Gráfico';
+            let x = [], y = [];
+
+            try {
+                x = JSON.parse(this.getAttribute('x') || '[]');
+                y = JSON.parse(this.getAttribute('y') || '[]');
+            } catch (err) {
+                console.error('Erro ao fazer parse dos atributos x e y:', err);
+                return;
+            }
+
+            const data = this.normalizeData(type, x, y);
+            const layout = { title: '' };
+
+            const container = this.querySelector(`#${this.id} .chart`);
+            const titleEl = this.querySelector(`#${this.id} .chart-title`);
+            if (titleEl) titleEl.textContent = title;
+
+            if (!window.Plotly) {
+                await import('https://cdn.plot.ly/plotly-2.30.0.min.js');
+            }
+
+            if (container) {
+                Plotly.newPlot(container, data, layout, {
+                    responsive: true,
+                });
+            }
+        }
+    }
+
+    customElements.define('plotly-chart', PlotlyChart);
+</script>
+
+{% endblock %}

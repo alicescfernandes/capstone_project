@@ -4,6 +4,7 @@
   "main": "tailwind.config.js",
   "scripts": {
     "build:css": "npx tailwindcss -i ./dashboard/static/src/styles.css -o ./dashboard/static/build/styles.css --watch --minify",
+    "dev:css": "npx tailwindcss -i ./dashboard/static/src/styles.css -o ./dashboard/static/build/styles.css --watch",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
