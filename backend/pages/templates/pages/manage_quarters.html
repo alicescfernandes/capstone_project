@@ -6,50 +6,43 @@
 
 {% load custom_tags %}
 
-<div class="flex gap-4 flex-col py-6">
-
-    <!-- Botão para abrir o modal -->
+<div class="upload-section-wrapper">
     <div>
-
-
         <button data-modal-target="createQuarterModal" data-modal-toggle="createQuarterModal"
-            class="mb-6 text-white bg-blue-700 hover:bg-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+            class="upload-new-quarter-btn">
             New Quarter
         </button>
     </div>
 
-    <!-- Cards dos quarters -->
-    <div class="grid gap-4 grid-cols-8">
+    <div class="upload-grid-quarters">
         {% for quarter in quarters %}
-        <div class="col-span-4 bg-white border border-gray-200 rounded-lg shadow p-6">
-            <div class="flex justify-between items-center mb-4">
-                <h5 class="text-xl font-bold tracking-tight text-gray-900">
+        <div class="upload-quarter-card">
+            <div class="upload-card-header">
+                <h5 class="upload-card-title">
                     {{ quarter }}
                 </h5>
-                <div class="flex flex-row gap-4">
-                    <a href="#" class="text-blue-600 hover:underline text-sm" data-modal-target="editQuarterModal"
+                <div class="upload-card-actions">
+                    <a href="#" class="upload-edit-link" data-modal-target="editQuarterModal"
                         data-modal-toggle="editQuarterModal" data-quarter-id="{{ quarter.uuid }}"
                         data-quarter-number="{{ quarter.number }}" onclick="openEditModal(this)">
                         Edit
                     </a>
 
                     <a href="{% url 'delete_quarter' quarter.uuid %}"
-                        class="text-red-600 hover:underline text-sm">Delete</a>
+                        class="upload-delete-link">Delete</a>
                 </div>
             </div>
 
-            <p class="text-sm text-gray-500 mb-4">Created em {{ quarter.created_at|date:"d/m/Y H:i" }}</p>
+            <p class="upload-card-meta">Created em {{ quarter.created_at|date:"d/m/Y H:i" }}</p>
 
-            <div class="flex flex-wrap gap-2">
+            <div class="upload-file-list">
                 {% if quarter.files.exists %}
                 {% for f in quarter.files.all %}
-                <div id="chip-{{ f.id }}"
-                    class="flex items-center px-3 py-1 text-sm font-medium text-blue-800 bg-blue-100 rounded-full">
+                <div class="upload-file-chip">
                     {{ f.file.name|basename }}
-                    <a href="/quarters/files/delete/{{f.uuid}}/"
-                        class="ml-2 inline-flex items-center justify-center w-4 h-4 text-blue-400 hover:text-blue-600 focus:outline-none">
-                        <svg class="w-2 h-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14"
-                            stroke="currentColor">
+                    <a href="/quarters/files/delete/{{f.uuid}}/" class="upload-delete-chip-btn">
+                        <svg class="upload-delete-icon" xmlns="http://www.w3.org/2000/svg" fill="none"
+                            viewBox="0 0 14 14" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M4 4l6 6m0-6L4 10" />
                         </svg>
@@ -57,7 +50,7 @@
                 </div>
                 {% endfor %}
                 {% else %}
-                <span class="text-sm text-gray-400">Sem ficheiros.</span>
+                <span class="upload-empty-files">No files.</span>
                 {% endif %}
             </div>
 
@@ -69,25 +62,25 @@
 <!-- Modal de criação de quarter -->
 <div id="createQuarterModal" tabindex="-1" aria-hidden="true"
     class="fixed top-0 left-0 right-0 z-50 hidden p-4 overflow-x-hidden overflow-y-auto h-[calc(100%-1rem)] max-h-full">
-    <div class="relative max-w-md max-h-full">
-        <div class="relative bg-white rounded-lg shadow">
-            <div class="flex items-start justify-between p-4 border-b rounded-t">
-                <h3 class="text-xl font-semibold text-gray-900">Criar Quarter</h3>
-                <button type="button" class="text-gray-400 bg-transparent hover:text-gray-900"
+    <div class="upload-modal-box">
+        <div class="upload-modal-inner ">
+            <div class="upload-modal-header">
+                <h3 class="upload-modal-title">Criar Quarter</h3>
+                <button type="button" class="upload-close-modal "
                     data-modal-hide="createQuarterModal">
                     ✕
                 </button>
             </div>
-            <form method="post" class="flex flex-col gap-4 p-6 space-y-6">
+            <form method="post" class="upload-form-wrapper">
                 {% csrf_token %}
                 <div>
-                    <label for="id_number" class="block mb-2 text-sm font-medium text-gray-900">Número do
+                    <label for="id_number" class="upload-label ">Número do
                         Quarter</label>
                     {{ form.number }}
                 </div>
                 <div class="flex justify-end">
                     <button type="submit"
-                        class="text-white bg-blue-700 hover:bg-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+                        class="upload-modal-submit-btn">
                         Criar
                     </button>
                 </div>
@@ -98,27 +91,27 @@
 
 <div id="editQuarterModal" tabindex="-1" aria-hidden="true"
     class="fixed top-0 left-0 right-0 z-50 hidden p-4 overflow-x-hidden overflow-y-auto h-[calc(100%-1rem)] max-h-full">
-    <div class="relative max-w-md max-h-full">
-        <div class="relative bg-white rounded-lg shadow">
-            <div class="flex items-start justify-between p-4 border-b rounded-t">
+    <div class="upload-modal-box">
+        <div class="upload-modal-inner ">
+            <div class="upload-modal-header">
                 <h3 class="text-xl font-semibold text-gray-900">Editar Quarter</h3>
-                <button type="button" class="text-gray-400 bg-transparent hover:text-gray-900"
+                <button type="button" class="upload-close-modal "
                     data-modal-hide="editQuarterModal">
                     ✕
                 </button>
             </div>
-            <form method="post" id="edit-quarter-form" class="flex flex-col gap-4 p-6">
+            <form method="post" id="edit-quarter-form" class="upload-form-wrapper">
                 {% csrf_token %}
                 <div>
-                    <label for="edit-quarter-number" class="block mb-2 text-sm font-medium text-gray-900">
+                    <label for="edit-quarter-number" class="upload-label ">
                         Número do Quarter
                     </label>
                     <input type="number" name="number" id="edit-quarter-number"
-                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5">
+                        class="upload-input">
                 </div>
                 <div class="flex justify-end">
                     <button type="submit"
-                        class="text-white bg-blue-700 hover:bg-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+                        class="upload-modal-submit-btn">
                         Guardar Alterações
                     </button>
                 </div>
@@ -126,6 +119,7 @@
         </div>
     </div>
 </div>
+
 
 <script>
     function openEditModal(button) {
@@ -137,8 +131,6 @@
 
         input.value = number;
         form.action = `/quarters/edit/${uuid}/`;
-
-        // Flowbite já trata do toggle do modal
     }
 </script>
 
