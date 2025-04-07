@@ -8,37 +8,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Dashboard{% endblock %}</title>
-    <link rel="stylesheet" href="{% static 'build/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
     <script src='https://cdn.plot.ly/plotly-3.0.1.min.js'></script>
     <script src="https://unpkg.com/flowbite@latest/dist/flowbite.min.js"></script>
 
     {% block extra_head %}{% endblock %}
 </head>
 
-<body class="container mx-auto">
-    <style>
-        .modebar {
-            background: none !important;
-            display: flex !important;
-            flex-direction: row !important;
-            justify-content: flex-end !important;
-            padding: 0 !important;
-            top: 36px !important;
-        }
-
-        .modebar-group {
-            display: flex !important;
-            flex-direction: row !important;
-            margin: 0 !important;
-            padding: 0 !important;
-        }
-
-        .modebar-btn {
-            background: none !important;
-            margin: 0 2px !important;
-        }
-    </style>
-
+<body class="container mx-auto px-8">
     {% include 'pages/navigation.html' %}
 
     <main class="py-8">
