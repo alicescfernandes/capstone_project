@@ -11,12 +11,16 @@ def create_quarter_directory(sender, instance, created, **kwargs):
         path = os.path.join(settings.MEDIA_ROOT, 'uploads', str(instance.uuid))
         os.makedirs(path, exist_ok=True)
 
+@receiver(post_save, sender=ExcellFile)
+def process_file_on_upload(sender, instance, created, **kwargs):
+    instance.process_and_store_csv()
+
+# TODO: Remove this code, this is here mostly for development purposes to avoid confusion
 @receiver(post_delete, sender=Quarter)
 def delete_quarter_directory(sender, instance, **kwargs):
     path = os.path.join(settings.MEDIA_ROOT, 'uploads', str(instance.uuid))
     if os.path.isdir(path):
         shutil.rmtree(path)
-        
         
 @receiver(post_delete, sender=ExcellFile)
 def delete_files_on_ExcellFile_delete(sender, instance, **kwargs):
@@ -27,8 +31,3 @@ def delete_files_on_ExcellFile_delete(sender, instance, **kwargs):
 def delete_csv_file_from_disk(sender, instance, **kwargs):
     if instance.csv_path and os.path.exists(instance.csv_path):
         os.remove(instance.csv_path)
-
-@receiver(post_save, sender=ExcellFile)
-def process_file_on_upload(sender, instance, created, **kwargs):
-    if created:
-        instance.process_and_store_csv()

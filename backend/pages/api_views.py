@@ -12,11 +12,6 @@ from rest_framework import status
 from .models import CSVFile
 from django.shortcuts import get_object_or_404
 import pandas as pd
-
-# Get the path to the xlsx directory
-current_dir = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
-xlsx_dir = os.path.join(current_dir, 'xlsx')
-
 class QuarterListAPIView(APIView):
     def get(self, request):
         # Preparar a lista de quarters
@@ -47,6 +42,7 @@ def get_quarter_navigation_object(quarter_number, slug):
     # Obter todos os quarter_uuids associados ao slug
     quarter_uuids = (
         CSVFile.objects
+        .filter(is_current=True) 
         .filter(sheet_name_slug=slug)
         .values_list('quarter_uuid', flat=True)
         .distinct()
@@ -96,7 +92,8 @@ class ChartDataAPIView(APIView):
         csv_file = get_object_or_404(
             CSVFile,
             sheet_name_slug=slug,
-            quarter_uuid=curr_q.uuid
+            quarter_uuid=curr_q.uuid,
+            is_current=True
         )
 
         file_path = csv_file.csv_path
