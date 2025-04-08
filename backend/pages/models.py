@@ -27,11 +27,11 @@ class Quarter(models.Model):
 
 class ExcellFile(models.Model):
     quarter = models.ForeignKey("Quarter", on_delete=models.CASCADE, related_name="files")
-    # file = models.FileField(upload_to=user_quarter_upload_path, max_length=255)
-    file = models.FileField(upload_to=user_quarter_upload_path, max_length=255)
+    file = models.FileField(upload_to=user_quarter_upload_path)
     uploaded_at = models.DateTimeField(auto_now_add=True)
     uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     file_name = models.TextField(editable=False)
+    is_processed = models.BooleanField(default=False, editable=True) # TODO: Flip this to true
     
     def __str__(self):
         return f"{self.file.name} ({self.quarter})"
@@ -69,7 +69,6 @@ class ExcellFile(models.Model):
                 
                 # Have django deal with duplicate files and file names
                 available_path = default_storage.get_available_name(csv_path)
-                print("available_path", available_path)
 
                 CSVFile.objects.create(
                     quarter_file=self,
@@ -79,40 +78,11 @@ class ExcellFile(models.Model):
                     csv_path=available_path,
                     is_current=True  # Isto é redundante mas explícito
                 )
-
+                
                 df.to_csv(available_path, index=False)
-
+                
         except Exception as e:
             print(f"Erro a processar {xlsx_path}: {e}")
-
-    def extract_section_from_filename(self):
-        """
-        Extrai o nome da secção com base no nome original do ficheiro.
-        Exemplo: 'CustomerNeeds-Q2.xlsx' → 'customerneeds'
-        """
-        filename = os.path.basename(self.file.name)
-        name = filename.split('-')[0]
-        return name.lower()
-    """
-    TODO: Clean this up. This is here for reference
-    def save(self, *args, **kwargs):
-        original_name = os.path.basename(self.file.name)
-        name, ext = os.path.splitext(original_name)
-        new_filename = f"{name}_{self.uuid}{ext}"
-
-        new_path = os.path.join("uploads", str(self.quarter.uuid), new_filename)
-
-        # Garante que ficheiro anterior com o mesmo nome não existe
-        full_path = os.path.join(settings.MEDIA_ROOT, new_path)
-        if os.path.exists(full_path):
-            os.remove(full_path)
-
-        # Substitui o nome no objeto FileField
-        self.file.name = new_filename
-        self.file_name = new_filename
-
-        super().save(*args, **kwargs)
-    """
 
 class CSVFile(models.Model):
     quarter_file = models.ForeignKey("ExcellFile", on_delete=models.CASCADE, related_name="csvs")

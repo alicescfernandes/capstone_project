@@ -27,4 +27,4 @@ class QuarterCSVAdmin(admin.ModelAdmin):
 
 @admin.register(ExcellFile)
 class QuarterCSVAdmin(admin.ModelAdmin):
-    list_display = ('quarter','file','file_name','uploaded_at')
+    list_display = ('quarter','is_processed','file','file_name','uploaded_at')
