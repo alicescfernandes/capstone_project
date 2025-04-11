@@ -8,6 +8,7 @@ import pandas as pd
 from django.db import models
 from django.conf import settings
 from django.core.files.storage import default_storage
+from .data_processing import run_pipeline_for_sheet
 
 def user_quarter_upload_path(instance, filename):
     instance.file_name = filename
@@ -36,51 +37,50 @@ class ExcellFile(models.Model):
     def __str__(self):
         return f"{self.file.name} ({self.quarter})"
 
-    def process_and_store_csv(self):        
-        folder = os.path.join(settings.MEDIA_ROOT, 'uploads', str(self.uuid))
+    def process_and_store_csv(self):
+        # Do not "save" itself, instead update just this field. Calling .save() causes a recursion
+        ExcellFile.objects.filter(pk=self.pk).update(is_processed=False)
+
         xlsx_path = self.file.path
-        self.file_name = self.file.name
+        print("Processing: " + xlsx_path)
+        output_dir = os.path.join(settings.MEDIA_ROOT, 'uploads', str(self.uuid))
+        os.makedirs(output_dir, exist_ok=True)
 
         try:
-            excel = pd.read_excel(xlsx_path, sheet_name=None)
+            xls = pd.ExcelFile(xlsx_path)
 
-            for sheet_name, df in excel.items():
-                if df.empty:
+            for sheet_name in xls.sheet_names:
+                df_raw = xls.parse(sheet_name, header=None)
+                if df_raw.empty:
                     continue
 
-                # Limpeza do DataFrame
-                df = df.dropna(how='all')
-                df.columns = df.iloc[0]
-                df = df[1:]
-                df = df.reset_index(drop=True)
-                df = df[~df.apply(lambda row: row.astype(str).str.contains("End of worksheet", case=False)).any(axis=1)]
-
-                # Converter nome da folha para slug
-                sheet_slug = sheet_name.lower().replace(' ', '_')
-
+                processed_data_frame, clean_sheet_name, sheet_title  = run_pipeline_for_sheet(xls, sheet_name, output_dir)
+                csv_path = os.path.join(output_dir, f"{clean_sheet_name}.csv")
+                
+                # Let django deal with the duplicated files on its own. We will store that path on the model and use that to access it
+                available_path = default_storage.get_available_name(csv_path)
+                with open(available_path, mode='w', encoding='utf-8', newline='') as f:
+                    processed_data_frame.to_csv(f, index=False)
+                
+                # Check for other CSV's and mark them as not active
                 CSVFile.objects.filter(
                     quarter_file__quarter=self.quarter,
-                    sheet_name_slug=sheet_slug,
+                    sheet_name_slug=clean_sheet_name,
                     is_current=True
                 ).update(is_current=False)
 
-                name = f"{sheet_slug}.csv"
-                csv_path = os.path.join(folder, name)
-                
-                # Have django deal with duplicate files and file names
-                available_path = default_storage.get_available_name(csv_path)
-
                 CSVFile.objects.create(
                     quarter_file=self,
-                    sheet_name=sheet_name,
-                    sheet_name_slug=sheet_slug,
+                    sheet_name=sheet_title,
+                    sheet_name_slug=clean_sheet_name,
                     quarter_uuid=self.quarter.uuid,
                     csv_path=available_path,
-                    is_current=True  # Isto é redundante mas explícito
+                    is_current=True
                 )
-                
-                df.to_csv(available_path, index=False)
-                
+        
+            # Do not "save" itself, instead update just this field. Calling .save() causes a recursion
+            ExcellFile.objects.filter(pk=self.pk).update(is_processed=True)
+
         except Exception as e:
             print(f"Erro a processar {xlsx_path}: {e}")
 

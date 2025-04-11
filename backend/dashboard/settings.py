@@ -128,4 +128,4 @@ STATICFILES_DIRS = [
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Turn this on during development to make sure that stuff is working
-HARD_DELETE = True
+HARD_DELETE = False
