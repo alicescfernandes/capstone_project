@@ -18,6 +18,7 @@ def create_quarter_directory(sender, instance, created, **kwargs):
 def process_file_on_upload(sender, instance, created, **kwargs):
     instance.process_and_store_csv()
 
+if settings.HARD_DELETE == True:
     @receiver(post_delete, sender=Quarter)
     def delete_quarter_directory(sender, instance, **kwargs):
         path = os.path.join(settings.MEDIA_ROOT, 'uploads', str(instance.uuid))

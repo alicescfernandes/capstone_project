@@ -26,5 +26,5 @@ class QuarterCSVAdmin(admin.ModelAdmin):
     list_display = ('sheet_name_slug','sheet_name','is_current','csv_path','quarter_file', 'quarter_uuid',)
 
 @admin.register(ExcellFile)
-class QuarterCSVAdmin(admin.ModelAdmin):
-    list_display = ('quarter','is_processed','file','file_name','uploaded_at')
+class ExcellFileAdmin(admin.ModelAdmin):
+    list_display = ('quarter','is_processed','section_name','uploaded_at')

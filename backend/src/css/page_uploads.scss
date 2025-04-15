@@ -1,0 +1,106 @@
+/* TODO: Nest SCSS */
+.upload-section-wrapper {
+    @apply flex gap-4 flex-col py-6;
+}
+
+
+.upload-grid-quarters {
+    @apply grid gap-4 grid-cols-8;
+}
+
+.upload-quarter-card {
+    @apply col-span-4 bg-white border border-gray-200 rounded-lg shadow p-6;
+}
+
+.upload-card-header {
+    @apply flex justify-between items-center mb-4;
+}
+
+.upload-card-title {
+    @apply text-xl font-bold tracking-tight text-gray-900;
+}
+
+.upload-card-actions {
+    @apply flex flex-row gap-4;
+}
+
+.upload-edit-link {
+    @apply text-blue-600 hover:underline text-sm;
+}
+
+.upload-delete-link {
+    @apply text-red-600 hover:underline text-sm;
+}
+
+.upload-card-meta {
+    @apply text-sm text-gray-500 mb-4;
+}
+
+.upload-file-list {
+    @apply flex flex-wrap gap-2;
+}
+
+.upload-file-chip {
+    @apply flex items-center px-3 py-1 text-sm font-medium text-blue-800 bg-blue-100 rounded-full;
+}
+
+.upload-delete-chip-btn {
+    @apply ml-2 inline-flex items-center justify-center w-4 h-4 text-blue-400 hover:text-blue-600 focus:outline-none;
+}
+
+.upload-delete-icon {
+    @apply w-2 h-2;
+}
+
+.upload-empty-files {
+    @apply text-sm text-gray-400;
+}
+
+.upload-modal-container {
+    @apply fixed top-0 left-0 right-0 z-50 hidden p-4 overflow-x-hidden overflow-y-auto h-[calc(100%-1rem)] max-h-full;
+}
+
+.upload-modal-box {
+    @apply relative max-w-md max-h-full w-full;
+
+}
+
+.upload-modal-inner {
+    @apply relative bg-white rounded-lg shadow;
+}
+
+.upload-modal-header {
+    @apply flex items-start justify-between p-4 border-b rounded-t;
+}
+
+.upload-modal-title {
+    @apply text-xl font-semibold text-gray-900;
+}
+
+.upload-close-modal {
+    @apply text-gray-400 bg-transparent hover:text-gray-900;
+}
+
+.upload-form-wrapper {
+    @apply flex flex-col gap-4 p-6;
+}
+
+.upload-label {
+    @apply block mb-2 text-sm font-medium text-gray-900;
+}
+
+.upload-input {
+    @apply bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5;
+}
+
+.upload-form-actions {
+    @apply flex justify-end;
+}
+
+.upload-modal-submit-btn {
+    @apply text-white bg-blue-700 hover:bg-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center;
+}
+
+.upload-new-quarter-btn {
+    @apply mb-6 text-white bg-blue-700 hover:bg-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center;
+}

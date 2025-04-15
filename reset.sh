@@ -1,3 +1,3 @@
 source venv/Scripts/activate
 
-rm -rf backend/db.sqlite3
+rm -rf backend/db.sqlite

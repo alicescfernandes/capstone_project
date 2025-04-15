@@ -1,25 +1,9 @@
 import os
-import pandas as pd
-import plotly.express as px
 from django.shortcuts import render
-from django.http import JsonResponse, Http404
-from django.views import View
-from pages.models import Quarter
-import os
-import pandas as pd
-from django.http import JsonResponse
-from rest_framework.views import APIView
-from rest_framework.response import Response
 from .models import Quarter, ExcellFile, CSVFile
-from .serializers import QuarterSerializer
-from django.db.models import Max
-# views.py
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Quarter
 from .forms import QuarterForm
-from django.shortcuts import render, redirect, get_object_or_404
-from .models import Quarter
-from .forms import QuarterForm
+from collections import defaultdict
 
 # Get the path to the xlsx directory
 current_dir = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
@@ -39,7 +23,6 @@ def home(request):
     })
     
     last_quarter = quarters[0]
-    first_quarter = quarters[::-1][0]
         
     # Use query params here with default values
     query_quarter = request.GET.get("q",last_quarter.number)
@@ -51,6 +34,7 @@ def home(request):
     latest_csvs = (
         CSVFile.objects
         .select_related('quarter_file__quarter')
+        .filter(is_current=True) 
         .order_by('sheet_name_slug', '-quarter_file__quarter__number')
         )
     
@@ -58,6 +42,10 @@ def home(request):
     seen_slugs = set()
     chart_slugs = []
 
+    # Populate this object
+    sections = {}
+    
+    
     for csv in latest_csvs:
         slug = csv.sheet_name_slug
         if slug not in seen_slugs:
@@ -68,12 +56,22 @@ def home(request):
                 "quarter_number": csv.quarter_file.quarter.number,
             })
             
+            section_name = csv.quarter_file.section_name or "Sem Secção"
+
+            if(sections.get(section_name) == None):
+                sections[section_name] = []
+
+            sections[section_name].append({
+                "slug": slug,
+                "quarter_number": csv.quarter_file.quarter.number,
+            })
 
     return render(request, 'pages/home.html', {
         "app_context":{
             "qn":quarter.number,
             "quuid":quarter.uuid,            
         },
+        'sections': sections,
         "chart_slugs": chart_slugs
     })
 
@@ -108,17 +106,14 @@ def edit_quarter(request, uuid):
     quarter = get_object_or_404(Quarter, uuid=uuid)
 
     if request.method == 'POST':
-        # Atualizar número do quarter
         new_number = request.POST.get('number')
         if new_number:
             quarter.number = new_number
             quarter.save()
 
-        # Upload de múltiplos ficheiros
         files = request.FILES.getlist('files')
-        print("files", files)
         for f in files:
-            excell_file = ExcellFile.objects.create(
+            ExcellFile.objects.create(
                 quarter=quarter,
                 file=f
             )

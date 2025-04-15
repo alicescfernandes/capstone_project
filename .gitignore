@@ -3,4 +3,6 @@ venv
 xlsx_all/*
 node_modules
 *.sqlite3
-**uploads**
+uploads/
+!page_uploads.scss
+staticfiles/

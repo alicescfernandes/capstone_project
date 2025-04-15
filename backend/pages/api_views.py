@@ -1,17 +1,14 @@
-import os
 import pandas as pd
-from pages.models import Quarter
-import os
-import pandas as pd
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from .models import Quarter, CSVFile
-from rest_framework.views import APIView
-from rest_framework.response import Response
+
 from rest_framework import status
-from .models import CSVFile
-from django.shortcuts import get_object_or_404
-import pandas as pd
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
+from pages.models import Quarter
+from .models import Quarter
+from .utils.chart_classification import CHART_CLASSIFICATION
+from .utils.api import  get_quarter_navigation_object, get_request_params, return_empty_response, get_active_csv_for_slug
+from .utils.charts import process_simple_chart, process_double_chart
 class QuarterListAPIView(APIView):
     def get(self, request):
         # Preparar a lista de quarters
@@ -38,91 +35,43 @@ class QuarterListAPIView(APIView):
             "isLast": quarter.number == last_quarter.number,
         })
 
-def get_quarter_navigation_object(quarter_number, slug):
-    # Obter todos os quarter_uuids associados ao slug
-    quarter_uuids = (
-        CSVFile.objects
-        .filter(is_current=True) 
-        .filter(sheet_name_slug=slug)
-        .values_list('quarter_uuid', flat=True)
-        .distinct()
-    )
-    
-    # Obter os objetos Quarter correspondentes, ordenados por número
-    all_quarters = list(
-        Quarter.objects
-        .filter(uuid__in=quarter_uuids)
-        .order_by('number')
-    )
-
-    curr_q = get_object_or_404(Quarter, number=quarter_number)
-
-    try:
-        current_index = next(i for i, q in enumerate(all_quarters) if q.pk == curr_q.pk)
-    except StopIteration:
-        return None  # current quarter não está na lista filtrada
-
-    prev_q = all_quarters[current_index - 1] if current_index > 0 else None
-    next_q = all_quarters[current_index + 1] if current_index < len(all_quarters) - 1 else None
-
-    return {
-        'current': curr_q.number,
-        'prev': prev_q.number if prev_q else None,
-        'next': next_q.number if next_q else None,
-    }
-
-# http://localhost:8000/api/chart/?slug=customer_needs_and_wants&q=1
+# http://localhost:8000/api/chart/?slug=customer-needs-and-wants&q=1
+# http://localhost:8000/api/chart/?slug=competitors-prices-apac&q=1
 class ChartDataAPIView(APIView):
-    def get(self, request, format=None):
-        quarters = Quarter.objects.all()
-        last_quarter = quarters[0]            # mais recente
-
-        slug = request.query_params.get('slug')
-        quarter_number = request.query_params.get('q', last_quarter.number)
-        filter = request.query_params.get('opt')  # opcional
-
+    def get(self, request):
+        slug, quarter_number, filter = get_request_params(request)
+        
         if not slug:
             return Response(
-                {"error": "Both 'slug' query parameters are required."},
+                {"error": "Missing required 'slug' query parameter."},
                 status=status.HTTP_400_BAD_REQUEST
             )
-        
-        curr_q = get_object_or_404(Quarter, number=quarter_number)
-        
-        csv_file = get_object_or_404(
-            CSVFile,
-            sheet_name_slug=slug,
-            quarter_uuid=curr_q.uuid,
-            is_current=True
-        )
 
-        file_path = csv_file.csv_path
-                
+        chart_meta = CHART_CLASSIFICATION.get(slug)
+        
+        if not chart_meta:
+            return Response(
+                {"error": f"No chart classification found for slug '{slug}'."},
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+        type = chart_meta["type"]
+
+        csv_file = get_active_csv_for_slug(quarter_number, slug)
+    
+        quarter_data = get_quarter_navigation_object(quarter_number, slug) 
+            
         try:
-            df = pd.read_csv(file_path)
-
-            application_col = df.columns[0]
-            filter_cols = df.columns[1:]
-
-            df[filter_cols] = df[filter_cols].apply(pd.to_numeric, errors='coerce')
-
-            available_filters = filter_cols.tolist()
-            selected_filter = filter if filter in available_filters else available_filters[0]
-
-            applications = df[application_col].fillna("").tolist()
-            values = df[selected_filter].fillna(0).tolist()
-
+            df = pd.read_csv(csv_file.csv_path)
+            
+            if(type == "simple"):
+                chart_response = process_simple_chart(df, chart_meta,csv_file.sheet_name, filter)
+                return Response(quarter_data | chart_response)
+        
+            if(type=="double"):
+                chart_response = process_double_chart(df, chart_meta,csv_file.sheet_name, filter)
+                return Response(quarter_data | chart_response)
+            
         except Exception as e:
-            return Response({"error": f"Error reading file: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-        return Response({
-            'quarter':get_quarter_navigation_object(quarter_number, slug),
-            "data": {
-                "type": "bar", #TODO: Mapping for slugs to chart types
-                "x": applications,
-                "y": values
-            },
-            'title': csv_file.sheet_name,
-            "options": available_filters,
-            'selected_option': selected_filter
-        })
+            empty_response = return_empty_response(quarter_number, slug, e, csv_file.sheet_name)
+            return Response(quarter_data | empty_response )

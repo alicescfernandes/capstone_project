@@ -1,0 +1,108 @@
+/* Plotly hammer to make sure that the modebar appears as a single line */
+.modebar {
+    background: none !important;
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: flex-end !important;
+    padding: 0 !important;
+    top: 36px !important;
+}
+
+.modebar-group {
+    display: flex !important;
+    flex-direction: row !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.modebar-btn {
+    background: none !important;
+    margin: 0 2px !important;
+}
+
+/* Web Components */
+plotly-chart {
+    @apply col-span-8 lg:col-span-4 p-6 bg-white border border-gray-200 rounded-lg shadow-sm;
+    min-height: 350px;
+    
+    .spinner{
+        &-container{
+            @apply h-full flex justify-center items-center
+        }
+    
+        &-svg{
+            @apply w-8 h-8 text-gray-200 animate-spin fill-blue-600
+        }
+    }
+    
+    .alert{
+        &-error{
+            @apply flex items-center p-4 mb-4 text-sm text-red-800 border border-red-300 rounded-lg bg-red-50;
+            &-svg {
+                @apply shrink-0 inline w-4 h-4 me-3
+            }
+        }
+
+        &-info{
+            @apply flex items-center p-4 mb-4 text-sm text-blue-800 border border-blue-300 rounded-lg bg-blue-50
+        }
+    }
+
+    .chart{
+        &-header{
+            @apply flex justify-between mb-2
+        }
+        &-title{
+            @apply text-2xl font-semibold tracking-tight flex-1
+        }
+
+        &-filter{
+            @apply border rounded-md text-sm
+        }
+
+        &-quarter-nav-btn {
+            @apply disabled:text-gray-100 text-gray-500 text-xl
+        }
+    }
+}
+
+h2 {
+    @apply text-4xl font-semibold my-8;
+
+    &.first{
+        margin-top: 0;
+    }
+}
+
+.floating-toc{
+    @apply text-blue-700 z-50 fixed  p-4;
+    left: 0;
+    top: 0;
+
+    &-button{
+        @apply font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2
+    }
+    &-menu{
+        @apply  bg-white border border-gray-200 rounded-lg shadow-lg w-64 p-4
+    }
+
+
+    
+    ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+    
+    a {
+        @apply block py-1;
+        color: #007bff;
+
+        &.active{
+            @apply font-bold;
+        }
+    }
+    
+    
+}
+

@@ -1,8 +1,15 @@
 /* static/css/tailwind.css or input.css */
 @tailwind base;
-@tailwind components;
 @tailwind utilities;
-@import 'flowbite';
+@tailwind components;
+@import "flowbite/src/themes/default";
+@plugin "flowbite/plugin";
+@source "../../node_modules/flowbite";
+
+
+.container {
+    @apply px-2 lg:px-20;
+}
 
 /* Navbar */
 .navbar {
@@ -11,7 +18,7 @@
 
 /* Container */
 .navbar-container {
-    @apply flex flex-wrap items-center justify-between mx-auto p-4;
+    @apply flex flex-wrap items-center justify-between mx-auto py-4;
 }
 
 /* Logo */
@@ -34,7 +41,7 @@
 
 /* Mobile menu */
 .navbar-menu {
-    @apply hidden w-full md:block md:w-auto;
+    @apply w-full md:block md:w-auto;
 }
 
 /* Menu list */
@@ -50,4 +57,16 @@
 /* Active link */
 .navbar-link-active {
     @apply text-white md:text-blue-700;
+}
+
+.dropdown-container {
+    @apply z-10 font-normal bg-white divide-y divide-gray-100 rounded-lg shadow-xl;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+a.active {
+    @apply font-semibold
 }

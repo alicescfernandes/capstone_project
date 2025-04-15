@@ -4,9 +4,12 @@
 {% block title %}Home - Dashboard{% endblock %}
 
 {% block extra_head %}
-<link href="https://unpkg.com/filepond@^4/dist/filepond.css" rel="stylesheet" />
-<script src="https://unpkg.com/filepond@^4/dist/filepond.js"></script>
+<link href="https://unpkg.com/filepond@4.32.7/dist/filepond.min.css" rel="stylesheet" />
 <link rel="stylesheet" href="{% static 'css/page_uploads.css' %}">
+
+<script defer src="https://unpkg.com/filepond@4.32.7/dist/filepond.min.js"></script>
+<script defer src="https://unpkg.com/filepond-plugin-file-validate-type@1.2.9/dist/filepond-plugin-file-validate-type.min.js"></script>
+<script defer src="{% static 'js/page_uploads.js' %}"></script>
 {% endblock %}
 
 {% block content %}
@@ -29,11 +32,11 @@
                     {{ quarter }}
                 </h5>
                 <div class="upload-card-actions">
-                    <a href="#" class="upload-edit-link" data-modal-target="editQuarterModal"
+                    <button href="#" class="upload-edit-link" data-modal-target="editQuarterModal"
                         data-modal-toggle="editQuarterModal" data-quarter-id="{{ quarter.uuid }}"
-                        data-quarter-number="{{ quarter.number }}" onclick="openEditModal(this)">
+                        data-quarter-number="{{ quarter.number }}">
                         Edit
-                    </a>
+                </button>
 
                     <a href="{% url 'delete_quarter' quarter.uuid %}"
                         class="upload-delete-link">Delete</a>
@@ -117,15 +120,14 @@
                         class="upload-input">
                 </div>
 
-                <!-- Uploader múltiplo -->
                 <div>
                     <label for="edit-quarter-files" class="upload-label">
                         Adicionar Ficheiros (.xlsx)
                     </label>
-                    <!--<input type="file" name="files" id="edit-quarter-files" multiple accept=".xlsx" class="upload-input">-->
-                    <input type="file" name="files" id="filepond" multiple accept=".xlsx" />
+                    <input type="file" name="files" id="filepond" multiple />
 
                 </div>
+
 
                 <div class="flex justify-end">
                     <button type="submit"
@@ -137,25 +139,5 @@
         </div>
     </div>
 </div>
-
-
-<script>
-    function openEditModal(button) {
-        const uuid = button.getAttribute('data-quarter-id');
-        const number = button.getAttribute('data-quarter-number');
-
-        const form = document.getElementById('edit-quarter-form');
-        const input = document.getElementById('edit-quarter-number');
-
-        input.value = number;
-        form.action = `/quarters/edit/${uuid}/`;
-    }
-
-    FilePond.create(document.querySelector('#filepond'), {
-        allowMultiple: true,
-        storeAsFile: true,
-        acceptedFileTypes: ['application/vnd.openxmlformats-officedocument.spreadsheetml.sheet']
-    });
-</script>
 
 {% endblock %}

@@ -3,27 +3,32 @@
 
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+      {% block title %}
+        Dashboard
+      {% endblock %}
+    </title>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Dashboard{% endblock %}</title>
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
-    <script src='https://cdn.plot.ly/plotly-3.0.1.min.js'></script>
-    <script src="https://unpkg.com/flowbite@latest/dist/flowbite.min.js"></script>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
 
-    {% block extra_head %}{% endblock %}
-</head>
+    <script defer src="https://unpkg.com/flowbite@3.1.2/dist/flowbite.min.js"></script>
+    {% block extra_head %}
 
-<body class="container mx-auto px-8">
+    {% endblock %}
+  </head>
+
+  <body class="">
     {% include 'pages/navigation.html' %}
 
-    <main class="py-8">
-        {% block content %}
-        {% endblock %}
+    <main class="container mx-auto py-8">
+      {% block content %}
+
+      {% endblock %}
     </main>
 
     {% include 'pages/footer.html' %}
-</body>
-
+  </body>
 </html>

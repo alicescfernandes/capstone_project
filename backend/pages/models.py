@@ -1,17 +1,33 @@
-from django.db import models
+import re
 import os
-import uuid
-from django.contrib.auth.models import User
-import os
+import inflection
 import uuid
 import pandas as pd
 from django.db import models
 from django.conf import settings
 from django.core.files.storage import default_storage
-from .data_processing import run_pipeline_for_sheet
+from .utils.data_processing import run_pipeline_for_sheet
+
+def extract_section_name(file_name):
+    # Remove a extensão
+    name = os.path.splitext(file_name)[0]
+
+    # Substituir underscores e hífens por espaços
+    name = re.sub(r'[_\-]', ' ', name)
+
+    # Remover padrões tipo "Q2", "2023", "v1", etc.
+    name = re.sub(r'\b(Q\d+|[12][0-9]{3}|v\d+)\b', '', name, flags=re.IGNORECASE)
+
+    # Normalizar múltiplos espaços
+    name = re.sub(r'\s+', ' ', name).strip()
+
+    # Detetar se está em camelCase ou snake_case e transformar
+    name = inflection.titleize(name)
+
+    return name
 
 def user_quarter_upload_path(instance, filename):
-    instance.file_name = filename
+    instance.section_name = extract_section_name(filename)
     return os.path.join("uploads", str(instance.uuid), filename)
 
 class Quarter(models.Model):
@@ -31,8 +47,8 @@ class ExcellFile(models.Model):
     file = models.FileField(upload_to=user_quarter_upload_path)
     uploaded_at = models.DateTimeField(auto_now_add=True)
     uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
-    file_name = models.TextField(editable=False)
     is_processed = models.BooleanField(default=False, editable=True) # TODO: Flip this to true
+    section_name = models.CharField(max_length=255, editable=False, blank=True)
     
     def __str__(self):
         return f"{self.file.name} ({self.quarter})"
@@ -79,6 +95,7 @@ class ExcellFile(models.Model):
                 )
         
             # Do not "save" itself, instead update just this field. Calling .save() causes a recursion
+            print("setting is processed")
             ExcellFile.objects.filter(pk=self.pk).update(is_processed=True)
 
         except Exception as e:
