@@ -19,6 +19,10 @@ _Stuff that is not important and just nice haves_
 - [ ] When deleting an excell, update the active CSV's to a previous version
 - [ ] Add alert when there is still Excel files in processing
 
+## 04/16/2025
+
+- [x] Adds Report code to the repo. Allows me to version control the repo
+
 ## 04/13/2025
 
 - [x] Add Sections - Extract the names from the XSLX file. This will require some template changes. Make sure that the sections are tagged by ID so users can link then (or bookmark them)

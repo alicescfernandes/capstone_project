@@ -6,3 +6,12 @@ node_modules
 uploads/
 !page_uploads.scss
 staticfiles/
+
+
+
+# tex files
+docs/tex/
+
+
+.env.dev
+.env.prod

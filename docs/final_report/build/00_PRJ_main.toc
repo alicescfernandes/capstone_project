@@ -1,0 +1,50 @@
+\babel@toc {portuguese}{}\relax 
+\contentsline {chapter}{Resumo}{i}{chapter*.1}%
+\contentsline {chapter}{Abstract}{iii}{chapter*.2}%
+\contentsline {chapter}{Agradecimentos}{v}{chapter*.3}%
+\contentsline {chapter}{Índice}{vii}{chapter*.4}%
+\contentsline {chapter}{Lista de Tabelas}{ix}{chapter*.5}%
+\contentsline {chapter}{Lista de Figuras}{xi}{chapter*.6}%
+\contentsline {chapter}{Lista de Acrónimos}{xiii}{section*.7}%
+\contentsline {chapter}{\numberline {1}Introdução}{3}{chapter.1}%
+\contentsline {subsection}{\numberline {1.0.1}Motivação}{3}{subsection.1.0.1}%
+\contentsline {subsection}{\numberline {1.0.2}Objetivos}{4}{subsection.1.0.2}%
+\contentsline {chapter}{\numberline {2}Trabalho Relacionado}{5}{chapter.2}%
+\contentsline {chapter}{\numberline {3}Modelo Proposto}{7}{chapter.3}%
+\contentsline {section}{\numberline {3.1}Requisitos}{7}{section.3.1}%
+\contentsline {subsubsection}{Requisitos funcionais}{8}{section*.10}%
+\contentsline {subsubsection}{Requisitos não funcionais}{8}{section*.11}%
+\contentsline {subsection}{\numberline {3.1.1}Casos de Utilização}{9}{subsection.3.1.1}%
+\contentsline {section}{\numberline {3.2}Fundamentos}{9}{section.3.2}%
+\contentsline {subsection}{\numberline {3.2.1}Marketplace Simulations}{9}{subsection.3.2.1}%
+\contentsline {subsection}{\numberline {3.2.2}\textit {Quarters}}{11}{subsection.3.2.2}%
+\contentsline {subsection}{\numberline {3.2.3}Ficheiros}{12}{subsection.3.2.3}%
+\contentsline {subsection}{\numberline {3.2.4}Utilizadores}{12}{subsection.3.2.4}%
+\contentsline {section}{\numberline {3.3}Abordagem}{13}{section.3.3}%
+\contentsline {subsection}{\numberline {3.3.1}Organização por \textit {Quarters}}{13}{subsection.3.3.1}%
+\contentsline {subsection}{\numberline {3.3.2}\textit {Pipeline} de Normalização de Dados}{14}{subsection.3.3.2}%
+\contentsline {chapter}{\numberline {4}Implementação do Modelo}{15}{chapter.4}%
+\contentsline {section}{\numberline {4.1}Arquitetura Tecnológica}{15}{section.4.1}%
+\contentsline {section}{\numberline {4.2}Análise dos dados}{15}{section.4.2}%
+\contentsline {subsection}{\numberline {4.2.1}Análise inicial da informação}{15}{subsection.4.2.1}%
+\contentsline {subsection}{\numberline {4.2.2}Classificação da informação}{15}{subsection.4.2.2}%
+\contentsline {subsection}{\numberline {4.2.3}Visualização escolhidas para os vários grupos}{16}{subsection.4.2.3}%
+\contentsline {section}{\numberline {4.3}Processamento dos dados}{16}{section.4.3}%
+\contentsline {subsection}{\numberline {4.3.1}\textit {Pipeline} de transformação dos dados}{16}{subsection.4.3.1}%
+\contentsline {subsection}{\numberline {4.3.2}Conversão e Exportação para CSV}{16}{subsection.4.3.2}%
+\contentsline {section}{\numberline {4.4}Desenvolvimento da Aplicação Web}{17}{section.4.4}%
+\contentsline {subsection}{\numberline {4.4.1}Arquitetura da aplicação Django}{17}{subsection.4.4.1}%
+\contentsline {subsection}{\numberline {4.4.2}Endpoints e API interna}{17}{subsection.4.4.2}%
+\contentsline {subsection}{\numberline {4.4.3}Sistema de processamento assíncrono e normalização}{17}{subsection.4.4.3}%
+\contentsline {section}{\numberline {4.5}Interface Gráfica e Experiência do Utilizador (Frontend)}{18}{section.4.5}%
+\contentsline {subsection}{\numberline {4.5.1}Design System e Flowbite}{18}{subsection.4.5.1}%
+\contentsline {subsection}{\numberline {4.5.2}WebComponents e gráficos interativos}{18}{subsection.4.5.2}%
+\contentsline {subsection}{\numberline {4.5.3}Gestão de Quarters e Uploads}{18}{subsection.4.5.3}%
+\contentsline {chapter}{\numberline {5}Validação e Testes}{19}{chapter.5}%
+\contentsline {paragraph}{Atenção.}{19}{section*.12}%
+\contentsline {chapter}{\numberline {6}Conclusões e Trabalho Futuro}{21}{chapter.6}%
+\contentsline {chapter}{\numberline {A}Tutorial}{23}{appendix.A}%
+\contentsline {chapter}{\numberline {B}Casos de Utilização - UML}{25}{appendix.B}%
+\contentsline {chapter}{\numberline {C}Tabela de Requisitos funcionais}{27}{appendix.C}%
+\contentsline {chapter}{\numberline {D}Tabela de Requisitos não funcionais}{29}{appendix.D}%
+\contentsline {chapter}{\numberline {E}Classificação das folhas \gls {xlsx}}{31}{appendix.E}%
