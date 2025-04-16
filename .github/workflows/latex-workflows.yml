@@ -12,14 +12,11 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-
-      - name: Set up Docker
-        run: docker build -t latex-builder .
-
       - name: Run build script
         run: |
+          cd docs/final_report
           chmod +x ./docker.sh
-          cd docs/final_report ./docker.sh
+          ./docker.sh
 
       - name: Upload compiled PDF
         uses: actions/upload-artifact@v4
