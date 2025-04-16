@@ -1,0 +1,28 @@
+name: Build LaTeX Report
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build-report:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Docker
+        run: docker build -t latex-builder .
+
+      - name: Run build script
+        run: |
+          chmod +x ./docker.sh
+          cd docs/final_report ./docker.sh
+
+      - name: Upload compiled PDF
+        uses: actions/upload-artifact@v4
+        with:
+          name: final-report
+          path: docs/final_report/build/final_report.pdf

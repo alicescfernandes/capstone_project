@@ -10,6 +10,7 @@ _Stuff that is not important and just nice haves_
 - [ ] Use Axios instead of fetch
 - [ ] Adds preload tags for faster loading of scripts
 - [ ] Check if the flowbite JS file can be imported from node_modules
+- [ ] Setup github workflows to compile the report on every commit to master
 
 ## TODO
 
@@ -22,6 +23,7 @@ _Stuff that is not important and just nice haves_
 ## 04/16/2025
 
 - [x] Adds Report code to the repo. Allows me to version control the repo
+- [X] Adds build system for report
 
 ## 04/13/2025
 
