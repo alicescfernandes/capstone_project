@@ -20,20 +20,20 @@
 
 No contexto do ensino superior, a integração de ferramentas tecnológicas que potencializem o processo de aprendizagem é cada vez mais valorizada. Particularmente, em ambientes que simulam situações empresariais reais, como é o caso do simulador utilizado pelos alunos do \gls{iscal}.  A análise eficiente de dados torna-se essencial para a tomada de decisões estratégicas e tem impacto na avaliação final dos alunos, no entanto, a complexidade e a falta de visuais que ajudem a perceber as informações apresentadas pela plataforma original podem representar um desafio significativo para os estudantes.
 
-\subsection{Motivação}
+\section{Motivação}
 O presente projeto surgiu da necessidade  entre os alunos do \gls{iscal} que utilizam o simulador empresarial \textit{Marketplace Simulations - International Corporate Management} que é um simulador de negócios internacionais, onde os alunos se agrupam em empresas e simulam a criação de um negócio num mercado internacional. Embora a plataforma forneça toda a informação necessária à tomada de decisões na simulação, esses dados estão dispersos em múltiplas secções e apresentados em tabelas, sem funcionalidades de visualização gráfica ou filtragem. Esta limitação obriga os alunos a alternar entre páginas, copiar dados manualmente e criar folhas de cálculo externas, comprometendo tanto a eficiência quanto a qualidade da análise.
 
 
-\subsection{Objetivos}
+\section{Objetivos}
 
-A aplicação proposta neste relatório pretende ajudar nesse sentido, oferecendo uma interface  funcional que permite aos utilizadores carregar ficheiros \gls{xlsx} exportados da plataforma originais e tornar esses ficheiros em visualizações que podem ser consultadas e manipuladas. A aplicação permitirá aos utilizadores:
+A aplicação proposta neste relatório pretende ajudar nesse sentido, oferecendo uma interface  funcional que permite aos utilizadores carregar dados retirados da plataforma de simulação e tornar esses ficheiros em visualizações que podem ser consultadas e manipuladas. A aplicação permitirá aos utilizadores:
 \begin{itemize}
     \item Criar uma conta na plataforma que permita persistir a informação carregada.
     \item Carregar ficheiros \gls{xlsx} exportados da plataforma original;
     \item Visualizar os dados em gráficos interativos;
 \end{itemize}
 
-Do ponto de vista técnico, queremos que  projeto adote uma arquitetura fácil ed manter e que vá de encontro à utilização da plataforma, dando ênfase aos seguintes itens:
+Do ponto de vista técnico, queremos que  projeto adote uma arquitetura fácil de manter e que vá de encontro à utilização da plataforma, dando ênfase aos seguintes itens:
 \begin{itemize}
     \item A normalização e transformação automática de dados provenientes de fontes externas;
     \item A facilidade na gestão de utilizadores e ficheiros, com o objetivo de oferecer uma experiência intuitiva para os utilizadores finais.
@@ -48,26 +48,18 @@ Ao longo deste relatório, serão detalhadamente apresentadas as decisões tomad
 \label{ch:trabalhoRelacionado}
 %%________________________________________________________________________
 
-O presente projeto insere-se num contexto mais vasto de ferramentas pedagógicas e plataformas de apoio à tomada de decisão em ambientes simulados, particularmente no ensino superior com foco em gestão e estratégia empresarial. No âmbito do \gls{iscal}, tem sido recorrente a utilização de plataformas como o \textit{Marketplace Simulations}, que permitem aos estudantes desenvolver competências práticas em ambientes virtuais de negócios, replicando o funcionamento de mercados reais. Esta necessidade de suporte digital à análise e interpretação de dados já motivou o desenvolvimento de outras ferramentas auxiliares, com destaque para um projeto também realizado em parceria com o \gls{iscal}, focado em simulações parciais de modelos económicos simplificados.
+O presente projeto insere-se num contexto mais vasto de ferramentas pedagógicas e \gls{sad}, ainda que neste caso concreto,  em ambientes simulados, no ensino superior. No âmbito do \gls{iscal}, é recorrente a utilização de plataformas como a que iremos descrever nos seguintes capítulos \textit{Marketplace Simulations}, que permitem aos estudantes desenvolver competências práticas em ambientes virtuais de negócios, replicando o funcionamento de mercados reais. Esta necessidade de suporte digital à análise e simulação motivou o desenvolvimento de outras ferramentas auxiliares, com destaque para um projeto também realizado em parceria com o \gls{iscal}, focado em simulações parciais de modelos económicos.
 
-Esse projeto, embora partilhe a mesma motivação — facilitar a análise de informação extraída de simuladores empresariais — apresentava uma abordagem distinta. Em particular, a aplicação permitia simular cenários específicos com base em inputs manuais ou em pequenos ficheiros com dados sintetizados, o que se revelou útil para exercícios de curto alcance ou com foco muito delimitado (por exemplo, simular o impacto de uma única variável nos resultados de uma empresa virtual). No entanto, não oferecia suporte direto ao processamento automático dos dados reais exportados da plataforma \textit{Marketplace Simulations}, nem dispunha de funcionalidades integradas de normalização de dados ou visualização gráfica dinâmica.
+Esse projeto, embora partilhe uma motivação semelhante (criar micro-simulações) apresenta uma abordagem distinta. Em particular, a aplicação permite simular cenários específicos com base em inputs manuais, o que pode ser útil para quando se procura prever resultados com foco muito concreto (por exemplo, simular o impacto de uma única variável nos resultados). Esta plataforma foca-se numa outra vertente, em que pretende ser uma ferramenta para auxiliar o ensino de forma prática.
 
-O projeto atual distingue-se, assim, tanto pelo seu alcance como pela profundidade técnica das soluções propostas. Ao contrário do sistema anterior, que se baseava em simulações parametrizadas e modelos estáticos, esta nova aplicação aposta numa abordagem orientada a dados, onde a informação real dos jogos de simulação é carregada diretamente pelo utilizador. Essa escolha trouxe consigo a necessidade de resolver questões de normalização, estruturação e tratamento de grandes volumes de folhas de cálculo, algo que não era exigido nos projetos anteriores.
+O projeto atual distingue-se, tanto pelo seu foco como pela componente técnica. Ao contrário do sistema anterior, que se baseava em simulações parametrizadas modelos estáticos, esta nova aplicação aposta numa abordagem orientada a dados, onde a informação real dos jogos de simulação é carregada diretamente pelo utilizador. Essa escolha trouxe consigo a necessidade de resolver questões de normalização, estruturação e tratamento de dados, algo que não era pedido no projeto relacionado.
 
-Este trabalho assume, portanto, como pressuposto o uso de dados reais extraídos diretamente do simulador, a necessidade de integração com um sistema de autenticação e gestão de utilizadores, e a valorização da experiência do utilizador (UX) na apresentação de dados. Em conjunto, estes elementos definem uma solução mais abrangente e alinhada com os desafios técnicos reais da análise de dados em contexto educativo, indo além das simulações reduzidas ou controladas que caracterizavam os trabalhos relacionados anteriormente desenvolvidos.
-
+Este trabalho assume, portanto como pressuposto, o uso de dados extraídos diretamente da plataforma de simulação, e a valorização da experiência do utilização na apresentação de dados. Em conjunto, estes elementos definem uma solução mais abrangente e alinhada com os desafios técnicos reais da análise de dados em contexto educativo, indo além das simulações reduzidas ou controladas que caracterizavam os trabalhos relacionados anteriormente desenvolvidos.
 
 %%________________________________________________________________________
 \chapter{Modelo Proposto}
 \label{ch:modeloProposto}
 %%________________________________________________________________________
-
-Aqui mostra um caminho que inicia com requisitos (\cf, secção \ref{sec:requisitos}), passa pela aplicação dos fundamentos (\cf, secção \ref{sec:fundamentos}) e continua até conseguir transmitir uma visão clara e um formalismo com nível de detalhe adequado a um leitor que tenha um perfil (competência técnica) idêntico ao seu.
-
-Recorra, sempre que possível, a exemplos ilustrativos da utilização do seu modelo. Esses exemplos devem ajudar o leitor a compreender os aspetos mais específicos do seu trabalho.
-
-O modelo aqui proposto deve ser (tanto quanto possível) independente de tecnologias concretas (\eg, linguagens de programação ou bibliotecas). No entanto,, deve fornecer os argumentos que contribuam para justificar uma posterior escolha (adoção) de tecnologias.
-
 
 (falta introduzir o modelo proposto)
 
@@ -85,8 +77,8 @@ Deve apresentar de forma \aspas{moderada} o resultado da fase avaliação de req
 Os requisitos funcionais descrevem as funcionalidades específicas que a aplicação deve oferecer para atender às necessidades dos utilizadores. No contexto deste projeto, definem as ações que o sistema deve ser capaz de executar. No nosso projeto, identificamos os seguintes requisitos:
 
 \begin{itemize}
-    \item \textbf{Visualizações interativas:} a aplicação deve conseguir mostrar gráficos com base nos dados carregados, com suporte a alteração de parâmetros em tempo real (por exemplo, mudar de \textit{quarter} ou selecionar um país específico).
-    \item \textbf{Upload e processamento de ficheiros \gls{xlsx}:} os utilizadores devem conseguir carregar ficheiros \textit{\gls{xlsx}} com múltiplas folhas; esses ficheiros são automaticamente convertidos para CSV e normalizados.
+    \item \textbf{Visualizações interativas:} a aplicação deve conseguir mostrar gráficos com base nos dados carregados, com suporte a alteração de parâmetros em tempo real (por exemplo, mudar de quarter ou selecionar um país específico).
+    \item \textbf{Upload e processamento de ficheiros \gls{xlsx}:} os utilizadores devem conseguir carregar ficheiros \textit{\gls{xlsx}} com múltiplas folhas; esses ficheiros são automaticamente convertidos para \gls{csv} e normalizados.
     \item \textbf{Autenticação e gestão de utilizadores:} cada utilizador tem uma conta e pode gerir os seus próprios dados. Apenas os ficheiros mais recentes serão considerados para as visualizações.
     \item \textbf{Gestão de quarters:} os utilizadores podem criar períodos temporais (quarters), cada um identificado por um número, que funcionam como \textit{bucket} lógicos para organizar os ficheiros carregados.
 \end{itemize}
@@ -106,9 +98,58 @@ Alguns requisitos não funcionais foram igualmente críticos para garantir a rob
 
 
 \subsection{Casos de Utilização}
-(TODO)
+Com base nos requisitos funcionais e não funcionais identificados na secção anterior, foram definidos os principais casos de utilização que representam os cenários típicos de interação entre o utilizador e a aplicação. Estes casos cobrem tanto a gestão de dados (como o carregamento de ficheiros ou criação de períodos de simulação), como também a autenticação, visualização de informação e manipulação de gráficos. Os diagramas correspondentes encontram-se no Apêndice~\ref{apendice:uml}.
 
-- Colocar UML commo apendice
+Segue-se a descrição textual dos casos principais.
+
+\subsubsection{UC01 - Registo de utilizador}
+
+O utilizador acede à plataforma pela primeira vez e opta por criar uma conta. O sistema solicita os dados de autenticação (email, password) e valida se o utilizador já existe. Caso não exista, a conta é criada e o utilizador é autenticado automaticamente.
+
+\textit{Este caso responde ao requisito funcional de autenticação e está alinhado com os requisitos não funcionais de segurança (armazenamento seguro das passwords e isolamento dos dados por utilizador).}
+
+\subsubsection{UC02 - Autenticação do utilizador}
+
+Ao entrar na aplicação, o utilizador introduz as suas credenciais. O sistema valida o login com base nos dados guardados (Django Auth) e, se for bem-sucedido, redireciona o utilizador para a sua área pessoal.
+
+\textit{Relaciona-se com os requisitos de segurança e experiência de utilizador.}
+
+\subsubsection{UC03 - Criação de um quarter}
+
+O utilizador, já autenticado, pode criar um novo período de simulação (quarter), identificando-o por um número (por exemplo, Quarter 1). O sistema garante que esse número é único para o utilizador e associa um UUID ao quarter criado.
+
+\textit{Este caso reflete o requisito funcional de organização por quarters, e está diretamente ligado à estrutura de dados definida no modelo.}
+
+\subsubsection{UC04 - Carregamento de ficheiros}
+
+O utilizador escolhe um quarter e carrega ficheiros exportados da plataforma de simulação. O sistema valida a extensão, processa os ficheiros, aplica a pipeline de normalização e converte cada folha do Excel num ficheiro \texttt{.csv}. Os dados serão associados ao quarter de onde foram criado.
+
+\textit{Este caso é central no sistema e concretiza os requisitos de Carregamento, normalização dos dados, e compatibilidade com os ficheiros da plataforma Marketplace Simulations.}
+
+\subsubsection{UC05 - Visualização de gráficos}
+
+Após carregar os ficheiros, o utilizador pode aceder a gráficos gerados a partir dos dados normalizados. Os gráficos são interativos, e o utilizador pode aplicar filtros (por exemplo, selecionar o país ou o quarter atual) para ajustar a visualização. Apenas os ficheiros mais recentes são utilizados para construir os gráficos.
+
+\textit{Este caso corresponde ao requisito de visualizações interativas e integra a lógica de isolamento de dados, performance e usabilidade.}
+
+\subsubsection{UC06 - Aplicação de filtros avançados}
+
+Nos gráficos disponíveis, o utilizador pode aplicar diferentes filtros para refinar a visualização dos dados. Estes filtros são enviados para o backend que responde com os dados transformados, respeitando os parâmetros aplicados (ex: tipo de gráfico, quarter selecionado, país, etc.).
+
+\textit{Este caso representa a componente de manipulação dinâmica dos dados e dá resposta aos requisitos de performance e experiência do utilizador.}
+
+\subsubsection{UC07 - Eliminação de ficheiros}
+
+O utilizador pode eliminar ficheiros previamente carregados. O sistema remove as referências no backend, marca os ficheiros antigos como inativos e evita que continuem a ser usados na geração dos gráficos.
+
+\textit{Este caso garante a gestão de dados pelo utilizador e reforça o princípio de manter apenas uma versão ativa por ficheiro.}
+
+\subsubsection{Matriz de Prioridade}
+
+A matriz de prioridade dos casos de utilização encontra-se no Apêndice~\ref{apendice:prioridade}, onde foram atribuídas prioridades com base na frequência de uso e impacto funcional de cada ação.
+
+
+- Colocar UML como apendice
 - Referenciar a matriz prioridade dos casos de utilização
 Com os casos de utilização estabelecidos, foram identificados então os requisitos da plataforma, que podemos separar em requisitos funcionais e não funcionais
 
@@ -118,18 +159,23 @@ Com os casos de utilização estabelecidos, foram identificados então os requis
 \section{Fundamentos}
 \label{sec:fundamentos}
 
+A Marketplace Simulations  é uma empresa que desenvolve plataformas de simulação para fins educativos, ou seja, ferramentas que colocam os estudantes numa espécie de "jogo" onde cada equipa gere a sua própria empresa e compete com os colegas em cenários de mercado realistas. Isto acaba por funcionar como uma espécie de laboratório virtual, usado em faculdades de gestão e economia, como no \gls{iscal}, onde os alunos aplicam os conceitos aprendidos numa experiência em contexto educativo.
 
-\subsection{Marketplace Simulations}
-A Marketplace Simulations é, basicamente, uma empresa que desenvolve plataformas de simulação empresarial para fins educativos — ou seja, ferramentas que colocam os estudantes numa espécie de "jogo" onde cada equipa gere a sua própria empresa e compete com os colegas em cenários de mercado realistas. Isto acaba por funcionar como uma espécie de laboratório virtual de gestão, muito usado em faculdades de gestão e economia, mas também aparece em contextos mais técnicos como no \gls{iscal}, onde os alunos aplicam conceitos de estratégia, marketing, logística e finanças numa experiência em contexto educativo
-
-No caso concreto do nosso projeto, o módulo em questão chama-se \textit{International Corporate Management} (referida doravante como plataforma de simulação), e é utilizado tipicamente no último semestre do curso. Aqui, cada grupo de alunos representa uma empresa que tem de atuar num mercado competitivo — tomando decisões sobre posicionamento de produto, investimento, preços, distribuição, contratação de equipas e por aí fora. Essas decisões são processadas pela plataforma, que simula o comportamento do mercado com base num algoritmo interno. 
+No caso concreto do nosso projeto, o módulo em questão chama-se \textit{International Corporate Management} (referida doravante como plataforma de simulação), e é utilizado tipicamente no último semestre, na cadeira Projeto de Simulação em Negócios Internacionais  da Licenciatura de Comércio e Negócios Internacionais. Aqui, cada grupo de alunos representa uma empresa que tem de atuar num mercado competitivo — tomando decisões sobre posicionamento de produto, investimento, preços, distribuição, contratação de equipas e por aí fora. Essas decisões são processadas pela plataforma, que simula o comportamento do mercado com base num algoritmo interno. 
 
 No final de cada ronda (ou trimestre), os dados são disponibilizados na plataforma nas várias secções disponiveis numa visualização tabular, o que, na prática, faz com que os alunos saltem entre secções, fazer gráficos à mão e tirar conclusões com base em tabelas.
 
 Em termos de estrutura temporal, a simulação decorre ao longo de vários períodos, normalmente designados por quarters. Cada um destes quarters representa uma fase do ciclo de vida da empresa simulada — incluindo decisões estratégicas, execução e análise de resultados. Ou seja, no final de cada trimestre, os alunos recebem os dados com os resultados das decisões anteriores, o que obriga a uma análise comparativa constante entre períodos. É precisamente esta lógica iterativa — decidir, analisar, ajustar, repetir — que dá ritmo à simulação e aproxima o exercício de uma situação real de gestão empresarial.
 
+
+%%________________________________________________________________________
+\section{Abordagem}
+\label{sec:abordagem}
+%%________________________________________________________________________
+
 O projeto proposto pretende então ajudar nesse sentido, de conseguir transformar dados desta plataforma em algo mais fácil e rápido de analisar. Tento o contexto da plataforma, iremos então descrever duas abordagens que considerámos.
 
+\subsection{Web Scraping}
 A primeira abordagem que consideramos foi a hipótese de automatizar a extração dos dados diretamente da plataforma do Marketplace Simulations, através de técnicas de web scraping. A ideia parecia interessante numa fase conceptual, já que permitiria reduzir a dependência do utilizador no processo de exportação manual dos dados. No entanto, rapidamente percebemos que esta abordagem trazia vários desafios que, na prática, a tornavam pouco viável, ou mesmo arriscada.
 
 Primeiro, cada conta na plataforma está associada a um grupo de alunos, ou seja, é uma conta ativa e personalizada, usada diretamente durante a simulação. Isto significa que qualquer processo automático que iniciasse sessão, mesmo que fosse só para leitura, poderia inadvertidamente interagir com a interface e acabar por alterar alguma opção crítica — o que seria desastroso num contexto académico em que cada decisão tem impacto na avaliação. Além disso, como o acesso à plataforma é feito por licenças pagas, não existe qualquer possibilidade de criar uma service account ou utilizador apenas para leitura com permissões de administração. Ou seja, qualquer tentativa de scraping teria de reutilizar credenciais reais, o que levanta não só questões de segurança, mas também (possivelmente) legais.  
@@ -138,26 +184,32 @@ Outro fator que pesou na decisão foi o próprio risco técnico do scraping: pla
 
 Por todos estes motivos, optámos por não seguir esta via. Em vez disso, definimos como parte do fluxo normal da aplicação que os próprios alunos devem exportar dados a partir da plataforma de simulação e, de seguida, carregar para a nossa aplicação. Esta solução, embora mais manual, garante segurança, respeita a integridade das contas dos utilizadores, e evita problemas legais ou técnicos com a aplicação de simulação.
 
-A abordagem que acabamos por usar foi os alunos exportam manualmente os dados diretamente da plataforma de simulação e carregarem esses ficheiros na nossa plataforma. A partir daí, o sistema processa automaticamente os dados, normaliza os conteúdos e cria visualizações interativas. Esta abordagem, apesar de requerer uma ação manual inicial por parte do utilizador, é mais segura e prática quando comparada com a alternativa de web scraping, que, como vimos acima, apresentava vários desafios que poderiam ir contra os termos do serviço. Deste modo, garantimos um equilíbrio entre usabilidade, segurança e fiabilidade do sistema.
+\subsection{Exportação e carregamento manual de ficheiros}
 
-Para isso, procurámos que a nossa aplicação refletisse a estrutura da própria simulação. Como tal, os dados são organizados por quarters,como acontece na plataforma de simulação — em que cada quarter representa um período simulado, equivalente a uma semana de decisões. Cada utilizador pode criar os seus próprios quarters e fazer upload dos ficheiros exportados a partir da simulação. Estes ficheiros são depois processados o que nos permite trabalhar com dados mais consistentes. Esta estrutura base implica a existência de três entidades principais na nossa aplicação (que iremos descrever a seguir) e cuja interação define o funcionamento base do sistema.
+A abordagem que acabamos por usar foi os alunos exportam manualmente os dados diretamente da plataforma de simulação e carregarem esses ficheiros na nossa plataforma. A partir daí, o sistema processa automaticamente os dados, normaliza os conteúdos e cria visualizações interativas. Esta abordagem, apesar de requerer uma ação manual inicial por parte do utilizador, é mais segura e prática quando comparada com a alternativa de web scraping, que, como vimos acima, apresentava vários desafios que poderiam ir contra os termos do serviço. Deste modo, garantimos um equilíbrio entre usabilidade, segurança e fiabilidade do sistema. Acabamos então por criar um \gla{sad} (\cf, capítulo \ref{ch:sad}) que permita os estudantes tomarem melhores decisões.
 
-\subsection{\textit{Quarters}}
+
+Para isso, procurámos que a nossa aplicação refletisse a estrutura da própria simulação. Como tal, os dados são organizados por quarters, como acontece na plataforma de simulação e permitir o carregamento dos dados exportados. Estes ficheiros são depois processados o que nos permite trabalhar com dados mais consistentes. 
+
+Esta estrutura base implica a existência de três entidades principais na nossa aplicação (que iremos descrever a seguir) e cuja interação define o funcionamento base do sistema.
+
+
+\subsubsection{\textit{Quarters}}
 Os quarters funcionam como \textit{buckets} lógicos para organizar os ficheiros carregados pelos utilizadores. Cada utilizador pode criar múltiplos quarters, identificados de forma única por um número. Este número serve tambem de identificador, sendo que não é possível ter dois quarters identificados como 1 para cada utilizador.
 
-A nível de implementação, cada \textit{quarter} está associado unicamente a um utilizador e é identificado por um UUID (gerado automaticamente pelo \textit{Django}), que garante que o \textit{quarter} seja único.
+A nível de implementação, cada quarter está associado unicamente a um utilizador e é identificado por um UUID (gerado automaticamente pelo \textit{Django}), que garante que o quarter seja único.
 
-\subsection{Ficheiros}
+\subsubsection{Ficheiros}
 
-Os ficheiros são inicialmente carregados no formato \gls{xlsx}, contendo uma ou várias folhas de cálculo. Cada folha é tratada como uma entidade individual e transformada para CSV. O ficheiro \gls{xlsx} é guardado como referência, mas não é diretamente utilizado para visualização.
+Os ficheiros são inicialmente carregados no formato \gls{xlsx}, contendo uma ou várias folhas de cálculo. Cada folha é tratada como uma entidade individual e transformada para \gls{csv}. O ficheiro \gls{xlsx} é guardado como referência, mas não é diretamente utilizado para visualização.
 
-Este processo de conversão para CSV é acompanhado por uma \textit{pipeline} de normalização de dados, que limpa os dados (como por exemplo, remover quebras de linha, colunas sem representação, nomes inconsistentes) e aplica regras para que os gráficos possam ser gerados de forma consistente. Cada ficheiro CSV gerado é associado ao seu ficheiro \gls{xlsx} de origem, ao \textit{quarter} correspondente, e o seu nome será baseado no nome da folha de onde foi extraído. Aos ficheiros CSV é também associado uma \textit{slug}, baseado também no nome, que identifica a informação que o CSV representa.
+Este processo de conversão para \gls{csv} é acompanhado por uma \textit{pipeline} de normalização de dados, que limpa os dados (como por exemplo, remover quebras de linha, colunas sem representação, nomes inconsistentes) e aplica regras para que os gráficos possam ser gerados de forma consistente. Cada ficheiro \gls{csv} gerado é associado ao seu ficheiro \gls{xlsx} de origem, ao quarter correspondente, e o seu nome será baseado no nome da folha de onde foi extraído. Aos ficheiros \gls{csv} é também associado uma \textit{slug}, baseado também no nome, que identifica a informação que o \gls{csv} representa.
 
 A plataforma garante que só existe uma versão ativa de cada ficheiro por tipo — caso o utilizador carregue novamente um ficheiro com o mesmo nome lógico, o anterior será marcado como não ativo, evitando duplicações e garantindo que os gráficos usam apenas dados mais recentes.
 
-\subsection{Utilizadores}
+\subsubsection{Utilizadores}
 
-A plataforma foi desenhada para funcionar com utilizadores, baseando-se no sistema de autenticação pré-existende do \textit{Django}. Cada utilizador tem a sua conta, e pode realizar operações como criação de quarters, carregamento e alteração de ficheiros, e aceder aos gráficos gerados a partir desses ficheiros.
+A plataforma foi desenhada para funcionar com utilizadores. Cada utilizador tem a sua conta, e pode criar quarters, carregar ou alterar ficheiros, e ver aos gráficos gerados a partir desses ficheiros.
 
 Cada utilizador tem acesso apenas aos seus próprios dados, garantindo o isolamento da informação. Esta separação é feita a nível da base de dados, através da associação de cada entidade ao utilizador que criou.
 
@@ -165,28 +217,13 @@ Apesar da plataforma não suportar explicitamente equipas ou grupos, assume-se q
 
 No futuro, pode ser considerada a funcionalidade de desativação automática de contas (por exemplo, após o final do semestre), mas para já o modelo é simples e robusto: conta individual, dados isolados, e controlo completo sobre os próprios uploads.
 
-%%________________________________________________________________________
-\section{Abordagem}
-\label{sec:abordagem}
-%%________________________________________________________________________
+\subsubsection{\textit{Pipeline} de Normalização de Dados}
 
-Para a concretização do projeto, definimos então algumas abordagens que afetam a maneira como a plataforma é desenvolvida e utilizada. Apesar de o produto final ser uma aplicação \textit{web}, existem fatores diferenciadores neste projeto que só conseguem ser explicados em contexto com o problema que queremos resolver.
- 
-\subsection{Organização por \textit{Quarters}}
-
-Uma das primeiras decisões que foram tomadas foi como organizar a informação recebida, e para facilitar a utilização da plataforma,  foi decidido organizar os dados por quarters, refletindo o modelo temporal da simulação, onde as decisões são tomadas em em quarters. Cada \textit{quarter} corresponde a uma semana, e a cada \textit{quarter} é possivel exportar um conjunto de ficheiros da plataforma original.  Assim conseguimos garantir que a interface visual é intuitiva e fácil de perceber, uma vez que o mapeamento dos quarters é igual no modelo proposto. 
-
-Esta organização é feita de forma intencional, pelos utilizadores da plataforma, ao criarem quarters na plataforma, onde posteriormente carregam a informação. Os quarters ajudam também a segmentar a informação carregada, e indica explicitamente à plataforma onde pertencem os dados.
-
- A alternativa seria inferir o \textit{quarter} através do nome do ficheiro (como por exemplo, \textit{CustomerNeeds-Q5.xlsx}, mas esta alternativa assumia que os alunos não trocam o nome ou não organizam os ficheiros de outra maneira e faria com que a plataforma dependesse de um identificador (nome do ficheiro) externo para determinar onde associar o ficheiro recebido.
-
-\subsection{\textit{Pipeline} de Normalização de Dados}
-
-Outro contributo diferenciador foi a criação de uma \textit{pipeline} modular de normalização de dados. O objetivo é garantir que os ficheiros \gls{xlsx} carregados, que muitas vezes contêm nomes de colunas inconsistentes, quebras de linha, espaços em excesso ou colunas irrelevantes, sejam convertidos em CSV com um formato adaptado para visualização. 
+Outro contributo diferenciador foi o desenvolvimento de uma \textit{pipeline} modular de normalização de dados. O objetivo é garantir que os ficheiros carregados, que muitas vezes contêm nomes de colunas inconsistentes, quebras de linha, espaços em excesso ou colunas irrelevantes, sejam adaptados para serem visualizados. 
 
 Como podemos receber muitos ficheiros, a variabilidade entre os dados recebidos é muito alta, pelo que alguns dados passam por mais do que uma fase de normalização. Esta decisão foi tomada com base numa análise manual, em que identificámos possíveis fontes de dados que precisam de mais do que uma fase de normalização. As várias fases de normalização alteram os dados de modo a facilitar a representação visual dos mesmos e é um passo essencial no projeto, porque garante que a aplicação trabalha com formatos e regras conhecidas, e remove a variabilidade dos ficheiros importados.
 
 As fases de normalização irão ser descritas em mais detalhe nos capítulos seguintes, uma vez que a implementação destas pipeline estão relacionadas à tecnologia escolhida, mas o desenvolvimento desta \textit{pipeline} é um fator diferenciador deste projeto, uma vez que tem de lidar com dados que não estão estruturados de forma a facilitar representações visuais. 
 
-Este processo de normalização é semelhante aos processos ETL (Extract, Transform, Load) ainda que neste projeto tenha sido desenvolvido com uma escala menor.
+Este processo de normalização é semelhante aos processos \gls{etl} ainda que neste projeto tenha sido desenvolvido com uma escala menor.
 

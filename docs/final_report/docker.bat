@@ -1,0 +1,3 @@
+:: Run this with powershell
+docker build -t compiler_image .
+docker run --rm -v "$(pwd):/data" -w /data compiler_image

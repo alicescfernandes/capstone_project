@@ -7,10 +7,12 @@ RUN tlmgr update --self && \
         xfor \
         mfirstuc \
         datatool \
-        tracklang
+        tracklang \
+        biblatex \
+        biber
 
 # Define o ponto de montagem
 
 WORKDIR /data
 
-CMD ["pdflatex", "data/00_PRJ_main.tex"]
+CMD ["sh", "build.sh"]

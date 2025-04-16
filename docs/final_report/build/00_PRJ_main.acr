@@ -2,19 +2,48 @@
 \begin{theglossary}\glossaryheader
 \glsgroupheading{C}\relax \glsresetentrylist %
 \glossentry{csv}{\glossaryentrynumbers{\relax 
+<<<<<<< Updated upstream
 		\setentrycounter[]{page}\glsnumberformat{1}}}\glsgroupskip
+=======
+		\setentrycounter[]{page}\glsnumberformat{i}\delimN 
+		\setentrycounter[]{page}\glsnumberformat{iii}\delimN 
+		\setentrycounter[]{page}\glsnumberformat{viii}\delimN 
+		\setentrycounter[]{page}\glsnumberformat{1}\delimN 
+		\setentrycounter[]{page}\glsnumberformat{7}\delimN 
+		\setentrycounter[]{page}\glsnumberformat{11\delimN 12}\delimN 
+		\setentrycounter[]{page}\glsnumberformat{16}}}\glsgroupskip
+\glsgroupheading{E}\relax \glsresetentrylist %
+\glossentry{etl}{\glossaryentrynumbers{\relax 
+		\setentrycounter[]{page}\glsnumberformat{13}}}\glsgroupskip
+>>>>>>> Stashed changes
 \glsgroupheading{I}\relax \glsresetentrylist %
 \glossentry{iscal}{\glossaryentrynumbers{\relax 
 		\setentrycounter[]{page}\glsnumberformat{3}\delimN 
 		\setentrycounter[]{page}\glsnumberformat{5}\delimN 
 		\setentrycounter[]{page}\glsnumberformat{9}}}\glsgroupskip
+<<<<<<< Updated upstream
+=======
+\glsgroupheading{S}\relax \glsresetentrylist %
+\glossentry{sad}{\glossaryentrynumbers{\relax 
+		\setentrycounter[]{page}\glsnumberformat{viii}\delimN 
+		\setentrycounter[]{page}\glsnumberformat{5}\delimN 
+		\setentrycounter[]{page}\glsnumberformat{23}}}\glsgroupskip
+>>>>>>> Stashed changes
 \glsgroupheading{X}\relax \glsresetentrylist %
 \glossentry{xlsx}{\glossaryentrynumbers{\relax 
 		\setentrycounter[]{page}\glsnumberformat{i}\delimN 
 		\setentrycounter[]{page}\glsnumberformat{iii}\delimN 
+<<<<<<< Updated upstream
 		\setentrycounter[]{page}\glsnumberformat{4}\delimN 
 		\setentrycounter[]{page}\glsnumberformat{8}\delimN 
 		\setentrycounter[]{page}\glsnumberformat{12}\delimN 
 		\setentrycounter[]{page}\glsnumberformat{14\delimR 16}\delimN 
+=======
+		\setentrycounter[]{page}\glsnumberformat{viii}\delimN 
+		\setentrycounter[]{page}\glsnumberformat{4}\delimN 
+		\setentrycounter[]{page}\glsnumberformat{7}\delimN 
+		\setentrycounter[]{page}\glsnumberformat{11\delimN 12}\delimN 
+		\setentrycounter[]{page}\glsnumberformat{15\delimN 16}\delimN 
+>>>>>>> Stashed changes
 		\setentrycounter[]{page}\glsnumberformat{31\delimN 32}}}%
 \end{theglossary}\glossarypostamble

@@ -107,15 +107,15 @@
 % mudar alguns nomes fixos para PortuguÃªs
 %%________________________________________________________________________
 % renomear "Listing" para "CÃ³digo"
-\renewcommand{\lstlistingname}{CÃ³digo}
+\renewcommand{\lstlistingname}{Código}
 \addto\captionsportuges{
-    \renewcommand{\contentsname}{Ã�ndice}}
+    \renewcommand{\contentsname}{Apêndice}}
 \addto\captionsportuges{
     \renewcommand{\bibname}{Bibliografia}}
 \addto\captionsportuges{
     \renewcommand{\proofname}{Prova}}
 \addto\captionsportuges{
-    \renewcommand{\chaptername}{CapÃ­tulo}}
+    \renewcommand{\chaptername}{Capítulo}}
 \setlength{\headheight}{15pt}
 
 \newcommand{\myListOfAcronymns}{
@@ -182,19 +182,12 @@ No sistema, o \gls{csv} pe
 \appendix
 
 %%________________________________________________________________________
-%% comentar o que nÃ£o interessar (ou incluir outros ficheiros)
 \input{./02_PRJ_cap_apendice.tex}
 %%________________________________________________________________________
 
-%% bibliografia
-%% estilo para construÃ§Ã£o de referÃªncias bibliogrÃ¡ficas
-%% PTS. Alterei o estilo "apalike" e chamei-lhe "apalikeMy".
-%% Coloquei vÃ¡rios termos em PortuguÃªs
-%% (e.g., "and", "of", "chapter", "editors", etc)
 \bibliographystyle{apalikeMy}
 \backmatter
 \bibliography{Xbib}
 
 
-%%________________________________________________________________________
 \end{document}
