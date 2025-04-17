@@ -2,6 +2,25 @@ import pandas as pd
 import os
 import re
 from .chart_classification import COLUMNS_TO_REMOVE, ROWS_TO_REMOVE
+import inflection
+
+def extract_section_name(file_name):
+    # Remove a extensão
+    name = os.path.splitext(file_name)[0]
+
+    # Substituir underscores e hífens por espaços
+    name = re.sub(r'[_\-]', ' ', name)
+
+    # Remover padrões tipo "Q2", "2023", "v1", etc.
+    name = re.sub(r'\b(Q\d+|[12][0-9]{3}|v\d+)\b', '', name, flags=re.IGNORECASE)
+
+    # Normalizar múltiplos espaços
+    name = re.sub(r'\s+', ' ', name).strip()
+
+    # Detetar se está em camelCase ou snake_case e transformar
+    name = inflection.titleize(name)
+
+    return name
 
 def clean_title(text):
     return re.sub(r"(the\s*)?for Quarter \d+", "", text, flags=re.IGNORECASE).strip()

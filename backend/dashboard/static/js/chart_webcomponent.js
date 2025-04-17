@@ -49,7 +49,7 @@
   };
 
   // src/js/chart_webcomponent.js
-  var API_BASE_URL = "http://localhost:8000/api/";
+  var API_BASE_URL = `${window.location}api/`;
   var PlotlyChart = class extends HTMLElement {
     constructor() {
       super();

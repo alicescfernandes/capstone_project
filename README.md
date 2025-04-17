@@ -6,21 +6,20 @@ A modern, responsive Django website with multiple pages and clean design.
 
 You must have installed a Python version bigger than 3.9. For this project, the development was done under 3.12
 
+You must have Node 22 installed on your machine
+
+You must have a Docker runtime installed, you can either install Docker Desktop, Podman or Rancher and configure it to use the Docker CLI.
+
 ## Quick Start
 
-1. Create and activate virtual environment:
+1. Start the development environment
+This will ensure that you get the correct dependencies installed and also Postgres and MongoDB running
 
 ```bash
-./activate.sh
+docker-compose up --build
 ```
 
-2. Start the development server:
-
-```bash
-./start.sh
-```
-
-3. Visit <http://localhost:8000/> in your browser
+2. Visit <http://localhost:8000/> in your browser
 
 ## Documentation
 
@@ -37,15 +36,8 @@ final_project/
 │   └── SCENARIOS.md    # Project scenarios
 ├── venv/               # Python virtual environment
 ├── activate.sh         # Virtual environment setup script
-├── start.sh           # Development server startup script
-├── requirements.txt    # Python dependencies
 └── .gitignore         # Git ignore rules
 ```
-
-## Available Scripts
-
-- `activate.sh`: Creates and activates the virtual environment
-- `start.sh`: Activates the virtual environment, runs migrations, and starts the development server
 
 ## Manual Commands
 
@@ -67,7 +59,7 @@ pip3 install -r requirements.txt
 3. Run migrations:
 
 ```bash
-cd dashboard
+cd backend
 python3 manage.py migrate
 ```
 

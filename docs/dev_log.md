@@ -18,6 +18,7 @@ _Stuff that is not important and just nice haves_
 - [ ] Setup Postgres (Only during using auth)
 - [ ] When deleting an excell, update the active CSV's to a previous version
 - [ ] Add alert when there is still Excel files in processing
+- [ ] Consider using Mongo to store the CSV files (write a POC that replaces the files with Mongo DB)
 
 ## 04/16/2025
 
@@ -36,6 +37,7 @@ _Stuff that is not important and just nice haves_
 - [x] Ensure that all phase 1 charts are supported, without any bugs or errors
 - [x] Loads all files from unpkg CDN.
 - [x] Extract remaining tailwind classes into the CSS file
+- [x] Add proper collectstatic to the app
 
 ## 04/11/2025
 

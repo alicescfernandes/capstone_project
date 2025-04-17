@@ -1,4 +1,0 @@
-CompetitorsBrands -> This one we cannot chart, its a list of "X"
-CompetitorsInCity -> this one we cannot chart, its a list of "X"
-BalanceSheet -> Might be possible to chart
-IncomeStatement -> not even sure if we can graph this

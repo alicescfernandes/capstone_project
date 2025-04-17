@@ -3,15 +3,13 @@ venv
 xlsx_all/*
 node_modules
 *.sqlite3
+staticfiles
 uploads/
 !page_uploads.scss
 staticfiles/
 
-
-
 # tex files
 docs/tex/
-
 
 .env.dev
 .env.prod

@@ -6,25 +6,8 @@ import pandas as pd
 from django.db import models
 from django.conf import settings
 from django.core.files.storage import default_storage
-from .utils.data_processing import run_pipeline_for_sheet
+from .utils.data_processing import run_pipeline_for_sheet, extract_section_name
 
-def extract_section_name(file_name):
-    # Remove a extensão
-    name = os.path.splitext(file_name)[0]
-
-    # Substituir underscores e hífens por espaços
-    name = re.sub(r'[_\-]', ' ', name)
-
-    # Remover padrões tipo "Q2", "2023", "v1", etc.
-    name = re.sub(r'\b(Q\d+|[12][0-9]{3}|v\d+)\b', '', name, flags=re.IGNORECASE)
-
-    # Normalizar múltiplos espaços
-    name = re.sub(r'\s+', ' ', name).strip()
-
-    # Detetar se está em camelCase ou snake_case e transformar
-    name = inflection.titleize(name)
-
-    return name
 
 def user_quarter_upload_path(instance, filename):
     instance.section_name = extract_section_name(filename)

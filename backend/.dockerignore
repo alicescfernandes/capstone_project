@@ -58,11 +58,14 @@ logs/
 *.sqlite3
 *.db
 media/
-static/
+node_modules/
+uploads/
+staticfiles/
 
 # Project specific
 tex/
 docs/
-# xlsx/
+
 *.sh
 !docker.sh 
+src
