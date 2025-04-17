@@ -40,7 +40,6 @@ export function openEditModal(button) {
 document.addEventListener("click", (e) => {
     const target = e.target.closest('.upload-edit-link');
     if (target) {
-        console.log("click");
         openEditModal(target);
     }
 });

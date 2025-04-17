@@ -15,7 +15,6 @@ _Stuff that is not important and just nice haves_
 
 ## TODO
 
-- [ ] When deleting an excell, update the active CSV's to a previous version
 - [ ] Add alert when there is still Excel files in processing
 - [ ] Consider using Mongo to store the CSV files (write a POC that replaces the files with Mongo DB)
 - [ ] Loading from an # breaks the charts (<http://localhost:8000/#section-balanced-scorecard>)
@@ -27,6 +26,7 @@ _Stuff that is not important and just nice haves_
 - [x] Fix styling bugs (modal overlay and input) on the new quarter modal
 - [x] Cleans up more tailwind classes
 - [x] Check mime type of file, to avoid fake xlsx uploads
+- [x] When deleting an excel, update the active CSV's to a previous version
 
 ## 04/16/2025
 

@@ -3,11 +3,10 @@ import os
 import inflection
 import uuid
 import pandas as pd
-from django.db import models
+from django.db import models, transaction
 from django.conf import settings
 from django.core.files.storage import default_storage
 from .utils.data_processing import run_pipeline_for_sheet, extract_section_name
-
 
 def user_quarter_upload_path(instance, filename):
     instance.section_name = extract_section_name(filename)
@@ -83,6 +82,41 @@ class ExcelFile(models.Model):
 
         except Exception as e:
             print(f"Erro a processar {xlsx_path}: {e}")
+
+    # When deleting a file, if a bunch of "active" csv's originated from said file are the most up to date, 
+    # then we need to update the active ones so that the user can still see something
+    def delete(self, *args, **kwargs):
+            related_csvs = list(self.csvs.all())
+            quarter = self.quarter
+            excel_file_id = self.id
+
+            # Build a set of slugs where the current CSV is going to be deleted
+            current_slugs = {
+                csv.sheet_name_slug
+                for csv in related_csvs
+                if csv.is_current
+            }
+
+
+            with transaction.atomic():
+                super().delete(*args, **kwargs)
+
+                for slug in current_slugs:
+                    # Get the most recent CSVData (by upload date) for this slug in this quarter
+                    recent_csv = (
+                        CSVData.objects
+                        .filter(
+                            quarter_file__quarter=quarter,
+                            sheet_name_slug=slug
+                        )
+                        .exclude(quarter_file__id=excel_file_id)
+                        .order_by('-quarter_file__uploaded_at') 
+                        .first()
+                    )
+
+                    if recent_csv:
+                        recent_csv.is_current = True
+                        recent_csv.save(update_fields=['is_current'])
 
 class CSVData(models.Model):
     quarter_file = models.ForeignKey("ExcelFile", on_delete=models.CASCADE, related_name="csvs")

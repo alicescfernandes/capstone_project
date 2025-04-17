@@ -49,7 +49,7 @@
                 </div>
               {% endfor %}
             {% else %}
-              <a class="upload-empty-files" href="#" class="upload-edit-link" data-modal-target="editQuarterModal" data-modal-toggle="editQuarterModal" data-quarter-id="{{ quarter.uuid }}" data-quarter-number="{{ quarter.number }}">No files to show. <span class="text-blue-500 underline">Upload files</span></a>
+              <span class="upload-empty-files">No files to show. <a href="#" data-modal-target="editQuarterModal" data-modal-toggle="editQuarterModal" data-quarter-id="{{ quarter.uuid }}" data-quarter-number="{{ quarter.number }}" class="upload-edit-link text-blue-500 underline">Upload files</a></span>
             {% endif %}
           </div>
         </div>

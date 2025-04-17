@@ -60,9 +60,9 @@ async function buildJS() {
     outdir: './dashboard/static/js',
     bundle: true,
     target: ['es2015'],
-    // minify: true,
+    minify: true,
     sourcemap: true,
-    // format: 'iife',
+    format: 'iife',
     platform: "browser"
   });
 
