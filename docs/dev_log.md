@@ -12,12 +12,21 @@ _Stuff that is not important and just nice haves_
 - [ ] Check if the flowbite JS file can be imported from node_modules
 - [ ] Django DRF Caching (either Redis or Memcached)
 - [ ] Hide Sections when using mobile
+- [ ] Create a "change password page", check if django is able to send emails
 
 ## TODO
 
 - [ ] Add alert when there is still Excel files in processing
 - [ ] Consider using Mongo to store the CSV files (write a POC that replaces the files with Mongo DB)
 - [ ] Loading from an # breaks the charts (<http://localhost:8000/#section-balanced-scorecard>)
+
+## 04/18/2025
+
+- [ ] Add a user reference to all models
+- [ ] Read current user and grab the instances that current user created
+- [ ] Create login page and add the username to the navbar
+- [ ] Create the logout page
+- [ ] Create the registration page
 
 ## 04/17/2025
 
