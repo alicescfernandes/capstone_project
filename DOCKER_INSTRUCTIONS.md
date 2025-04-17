@@ -4,21 +4,28 @@
 
 ### First-Time Run
 
-```
+```sh
 docker-compose up --build
 ```
 
 ### Running the dev env
 
-```
+```sh
 docker-compose up 
+```
+
+### Run commands on the Web service
+
+```sh
+docker-compose exec web python manage.py makemigrations
+docker-compose exec web python manage.py migrate
 ```
 
 ### Clear the Dev Enviroment
 
 This also clears the databases since it removes the volumes
 
-```
+```sh
 docker-compose down -v
 ```
 
@@ -43,3 +50,9 @@ docker container prune
 docker volume prune
 
 # docker run --name some-nginx -p 80:80 nginx
+
+docker-compose down -v
+
+docker ps -aq | xargs docker rm -f
+
+docker ps -a

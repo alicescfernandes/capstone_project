@@ -15,7 +15,7 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='ExcellFile',
+            name='ExcelFile',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('file', models.FileField(upload_to=pages.models.user_quarter_upload_path)),
@@ -38,7 +38,7 @@ class Migration(migrations.Migration):
             },
         ),
         migrations.CreateModel(
-            name='CSVFile',
+            name='CSVData',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('sheet_name', models.CharField(max_length=255)),
@@ -48,11 +48,11 @@ class Migration(migrations.Migration):
                 ('uuid', models.UUIDField(default=uuid.uuid4, editable=False, unique=True)),
                 ('is_current', models.BooleanField(default=True)),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('quarter_file', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='csvs', to='pages.excellfile')),
+                ('quarter_file', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='csvs', to='pages.ExcelFile')),
             ],
         ),
         migrations.AddField(
-            model_name='excellfile',
+            model_name='ExcelFile',
             name='quarter',
             field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='files', to='pages.quarter'),
         ),

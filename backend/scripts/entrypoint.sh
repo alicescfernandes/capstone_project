@@ -2,7 +2,8 @@
 
 # Save this with the UNIX Line Endings (LF)
 
-echo "🔄 Applying migrations..."
+echo "Applying migrations..."
+python manage.py makemigrations  --verbosity 3
 python manage.py migrate
 
 echo "Creating superuser (if not exists)..."
@@ -17,9 +18,8 @@ if not User.objects.filter(username='${DJANGO_SUPERUSER_USERNAME}').exists():
     )
 EOF
 
-echo "🚀 Starting server..."
+# echo "🚀 Starting server..."
 exec python manage.py runserver 0.0.0.0:8000
 
-python manage.py makemigrations
-python manage.py migrate
-python manage.py runserver 0.0.0.0:8000
+# python manage.py runserver 0.0.0.0:8000
+

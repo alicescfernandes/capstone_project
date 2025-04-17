@@ -25,7 +25,7 @@ class Quarter(models.Model):
         return f"Q{self.number}"
     
 
-class ExcellFile(models.Model):
+class ExcelFile(models.Model):
     quarter = models.ForeignKey("Quarter", on_delete=models.CASCADE, related_name="files")
     file = models.FileField(upload_to=user_quarter_upload_path)
     uploaded_at = models.DateTimeField(auto_now_add=True)
@@ -38,7 +38,7 @@ class ExcellFile(models.Model):
 
     def process_and_store_csv(self):
         # Do not "save" itself, instead update just this field. Calling .save() causes a recursion
-        ExcellFile.objects.filter(pk=self.pk).update(is_processed=False)
+        ExcelFile.objects.filter(pk=self.pk).update(is_processed=False)
 
         xlsx_path = self.file.path
         print("Processing: " + xlsx_path)
@@ -62,13 +62,13 @@ class ExcellFile(models.Model):
                     processed_data_frame.to_csv(f, index=False)
                 
                 # Check for other CSV's and mark them as not active
-                CSVFile.objects.filter(
+                CSVData.objects.filter(
                     quarter_file__quarter=self.quarter,
                     sheet_name_slug=clean_sheet_name,
                     is_current=True
                 ).update(is_current=False)
 
-                CSVFile.objects.create(
+                CSVData.objects.create(
                     quarter_file=self,
                     sheet_name=sheet_title,
                     sheet_name_slug=clean_sheet_name,
@@ -79,13 +79,13 @@ class ExcellFile(models.Model):
         
             # Do not "save" itself, instead update just this field. Calling .save() causes a recursion
             print("setting is processed")
-            ExcellFile.objects.filter(pk=self.pk).update(is_processed=True)
+            ExcelFile.objects.filter(pk=self.pk).update(is_processed=True)
 
         except Exception as e:
             print(f"Erro a processar {xlsx_path}: {e}")
 
-class CSVFile(models.Model):
-    quarter_file = models.ForeignKey("ExcellFile", on_delete=models.CASCADE, related_name="csvs")
+class CSVData(models.Model):
+    quarter_file = models.ForeignKey("ExcelFile", on_delete=models.CASCADE, related_name="csvs")
     sheet_name = models.CharField(max_length=255)
     sheet_name_slug = models.CharField(max_length=255)
     csv_path = models.FilePathField(path=settings.MEDIA_ROOT, max_length=500)

@@ -1,30 +1,30 @@
 from django.contrib import admin
 
-from .models import Quarter, ExcellFile, CSVFile
+from .models import Quarter, ExcelFile, CSVData
 
 
-class CSVFileInline(admin.TabularInline):
-    model = CSVFile
+class CSVDataInline(admin.TabularInline):
+    model = CSVData
     extra = 0
     list_display = ('csv_path')
 
 
-class ExcellFileInline(admin.TabularInline):
-    model = ExcellFile
+class ExcelFileInline(admin.TabularInline):
+    model = ExcelFile
     extra = 1
-    inlines = [CSVFileInline]  # Este truque não funciona diretamente
+    inlines = [CSVDataInline]  # Este truque não funciona diretamente
 
 @admin.register(Quarter)
 class QuarterAdmin(admin.ModelAdmin):
     list_display = ('id', 'number', 'uuid', 'created_at')
     search_fields = ('number', 'uuid')
     ordering = ('-created_at',)
-    inlines = [ExcellFileInline]
+    inlines = [ExcelFileInline]
 
-@admin.register(CSVFile)
+@admin.register(CSVData)
 class QuarterCSVAdmin(admin.ModelAdmin):
     list_display = ('sheet_name_slug','sheet_name','is_current','csv_path','quarter_file', 'quarter_uuid',)
 
-@admin.register(ExcellFile)
-class ExcellFileAdmin(admin.ModelAdmin):
+@admin.register(ExcelFile)
+class ExcelFileAdmin(admin.ModelAdmin):
     list_display = ('quarter','is_processed','section_name','uploaded_at')

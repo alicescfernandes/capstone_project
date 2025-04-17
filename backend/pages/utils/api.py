@@ -1,10 +1,10 @@
-from ..models import Quarter, CSVFile
+from ..models import Quarter, CSVData
 from django.shortcuts import get_object_or_404
 
 def get_quarter_navigation_object(quarter_number, slug):
     # Obter todos os quarter_uuids associados ao slug
     quarter_uuids = (
-        CSVFile.objects
+        CSVData.objects
         .filter(is_current=True) 
         .filter(sheet_name_slug=slug)
         .values_list('quarter_uuid', flat=True)
@@ -64,7 +64,7 @@ def return_empty_response(quarter_number, slug,error,sheet_name ):
 def get_active_csv_for_slug(quarter_number, slug):
     curr_q = get_object_or_404(Quarter, number=quarter_number)
     csv_file = get_object_or_404(
-        CSVFile,
+        CSVData,
         sheet_name_slug=slug,
         quarter_uuid=curr_q.uuid,
         is_current=True)

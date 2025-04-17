@@ -11,11 +11,11 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.RemoveField(
-            model_name='excellfile',
+            model_name='ExcelFile',
             name='file_name',
         ),
         migrations.AddField(
-            model_name='excellfile',
+            model_name='ExcelFile',
             name='section_name',
             field=models.CharField(blank=True, editable=False, max_length=255),
         ),

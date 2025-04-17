@@ -1,6 +1,6 @@
 import os
 from django.shortcuts import render
-from .models import Quarter, ExcellFile, CSVFile
+from .models import Quarter, ExcelFile, CSVData
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import QuarterForm
 from collections import defaultdict
@@ -28,11 +28,11 @@ def home(request):
     query_quarter = request.GET.get("q",last_quarter.number)
     quarter = Quarter.objects.get(number=int(query_quarter))
 
-    unique_slugs = list(CSVFile.objects.values_list('sheet_name_slug', flat=True).distinct())    
+    unique_slugs = list(CSVData.objects.values_list('sheet_name_slug', flat=True).distinct())    
     print(unique_slugs)
     
     latest_csvs = (
-        CSVFile.objects
+        CSVData.objects
         .select_related('quarter_file__quarter')
         .filter(is_current=True) 
         .order_by('sheet_name_slug', '-quarter_file__quarter__number')
@@ -97,7 +97,7 @@ def delete_quarter(request, uuid):
 
 
 def delete_file(request, uuid):
-    quarter = get_object_or_404(ExcellFile, uuid=uuid)
+    quarter = get_object_or_404(ExcelFile, uuid=uuid)
     quarter.delete()
     return redirect('manage_quarters')
 
@@ -113,7 +113,7 @@ def edit_quarter(request, uuid):
 
         files = request.FILES.getlist('files')
         for f in files:
-            ExcellFile.objects.create(
+            ExcelFile.objects.create(
                 quarter=quarter,
                 file=f
             )
