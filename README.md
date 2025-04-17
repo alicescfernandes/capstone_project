@@ -4,22 +4,33 @@ A modern, responsive Django website with multiple pages and clean design.
 
 ## Requirements
 
-You must have installed a Python version bigger than 3.9. For this project, the development was done under 3.12
+You must have installed a **Python** version bigger than 3.9. For this project, the development was done under **3.12**
 
-You must have Node 22 installed on your machine
+You must have **Node 22** installed on your machine
 
-You must have a Docker runtime installed, you can either install Docker Desktop, Podman or Rancher and configure it to use the Docker CLI.
+You must have a **Docker runtime** installed, you can either install **Docker Desktop**, **Podman** or **Rancher** and configure it to use the Docker CLI.
 
 ## Quick Start
 
-1. Start the development environment
-This will ensure that you get the correct dependencies installed and also Postgres and MongoDB running
+1. Setup a `.env.dev` on the `infra` folder
+Copy the contents of `infra/.env.example` and save the changes as a new file. Use the name `.env.dev`
+
+2. Start the development environment
+This will ensure that you get the correct dependencies installed and also a Postgres DB ready to go.
 
 ```bash
 docker-compose up --build
 ```
 
-2. Visit <http://localhost:8000/> in your browser
+3. Visit <http://localhost:8000/> in your browser
+
+4. Build assets if changing JS or CSS
+Assets are built separately
+
+```sh
+cd backend
+node build.js
+```
 
 ## Documentation
 
