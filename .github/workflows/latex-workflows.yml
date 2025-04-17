@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - master
+    paths:
+      - '**.tex'  # Aciona o workflow somente quando arquivos .tex forem modificados
 
 jobs:
   build-report:
