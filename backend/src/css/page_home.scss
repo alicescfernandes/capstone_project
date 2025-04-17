@@ -1,4 +1,6 @@
 /* Plotly hammer to make sure that the modebar appears as a single line */
+@use "./navbar.scss";
+
 .modebar {
     background: none !important;
     display: flex !important;
@@ -19,6 +21,7 @@
     background: none !important;
     margin: 0 2px !important;
 }
+
 
 /* Web Components */
 plotly-chart {
@@ -106,3 +109,30 @@ h2 {
     
 }
 
+.empty-message{
+    &-container{
+        @apply col-span-8 p-6 flex flex-col items-center justify-center text-center;
+
+        svg{
+            @apply h-12 mb-3 text-gray-400
+        }
+    }
+}
+
+.dropdown {
+    &-items-list {
+        @apply z-10 font-normal bg-white divide-y divide-gray-100 rounded-lg shadow-xl border border-gray-200;
+
+        a{
+            @apply block px-4 
+        }
+    }
+    
+    &-list-item{
+        @apply py-2 text-sm text-gray-700
+    }
+    
+    &-container {
+        @apply flex flex-col font-medium rounded-lg md:space-x-8 rtl:space-x-reverse md:flex-row md:border-0 md:bg-white
+    }
+}

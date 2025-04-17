@@ -27,5 +27,5 @@ class QuarterForm(forms.ModelForm):
         model = Quarter
         fields = ['number']
         widgets = {
-            'number': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Número do quarter'}),
+            'number': forms.NumberInput(attrs={'class': 'form-control upload-input', 'placeholder': 'Número do quarter'}),
         }

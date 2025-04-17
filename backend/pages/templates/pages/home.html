@@ -13,6 +13,8 @@
 
 {% block content %}
 
+{% include 'sections/empty-message.html' %}
+  
 {% for section_name, charts in sections.items %}
 <div id="section-{{section_name|slugify}}">
     <h2 class="{% if forloop.first %}first{% endif %}">

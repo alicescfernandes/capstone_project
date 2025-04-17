@@ -4,10 +4,27 @@ from .models import Quarter, ExcelFile, CSVData
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import QuarterForm
 from collections import defaultdict
-
+from django.core.exceptions import ValidationError
+import openpyxl
 # Get the path to the xlsx directory
 current_dir = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
 xlsx_dir = os.path.join(current_dir, 'xlsx')
+
+def is_valid_xlsx(file):
+    if not file.name.endswith('.xlsx'):
+        raise ValidationError("Extensão inválida: apenas ficheiros .xlsx são permitidos.")
+    
+    if file.content_type != 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
+        raise ValidationError("Tipo MIME inválido para ficheiro .xlsx.")
+
+    try:
+        # openpyxl precisa do ficheiro 'rebobinado'
+        file.seek(0)
+        openpyxl.load_workbook(file)
+        file.seek(0)  # rebobina novamente para salvar mais à frente
+    except Exception as e:
+        raise ValidationError("Conteúdo inválido: o ficheiro não é um Excel válido.") from e
+    
 
 def home(request):
     # Prepare default case
@@ -72,6 +89,7 @@ def home(request):
             "quuid":quarter.uuid,            
         },
         'sections': sections,
+        "empty":len(chart_slugs) <= 0,
         "chart_slugs": chart_slugs
     })
 
@@ -113,9 +131,15 @@ def edit_quarter(request, uuid):
 
         files = request.FILES.getlist('files')
         for f in files:
-            ExcelFile.objects.create(
-                quarter=quarter,
-                file=f
-            )
+            try:
+                is_valid_xlsx(f)
+                ExcelFile.objects.create(
+                    quarter=quarter,
+                    file=f
+                )
+            except ValidationError as e:
+                # Podes fazer log, mostrar erro, ou armazenar numa lista para mostrar mais tarde
+                print(f"Did not upload '{f.name}': {e}")
+                continue
 
     return redirect('manage_quarters')

@@ -1,0 +1,11 @@
+{% if empty %}
+  <div class="empty-message-container">
+    <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+      <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v9m-5 0H5a1 1 0 0 0-1 1v4a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-4a1 1 0 0 0-1-1h-2M8 9l4-5 4 5m1 8h.01" />
+    </svg>
+
+    <h5 class="mb-1 text-xl font-semibold text-gray-700">No items found</h5>
+    <p class="mb-4 text-sm text-gray-500">It looks like there's nothing here yet. Start by adding your first quarter to get going.</p>
+    <a href="/quarters" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2">Create your first quarter</a>
+  </div>
+{% endif %}

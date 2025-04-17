@@ -1,143 +1,107 @@
 {% extends 'pages/base.html' %}
 {% load static %}
 
-{% block title %}Home - Dashboard{% endblock %}
+{% block title %}
+  Home - Dashboard
+{% endblock %}
 
 {% block extra_head %}
-<link href="https://unpkg.com/filepond@4.32.7/dist/filepond.min.css" rel="stylesheet" />
-<link rel="stylesheet" href="{% static 'css/page_uploads.css' %}">
+  <link href="https://unpkg.com/filepond@4.32.7/dist/filepond.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="{% static 'css/page_uploads.css' %}" />
 
-<script defer src="https://unpkg.com/filepond@4.32.7/dist/filepond.min.js"></script>
-<script defer src="https://unpkg.com/filepond-plugin-file-validate-type@1.2.9/dist/filepond-plugin-file-validate-type.min.js"></script>
-<script defer src="{% static 'js/page_uploads.js' %}"></script>
+  <script defer src="https://unpkg.com/filepond@4.32.7/dist/filepond.min.js"></script>
+  <script defer src="https://unpkg.com/filepond-plugin-file-validate-type@1.2.9/dist/filepond-plugin-file-validate-type.min.js"></script>
+  <script defer src="{% static 'js/page_uploads.js' %}"></script>
 {% endblock %}
 
 {% block content %}
+  {% load custom_tags %}
 
-{% load custom_tags %}
-
-<div class="upload-section-wrapper">
+  <div class="upload-section-wrapper">
     <div>
-        <button data-modal-target="createQuarterModal" data-modal-toggle="createQuarterModal"
-            class="upload-new-quarter-btn">
-            New Quarter
-        </button>
+      <button data-modal-target="createQuarterModal" data-modal-toggle="createQuarterModal" class="upload-new-quarter-btn">New Quarter</button>
     </div>
 
     <div class="upload-grid-quarters">
-        {% for quarter in quarters %}
+      {% for quarter in quarters %}
         <div class="upload-quarter-card">
-            <div class="upload-card-header">
-                <h5 class="upload-card-title">
-                    {{ quarter }}
-                </h5>
-                <div class="upload-card-actions">
-                    <button href="#" class="upload-edit-link" data-modal-target="editQuarterModal"
-                        data-modal-toggle="editQuarterModal" data-quarter-id="{{ quarter.uuid }}"
-                        data-quarter-number="{{ quarter.number }}">
-                        Edit
-                </button>
+          <div class="upload-card-header">
+            <h5 class="upload-card-title">{{ quarter }}</h5>
+            <div class="upload-card-actions">
+              <button href="#" class="upload-edit-link" data-modal-target="editQuarterModal" data-modal-toggle="editQuarterModal" data-quarter-id="{{ quarter.uuid }}" data-quarter-number="{{ quarter.number }}">Edit</button>
 
-                    <a href="{% url 'delete_quarter' quarter.uuid %}"
-                        class="upload-delete-link">Delete</a>
-                </div>
+              <a href="{% url 'delete_quarter' quarter.uuid %}" class="upload-delete-link">Delete</a>
             </div>
+          </div>
 
-            <p class="upload-card-meta">Created em {{ quarter.created_at|date:"d/m/Y H:i" }}</p>
+          <p class="upload-card-meta">Created at {{ quarter.created_at|date:'d/m/Y H:i' }}</p>
 
-            <div class="upload-file-list">
-                {% if quarter.files.exists %}
-                {% for f in quarter.files.all %}
+          <div class="upload-file-list">
+            {% if quarter.files.exists %}
+              {% for f in quarter.files.all %}
                 <div class="upload-file-chip">
-                    {{ f.file.name|basename }}
-                    <a href="/quarters/files/delete/{{f.uuid}}/" class="upload-delete-chip-btn">
-                        <svg class="upload-delete-icon" xmlns="http://www.w3.org/2000/svg" fill="none"
-                            viewBox="0 0 14 14" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M4 4l6 6m0-6L4 10" />
-                        </svg>
-                    </a>
+                  {{ f.file.name|basename }}
+                  <a href="/quarters/files/delete/{{ f.uuid }}/" class="upload-delete-chip-btn">
+                    <svg class="upload-delete-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4l6 6m0-6L4 10" />
+                    </svg>
+                  </a>
                 </div>
-                {% endfor %}
-                {% else %}
-                <span class="upload-empty-files">No files.</span>
-                {% endif %}
-            </div>
-
+              {% endfor %}
+            {% else %}
+              <a class="upload-empty-files" href="#" class="upload-edit-link" data-modal-target="editQuarterModal" data-modal-toggle="editQuarterModal" data-quarter-id="{{ quarter.uuid }}" data-quarter-number="{{ quarter.number }}">No files to show. <span class="text-blue-500 underline">Upload files</span></a>
+            {% endif %}
+          </div>
         </div>
-        {% endfor %}
+      {% endfor %}
     </div>
-</div>
+  </div>
 
-<!-- Modal de criação de quarter -->
-<div id="createQuarterModal" tabindex="-1" aria-hidden="true"
-    class="fixed top-0 left-0 right-0 z-50 hidden p-4 overflow-x-hidden overflow-y-auto h-[calc(100%-1rem)] max-h-full">
+  <div id="createQuarterModal" tabindex="-1" aria-hidden="true" class="fixed top-0 left-0 right-0 z-50 hidden p-4 overflow-x-hidden overflow-y-auto h-[calc(100%-1rem)] max-h-full">
     <div class="upload-modal-box">
-        <div class="upload-modal-inner ">
-            <div class="upload-modal-header">
-                <h3 class="upload-modal-title">Criar Quarter</h3>
-                <button type="button" class="upload-close-modal "
-                    data-modal-hide="createQuarterModal">
-                    ✕
-                </button>
-            </div>
-            <form method="post" class="upload-form-wrapper">
-                {% csrf_token %}
-                <div>
-                    <label for="id_number" class="upload-label ">Número do
-                        Quarter</label>
-                    {{ form.number }}
-                </div>
-                <div class="flex justify-end">
-                    <button type="submit"
-                        class="upload-modal-submit-btn">
-                        Criar
-                    </button>
-                </div>
-            </form>
+      <div class="upload-modal-inner">
+        <div class="upload-modal-header">
+          <h3 class="upload-modal-title">Add new quarter</h3>
+          <button type="button" class="upload-close-modal" data-modal-hide="createQuarterModal">✕</button>
         </div>
+        <form method="post" class="upload-form-wrapper">
+          {% csrf_token %}
+          <div>
+            <label for="id_number" class="upload-label">Quarter Number</label>
+            {{ form.number }}
+          </div>
+          <div class="flex justify-end">
+            <button type="submit" class="upload-modal-submit-btn">Save</button>
+          </div>
+        </form>
+      </div>
     </div>
-</div>
+  </div>
 
-<div id="editQuarterModal" tabindex="-1" aria-hidden="true"
-    class="fixed top-0 left-0 right-0 z-50 hidden p-4 overflow-x-hidden overflow-y-auto h-[calc(100%-1rem)] max-h-full">
+  <div id="editQuarterModal" tabindex="-1" aria-hidden="true" class="fixed top-0 left-0 right-0 z-50 hidden p-4 overflow-x-hidden overflow-y-auto h-[calc(100%-1rem)] max-h-full">
     <div class="upload-modal-box">
-        <div class="upload-modal-inner ">
-            <div class="upload-modal-header">
-                <h3 class="text-xl font-semibold text-gray-900">Editar Quarter</h3>
-                <button type="button" class="upload-close-modal "
-                    data-modal-hide="editQuarterModal">
-                    ✕
-                </button>
-            </div>
-            <form method="post" id="edit-quarter-form" class="upload-form-wrapper" enctype="multipart/form-data">
-                {% csrf_token %}
-                <div>
-                    <label for="edit-quarter-number" class="upload-label ">
-                        Número do Quarter
-                    </label>
-                    <input type="number" name="number" id="edit-quarter-number"
-                        class="upload-input">
-                </div>
-
-                <div>
-                    <label for="edit-quarter-files" class="upload-label">
-                        Adicionar Ficheiros (.xlsx)
-                    </label>
-                    <input type="file" name="files" id="filepond" multiple />
-
-                </div>
-
-
-                <div class="flex justify-end">
-                    <button type="submit"
-                        class="upload-modal-submit-btn">
-                        Guardar Alterações
-                    </button>
-                </div>
-            </form>
+      <div class="upload-modal-inner">
+        <div class="upload-modal-header">
+          <h3 class="text-xl font-semibold text-gray-900">Edit quarter</h3>
+          <button type="button" class="upload-close-modal" data-modal-hide="editQuarterModal">✕</button>
         </div>
-    </div>
-</div>
+        <form method="post" id="edit-quarter-form" class="upload-form-wrapper" enctype="multipart/form-data">
+          {% csrf_token %}
+          <div>
+            <label for="edit-quarter-number" class="upload-label">Quarter Number</label>
+            <input type="number" name="number" id="edit-quarter-number" class="upload-input" />
+          </div>
 
+          <div>
+            <label for="edit-quarter-files" class="upload-label">Upload Files (Only .xlsx accepted)</label>
+            <input type="file" name="files" id="filepond" multiple />
+          </div>
+
+          <div class="flex justify-end">
+            <button type="submit" class="upload-modal-submit-btn">Save</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
 {% endblock %}

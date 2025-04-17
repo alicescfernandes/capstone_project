@@ -10,24 +10,31 @@ _Stuff that is not important and just nice haves_
 - [ ] Use Axios instead of fetch
 - [ ] Adds preload tags for faster loading of scripts
 - [ ] Check if the flowbite JS file can be imported from node_modules
+- [ ] Django DRF Caching (either Redis or Memcached)
+- [ ] Hide Sections when using mobile
 
 ## TODO
 
-- [ ] Fork the branch for the FEIM presentation and freeze it
-- [ ] Django DRF Caching (either Redis or Memcached)
-- [ ] Setup Postgres (Only during using auth)
 - [ ] When deleting an excell, update the active CSV's to a previous version
 - [ ] Add alert when there is still Excel files in processing
-- [ ] Add empty state message when no files are returned
-- [ ] Hide Sections when using mobile
-- [ ] Remove dark mode from mobile menu
 - [ ] Consider using Mongo to store the CSV files (write a POC that replaces the files with Mongo DB)
+- [ ] Loading from an # breaks the charts (<http://localhost:8000/#section-balanced-scorecard>)
+
+## 04/17/2025
+
+- [x] Add empty state message when no files are returned
+- [x] Remove dark mode from mobile menu
+- [x] Fix styling bugs (modal overlay and input) on the new quarter modal
+- [x] Cleans up more tailwind classes
+- [x] Check mime type of file, to avoid fake xlsx uploads
 
 ## 04/16/2025
 
 - [x] Adds Report code to the repo. Allows me to version control the repo
 - [x] Adds build system for report
 - [x] Setup github workflows to compile the report on every commit to master
+- [x] Fork the branch for the FEIM presentation and freeze it
+- [x] Setup Postgres (Only during using auth)
 
 ## 04/13/2025
 

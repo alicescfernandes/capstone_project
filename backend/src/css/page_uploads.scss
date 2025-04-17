@@ -1,4 +1,5 @@
-/* TODO: Nest SCSS */
+@use "./navbar.scss";
+
 .upload-section-wrapper {
     @apply flex gap-4 flex-col py-6;
 }
