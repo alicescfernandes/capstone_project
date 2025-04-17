@@ -18,6 +18,9 @@ _Stuff that is not important and just nice haves_
 - [ ] Setup Postgres (Only during using auth)
 - [ ] When deleting an excell, update the active CSV's to a previous version
 - [ ] Add alert when there is still Excel files in processing
+- [ ] Add empty state message when no files are returned
+- [ ] Hide Sections when using mobile
+- [ ] Remove dark mode from mobile menu
 - [ ] Consider using Mongo to store the CSV files (write a POC that replaces the files with Mongo DB)
 
 ## 04/16/2025
