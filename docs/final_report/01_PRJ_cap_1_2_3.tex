@@ -15,30 +15,29 @@
 \label{ch:introducao}
 %%________________________________________________________________________
 
-%%\gls{xlsx}
-%% The \gls{api} provides access to the hardware.
+No contexto do ensino superior, tem-se dado cada vez mais importância à integração de ferramentas tecnológicas que tornem o processo de aprendizagem mais eficaz e prático, como é o caso do simulador utilizado pelos alunos do \gls{iscal}. Esta ferramenta permite que os estudantes apliquem, de forma interativa, os conhecimentos adquiridos ao longo do curso, colocando-os em situações de tomada de decisão semelhantes às que enfrentariam num ambiente real. Deste modo, o simulador não só reforça os conteúdos teóricos, como também promove o desenvolvimento de competências analíticas e estratégicas, essenciais para a sua formação. 
 
-No contexto do ensino superior, a integração de ferramentas tecnológicas que potencializem o processo de aprendizagem é cada vez mais valorizada. Particularmente, em ambientes que simulam situações empresariais reais, como é o caso do simulador utilizado pelos alunos do \gls{iscal}.  A análise eficiente de dados torna-se essencial para a tomada de decisões estratégicas e tem impacto na avaliação final dos alunos, no entanto, a complexidade e a falta de visuais que ajudem a perceber as informações apresentadas pela plataforma original podem representar um desafio significativo para os estudantes.
+Neste contexto, a análise eficiente de dados (da plataforma de simulação) torna-se essencial para a tomada de decisões estratégicas e tem impacto na avaliação final dos alunos, no entanto, a complexidade e a falta de visuais que ajudem a perceber as informações apresentadas pela plataforma original podem representar um desafio significativo para os estudantes.
 
 \section{Motivação}
-O presente projeto surgiu da necessidade  entre os alunos do \gls{iscal} que utilizam o simulador empresarial \textit{Marketplace Simulations - International Corporate Management} que é um simulador de negócios internacionais, onde os alunos se agrupam em empresas e simulam a criação de um negócio num mercado internacional. Embora a plataforma forneça toda a informação necessária à tomada de decisões na simulação, esses dados estão dispersos em múltiplas secções e apresentados em tabelas, sem funcionalidades de visualização gráfica ou filtragem. Esta limitação obriga os alunos a alternar entre páginas, copiar dados manualmente e criar folhas de cálculo externas, comprometendo tanto a eficiência quanto a qualidade da análise.
+O presente projeto surgiu da necessidade  entre os alunos do \gls{iscal} que utilizam o simulador \textit{Marketplace Simulations - International Corporate Management} (que iremos descrever no capítulo seguinte), que é um simulador de negócios internacionais, onde os alunos se agrupam em empresas e simulam a criação de um negócio num mercado internacional. Embora a plataforma forneça toda a informação necessária à tomada de decisões na simulação, esses dados estão dispersos em múltiplas secções e apresentados em tabelas, com poucas funcionalidades de visualização gráfica. Esta limitação obriga os alunos a alternar entre páginas, copiar dados manualmente e criar folhas de cálculo externas, comprometendo a eficiência e a análise da informação.
 
 
 \section{Objetivos}
 
-A aplicação proposta neste relatório pretende ajudar nesse sentido, oferecendo uma interface  funcional que permite aos utilizadores carregar dados retirados da plataforma de simulação e tornar esses ficheiros em visualizações que podem ser consultadas e manipuladas. A aplicação permitirá aos utilizadores:
+A aplicação proposta neste relatório pretende ajudar nesse sentido, oferecendo uma interface que permite aos utilizadores carregar dados retirados da plataforma de simulação e tornar esses ficheiros em visualizações que podem ser consultadas e manipuladas. A aplicação permitirá aos utilizadores:
 \begin{itemize}
     \item Criar uma conta na plataforma que permita persistir a informação carregada.
-    \item Carregar ficheiros \gls{xlsx} exportados da plataforma original;
+    \item Carregar ficheiros exportados da plataforma original;
     \item Visualizar os dados em gráficos interativos;
 \end{itemize}
 
 Do ponto de vista técnico, queremos que  projeto adote uma arquitetura fácil de manter e que vá de encontro à utilização da plataforma, dando ênfase aos seguintes itens:
 \begin{itemize}
     \item A normalização e transformação automática de dados provenientes de fontes externas;
-    \item A facilidade na gestão de utilizadores e ficheiros, com o objetivo de oferecer uma experiência intuitiva para os utilizadores finais.
+    \item A facilidade na gestão de ficheiros, com o objetivo de oferecer uma interface facil para os utilizadores finais.
     \item Organizar a informação por utilizador, garantindo que o utilizador apenas consegue consultar a informação carregada.
-    \item Adotar um modelo de organização semelhante à plataforma de simulação, de modo a tornar a experiência de utilização mais intuitiva e garantido que a nossa aplicação tenha fronteiras claras de utilização.
+    \item Adotar um modelo de funcionamento semelhante à plataforma de simulação, de modo a tornar a experiência de utilização mais intuitiva e garantido que a nossa aplicação tenha fronteiras claras de utilização.
 \end{itemize}
 
 Ao longo deste relatório, serão detalhadamente apresentadas as decisões tomadas, bem como os fundamentos que orientaram o desenvolvimento da aplicação proposta.
@@ -48,7 +47,7 @@ Ao longo deste relatório, serão detalhadamente apresentadas as decisões tomad
 \label{ch:trabalhoRelacionado}
 %%________________________________________________________________________
 
-O presente projeto insere-se num contexto mais vasto de ferramentas pedagógicas e \gls{sad}, ainda que neste caso concreto,  em ambientes simulados, no ensino superior. No âmbito do \gls{iscal}, é recorrente a utilização de plataformas como a que iremos descrever nos seguintes capítulos \textit{Marketplace Simulations}, que permitem aos estudantes desenvolver competências práticas em ambientes virtuais de negócios, replicando o funcionamento de mercados reais. Esta necessidade de suporte digital à análise e simulação motivou o desenvolvimento de outras ferramentas auxiliares, com destaque para um projeto também realizado em parceria com o \gls{iscal}, focado em simulações parciais de modelos económicos.
+O presente projeto insere-se num contexto mais geral de ferramentas pedagógicas e \gls{sad}, ainda que neste caso concreto,  em ambientes simulados no ensino superior. No âmbito do \gls{iscal}, é frequente a utilização de plataformas como a que iremos descrever nos seguintes capítulos \textit{Marketplace Simulations}, que permitem aos estudantes desenvolver competências práticas em ambientes virtuais de negócios, replicando o funcionamento de mercados reais. Esta necessidade de suporte digital à análise e simulação motivou o desenvolvimento de outras ferramentas auxiliares, com destaque para um projeto também realizado em parceria com o \gls{iscal}, focado em simulações parciais de modelos económicos.
 
 Esse projeto, embora partilhe uma motivação semelhante (criar micro-simulações) apresenta uma abordagem distinta. Em particular, a aplicação permite simular cenários específicos com base em inputs manuais, o que pode ser útil para quando se procura prever resultados com foco muito concreto (por exemplo, simular o impacto de uma única variável nos resultados). Esta plataforma foca-se numa outra vertente, em que pretende ser uma ferramenta para auxiliar o ensino de forma prática.
 
@@ -69,91 +68,71 @@ Este trabalho assume, portanto como pressuposto, o uso de dados extraídos diret
 \label{sec:requisitos}
 %%________________________________________________________________________
 
-Aqui o essencial (e se aplicável) dos requisitos funcionais, não funcionais e modelo de casos de utilização. Aqui deve também apresentar matriz para decisão sobre prioridade dos casos de utilização (se aplicável) \ldots
-
-Deve apresentar de forma \aspas{moderada} o resultado da fase avaliação de requisitos. A informação de maior detalhe (\eg, diagramas UML demasiado detalhados) deve ser colocada em apêndice.
-
 \subsubsection{Requisitos funcionais}
-Os requisitos funcionais descrevem as funcionalidades específicas que a aplicação deve oferecer para atender às necessidades dos utilizadores. No contexto deste projeto, definem as ações que o sistema deve ser capaz de executar. No nosso projeto, identificamos os seguintes requisitos:
+Os requisitos funcionais descrevem as funcionalidades específicas que a aplicação deve oferecer para atender às necessidades dos utilizadores. No contexto deste projeto, definem as ações que o sistema deve ser capaz de executar. No nosso projeto, identificamos os seguintes requisitos, ordenados por prioridade:
 
 \begin{itemize}
-    \item \textbf{Visualizações interativas:} a aplicação deve conseguir mostrar gráficos com base nos dados carregados, com suporte a alteração de parâmetros em tempo real (por exemplo, mudar de quarter ou selecionar um país específico).
-    \item \textbf{Upload e processamento de ficheiros \gls{xlsx}:} os utilizadores devem conseguir carregar ficheiros \textit{\gls{xlsx}} com múltiplas folhas; esses ficheiros são automaticamente convertidos para \gls{csv} e normalizados.
-    \item \textbf{Autenticação e gestão de utilizadores:} cada utilizador tem uma conta e pode gerir os seus próprios dados. Apenas os ficheiros mais recentes serão considerados para as visualizações.
-    \item \textbf{Gestão de quarters:} os utilizadores podem criar períodos temporais (quarters), cada um identificado por um número, que funcionam como \textit{bucket} lógicos para organizar os ficheiros carregados.
+    \item \textbf{Visualização de dados:} os utilizadores devem poder visualizar gráficos interativos baseados nos dados carregados, com a possibilidade de aplicar filtros como país ou quarter selecionado.
+
+    \item \textbf{Gestão de ficheiros:} os utilizadores devem poder carregar ficheiros, associá-los a quarters e eliminá-los quando necessário. O sistema valida os formatos e garante que apenas ficheiros válidos são processados.
+    
+    \item \textbf{Gestão de quarters:} cada utilizador pode criar períodos identificados como \textit{Quarter N}, para organizar os ficheiros carregados. Tem também de ser possível visualizar a lista de quarters disponíveis.
+
+    \item \textbf{Autenticação:} o sistema deve permitir a criação de contas e o login por parte dos utilizadores, garantindo que cada um acede apenas aos seus próprios dados.
+    
 \end{itemize}
 
 \subsubsection{Requisitos não funcionais}
 
-Alguns requisitos não funcionais foram igualmente críticos para garantir a robustez e usabilidade do sistema (TODO):
+Alguns requisitos não funcionais foram igualmente críticos para garantir a robustez e usabilidade do sistema. Os requisitos identificados foram os seguintes:
 
 \begin{itemize}
-    \item \textbf{Normalização da informação: } A \textit{pipeline} de processamento é isolada e modular, facilitando a manutenção e futura extensão do sistema.
-    \item \textbf{Normalização dos dados:} foram aplicadas rotinas automáticas para garantir coerência nos nomes de colunas, remoção de quebras de linha, e eliminação de colunas irrelevantes.
-    \item \textbf{Isolamento por utilizador:} cada utilizador só pode aceder aos seus dados, e visualizar a informação que carregou.
-    \item \textbf{Experiência de utilizador:} A plataforma tem de  ser capaz de oferecer uma boa experiência de utilização.
+    \item \textbf{Usabilidade:} a interface deve ser intuitiva, suportar múltiplos browsers e permitir o carregamento progressivo de gráficos sem bloquear a interação do utilizador (\textit{lazy load}).
+    
+    \item \textbf{Segurança:} o sistema deve garantir uma autenticação segura e assegurar que cada utilizador ou grupo apenas consegue aceder aos seus próprios dados. Deve também assegurar que só permite carregar ficheiros com o formato previsto.
+    
+    \item \textbf{Performance:} a aplicação deve ser capaz de suportar múltiplos utilizadores em simultâneo sem degradação significativa, mantendo uma resposta rápida às interações.
+    
+    \item \textbf{Acessibilidade:} o sistema deve ser acessível por teclado e compatível com leitores de ecrã (\textit{screen-reader friendly}).
+
+    \item \textbf{Normalização de dados:} os dados extraídos dos ficheiros devem ser automaticamente normalizados para garantir consistência e compatibilidade com o sistema de visualização.
+
 \end{itemize}
 
-(Colocar as actual tabelas no apendice)
+Os tabelas de requisitos por inteiro estão incluidas em apêndice (\cf, capítulo \ref{ch:tabRequisitos}).
 
+\section{Casos de Utilização}
 
-\subsection{Casos de Utilização}
-Com base nos requisitos funcionais e não funcionais identificados na secção anterior, foram definidos os principais casos de utilização que representam os cenários típicos de interação entre o utilizador e a aplicação. Estes casos cobrem tanto a gestão de dados (como o carregamento de ficheiros ou criação de períodos de simulação), como também a autenticação, visualização de informação e manipulação de gráficos. Os diagramas correspondentes encontram-se no Apêndice~\ref{apendice:uml}.
+Com base nos requisitos funcionais e não funcionais identificados na secção anterior, foram definidos os casos de utilização que iremos suportar. O diagramas correspondente, tal como a matriz de prioridade, encontram-se no (\cf, capítulo \ref{ch:casosUtilizacao}), mas em resumo, os casos de utilização são os que se seguem:
 
-Segue-se a descrição textual dos casos principais.
+\begin{enumerate}
+    \item \textbf{Registo de utilizador: } \\
+    O utilizador acede à plataforma pela primeira vez e opta por criar uma conta. O sistema solicita os dados de autenticação e valida se o utilizador já existe. Caso não exista, a conta é criada e o utilizador é autenticado automaticamente. \\
+    \textit{Este caso responde ao requisito funcional de autenticação e está alinhado com os requisitos não funcionais de segurança.}
+    
+    \item \textbf{Autenticação do utilizador: } \\
+    Ao entrar na aplicação, o utilizador introduz o seu username e password. O sistema valida o login com base nos dados guardados e, se for bem-sucedido, redireciona o utilizador para a página principal. \\
+    \textit{Relaciona-se com os requisitos de segurança e experiência de utilizador.}
+    
+    \item \textbf{Criação de um quarter: } \\
+    O utilizador, já autenticado, pode criar um novo quarter, identificando-o por um número. O sistema garante que esse número é único para o utilizador. \\
+    \textit{Este caso reflete o requisito funcional de organização por quarters, e está diretamente ligado à estrutura de dados definida no modelo.}
+    
+    \item \textbf{Carregamento de ficheiros: } \\
+    O utilizador escolhe um quarter e carrega ficheiros exportados da plataforma de simulação. O sistema valida a extensão, processa os ficheiros, aplica a pipeline de normalização para cada folha do Excel. Os dados serão associados ao quarter de onde foram criados. \\
+    \textit{Este caso é central no sistema e concretiza os requisitos de Carregamento, normalização dos dados, e compatibilidade com os ficheiros da plataforma Marketplace Simulations.}
 
-\subsubsection{UC01 - Registo de utilizador}
+    \item \textbf{Eliminação de ficheiros: } \\
+    O utilizador pode eliminar ficheiros previamente carregados. O sistema remove as referências no backend, marca os ficheiros antigos como inativos e evita que continuem a ser usados na geração dos gráficos. \\
+    \textit{Este caso garante a gestão de dados pelo utilizador e reforça o princípio de manter apenas uma versão ativa por ficheiro.}
+    
+    \item \textbf{Visualização de gráficos: } \\
+    Após carregar os ficheiros, o utilizador pode aceder a gráficos criados a partir dos dados normalizados. Os gráficos são interativos, e o utilizador pode aplicar filtros (por exemplo, selecionar o país ou o quarter atual) para ajustar a visualização. Apenas os ficheiros mais recentes são utilizados para construir os gráficos. \\
+    \textit{Este caso corresponde ao requisito de visualizações interativas e integra a lógica de isolamento de dados, performance e usabilidade.}
+    
+\end{enumerate}
 
-O utilizador acede à plataforma pela primeira vez e opta por criar uma conta. O sistema solicita os dados de autenticação (email, password) e valida se o utilizador já existe. Caso não exista, a conta é criada e o utilizador é autenticado automaticamente.
-
-\textit{Este caso responde ao requisito funcional de autenticação e está alinhado com os requisitos não funcionais de segurança (armazenamento seguro das passwords e isolamento dos dados por utilizador).}
-
-\subsubsection{UC02 - Autenticação do utilizador}
-
-Ao entrar na aplicação, o utilizador introduz as suas credenciais. O sistema valida o login com base nos dados guardados (Django Auth) e, se for bem-sucedido, redireciona o utilizador para a sua área pessoal.
-
-\textit{Relaciona-se com os requisitos de segurança e experiência de utilizador.}
-
-\subsubsection{UC03 - Criação de um quarter}
-
-O utilizador, já autenticado, pode criar um novo período de simulação (quarter), identificando-o por um número (por exemplo, Quarter 1). O sistema garante que esse número é único para o utilizador e associa um UUID ao quarter criado.
-
-\textit{Este caso reflete o requisito funcional de organização por quarters, e está diretamente ligado à estrutura de dados definida no modelo.}
-
-\subsubsection{UC04 - Carregamento de ficheiros}
-
-O utilizador escolhe um quarter e carrega ficheiros exportados da plataforma de simulação. O sistema valida a extensão, processa os ficheiros, aplica a pipeline de normalização e converte cada folha do Excel num ficheiro \texttt{.csv}. Os dados serão associados ao quarter de onde foram criado.
-
-\textit{Este caso é central no sistema e concretiza os requisitos de Carregamento, normalização dos dados, e compatibilidade com os ficheiros da plataforma Marketplace Simulations.}
-
-\subsubsection{UC05 - Visualização de gráficos}
-
-Após carregar os ficheiros, o utilizador pode aceder a gráficos gerados a partir dos dados normalizados. Os gráficos são interativos, e o utilizador pode aplicar filtros (por exemplo, selecionar o país ou o quarter atual) para ajustar a visualização. Apenas os ficheiros mais recentes são utilizados para construir os gráficos.
-
-\textit{Este caso corresponde ao requisito de visualizações interativas e integra a lógica de isolamento de dados, performance e usabilidade.}
-
-\subsubsection{UC06 - Aplicação de filtros avançados}
-
-Nos gráficos disponíveis, o utilizador pode aplicar diferentes filtros para refinar a visualização dos dados. Estes filtros são enviados para o backend que responde com os dados transformados, respeitando os parâmetros aplicados (ex: tipo de gráfico, quarter selecionado, país, etc.).
-
-\textit{Este caso representa a componente de manipulação dinâmica dos dados e dá resposta aos requisitos de performance e experiência do utilizador.}
-
-\subsubsection{UC07 - Eliminação de ficheiros}
-
-O utilizador pode eliminar ficheiros previamente carregados. O sistema remove as referências no backend, marca os ficheiros antigos como inativos e evita que continuem a ser usados na geração dos gráficos.
-
-\textit{Este caso garante a gestão de dados pelo utilizador e reforça o princípio de manter apenas uma versão ativa por ficheiro.}
-
-\subsubsection{Matriz de Prioridade}
-
-A matriz de prioridade dos casos de utilização encontra-se no Apêndice~\ref{apendice:prioridade}, onde foram atribuídas prioridades com base na frequência de uso e impacto funcional de cada ação.
-
-
-- Colocar UML como apendice
-- Referenciar a matriz prioridade dos casos de utilização
-Com os casos de utilização estabelecidos, foram identificados então os requisitos da plataforma, que podemos separar em requisitos funcionais e não funcionais
-
-\textbf{ Falta a matriz de prioridade dos casos de utilização}
+Com os casos de utilização estabelecidos, foram identificados então os requisitos da plataforma, que podemos separar em requisitos funcionais e não funcionais.
 
 %%________________________________________________________________________
 \section{Fundamentos}
