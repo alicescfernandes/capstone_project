@@ -241,59 +241,83 @@ CHART_CLASSIFICATION = {
     "advertising-mea": {
         "chart_type": "bar",
         "type": "advertising",
-        'column_name':"Company"
+        'column_name':"Company",
+        "group_by":['City', 'Ad'],
+        "group_column_index":"City"
     },
     "advertising-noram": {
         "chart_type": "bar",
         "type": "advertising",
-        'column_name':"Company"
+        'column_name':"Company",
+        "group_by":['City', 'Ad'],
+        "group_column_index":"City"
     },
     "advertising-latam": {
         "chart_type": "bar",
         "type": "advertising",
-        'column_name':"Company"
+        'column_name':"Company",
+        "group_by":['City', 'Ad'],
+        "group_column_index":"City"
     },
     "advertising-europe": {
         "chart_type": "bar",
         "type": "advertising",
-        'column_name':"Company"
+        'column_name':"Company",
+        "group_by":['City', 'Ad'],
+        "group_column_index":"City"
     },
     "advertising-apac": {
         "chart_type": "bar",
         "type": "advertising",
-        'column_name':"Company"
+        'column_name':"Company",
+        "group_by":['City', 'Ad'],
+        "group_column_index":"City"
     },
     "regional-media-inserts":{
         "chart_type": "bar",
         "type": "simple",
         'column_name':None
     },
-    # TODO: Regional advertising shares the same columns as the local advt
-    # "advertising-mea": {
-    #     "chart_type": "bar",
-    #     "type": "advertising",
-    #     'column_name':"Company"
-    # },
-    # "advertising-noram": {
-    #     "chart_type": "bar",
-    #     "type": "advertising",
-    #     'column_name':"Company"
-    # },
-    # "advertising-latam": {
-    #     "chart_type": "bar",
-    #     "type": "advertising",
-    #     'column_name':"Company"
-    # },
-    # "advertising-europe": {
-    #     "chart_type": "bar",
-    #     "type": "advertising",
-    #     'column_name':"Company"
-    # },
-    # "advertising-apac": {
-    #     "chart_type": "bar",
-    #     "type": "advertising",
-    #     'column_name':"Company"
-    # }
+    "regional-advertising-mea": {
+        "chart_type": "bar",
+        "type": "advertising",
+        'column_name':"Company",
+        "group_by":['Media', 'Ad'],
+        "group_column_index":"Media"
+
+    },
+    "regional-advertising-noram": {
+        "chart_type": "bar",
+        "type": "advertising",
+        'column_name':"Company",
+        "group_by":['Media', 'Ad'],
+        "group_column_index":"Media"
+
+    },
+    "regional-advertising-latam": {
+        "chart_type": "bar",
+        "type": "advertising",
+        'column_name':"Company",
+        "group_by":['Media', 'Ad'],
+        "group_column_index":"Media"
+
+    },
+    "regional-advertising-europe": {
+        "chart_type": "bar",
+        "type": "advertising",
+        'column_name':"Company",
+        "group_by":['Media', 'Ad'],
+        "group_column_index":"Media"
+
+    },
+    "regional-advertising-apac": {
+        "chart_type": "bar",
+        "type": "advertising",
+        'column_name':"Company",
+        "group_by":['Media', 'Ad'],
+        "group_column_index":"Media"
+
+    }
 
 }
 

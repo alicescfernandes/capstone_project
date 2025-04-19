@@ -226,7 +226,10 @@ def get_waterfall_chart(df, chart_meta, csv_sheet_name, filter):
     
 def get_group_chart(df, chart_meta, csv_sheet_name, filter):
     column_filter_name = chart_meta["column_name"]  
-    chart_type = chart_meta["chart_type"]           
+    chart_type = chart_meta["chart_type"]
+    group_by = chart_meta["group_by"]      
+    group_column_index = chart_meta["group_column_index"]           
+         
 
     available_column_filters = df[column_filter_name].unique()
     selected_column_filter = filter if filter in available_column_filters else available_column_filters[0]
@@ -235,12 +238,12 @@ def get_group_chart(df, chart_meta, csv_sheet_name, filter):
 
     grouped = (
         filtered_df
-        .groupby(['City', 'Ad'])['Number of Inserts']
+        .groupby(group_by)['Number of Inserts']
         .sum()
         .reset_index()
     )
 
-    pivot_df = grouped.pivot(index='Ad', columns='City', values='Number of Inserts').fillna(0)
+    pivot_df = grouped.pivot(index='Ad', columns=group_column_index, values='Number of Inserts').fillna(0)
 
     traces = []
     x = pivot_df.columns.tolist() 
