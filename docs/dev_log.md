@@ -15,6 +15,7 @@ _Stuff that is not important and just nice haves_
 - [ ] Create a "change password page", check if django is able to send emails
 - [ ] Display username on the navbar
 - [ ] Add a zoom feature on the charts, that would open a popup with the chart that was zoomed in
+- [ ] Add proper logging for the python app
 
 ## TODO
 
