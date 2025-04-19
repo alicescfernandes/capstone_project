@@ -353,6 +353,7 @@ ROWS_TO_REMOVE = [
 ADDITIONAL_PROCESSING_PIPELINE = {
     "brand-profitability": [process_balance_sheet],
     "channel-profitability-noram": [process_balance_sheet],
+    "channel-profitability-mea": [process_balance_sheet],
     "channel-profitability-latam": [process_balance_sheet],
     "channel-profitability-europe": [process_balance_sheet],
     "channel-profitability-apac": [process_balance_sheet]
