@@ -8,7 +8,7 @@ from pages.models import Quarter
 from .models import Quarter
 from .utils.chart_classification import CHART_CLASSIFICATION
 from .utils.api import  get_quarter_navigation_object, get_request_params, return_empty_response, get_active_csv_for_slug
-from .utils.charts import get_simple_chart, get_double_chart
+from .utils.charts import get_simple_chart, get_double_chart, get_waterfall_chart
 class QuarterListAPIView(APIView):
     def get(self, request):
         # Preparar a lista de quarters
@@ -73,8 +73,9 @@ class ChartDataAPIView(APIView):
                 return Response(quarter_data | chart_response)
             
             if(type=="balance_sheet"):
-                chart_response = get_double_chart(df, chart_meta,csv_data.sheet_name, filter)
+                chart_response = get_waterfall_chart(df, chart_meta,csv_data.sheet_name_pretty, filter)
                 return Response(quarter_data | chart_response)
         except Exception as e:
             empty_response = return_empty_response(quarter_number, slug, e, csv_data.sheet_name_pretty)
+            print(e)
             return Response(quarter_data | empty_response )

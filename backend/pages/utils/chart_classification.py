@@ -206,27 +206,27 @@ CHART_CLASSIFICATION = {
     "brand-profitability": {
         "chart_type": "waterfall",
         "type": "balance_sheet",
-        'column_name':None
+        'column_name':"Column"
     },
     "channel-profitability-noram": {
         "chart_type": "waterfall",
         "type": "balance_sheet",
-        'column_name':None
+        'column_name':"Column"
     },
     "channel-profitability-latam": {
         "chart_type": "waterfall",
         "type": "balance_sheet",
-        'column_name':None
+        'column_name':"Column"
     },
     "channel-profitability-europe": {
         "chart_type": "waterfall",
         "type": "balance_sheet",
-        'column_name':None
+        'column_name':"Column"
     },
     "channel-profitability-apac": {
         "chart_type": "waterfall",
         "type": "balance_sheet",
-        'column_name':None
+        'column_name':"Column"
     },
 
 }

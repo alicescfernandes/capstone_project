@@ -185,3 +185,40 @@ def get_double_chart(df, chart_meta,csv_sheet_name, filter):
             'selected': selected_column_filter
         }
     }
+    
+
+def get_waterfall_chart(df, chart_meta, csv_sheet_name, filter):
+    column_filter_name = chart_meta["column_name"]
+    chart_type = chart_meta["chart_type"]
+    available_column_filters = df[column_filter_name].unique()
+
+    selected_column_filter = filter if filter in available_column_filters else available_column_filters[0]
+
+    filtered_df = df[df[column_filter_name] == selected_column_filter]
+
+    trace = {
+        "type": "waterfall",
+        "name": selected_column_filter,
+        "x": filtered_df["Label"].tolist(),
+        "y": filtered_df["Value"].tolist(),
+        "measure": filtered_df["Measure"].tolist(),
+        "textposition": "inside"
+    }
+
+    return {
+        'title': csv_sheet_name,
+        'type': chart_type,
+        'chart_config': {
+            "traces": [trace],
+            "layout": {
+                "showlegend": False,
+                "waterfallgap": 0.1,
+            }
+        },
+        "options": available_column_filters.tolist(),
+        'selected_option': selected_column_filter,
+        'columns_filter': {
+            'available': available_column_filters.tolist(),
+            'selected': selected_column_filter
+        }
+    }

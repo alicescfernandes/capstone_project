@@ -61,7 +61,6 @@ class ExcelFile(models.Model):
                 processed_data_frame, sheet_slug, sheet_title  = run_pipeline_for_sheet(df_raw, sheet_name)
 
                 # Get the column order first, this will be saved in a specific field
-                columns = processed_data_frame.columns.tolist()
                 
                 if(sheet_slug in ADDITIONAL_PROCESSING_PIPELINE):
                     processing_functions= ADDITIONAL_PROCESSING_PIPELINE[sheet_slug]
@@ -70,12 +69,10 @@ class ExcelFile(models.Model):
                     for fn in processing_functions:
                         df_processing = fn(df_processing)
                     
-                    print("sheet slug:" + sheet_slug)
-                    print("additional processing required", df_processing)
                     processed_data_frame = df_processing
-                    
 
-                
+
+                columns = processed_data_frame.columns.tolist()
                 data_json = convert_df_to_json(processed_data_frame)
                 
                 # Check for other CSV's and mark them as not active
