@@ -2,8 +2,7 @@ import os
 import uuid
 import pandas as pd
 from django.db import models, transaction
-from django.conf import settings
-from django.core.files.storage import default_storage
+from .utils.data_processing import run_pipeline_for_sheet, extract_section_name, convert_df_to_json, parse_sheet
 from .utils.data_processing import run_pipeline_for_sheet, extract_section_name
 from django.contrib.auth import get_user_model
 
@@ -14,9 +13,11 @@ def user_quarter_upload_path(instance, filename):
     return os.path.join("uploads", str(instance.uuid), filename)
 
 class Quarter(models.Model):
+    uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
+    number = models.PositiveIntegerField(unique=True)
+    created_at = models.DateTimeField(auto_now_add=True)
     number = models.PositiveIntegerField()
     created_at = models.DateTimeField(auto_now_add=True)
-    uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="quarters")
 
     class Meta:
@@ -28,10 +29,10 @@ class Quarter(models.Model):
     
 
 class ExcelFile(models.Model):
+    uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     quarter = models.ForeignKey("Quarter", on_delete=models.CASCADE, related_name="files")
     file = models.FileField(upload_to=user_quarter_upload_path)
     uploaded_at = models.DateTimeField(auto_now_add=True)
-    uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     is_processed = models.BooleanField(default=False, editable=True) # TODO: Flip this to true
     section_name = models.CharField(max_length=255, editable=False, blank=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="excel_files")
@@ -47,46 +48,41 @@ class ExcelFile(models.Model):
         ExcelFile.objects.filter(pk=self.pk).update(is_processed=False)
 
         xlsx_path = self.file.path
-        print("Processing: " + xlsx_path)
-        output_dir = os.path.join(settings.MEDIA_ROOT, 'uploads', str(self.uuid))
-        os.makedirs(output_dir, exist_ok=True)
 
         try:
             xls = pd.ExcelFile(xlsx_path)
 
             for sheet_name in xls.sheet_names:
-                df_raw = xls.parse(sheet_name, header=None)
+                df_raw = parse_sheet(xls, sheet_name)
                 if df_raw.empty:
                     continue
 
-                processed_data_frame, clean_sheet_name, sheet_title  = run_pipeline_for_sheet(xls, sheet_name, output_dir)
-                csv_path = os.path.join(output_dir, f"{clean_sheet_name}.csv")
-                
-                # Let django deal with the duplicated files on its own. We will store that path on the model and use that to access it
-                available_path = default_storage.get_available_name(csv_path)
-                with open(available_path, mode='w', encoding='utf-8', newline='') as f:
-                    processed_data_frame.to_csv(f, index=False)
+                processed_data_frame, sheet_slug, sheet_title  = run_pipeline_for_sheet(df_raw, sheet_name)
+
+                # Get the column order first, this will be saved in a specific field
+                columns = processed_data_frame.columns.tolist()
+                data_json = convert_df_to_json(processed_data_frame)
                 
                 # Check for other CSV's and mark them as not active
                 CSVData.objects.filter(
                     quarter_file__quarter=self.quarter,
-                    sheet_name_slug=clean_sheet_name,
+                    sheet_name_slug=sheet_slug,
                     is_current=True,
                     user=self.user
                 ).update(is_current=False)
 
                 CSVData.objects.create(
                     quarter_file=self,
-                    sheet_name=sheet_title,
-                    sheet_name_slug=clean_sheet_name,
+                    sheet_name_pretty=sheet_title,
+                    sheet_name_slug=sheet_slug,
                     quarter_uuid=self.quarter.uuid,
-                    csv_path=available_path,
+                    data=data_json,
+                    is_current=True,
+                    column_order=columns, 
                     user=self.user,
-                    is_current=True
                 )
         
             # Do not "save" itself, instead update just this field. Calling .save() causes a recursion
-            print("setting is processed")
             ExcelFile.objects.filter(pk=self.pk).update(is_processed=True)
 
         except Exception as e:
@@ -128,17 +124,21 @@ class ExcelFile(models.Model):
                         recent_csv.save(update_fields=['is_current'])
 
 class CSVData(models.Model):
-    quarter_file = models.ForeignKey("ExcelFile", on_delete=models.CASCADE, related_name="csvs")
-    sheet_name = models.CharField(max_length=255)
-    sheet_name_slug = models.CharField(max_length=255)
-    csv_path = models.FilePathField(path=settings.MEDIA_ROOT, max_length=500)
-    quarter_uuid = models.UUIDField(null=True, editable=False)
     uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
+    quarter_file = models.ForeignKey("ExcelFile", on_delete=models.CASCADE, related_name="csvs")
+    
+    # Sheet name (derived from she actual sheet title) is a more human-like string, that removes some text.
+    sheet_name_pretty = models.CharField(max_length=255)
+    # Sheet slug is a slug-like string derived from the sheet title, keeping in mind that the user won't change the sheet title, it groups the data into common identifiers
+    sheet_name_slug = models.CharField(max_length=255)
+    quarter_uuid = models.UUIDField(null=True, editable=False) # might be useful to remove the quarter_uuid and use the relations instead
     is_current = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    data = models.JSONField(default=list)
+    column_order = models.JSONField(default=list) # saves the column order. this is crucial for the read from the API
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="csv_data")
     class Meta:
         unique_together = ('user', 'uuid')
         
     def __str__(self):
-        return f"{self.sheet_name} ({self.uuid})"
+        return f"{self.sheet_name_pretty} ({self.uuid})"

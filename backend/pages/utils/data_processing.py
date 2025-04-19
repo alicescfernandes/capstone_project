@@ -4,6 +4,19 @@ import re
 from .chart_classification import COLUMNS_TO_REMOVE, ROWS_TO_REMOVE
 import inflection
 
+def convert_df_to_json(df):
+
+    df_clean = df.copy()
+
+    for col in df_clean.columns:
+        df_clean[col] = pd.to_numeric(df_clean[col], errors='ignore')
+
+    # Round the floats to 5 digits 
+    numeric_cols = df_clean.select_dtypes(include=['float']).columns
+    df_clean[numeric_cols] = df_clean[numeric_cols].round(5)
+
+    return df_clean.to_dict(orient='records')
+
 def extract_section_name(file_name):
     # Remove a extensão
     name = os.path.splitext(file_name)[0]
@@ -11,18 +24,18 @@ def extract_section_name(file_name):
     # Substituir underscores e hífens por espaços
     name = re.sub(r'[_\-]', ' ', name)
 
-    # Remover padrões tipo "Q2", "2023", "v1", etc.
+    # Remover texto como "Q2", "2023", "v1", etc.
     name = re.sub(r'\b(Q\d+|[12][0-9]{3}|v\d+)\b', '', name, flags=re.IGNORECASE)
 
     # Normalizar múltiplos espaços
     name = re.sub(r'\s+', ' ', name).strip()
 
-    # Detetar se está em camelCase ou snake_case e transformar
+    # Transformar em sheet_title case
     name = inflection.titleize(name)
 
     return name
 
-def clean_title(text):
+def clean_sheet_title(text):
     return re.sub(r"(the\s*)?for Quarter \d+", "", text, flags=re.IGNORECASE).strip()
 
 def remove_line_breaks_from_data(df):
@@ -94,7 +107,7 @@ def remove_columns(df):
     to_remove = [normalized_cols[col.lower()] for col in COLUMNS_TO_REMOVE if col.lower() in normalized_cols]
     return df.drop(columns=to_remove, errors='ignore')
 
-def sanitize_sheet_name(sheet_name):
+def slugify_sheet_name(sheet_name):
     """
     Sanitize an Excel sheet name to produce a safe, lowercase, hyphenated file name.
 
@@ -116,33 +129,33 @@ def parse_sheet(xls, sheet_name):
 
     Parameters:
         xls (pd.ExcelFile): A loaded Excel file via pd.ExcelFile.
-        sheet_name (str): Name of the sheet to parse.
+        sheet_name (str): Name of the sheet to parse.F
 
     Returns:
         pd.DataFrame: Raw data from the sheet without headers.
     """
-    return xls.parse(sheet_name, header=None)
+    return xls.parse(sheet_name, header=None, dtype=str)
 
 def extract_sheet_title(df_raw):
     """
-    Extract the title of the sheet, assuming it is in the first cell.
+    Extract the sheet_title of the sheet, assuming it is in the first cell.
 
     Parameters:
         df_raw (pd.DataFrame): Raw sheet data.
 
     Returns:
-        str: The title extracted from cell (0, 0).
+        str: The sheet_title extracted from cell (0, 0).
     """
-    return clean_title(str(df_raw.iloc[0, 0]).strip())
+    return clean_sheet_title(str(df_raw.iloc[0, 0]).strip())
 
 def extract_column_names(df_raw,sheet_title):
     """
     Extract column names from the second row of the sheet, replacing line breaks
-    and filling first column with sheet title if missing.
+    and filling first column with sheet sheet_title if missing.
 
     Parameters:
         df_raw (pd.DataFrame): Raw sheet data.
-        sheet_title (str): The title extracted from the first cell (0, 0).
+        sheet_title (str): The sheet_title extracted from the first cell (0, 0).
 
     Returns:
         list[str]: A list of cleaned column names.
@@ -157,7 +170,7 @@ def extract_column_names(df_raw,sheet_title):
 
 def extract_clean_data(df_raw, column_names):
     """
-    Extract the main dataset, skipping the title and column name rows.
+    Extract the main dataset, skipping the sheet_title and column name rows.
 
     Parameters:
         df_raw (pd.DataFrame): Raw sheet data.
@@ -170,44 +183,24 @@ def extract_clean_data(df_raw, column_names):
     df.columns = column_names
     return df
 
-def export_csv_with_title(df, title, output_dir, sheet_name):
-    """
-    Export a DataFrame to CSV using a sanitized filename.
-
-    Parameters:
-        df (pd.DataFrame): The cleaned dataset to export.
-        title (str): The title extracted from the sheet (not used in filename).
-        output_dir (str): Path to the directory where the CSV should be saved.
-        sheet_name (str): Original sheet name, used for filename generation.
-
-    Returns:
-        str: The generated CSV filename.
-    """
-    filename = f"{sanitize_sheet_name(sheet_name)}.csv"
-    path = os.path.join(output_dir, filename)
-    with open(path, mode='w', encoding='utf-8', newline='') as f:
-        df.to_csv(f, index=False)
-    return filename
-
-def run_pipeline_for_sheet(xls, sheet_name, output_dir):
+def run_pipeline_for_sheet(df_in, sheet_name):
     """
     Full processing pipeline for a single Excel sheet.
 
     Parameters:
-        xls (pd.ExcelFile): Loaded Excel file.
+        df_in (pd.DataFrame): Dataframe from an excel sheet.
         sheet_name (str): Name of the sheet to process.
-        output_dir (str): Directory to save the resulting CSV.
 
     Returns:
-        tuple[str, str]: A tuple containing the CSV filename and sheet title.
+        tuple[pd.DataFrame, str, str]: A tuple containing the parsed dataframe, sheet slug and sheet title.
     """
-    df_raw = parse_sheet(xls, sheet_name)
-    df_raw = remove_line_breaks_from_data(df_raw)
-    title = extract_sheet_title(df_raw)
-    columns = extract_column_names(df_raw, title)
+    df_raw = remove_line_breaks_from_data(df_in)
+    sheet_title = extract_sheet_title(df_raw)
+    columns = extract_column_names(df_raw, sheet_title)
     df_clean = extract_clean_data(df_raw, columns)
     df_clean = normalize_column_names(df_clean)
     df_clean = remove_columns(df_clean)
     df_clean = remove_rows(df_clean)
-    clean_sheet_name = sanitize_sheet_name(sheet_name)
-    return (df_clean,  clean_sheet_name, title)
+    sheet_slug = slugify_sheet_name(sheet_name)
+    return (df_clean,  sheet_slug, sheet_title)
+

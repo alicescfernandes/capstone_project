@@ -62,13 +62,13 @@ def return_empty_response(quarter_number, slug,error,sheet_name ):
         'selected_option': None
     }
 
-
-def get_active_csv_for_slug(quarter_number, slug,user):
-    curr_q = get_object_or_404(Quarter, number=quarter_number, user=user)
-    csv_file = get_object_or_404(
+def get_active_csv_for_slug(quarter_number, slug, user):
+    curr_q = get_object_or_404(Quarter, number=quarter_number)
+    csv_data = get_object_or_404(
         CSVData,
         sheet_name_slug=slug,
         quarter_uuid=curr_q.uuid,
         is_current=True,
         user=user)
-    return csv_file
+    return csv_data
+
