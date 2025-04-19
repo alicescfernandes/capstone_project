@@ -75,6 +75,7 @@ class ChartDataAPIView(APIView):
             if(type=="balance_sheet"):
                 chart_response = get_waterfall_chart(df, chart_meta,csv_data.sheet_name_pretty, filter)
                 return Response(quarter_data | chart_response)
+            
         except Exception as e:
             empty_response = return_empty_response(quarter_number, slug, e, csv_data.sheet_name_pretty)
             print(e)
