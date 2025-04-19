@@ -76,7 +76,7 @@ class ChartDataAPIView(APIView):
                 chart_response = get_waterfall_chart(df, chart_meta,csv_data.sheet_name_pretty, filter)
                 return Response(quarter_data | chart_response)
             
-            if(type=="advertising"):
+            if(type=="grouped"):
                 chart_response = get_group_chart(df, chart_meta,csv_data.sheet_name_pretty, filter)
                 return Response(quarter_data | chart_response)
             

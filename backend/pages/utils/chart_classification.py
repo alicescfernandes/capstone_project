@@ -240,35 +240,35 @@ CHART_CLASSIFICATION = {
     },
     "advertising-mea": {
         "chart_type": "bar",
-        "type": "advertising",
+        "type": "grouped",
         'column_name':"Company",
         "group_by":['City', 'Ad'],
         "group_column_index":"City"
     },
     "advertising-noram": {
         "chart_type": "bar",
-        "type": "advertising",
+        "type": "grouped",
         'column_name':"Company",
         "group_by":['City', 'Ad'],
         "group_column_index":"City"
     },
     "advertising-latam": {
         "chart_type": "bar",
-        "type": "advertising",
+        "type": "grouped",
         'column_name':"Company",
         "group_by":['City', 'Ad'],
         "group_column_index":"City"
     },
     "advertising-europe": {
         "chart_type": "bar",
-        "type": "advertising",
+        "type": "grouped",
         'column_name':"Company",
         "group_by":['City', 'Ad'],
         "group_column_index":"City"
     },
     "advertising-apac": {
         "chart_type": "bar",
-        "type": "advertising",
+        "type": "grouped",
         'column_name':"Company",
         "group_by":['City', 'Ad'],
         "group_column_index":"City"
@@ -280,7 +280,7 @@ CHART_CLASSIFICATION = {
     },
     "regional-advertising-mea": {
         "chart_type": "bar",
-        "type": "advertising",
+        "type": "grouped",
         'column_name':"Company",
         "group_by":['Media', 'Ad'],
         "group_column_index":"Media"
@@ -288,7 +288,7 @@ CHART_CLASSIFICATION = {
     },
     "regional-advertising-noram": {
         "chart_type": "bar",
-        "type": "advertising",
+        "type": "grouped",
         'column_name':"Company",
         "group_by":['Media', 'Ad'],
         "group_column_index":"Media"
@@ -296,7 +296,7 @@ CHART_CLASSIFICATION = {
     },
     "regional-advertising-latam": {
         "chart_type": "bar",
-        "type": "advertising",
+        "type": "grouped",
         'column_name':"Company",
         "group_by":['Media', 'Ad'],
         "group_column_index":"Media"
@@ -304,7 +304,7 @@ CHART_CLASSIFICATION = {
     },
     "regional-advertising-europe": {
         "chart_type": "bar",
-        "type": "advertising",
+        "type": "grouped",
         'column_name':"Company",
         "group_by":['Media', 'Ad'],
         "group_column_index":"Media"
@@ -312,13 +312,31 @@ CHART_CLASSIFICATION = {
     },
     "regional-advertising-apac": {
         "chart_type": "bar",
-        "type": "advertising",
+        "type": "grouped",
         'column_name':"Company",
         "group_by":['Media', 'Ad'],
         "group_column_index":"Media"
-
+    },
+    "demand-by-region":{
+        "chart_type": "pie",
+        "type": "simple",
+        'column_name':None
+    },
+    "demand-by-city":{
+        "chart_type": "bar",
+        "type": "simple",
+        'column_name':None
+    },
+    "demand-by-company":{
+        "chart_type": "pie",
+        "type": "simple",
+        'column_name':None
+    },
+    "demand-by-brand":{
+        "chart_type": "bar",
+        "type": "double",
+        'column_name':"Company"
     }
-
 }
 
 COLUMNS_TO_REMOVE = [

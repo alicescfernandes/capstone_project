@@ -170,7 +170,7 @@ def get_double_chart(df, chart_meta,csv_sheet_name, filter):
         'chart_config':{
             "traces":traces,
             "layout":{
-                "barmode": "stack",
+                "barmode": "group",
                 "showlegend":True,
                 "legend": {
                     "title": { "text": '' },     
