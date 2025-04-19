@@ -50,7 +50,6 @@ plotly-chart {
             @apply flex items-center p-4 mb-4 text-sm text-blue-800 border border-blue-300 rounded-lg bg-blue-50;
         }
     }
-
     .chart{
         &-header{
             @apply flex justify-between mb-2;
@@ -65,6 +64,21 @@ plotly-chart {
 
         &-quarter-nav-btn {
             @apply disabled:text-gray-100 text-gray-500 text-xl;
+        }
+
+        &-zoom-overlay {
+            @apply hidden fixed inset-0 bg-black/60 flex justify-center items-center;
+            z-index: 50;
+        }
+        
+        &-zoom-content {
+            @apply bg-white p-4 rounded-lg w-[80vw] h-[80vh] overflow-auto relative;
+        }
+        
+        &-zoom-close {
+            @apply absolute top-4 right-4 bg-transparent border-none cursor-pointer text-2xl;
+            z-index: 60;
+
         }
     }
 }

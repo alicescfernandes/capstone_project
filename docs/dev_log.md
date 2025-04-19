@@ -14,12 +14,15 @@ _Stuff that is not important and just nice haves_
 - [ ] Hide Sections when using mobile
 - [ ] Create a "change password page", check if django is able to send emails
 - [ ] Display username on the navbar
-- [ ] Add a zoom feature on the charts, that would open a popup with the chart that was zoomed in
 
 ## TODO
 
 - [ ] Add alert when there is still Excel files in processing
 - [ ] Loading from an # breaks the charts (<http://localhost:8000/#section-balanced-scorecard>)
+
+## 04/19/2025
+
+- [x] Add a zoom feature on the charts, that would open a popup with the chart that was zoomed in
 
 ## 04/18/2025
 
