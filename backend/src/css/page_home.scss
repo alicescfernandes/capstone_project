@@ -67,7 +67,7 @@ plotly-chart {
         }
 
         &-zoom-overlay {
-            @apply hidden fixed inset-0 bg-black/60 flex justify-center items-center;
+            @apply hidden fixed inset-0 bg-black/60 justify-center items-center;
             z-index: 50;
         }
         
