@@ -6,7 +6,7 @@
                 </div>
                 ${e?'<p>Filter By: <select class="chart-filter"></select></p>':""}
                 <div class="chart" style="width:100%;height:400px;"></div>
-            </div>`,this.renderChart(),this.renderQuarterNavigation(),e&&(this.renderOptions(),this.setupEvents())}renderQuarterNavigation(){let e=this.querySelector(`#${this.id} .chart-quarter-navigation`),{quarter:t}=this.state;console.log("quarter",t,!(t!=null&&t.prev)),e.innerHTML=`
+            </div>`,this.renderChart(),this.renderQuarterNavigation(),e&&(this.renderOptions(),this.setupEvents())}renderQuarterNavigation(){let e=this.querySelector(`#${this.id} .chart-quarter-navigation`),{quarter:t}=this.state;e.innerHTML=`
             <button ${t!=null&&t.prev?"":"disabled"} class="prev-quarter chart-quarter-nav-btn">\u2190</button>
             <button ${t!=null&&t.next?"":"disabled"} class="next-quarter chart-quarter-nav-btn">\u2192</button>`}renderSpinner(){this.innerHTML=`<div class="spinner-container" role="status">
                                 <svg aria-hidden="true" class="spinner-svg" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">

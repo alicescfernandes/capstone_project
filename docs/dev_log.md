@@ -13,6 +13,7 @@ _Stuff that is not important and just nice haves_
 - [ ] Django DRF Caching (either Redis or Memcached)
 - [ ] Hide Sections when using mobile
 - [ ] Create a "change password page", check if django is able to send emails
+- [ ] Display username on the navbar
 - [ ] Add a zoom feature on the charts, that would open a popup with the chart that was zoomed in
 
 ## TODO
@@ -23,11 +24,13 @@ _Stuff that is not important and just nice haves_
 
 ## 04/18/2025
 
-- [ ] Add a user reference to all models
-- [ ] Read current user and grab the instances that current user created
-- [ ] Create login page and add the username to the navbar
-- [ ] Create the logout page
-- [ ] Create the registration page
+- [x] Add a user reference to all models
+- [x] Read current user and grab the instances that current user created
+- [x] Create login page and add the username to the navbar
+- [x] Create the logout page
+- [x] Create the registration page
+- [x] Cleans up even more tailwind classes
+- [x] Extract JS from the apps
 
 ## 04/17/2025
 

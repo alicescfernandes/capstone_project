@@ -81,7 +81,6 @@ class PlotlyChart extends HTMLElement {
         const container = this.querySelector(`#${this.id} .chart-quarter-navigation`);
         const { quarter } = this.state;
 
-        console.log("quarter", quarter, !quarter?.prev)
         container.innerHTML = `
             <button ${!quarter?.prev ? 'disabled' : ''} class="prev-quarter chart-quarter-nav-btn">←</button>
             <button ${!quarter?.next ? 'disabled' : ''} class="next-quarter chart-quarter-nav-btn">→</button>`;

@@ -9,6 +9,8 @@
 
 <link rel="stylesheet" href="{% static 'css/page_home.css' %}">
 <script type="module" src="{% static 'js/chart_webcomponent.js' %}"></script>
+<script defer src="{% static 'js/page_home.js' %}"></script>
+
 {% endblock %}
 
 {% block content %}
@@ -36,38 +38,4 @@
     }
 
 </script>
-
-
-<script type="text/javascript">
-    document.addEventListener("DOMContentLoaded", () => {
-      const tocLinks = document.querySelectorAll("#floating-toc a");
-      const sections = Array.from(tocLinks).map(link =>
-        document.querySelector(link.getAttribute("href"))
-      );
-    
-      const observerOptions = {
-        root: null,
-        rootMargin: "10px",
-        threshold: 0.1
-      };
-    
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-        console.log("start")
-          const id = entry.target.id;
-          const link = document.querySelector(`#floating-toc a[href="#${id}"]`);
-          if (entry.isIntersecting) {
-            tocLinks.forEach(l => l.classList.remove("active"));
-            console.log("setting up active")
-            if (link) link.classList.add("active");
-          }
-        });
-      }, observerOptions);
-    
-      sections.forEach(section => {
-        if (section) observer.observe(section);
-      });
-    });
-    </script>
-
 {% endblock %}

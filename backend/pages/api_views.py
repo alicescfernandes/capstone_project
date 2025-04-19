@@ -12,7 +12,7 @@ from .utils.charts import process_simple_chart, process_double_chart
 class QuarterListAPIView(APIView):
     def get(self, request):
         # Preparar a lista de quarters
-        quarters = Quarter.objects.all()
+        quarters = Quarter.objects.filter(user=request.user)
         last_quarter = quarters[0]
         if not quarters:
             return Response({"error": "No quarters found"}, status=404)
@@ -57,9 +57,9 @@ class ChartDataAPIView(APIView):
 
         type = chart_meta["type"]
 
-        csv_file = get_active_csv_for_slug(quarter_number, slug)
+        csv_file = get_active_csv_for_slug(quarter_number, slug, request.user)
     
-        quarter_data = get_quarter_navigation_object(quarter_number, slug) 
+        quarter_data = get_quarter_navigation_object(quarter_number, slug, request.user) 
             
         try:
             df = pd.read_csv(csv_file.csv_path)

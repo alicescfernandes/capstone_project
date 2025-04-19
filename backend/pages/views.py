@@ -1,11 +1,15 @@
 import os
-from django.shortcuts import render
-from .models import Quarter, ExcelFile, CSVData
-from django.shortcuts import render, redirect, get_object_or_404
-from .forms import QuarterForm
-from collections import defaultdict
-from django.core.exceptions import ValidationError
 import openpyxl
+from django.core.exceptions import ValidationError
+from django.contrib.auth.views import LoginView
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import logout
+from django.contrib.auth.forms import UserCreationForm
+from django.shortcuts import render, redirect, get_object_or_404
+from django.urls import reverse_lazy
+from .models import Quarter, ExcelFile, CSVData
+from .forms import QuarterForm
+
 # Get the path to the xlsx directory
 current_dir = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
 xlsx_dir = os.path.join(current_dir, 'xlsx')
@@ -18,17 +22,16 @@ def is_valid_xlsx(file):
         raise ValidationError("Tipo MIME inválido para ficheiro .xlsx.")
 
     try:
-        # openpyxl precisa do ficheiro 'rebobinado'
         file.seek(0)
         openpyxl.load_workbook(file)
-        file.seek(0)  # rebobina novamente para salvar mais à frente
+        file.seek(0)
     except Exception as e:
         raise ValidationError("Conteúdo inválido: o ficheiro não é um Excel válido.") from e
     
-
+@login_required
 def home(request):
     # Prepare default case
-    quarters = Quarter.objects.all()
+    quarters = Quarter.objects.filter(user=request.user)
     if(len(quarters) <= 0):
         return render(request, 'pages/home.html', {
         "app_context":{
@@ -40,16 +43,12 @@ def home(request):
     })
     
     last_quarter = quarters[0]
-        
-    # Use query params here with default values
-    query_quarter = request.GET.get("q",last_quarter.number)
-    quarter = Quarter.objects.get(number=int(query_quarter))
 
-    unique_slugs = list(CSVData.objects.values_list('sheet_name_slug', flat=True).distinct())    
-    print(unique_slugs)
+    quarter = quarters.get(number=int(last_quarter.number))
     
     latest_csvs = (
         CSVData.objects
+        .filter(user=request.user)
         .select_related('quarter_file__quarter')
         .filter(is_current=True) 
         .order_by('sheet_name_slug', '-quarter_file__quarter__number')
@@ -61,7 +60,6 @@ def home(request):
 
     # Populate this object
     sections = {}
-    
     
     for csv in latest_csvs:
         slug = csv.sheet_name_slug
@@ -93,14 +91,17 @@ def home(request):
         "chart_slugs": chart_slugs
     })
 
+@login_required
 def manage_quarters(request):
-    quarters = Quarter.objects.all()
+    quarters = Quarter.objects.filter(user=request.user)
     form = QuarterForm()
 
     if request.method == 'POST':
         form = QuarterForm(request.POST)
         if form.is_valid():
-            form.save()
+            quarter = form.save(commit=False)
+            quarter.user = request.user 
+            quarter.save()
             return redirect('manage_quarters')
 
     return render(request, 'pages/manage_quarters.html', {
@@ -108,25 +109,27 @@ def manage_quarters(request):
         'quarters': quarters,
     })
 
+@login_required
 def delete_quarter(request, uuid):
-    quarter = get_object_or_404(Quarter, uuid=uuid)
+    quarter = get_object_or_404(Quarter, uuid=uuid, user=request.user)
     quarter.delete()
     return redirect('manage_quarters')
 
-
+@login_required
 def delete_file(request, uuid):
-    quarter = get_object_or_404(ExcelFile, uuid=uuid)
+    quarter = get_object_or_404(ExcelFile, uuid=uuid, user=request.user)
     quarter.delete()
     return redirect('manage_quarters')
 
-
+@login_required
 def edit_quarter(request, uuid):
-    quarter = get_object_or_404(Quarter, uuid=uuid)
+    quarter = get_object_or_404(Quarter, uuid=uuid, user=request.user)
 
     if request.method == 'POST':
         new_number = request.POST.get('number')
         if new_number:
             quarter.number = new_number
+            quarter.user = request.user 
             quarter.save()
 
         files = request.FILES.getlist('files')
@@ -135,7 +138,8 @@ def edit_quarter(request, uuid):
                 is_valid_xlsx(f)
                 ExcelFile.objects.create(
                     quarter=quarter,
-                    file=f
+                    file=f,
+                    user=request.user
                 )
             except ValidationError as e:
                 # Podes fazer log, mostrar erro, ou armazenar numa lista para mostrar mais tarde
@@ -143,3 +147,23 @@ def edit_quarter(request, uuid):
                 continue
 
     return redirect('manage_quarters')
+
+@login_required
+def logout_view(request):
+    logout(request)
+    return redirect('login')  # ou outro destino
+
+class CustomLoginView(LoginView):
+    template_name = "pages/login.html"
+    redirect_authenticated_user = True 
+    next_page = reverse_lazy("home") 
+
+def register(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('login')
+    else:
+        form = UserCreationForm()
+    return render(request, 'pages/register.html', {'form': form})

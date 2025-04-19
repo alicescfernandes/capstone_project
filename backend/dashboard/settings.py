@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     "corsheaders",
     'rest_framework',
+    "widget_tweaks",
     'pages',
 ]
 
@@ -163,5 +164,6 @@ STATICFILES_DIRS = [
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# Turn this on during development to make sure that stuff is working
-HARD_DELETE = False
+LOGIN_URL = "login"
+LOGIN_REDIRECT_URL = "home"  # ou outra view
+LOGOUT_REDIRECT_URL = "login"

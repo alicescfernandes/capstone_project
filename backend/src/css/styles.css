@@ -11,9 +11,9 @@ html {
 }
 
 a.active {
-    @apply font-semibold
+    @apply font-semibold;
 }
 
 .container {
-    @apply px-2 lg:px-20 bg-white
+    @apply px-2 lg:px-20 bg-white;
 }
