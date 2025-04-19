@@ -77,8 +77,6 @@ def remove_rows(df):
     mask = df.apply(row_should_be_removed, axis=1)
     return df[~mask]  # Keeps only the lines that must not be removed
 
-
-
 def remove_columns(df):
     """
     Remove specific columns from the DataFrame by name, case-insensitively.

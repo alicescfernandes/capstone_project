@@ -22,7 +22,7 @@ def format_chart_trace(x,y, type, name=""):
             "y": y
         }
 
-def process_box_chart_all(df, chart_meta, csv_sheet_name, filter):
+def get_box_chart_all(df, chart_meta, csv_sheet_name, filter):
 
     indicator_col = df.columns[0]
     value_cols = df.columns[1:]
@@ -48,7 +48,7 @@ def process_box_chart_all(df, chart_meta, csv_sheet_name, filter):
         'selected_option': None
     }
         
-def process_box_chart(df, chart_meta, csv_sheet_name, filter):
+def get_box_chart(df, chart_meta, csv_sheet_name, filter):
     chart_type = chart_meta["chart_type"]
 
     indicator_col = df.columns[0]
@@ -108,12 +108,12 @@ def process_box_chart(df, chart_meta, csv_sheet_name, filter):
         'selected_option': selected_filter
     }
 
-def process_simple_chart(df,chart_meta, csv_sheet_name, filter):
+def get_simple_chart(df,chart_meta, csv_sheet_name, filter):
     chart_type = chart_meta["chart_type"]
     
     # Box charts use a whole different data structure, but is still "simple"
     if(chart_type == 'box'):
-        return process_box_chart(df,chart_meta, csv_sheet_name, filter)
+        return get_box_chart(df,chart_meta, csv_sheet_name, filter)
 
     first_column = df.columns[0]
     filter_cols = df.columns[1:]
@@ -139,8 +139,7 @@ def process_simple_chart(df,chart_meta, csv_sheet_name, filter):
     'selected_option': selected_filter
     }
 
-
-def process_double_chart(df, chart_meta,csv_sheet_name, filter):
+def get_double_chart(df, chart_meta,csv_sheet_name, filter):
     column_filter_name = chart_meta["column_name"]
     chart_type = chart_meta["chart_type"]
 

@@ -7,6 +7,7 @@ from django.db import models, transaction
 from django.conf import settings
 from django.core.files.storage import default_storage
 from .utils.data_processing import run_pipeline_for_sheet, extract_section_name
+from .utils.chart_classification import ADDITIONAL_PROCESSING_PIPELINE
 
 def user_quarter_upload_path(instance, filename):
     instance.section_name = extract_section_name(filename)
@@ -53,6 +54,19 @@ class ExcelFile(models.Model):
                     continue
 
                 processed_data_frame, clean_sheet_name, sheet_title  = run_pipeline_for_sheet(xls, sheet_name, output_dir)
+                
+                if(clean_sheet_name in ADDITIONAL_PROCESSING_PIPELINE):
+                    processing_functions= ADDITIONAL_PROCESSING_PIPELINE[clean_sheet_name]
+                    df_processing = processed_data_frame
+                    
+                    for fn in processing_functions:
+                        df_processing = fn(df_processing)
+                    
+                    print("sheet slug:" + clean_sheet_name)
+                    print("additional processing required", df_processing)
+                    processed_data_frame = df_processing;
+                    
+                
                 csv_path = os.path.join(output_dir, f"{clean_sheet_name}.csv")
                 
                 # Let django deal with the duplicated files on its own. We will store that path on the model and use that to access it

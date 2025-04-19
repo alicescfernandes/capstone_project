@@ -1,3 +1,5 @@
+from .balance_sheet_processing import process_balance_sheet
+
 CHART_CLASSIFICATION = {
     "industry-results-for": {
         "chart_type": "box",
@@ -198,7 +200,35 @@ CHART_CLASSIFICATION = {
         "chart_type": "bar",
         "type": "simple",
         'column_name':None
-    }
+    },
+
+    # phase 2
+    "brand-profitability": {
+        "chart_type": "waterfall",
+        "type": "balance_sheet",
+        'column_name':None
+    },
+    "channel-profitability-noram": {
+        "chart_type": "waterfall",
+        "type": "balance_sheet",
+        'column_name':None
+    },
+    "channel-profitability-latam": {
+        "chart_type": "waterfall",
+        "type": "balance_sheet",
+        'column_name':None
+    },
+    "channel-profitability-europe": {
+        "chart_type": "waterfall",
+        "type": "balance_sheet",
+        'column_name':None
+    },
+    "channel-profitability-apac": {
+        "chart_type": "waterfall",
+        "type": "balance_sheet",
+        'column_name':None
+    },
+
 }
 
 COLUMNS_TO_REMOVE = [
@@ -212,3 +242,11 @@ COLUMNS_TO_REMOVE = [
 ROWS_TO_REMOVE = [
     "Total"
 ]
+
+ADDITIONAL_PROCESSING_PIPELINE = {
+    "brand-profitability": [process_balance_sheet],
+    "channel-profitability-noram": [process_balance_sheet],
+    "channel-profitability-latam": [process_balance_sheet],
+    "channel-profitability-europe": [process_balance_sheet],
+    "channel-profitability-apac": [process_balance_sheet],
+}
