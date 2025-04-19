@@ -3,6 +3,7 @@
 import django.db.models.deletion
 import pages.models
 import uuid
+from django.conf import settings
 from django.db import migrations, models
 
 
@@ -11,9 +12,24 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
+        migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
+        migrations.CreateModel(
+            name='Quarter',
+            fields=[
+                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('number', models.PositiveIntegerField()),
+                ('created_at', models.DateTimeField(auto_now_add=True)),
+                ('uuid', models.UUIDField(default=uuid.uuid4, editable=False, unique=True)),
+                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='quarters', to=settings.AUTH_USER_MODEL)),
+            ],
+            options={
+                'ordering': ['-number'],
+                'unique_together': {('user', 'number')},
+            },
+        ),
         migrations.CreateModel(
             name='ExcelFile',
             fields=[
@@ -34,7 +50,7 @@ class Migration(migrations.Migration):
                 ('uuid', models.UUIDField(default=uuid.uuid4, editable=False, unique=True)),
             ],
             options={
-                'ordering': ['-number'],
+                'unique_together': {('user', 'uuid')},
             },
         ),
         migrations.CreateModel(

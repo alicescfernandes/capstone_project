@@ -20,10 +20,14 @@
     {% endblock %}
   </head>
 
-  <body class="">
-    {% include 'pages/navigation.html' %}
+  <body>
+    {% if request.path != '/login/' and request.path != '/register/' %}
+      {% include 'pages/navigation.html' %}
+    {% endif %}
 
-    <main class="container mx-auto py-8">
+    <main class="container mx-auto py-8 {% block main_classes %}
+
+      {% endblock %}">
       {% block content %}
 
       {% endblock %}

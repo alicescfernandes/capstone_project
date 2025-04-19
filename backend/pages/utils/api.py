@@ -1,10 +1,11 @@
 from ..models import Quarter, CSVData
 from django.shortcuts import get_object_or_404
 
-def get_quarter_navigation_object(quarter_number, slug):
+def get_quarter_navigation_object(quarter_number, slug, user):
     # Obter todos os quarter_uuids associados ao slug
     quarter_uuids = (
         CSVData.objects
+        .filter(user=user)
         .filter(is_current=True) 
         .filter(sheet_name_slug=slug)
         .values_list('quarter_uuid', flat=True)
@@ -14,11 +15,12 @@ def get_quarter_navigation_object(quarter_number, slug):
     # Obter os objetos Quarter correspondentes, ordenados por número
     all_quarters = list(
         Quarter.objects
+        .filter(user=user)
         .filter(uuid__in=quarter_uuids)
         .order_by('number')
     )
 
-    curr_q = get_object_or_404(Quarter, number=quarter_number)
+    curr_q = get_object_or_404(Quarter, number=quarter_number, user=user)
 
     try:
         current_index = next(i for i, q in enumerate(all_quarters) if q.pk == curr_q.pk)
@@ -38,7 +40,7 @@ def get_quarter_navigation_object(quarter_number, slug):
 
 
 def get_request_params(request):
-    quarters = Quarter.objects.all()
+    quarters = Quarter.objects.filter(user=request.user)
     last_quarter = quarters[0]
 
     slug = request.query_params.get('slug')
@@ -61,11 +63,12 @@ def return_empty_response(quarter_number, slug,error,sheet_name ):
     }
 
 
-def get_active_csv_for_slug(quarter_number, slug):
-    curr_q = get_object_or_404(Quarter, number=quarter_number)
+def get_active_csv_for_slug(quarter_number, slug,user):
+    curr_q = get_object_or_404(Quarter, number=quarter_number, user=user)
     csv_file = get_object_or_404(
         CSVData,
         sheet_name_slug=slug,
         quarter_uuid=curr_q.uuid,
-        is_current=True)
+        is_current=True,
+        user=user)
     return csv_file

@@ -38,7 +38,11 @@
 
 /* Links base */
 .navbar-link {
-    @apply block py-2 px-3 rounded-sm md:bg-transparent md:p-0 text-gray-900 md:hover:text-blue-700;
+    @apply block py-2 px-3 rounded-sm md:bg-transparent md:p-0 text-gray-900 md:hover:text-blue-700 font-normal;
+}
+
+.navbar-link-section {
+    @apply flex items-center justify-between font-normal w-full py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:w-auto;
 }
 
 /* Active link */

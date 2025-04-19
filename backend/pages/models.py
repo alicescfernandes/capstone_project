@@ -1,6 +1,4 @@
-import re
 import os
-import inflection
 import uuid
 import pandas as pd
 from django.db import models, transaction
@@ -8,18 +6,23 @@ from django.conf import settings
 from django.core.files.storage import default_storage
 from .utils.data_processing import run_pipeline_for_sheet, extract_section_name
 from .utils.chart_classification import ADDITIONAL_PROCESSING_PIPELINE
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 def user_quarter_upload_path(instance, filename):
     instance.section_name = extract_section_name(filename)
     return os.path.join("uploads", str(instance.uuid), filename)
 
 class Quarter(models.Model):
-    number = models.PositiveIntegerField(unique=True)
+    number = models.PositiveIntegerField()
     created_at = models.DateTimeField(auto_now_add=True)
     uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="quarters")
 
     class Meta:
         ordering = ['-number']
+        unique_together = ('user', 'number')
 
     def __str__(self):
         return f"Q{self.number}"
@@ -32,7 +35,11 @@ class ExcelFile(models.Model):
     uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     is_processed = models.BooleanField(default=False, editable=True) # TODO: Flip this to true
     section_name = models.CharField(max_length=255, editable=False, blank=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="excel_files")
     
+    class Meta:
+        unique_together = ('user', 'uuid')
+        
     def __str__(self):
         return f"{self.file.name} ({self.quarter})"
 
@@ -78,7 +85,8 @@ class ExcelFile(models.Model):
                 CSVData.objects.filter(
                     quarter_file__quarter=self.quarter,
                     sheet_name_slug=clean_sheet_name,
-                    is_current=True
+                    is_current=True,
+                    user=self.user
                 ).update(is_current=False)
 
                 CSVData.objects.create(
@@ -87,6 +95,7 @@ class ExcelFile(models.Model):
                     sheet_name_slug=clean_sheet_name,
                     quarter_uuid=self.quarter.uuid,
                     csv_path=available_path,
+                    user=self.user,
                     is_current=True
                 )
         
@@ -100,7 +109,7 @@ class ExcelFile(models.Model):
     # When deleting a file, if a bunch of "active" csv's originated from said file are the most up to date, 
     # then we need to update the active ones so that the user can still see something
     def delete(self, *args, **kwargs):
-            related_csvs = list(self.csvs.all())
+            related_csvs = list(self.csvs.filter(user=self.user))
             quarter = self.quarter
             excel_file_id = self.id
 
@@ -141,6 +150,9 @@ class CSVData(models.Model):
     uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     is_current = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
-
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="csv_data")
+    class Meta:
+        unique_together = ('user', 'uuid')
+        
     def __str__(self):
         return f"{self.sheet_name} ({self.uuid})"

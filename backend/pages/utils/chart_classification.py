@@ -232,7 +232,6 @@ CHART_CLASSIFICATION = {
 }
 
 COLUMNS_TO_REMOVE = [
-    # "CTTG", --> THIS IS A BRAND NAME
     "Priority",
     "Point of Purchase Display",
     "Total Sales People",
