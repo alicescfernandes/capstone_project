@@ -21,6 +21,10 @@ _Stuff that is not important and just nice haves_
 - [ ] Add alert when there is still Excel files in processing
 - [ ] Loading from an # breaks the charts (<http://localhost:8000/#section-balanced-scorecard>)
 
+## 04/19/2025
+
+- [x] Adds balance sheet (waterfall) charts
+
 ## 04/18/2025
 
 - [x] Add a user reference to all models
