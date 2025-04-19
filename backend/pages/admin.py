@@ -21,7 +21,7 @@ class QuarterAdmin(admin.ModelAdmin):
         return qs.filter(user=request.user)
 @admin.register(CSVData)
 class CSVDataAdmin(admin.ModelAdmin):
-    list_display = ('sheet_name_slug', 'user', 'sheet_name', 'is_current', 'csv_path', 'quarter_file', 'quarter_uuid')
+    list_display = ('sheet_name_slug','user','sheet_name_pretty','is_current','data','quarter_file', 'quarter_uuid','column_order')
     exclude = ('user',)
 
     def save_model(self, request, obj, form, change):

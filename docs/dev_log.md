@@ -19,7 +19,6 @@ _Stuff that is not important and just nice haves_
 ## TODO
 
 - [ ] Add alert when there is still Excel files in processing
-- [ ] Consider using Mongo to store the CSV files (write a POC that replaces the files with Mongo DB)
 - [ ] Loading from an # breaks the charts (<http://localhost:8000/#section-balanced-scorecard>)
 
 ## 04/18/2025
@@ -40,6 +39,7 @@ _Stuff that is not important and just nice haves_
 - [x] Cleans up more tailwind classes
 - [x] Check mime type of file, to avoid fake xlsx uploads
 - [x] When deleting an excel, update the active CSV's to a previous version
+- [x] Consider using ~Mongo~ PostgresSQL to store the CSV files (write a POC that replaces the files with ~MongoDB~ PostgresSQL)
 
 ## 04/16/2025
 
@@ -47,7 +47,9 @@ _Stuff that is not important and just nice haves_
 - [x] Adds build system for report
 - [x] Setup github workflows to compile the report on every commit to master
 - [x] Fork the branch for the FEIM presentation and freeze it
-- [x] Setup Postgres (Only during using auth)
+- [x] Setup Postgres (Only during using auth) (deployment-setup branch)
+- [x] Setup docker compose yml for dev
+- [x] Skeleton docker-compose yml for prod
 
 ## 04/13/2025
 

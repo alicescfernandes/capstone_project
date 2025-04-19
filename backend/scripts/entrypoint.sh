@@ -18,9 +18,6 @@ if not User.objects.filter(username='${DJANGO_SUPERUSER_USERNAME}').exists():
     )
 EOF
 
-# echo "🚀 Starting server..."
-# node build.js &
 exec python manage.py runserver 0.0.0.0:8000
 
-# python manage.py runserver 0.0.0.0:8000
 
