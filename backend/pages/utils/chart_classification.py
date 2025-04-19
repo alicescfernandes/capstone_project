@@ -1,4 +1,4 @@
-from .balance_sheet_processing import process_balance_sheet
+from .advanced_processing import process_balance_sheet
 
 CHART_CLASSIFICATION = {
     "industry-results-for": {
@@ -213,6 +213,11 @@ CHART_CLASSIFICATION = {
         "type": "balance_sheet",
         'column_name':"Column"
     },
+    "channel-profitability-mea": {
+        "chart_type": "waterfall",
+        "type": "balance_sheet",
+        'column_name':"Column"
+    },
     "channel-profitability-latam": {
         "chart_type": "waterfall",
         "type": "balance_sheet",
@@ -228,6 +233,67 @@ CHART_CLASSIFICATION = {
         "type": "balance_sheet",
         'column_name':"Column"
     },
+    "local-media-inserts":{
+        "chart_type": "bar",
+        "type": "simple",
+        'column_name':None
+    },
+    "advertising-mea": {
+        "chart_type": "bar",
+        "type": "advertising",
+        'column_name':"Company"
+    },
+    "advertising-noram": {
+        "chart_type": "bar",
+        "type": "advertising",
+        'column_name':"Company"
+    },
+    "advertising-latam": {
+        "chart_type": "bar",
+        "type": "advertising",
+        'column_name':"Company"
+    },
+    "advertising-europe": {
+        "chart_type": "bar",
+        "type": "advertising",
+        'column_name':"Company"
+    },
+    "advertising-apac": {
+        "chart_type": "bar",
+        "type": "advertising",
+        'column_name':"Company"
+    },
+    "regional-media-inserts":{
+        "chart_type": "bar",
+        "type": "simple",
+        'column_name':None
+    },
+    # TODO: Regional advertising shares the same columns as the local advt
+    # "advertising-mea": {
+    #     "chart_type": "bar",
+    #     "type": "advertising",
+    #     'column_name':"Company"
+    # },
+    # "advertising-noram": {
+    #     "chart_type": "bar",
+    #     "type": "advertising",
+    #     'column_name':"Company"
+    # },
+    # "advertising-latam": {
+    #     "chart_type": "bar",
+    #     "type": "advertising",
+    #     'column_name':"Company"
+    # },
+    # "advertising-europe": {
+    #     "chart_type": "bar",
+    #     "type": "advertising",
+    #     'column_name':"Company"
+    # },
+    # "advertising-apac": {
+    #     "chart_type": "bar",
+    #     "type": "advertising",
+    #     'column_name':"Company"
+    # }
 
 }
 
@@ -247,5 +313,5 @@ ADDITIONAL_PROCESSING_PIPELINE = {
     "channel-profitability-noram": [process_balance_sheet],
     "channel-profitability-latam": [process_balance_sheet],
     "channel-profitability-europe": [process_balance_sheet],
-    "channel-profitability-apac": [process_balance_sheet],
+    "channel-profitability-apac": [process_balance_sheet]
 }

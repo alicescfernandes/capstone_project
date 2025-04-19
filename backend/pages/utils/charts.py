@@ -222,3 +222,58 @@ def get_waterfall_chart(df, chart_meta, csv_sheet_name, filter):
             'selected': selected_column_filter
         }
     }
+    
+    
+def get_group_chart(df, chart_meta, csv_sheet_name, filter):
+    column_filter_name = chart_meta["column_name"]  
+    chart_type = chart_meta["chart_type"]           
+
+    available_column_filters = df[column_filter_name].unique()
+    selected_column_filter = filter if filter in available_column_filters else available_column_filters[0]
+
+    filtered_df = df[df[column_filter_name] == selected_column_filter].copy()
+
+    grouped = (
+        filtered_df
+        .groupby(['City', 'Ad'])['Number of Inserts']
+        .sum()
+        .reset_index()
+    )
+
+    pivot_df = grouped.pivot(index='Ad', columns='City', values='Number of Inserts').fillna(0)
+
+    traces = []
+    x = pivot_df.columns.tolist() 
+    for ad_name, row in pivot_df.iterrows():
+        traces.append({
+            "x": x,
+            "y": row.tolist(),
+            "name": ad_name,
+            "type": "bar"
+        })
+
+    return {
+        'title': csv_sheet_name,
+        'type': chart_type,
+        'chart_config': {
+            "traces": traces,
+            "layout": {
+                "barmode": "group",
+                "showlegend": True,
+                "legend": {
+                    "title": {"text": ''},
+                    "traceorder": 'normal'
+                },
+                "xaxis": {"title": "Cidade"},
+                "yaxis": {"title": "Número de Inserções"}
+            }
+        },
+        "options": available_column_filters.tolist(),
+        'selected_option': selected_column_filter,
+        'columns_filter': {
+            'available': available_column_filters.tolist(),
+            'selected': selected_column_filter
+        }
+    }
+    
+    

@@ -71,5 +71,3 @@ def process_balance_sheet(df,):
     # Final parsed DataFrame
     parsed_df = pd.DataFrame(parsed_rows)
     return parsed_df
-
-
