@@ -280,3 +280,81 @@ def get_group_chart(df, chart_meta, csv_sheet_name, filter):
     }
     
     
+def get_skankey_chart(df, chart_meta, csv_sheet_name, filter):
+    df_long = df.copy()
+    chart_type = chart_meta["chart_type"]
+    column_filter_name = chart_meta["column_name"]  
+
+    # Preencher filtros disponíveis (para dropdowns, por exemplo)
+    available_column_filters = df["Company"].dropna().unique()
+    selected_column_filter = filter if filter in available_column_filters else available_column_filters[0]
+
+    
+    # Filtrar pela empresa selecionada
+    available_column_filters = df[column_filter_name].unique()
+    
+    df_filtered = df_long[df_long[column_filter_name] == selected_column_filter]
+
+    # Certificar que está em formato long com coluna Demand
+    if "Demand" not in df_filtered.columns:
+        df_filtered = df_filtered.melt(
+            id_vars=["Brand", "Company", "City"],
+            var_name="Segment",
+            value_name="Demand"
+        )
+
+    # Gerar os nós únicos
+    all_nodes = pd.unique(df_filtered[["Brand", "Segment", "City"]].values.ravel())
+    node_indices = {name: i for i, name in enumerate(all_nodes)}
+
+    # Brand → Segment
+    bs = df_filtered.groupby(["Brand", "Segment"])["Demand"].sum().reset_index()
+    source1 = bs["Brand"].map(node_indices).tolist()
+    target1 = bs["Segment"].map(node_indices).tolist()
+    value1 = bs["Demand"].tolist()
+
+    # Segment → City
+    sc = df_filtered.groupby(["Segment", "City"])["Demand"].sum().reset_index()
+    source2 = sc["Segment"].map(node_indices).tolist()
+    target2 = sc["City"].map(node_indices).tolist()
+    value2 = sc["Demand"].tolist()
+
+    # Combinar os fluxos
+    source = source1 + source2
+    target = target1 + target2
+    value = value1 + value2
+
+    # Plotly trace
+    traces = [{
+        "type": "sankey",
+        "orientation": "h",
+        "node": {
+            "pad": 15,
+            "thickness": 20,
+            "line": {"color": "black", "width": 0.5},
+            "label": all_nodes.tolist()
+        },
+        "link": {
+            "source": source,
+            "target": target,
+            "value": value
+        }
+    }]
+    
+    return {
+        'title': csv_sheet_name,
+        'type': chart_type,
+        'chart_config': {
+            "traces": traces,
+            "layout": {
+                "title": {"text": f"Sankey - {selected_column_filter}"},
+                "font": {"size": 12}
+            }
+        },
+        "options": available_column_filters.tolist(),
+        'selected_option': selected_column_filter,
+        'columns_filter': {
+            'available': available_column_filters.tolist(),
+            'selected': selected_column_filter
+        }
+    }

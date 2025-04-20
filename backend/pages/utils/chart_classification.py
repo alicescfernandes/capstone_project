@@ -1,4 +1,4 @@
-from .advanced_processing import process_balance_sheet
+from .advanced_processing import process_balance_sheet, process_income_statement, process_detailed_brand_demand
 
 CHART_CLASSIFICATION = {
     "industry-results-for": {
@@ -336,7 +336,52 @@ CHART_CLASSIFICATION = {
         "chart_type": "bar",
         "type": "double",
         'column_name':"Company"
-    }
+    },
+    "income-statement": {
+        "chart_type": "waterfall",
+        "type": "balance_sheet",
+        'column_name':"Column"
+    },
+    "detailed-brand-demand-mea": {
+        "chart_type": "skankey",
+        "type": "skankey",
+        'column_name':"Company",
+        "group_by":['Media', 'Ad'],
+        "group_column_index":"Media"
+
+    },
+    "detailed-brand-demand-noram": {
+        "chart_type": "skankey",
+        "type": "skankey",
+        'column_name':"Company",
+        "group_by":['Media', 'Ad'],
+        "group_column_index":"Media"
+
+    },
+    "detailed-brand-demand-latam": {
+        "chart_type": "skankey",
+        "type": "skankey",
+        'column_name':"Company",
+        "group_by":['Media', 'Ad'],
+        "group_column_index":"Media"
+
+    },
+    "detailed-brand-demand-europe": {
+        "chart_type": "skankey",
+        "type": "skankey",
+        'column_name':"Company",
+        "group_by":['Media', 'Ad'],
+        "group_column_index":"Media"
+
+    },
+    "detailed-brand-demand-apac": {
+        "chart_type": "skankey",
+        "type": "skankey",
+        'column_name':"Company",
+        "group_by":['Media', 'Ad'],
+        "group_column_index":"Media"
+    },
+    
 }
 
 COLUMNS_TO_REMOVE = [
@@ -356,5 +401,10 @@ ADDITIONAL_PROCESSING_PIPELINE = {
     "channel-profitability-mea": [process_balance_sheet],
     "channel-profitability-latam": [process_balance_sheet],
     "channel-profitability-europe": [process_balance_sheet],
-    "channel-profitability-apac": [process_balance_sheet]
+    "channel-profitability-apac": [process_balance_sheet],
+    "income-statement": [process_income_statement],
+    "detailed-brand-demand-noram": [process_detailed_brand_demand],
+    "detailed-brand-demand-latam": [process_detailed_brand_demand],
+    "detailed-brand-demand-europe": [process_detailed_brand_demand],
+    "detailed-brand-demand-apac": [process_detailed_brand_demand],
 }

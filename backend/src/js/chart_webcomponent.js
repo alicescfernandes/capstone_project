@@ -56,7 +56,7 @@ class PlotlyChart extends HTMLElement {
         if (this.state.isLoading) return this.renderSpinner();
         if (this.state.isError) return this.renderError();
 
-        const hasOptions = Array.isArray(this.state.options) && this.state.options.length > 0;
+        const hasOptions = Array.isArray(this.state.options) && this.state.options.length > 1;
 
         this.innerHTML = `
             <div id="${this.id}">

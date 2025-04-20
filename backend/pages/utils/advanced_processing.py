@@ -13,6 +13,7 @@ BALANCE_SHEET_CONFIG = {
     "Brand Profit":           {"type": "total",    "sign":  1},
     "Profit per Unit":        {"ignore": True},
     "% from Brand Revenues":  {'type': 'percentage', "reference": "Brand Revenues"},
+    
     # Regional Profitability
     "Sales Revenue":         {"type": "relative", "sign":  1},
     "Gross Margin":           {"ignore": True},
@@ -22,6 +23,35 @@ BALANCE_SHEET_CONFIG = {
     "Channel Expenses":       {"ignore": True},
     "Channel Profit":         {"type": "total",    "sign":  1},
     "% from Sales Revenue":  {'type': 'percentage', "reference": "Sales Revenue"},
+    
+    # Income statement
+    "Revenues":                                 {"type": "relative", "sign": 1},
+    "Research and Development":                 {"type": "relative", "sign": -1},
+    "Quality Costs":                            {"type": "relative", "sign": -1},
+    "Advertising":                              {"type": "relative", "sign": -1},
+    "Sales Office and Web Sales Center Expenses": {"type": "relative", "sign": -1},
+    "Marketing Research":                       {"type": "relative", "sign": -1},
+    "Shipping":                                 {"type": "relative", "sign": -1},
+    "Inventory Holding Cost":                   {"type": "relative", "sign": -1},
+    "Excess Capacity Cost":                     {"type": "relative", "sign": -1},
+    "Depreciation":                             {"type": "relative", "sign": -1},
+    "Operating Profit":                         {"type": "total",    "sign": 1},
+    "Licensing Income":                         {"type": "relative", "sign": 1},
+    "Licensing Fees":                           {"type": "relative", "sign": -1},
+    "Other Income":                             {"type": "relative", "sign": 1},
+    "Other Expenses":                           {"type": "relative", "sign": -1},
+    "Earnings Before Interest and Taxes":       {"type": "total",    "sign": 1},
+    "Interest Income":                          {"type": "relative", "sign": 1},
+    "Interest Charges":                         {"type": "relative", "sign": -1},
+    "Income Before Taxes":                      {"type": "total",    "sign": 1},
+    "Loss Carry Forward":                       {"type": "relative", "sign": -1},
+    "Taxable Income":                           {"ignore":True},
+    "Income Taxes":                             {"type": "relative", "sign": -1},
+    "Net Income":                               {"type": "total",    "sign": 1},
+    "Earnings per Share":                       {"ignore": True},
+    "Gross Profit":                             {"ignore": True},
+    "Total Expenses":                           {"ignore": True},
+    "Miscellaneous Income and Expenses":        {"ignore": True},
 }
 
 # Helper function for each cell
@@ -71,3 +101,36 @@ def process_balance_sheet(df,):
     # Final parsed DataFrame
     parsed_df = pd.DataFrame(parsed_rows)
     return parsed_df
+
+
+def process_income_statement(df):
+    # extract last quarter from sheet (sheets have all the quarters, but we are only interested on the last)
+    quarter_columns = [col for col in df.columns if col.startswith("Quarter")]
+    latest_quarter = quarter_columns[-1] if quarter_columns else None
+
+    # validate
+    if latest_quarter is None:
+        raise ValueError("Nenhuma coluna de trimestre encontrada no ficheiro CSV.")
+
+    df = df[["Report Item", latest_quarter]].dropna()
+    df[latest_quarter] = df[latest_quarter].astype(str).str.replace(",", "").astype(float)
+
+
+    # parse sheets
+    parsed_rows = []
+    for _, row in df.iterrows():
+        parsed = parse_cell(row["Report Item"], row[latest_quarter], latest_quarter, df[["Report Item", latest_quarter]])
+
+        if parsed:
+            parsed_rows.append(parsed)
+
+    # Criar DataFrame
+    parsed_df = pd.DataFrame(parsed_rows)
+    return parsed_df
+
+
+def process_detailed_brand_demand(df):
+    parsed_df = df.melt(id_vars=["Brand", "Company", "City"], var_name="Segment", value_name="Demand")
+
+    return parsed_df
+
