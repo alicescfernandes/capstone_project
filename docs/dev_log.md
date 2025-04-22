@@ -17,48 +17,10 @@ _Stuff that is not important and just nice haves_
 
 ## TODO
 
-- [ ] Add annotation for quarter diagrams about the balanced score card
-- [ ] Finish the remaining graphs
-- [ ] Add DataTable charts
-- [ ] Add field to allow the user to choose the number precision
-
-## 05/24/2025
-- [x] Add search functionality with text hightligthing
-
-
-## 05/11/2025
-
-- [x] Adds more VPS configs for deploy
-- [x] Adds Django Unfold
-- [x] Adds preload tags for faster loading of scripts - Scripts were pushed locally for caching
-- [x] Check if the flowbite JS file can be imported from node_modules - Scripts were pushed locally for caching
-
-## 05/10/2025
-
-- [x] Fixes user on the quarter selection causing errors for multiple users
-- [x] Adds fixed sideabar toc and sections show only on mobile
-- [x] Hide Sections when using mobile (ignored)
-- [x] Closes the chart zoom modal when the user clicks ESC
-- [x] Consider remove infinite scrolling in favour of actual sections that can show a localized set of charts
-
-## 04/27/2025
-
-- [x] Adds more charts - cashflow
-- [x] Fixes quarter navigation when no options are given
-
-## 04/26/2025
-
-- [x] Adds more charts - ad judgement, demand distrib by channel and others
-- [x] Loading from an # breaks the charts (<http://localhost:8000/#section-balanced-scorecard>)
-- [x] Change the modals to upload files instead of the quarters
-
-## 04/25/2025
-
-- [x] Adds more charts - not sure what it was
-
-## 04/20/2025
-
-- [x] Adds more charts - not sure what it was
+- [ ] Add alert when there is still Excel files in processing
+- [ ] Loading from an # breaks the charts (<http://localhost:8000/#section-balanced-scorecard>)
+- [ ] Change quarter button to upload files, add quarter field as required and add the file form
+- [ ] Change the errors and messages from the charts into a light grey with string type of message
 
 ## 04/19/2025
 
@@ -125,7 +87,7 @@ _Stuff that is not important and just nice haves_
 - [x] Show legends on the charts even when its a single trace
 - [x] Only allow for excel files uploads
 - [x] When no data is able to be show, an empty state message
-- [X] When a graph has an error, don't render the chart but the error message
+- [x] When a graph has an error, don't render the chart but the error message
 
 ### Data filtering problems
 
@@ -137,8 +99,8 @@ Elevatech 3.0 3,400 0 1
 
 But if we only apply the following filter Company== CTTG, then we get multiple lines of information
 Elevatech 3.0 3,400 0 1
-Express 3.0   3,000 200 2
-TurboLiteV2     1,850 100 3
+Express 3.0 3,000 200 2
+TurboLiteV2 1,850 100 3
 
 The second data is more useful than the first, since it immediatly displays all products of the CTTG brand. The same thought process can be applied to all "double" charts, where we should really only filter by a single column information.
 
