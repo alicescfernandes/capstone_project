@@ -431,6 +431,21 @@ CHART_CLASSIFICATION = {
         "type": "simple",
         'column_name':None
     },
+    "changeover-costs": {
+        "chart_type": "bar",
+        "type": "simple",
+        "column_name":None
+    },
+    "inventory-position-cost-unit": {
+        "chart_type": "bar",
+        "type": "simple",
+        "column_name":None
+    },
+    "inventory-position": {
+        "chart_type": "bar",
+        "type": "simple",
+        "column_name":None
+    }
 }
 
 COLUMNS_TO_REMOVE = [
