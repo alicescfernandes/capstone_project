@@ -75,6 +75,9 @@ class ExcelFile(models.Model):
                 # changing the sheet name for regional so it doesn't clash with the local
                 if('regional' in sheet_title_lowercase):
                     sheet_slug = inflection.parameterize(sheet_title.lower())
+                    
+                if('compensation' in sheet_title_lowercase):
+                    sheet_slug = inflection.parameterize(sheet_title.lower())
 
                 columns = processed_data_frame.columns.tolist()
                 data_json = convert_df_to_json(processed_data_frame)

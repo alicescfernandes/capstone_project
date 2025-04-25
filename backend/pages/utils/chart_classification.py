@@ -1,4 +1,4 @@
-from .advanced_processing import process_balance_sheet, process_income_statement, process_detailed_brand_demand
+from .advanced_processing import process_balance_sheet, process_income_statement, process_detailed_brand_demand, process_compensation
 
 CHART_CLASSIFICATION = {
     "industry-results-for": {
@@ -381,18 +381,70 @@ CHART_CLASSIFICATION = {
         "group_by":['Media', 'Ad'],
         "group_column_index":"Media"
     },
-    
+    "competitors-compensation-for-sales-force-noram": {
+        "chart_type": "bar",
+        "type": "simple",
+        'column_name':None
+    },
+    "competitors-compensation-for-sales-force-mea": {
+        "chart_type": "bar",
+        "type": "simple",
+        'column_name':None
+    },
+    "competitors-compensation-for-sales-force-latam": {
+        "chart_type": "bar",
+        "type": "simple",
+        'column_name':None
+    },
+    "competitors-compensation-for-sales-force-europe": {
+        "chart_type": "bar",
+        "type": "simple",
+        'column_name':None
+    },
+    "competitors-compensation-for-sales-force-apac": {
+        "chart_type": "bar",
+        "type": "simple",
+        'column_name':None
+    },
+    "competitors-compensation-for-production-workers-noram": {
+        "chart_type": "bar",
+        "type": "simple",
+        'column_name':None
+    },
+    "competitors-compensation-for-production-workers-mea": {
+        "chart_type": "bar",
+        "type": "simple",
+        'column_name':None
+    },
+    "competitors-compensation-for-production-workers-latam": {
+        "chart_type": "bar",
+        "type": "simple",
+        'column_name':None
+    },
+    "competitors-compensation-for-production-workers-europe": {
+        "chart_type": "bar",
+        "type": "simple",
+        'column_name':None
+    },
+    "competitors-compensation-for-production-workers-apac": {
+        "chart_type": "bar",
+        "type": "simple",
+        'column_name':None
+    },
 }
 
 COLUMNS_TO_REMOVE = [
     "Priority",
     "Point of Purchase Display",
     "Total Sales People",
-    "Total"
+    "Total",
+    "Importance of further improvements" #TODO: on API get the slug, and if the column is this, then return a whole different dataset
+
 ]
 
 ROWS_TO_REMOVE = [
-    "Total"
+    "Total",
+    "Importance of further improvements"
 ]
 
 ADDITIONAL_PROCESSING_PIPELINE = {
@@ -407,4 +459,14 @@ ADDITIONAL_PROCESSING_PIPELINE = {
     "detailed-brand-demand-latam": [process_detailed_brand_demand],
     "detailed-brand-demand-europe": [process_detailed_brand_demand],
     "detailed-brand-demand-apac": [process_detailed_brand_demand],
+    "competitors-compensation-for-sales-force-noram": [process_compensation],
+    "competitors-compensation-for-sales-force-mea": [process_compensation],
+    "competitors-compensation-for-sales-force-latam": [process_compensation],
+    "competitors-compensation-for-sales-force-europe": [process_compensation],
+    "competitors-compensation-for-sales-force-apac": [process_compensation],
+    "competitors-compensation-for-production-workers-noram": [process_compensation],
+    "competitors-compensation-for-production-workers-mea": [process_compensation],
+    "competitors-compensation-for-production-workers-latam": [process_compensation],
+    "competitors-compensation-for-production-workers-europe": [process_compensation],
+    "competitors-compensation-for-production-workers-apac": [process_compensation],
 }

@@ -134,3 +134,16 @@ def process_detailed_brand_demand(df):
 
     return parsed_df
 
+# dropna is dropping all rows with nan values, and that is causing some rows to get removed
+def process_compensation(df):
+    last_two = df.tail(2)
+
+    # Merges last two lines so that we have a single column
+    merged = last_two.aggregate(lambda x: x.dropna().iloc[0] if x.dtype == object else x.sum())
+
+    parsed_df = df.iloc[:-2]
+
+    parsed_df = pd.concat([parsed_df, pd.DataFrame([merged])])
+    
+    print(parsed_df)
+    return df
