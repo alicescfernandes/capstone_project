@@ -201,5 +201,16 @@ def run_pipeline_for_sheet(df_in, sheet_name):
     df_clean = remove_columns(df_clean)
     df_clean = remove_rows(df_clean)
     sheet_slug = slugify_sheet_name(sheet_name)
+    
+    sheet_title_lowercase = sheet_title.lower()
+
+    # changing the sheet name for regional so it doesn't clash with the local
+    if('regional' in sheet_title_lowercase):
+        sheet_slug = inflection.parameterize(sheet_title.lower())
+        
+    if('compensation' in sheet_title_lowercase):
+        sheet_slug = inflection.parameterize(sheet_title.lower())
+
+
     return (df_clean,  sheet_slug, sheet_title)
 

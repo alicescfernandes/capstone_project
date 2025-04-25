@@ -453,13 +453,14 @@ COLUMNS_TO_REMOVE = [
     "Point of Purchase Display",
     "Total Sales People",
     "Total",
-    "Importance of further improvements" #TODO: on API get the slug, and if the column is this, then return a whole different dataset
-
+    "Importance of further improvements", #TODO: on API get the slug, and if the column is this, then return a whole different dataset
+    "Units Produced"
 ]
 
 ROWS_TO_REMOVE = [
     "Total",
-    "Importance of further improvements"
+    "Importance of further improvements",
+    "Units Produced"
 ]
 
 ADDITIONAL_PROCESSING_PIPELINE = {

@@ -6,7 +6,6 @@ from .utils.data_processing import run_pipeline_for_sheet, extract_section_name,
 from .utils.data_processing import run_pipeline_for_sheet, extract_section_name
 from .utils.chart_classification import ADDITIONAL_PROCESSING_PIPELINE
 from django.contrib.auth import get_user_model
-import inflection
 
 User = get_user_model()
 
@@ -60,9 +59,7 @@ class ExcelFile(models.Model):
                     continue
 
                 processed_data_frame, sheet_slug, sheet_title  = run_pipeline_for_sheet(df_raw, sheet_name)
-                sheet_title_lowercase = sheet_title.lower()
                 # Get the column order first, this will be saved in a specific field
-                print("sheet_title", sheet_title)
                 if(sheet_slug in ADDITIONAL_PROCESSING_PIPELINE):
                     processing_functions= ADDITIONAL_PROCESSING_PIPELINE[sheet_slug]
                     df_processing = processed_data_frame
@@ -71,13 +68,6 @@ class ExcelFile(models.Model):
                         df_processing = fn(df_processing)
                     
                     processed_data_frame = df_processing
-
-                # changing the sheet name for regional so it doesn't clash with the local
-                if('regional' in sheet_title_lowercase):
-                    sheet_slug = inflection.parameterize(sheet_title.lower())
-                    
-                if('compensation' in sheet_title_lowercase):
-                    sheet_slug = inflection.parameterize(sheet_title.lower())
 
                 columns = processed_data_frame.columns.tolist()
                 data_json = convert_df_to_json(processed_data_frame)
