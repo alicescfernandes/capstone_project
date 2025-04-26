@@ -49,7 +49,6 @@ BALANCE_SHEET_CONFIG = {
     "Income Taxes":                             {"type": "relative", "sign": -1},
     "Net Income":                               {"type": "total",    "sign": 1},
     "Earnings per Share":                       {"ignore": True},
-    "Gross Profit":                             {"ignore": True},
     "Total Expenses":                           {"ignore": True},
     "Miscellaneous Income and Expenses":        {"ignore": True},
     
@@ -60,8 +59,55 @@ BALANCE_SHEET_CONFIG = {
     "Total Overhead":     {"type": "relative", "sign": 1},
     "Changeover":         {"type": "relative", "sign": 1},
     "Production Average": {"type": "total",    "sign": 1},
-
+    
+    # Cashflow
+    "Beginning Cash Balance":                   {"type": "relative", "sign": 1},
+    "Production":                               {"type": "relative", "sign": -1},
+    "Sales Force Expense":                      {"type": "relative", "sign": -1},
+    "Net Operating Cash Flow":                  {"ignore":True},
+    "Fixed Production Capacity":                {"type": "relative", "sign": -1},
+    "Sinking Fund":                             {"type": "relative", "sign": -1},
+    "Total Investing Activities":               {"ignore":True},
+    "Increase in Common Stock":                 {"type": "relative", "sign": 1},
+    "Borrow Conventional Loan":                 {"type": "relative", "sign": 1},
+    "Repay Conventional Loan":                  {"type": "relative", "sign": -1},
+    "Borrow Long-Term Loan":                    {"type": "relative", "sign": 1},
+    "Borrow Emergency Loan":                    {"type": "relative", "sign": 1},
+    "Repay Emergency Loan":                     {"type": "relative", "sign": -1},
+    "Deposit 3 Month Certificate":              {"type": "relative", "sign": -1},
+    "Withdraw 3 Month Certificate":             {"type": "relative", "sign": 1},
+    "Dividends":                                {"type": "relative", "sign": -1},
+    "Total Financing Activities":               {"ignore": True},
+    "Cash Balance, End of Period":              {"type": "total",    "sign": 1},
 }
+
+def parse_cell_cashflow(label, value, column_name, df_col):
+    label = label.strip().lstrip("-+= ").strip()
+    if label not in BALANCE_SHEET_CONFIG or BALANCE_SHEET_CONFIG[label].get("ignore"):
+        return None
+
+    config = BALANCE_SHEET_CONFIG[label]
+    measure = config["type"]
+
+    if measure == "percentage":
+        ref_label = config["reference"]
+        ref_row = df_col[df_col["Report Item"].str.contains(ref_label, case=False, na=False)]
+        if not ref_row.empty:
+            ref_value = ref_row.iloc[0][column_name]
+            value = (int(value) / 100) * abs(ref_value)
+        else:
+            value = 0
+        measure = "absolute"
+    elif measure == "relative" or measure == "absolute":
+        sign = config["sign"]
+        value = sign * abs(value)
+
+    return {
+        "Column": column_name,
+        "Label": label,
+        "Measure": measure,
+        "Value": value
+    }
 
 def parse_cell_production(label, value, column_name):
     original_label = label.strip()
@@ -218,4 +264,21 @@ def process_production_costs(df):
     parsed_df = pd.DataFrame(parsed_rows)
     return parsed_df
 
+
+def process_cashflow(df):
+    quarter_columns = [col for col in df.columns if col.startswith("Quarter")]
+    latest_quarter = quarter_columns[-1] if quarter_columns else None
+
+    df = df[["Report Item", latest_quarter]].dropna()
+    df[latest_quarter] = df[latest_quarter].astype(str).str.replace(",", "").astype(float)
+
+    parsed_rows = []
+    for _, row in df.iterrows():
+        parsed = parse_cell(row["Report Item"], row[latest_quarter], latest_quarter, df[["Report Item", latest_quarter]])
+
+        if parsed:
+            parsed_rows.append(parsed)
+
+    parsed_df = pd.DataFrame(parsed_rows)
+    return parsed_df
 

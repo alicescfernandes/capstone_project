@@ -20,6 +20,10 @@ _Stuff that is not important and just nice haves_
 
 ## TODO
 
+## 04/27/2025
+
+- [x] Adds more charts - cashflow
+
 ## 04/26/2025
 
 - [x] Adds more charts - ad judgement, demand distrib by channel and others
