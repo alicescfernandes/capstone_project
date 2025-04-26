@@ -346,10 +346,6 @@ def get_skankey_chart(df, chart_meta, csv_sheet_name, filter):
         'type': chart_type,
         'chart_config': {
             "traces": traces,
-            "layout": {
-                "title": {"text": f"Sankey - {selected_column_filter}"},
-                "font": {"size": 12}
-            }
         },
         "options": available_column_filters.tolist(),
         'selected_option': selected_column_filter,
