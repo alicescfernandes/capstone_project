@@ -16,10 +16,9 @@ _Stuff that is not important and just nice haves_
 - [ ] Display username on the navbar
 - [ ] Add proper logging for the python app
 - [ ] Consider remove infinite scrolling in favour of actual sections that can show a localized set of charts
+- [ ] Add alert when there is still Excel files in processing
 
 ## TODO
-
-- [ ] Add alert when there is still Excel files in processing
 
 ## 04/26/2025
 
