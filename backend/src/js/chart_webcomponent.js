@@ -1,4 +1,4 @@
-const API_BASE_URL = `${window.location}api/`;
+const API_BASE_URL = `${window.location.origin}/api/`;
 
 class PlotlyChart extends HTMLElement {
     constructor() {

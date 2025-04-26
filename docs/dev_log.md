@@ -15,16 +15,17 @@ _Stuff that is not important and just nice haves_
 - [ ] Create a "change password page", check if django is able to send emails
 - [ ] Display username on the navbar
 - [ ] Add proper logging for the python app
+- [ ] Consider remove infinite scrolling in favour of actual sections that can show a localized set of charts
 
 ## TODO
 
 - [ ] Add alert when there is still Excel files in processing
-- [ ] Loading from an # breaks the charts (<http://localhost:8000/#section-balanced-scorecard>)
 - [ ] Add a zoom feature on the charts, that would open a popup with the chart that was zoomed in
 
 ## 04/26/2025
 
-- [x] Adds more charts - ad judgement, demand distrib by channel
+- [x] Adds more charts - ad judgement, demand distrib by channel and others
+- [x] Loading from an # breaks the charts (<http://localhost:8000/#section-balanced-scorecard>)
 
 ## 04/25/2025
 
