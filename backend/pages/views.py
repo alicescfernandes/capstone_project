@@ -9,6 +9,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
 from .models import Quarter, ExcelFile, CSVData
 from .forms import QuarterForm
+from .utils.chart_classification import CHART_CLASSIFICATION_KEYS
 
 # Get the path to the xlsx directory
 current_dir = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
@@ -57,13 +58,14 @@ def home(request):
     # Filtrar para manter apenas o primeiro CSV por slug
     seen_slugs = set()
     chart_slugs = []
+    
 
     # Populate this object
     sections = {}
     
     for csv in latest_csvs:
         slug = csv.sheet_name_slug
-        if slug not in seen_slugs:
+        if slug not in seen_slugs and slug in CHART_CLASSIFICATION_KEYS:
             seen_slugs.add(slug)
 
             chart_slugs.append({

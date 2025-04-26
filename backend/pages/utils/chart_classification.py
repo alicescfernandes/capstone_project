@@ -1,4 +1,4 @@
-from .advanced_processing import process_balance_sheet, process_income_statement, process_detailed_brand_demand, process_compensation, process_competitor_city
+from .advanced_processing import process_balance_sheet, process_income_statement, process_detailed_brand_demand, process_compensation, process_competitor_city, process_production_costs
 
 CHART_CLASSIFICATION = {
     "industry-results-for": {
@@ -527,7 +527,15 @@ CHART_CLASSIFICATION = {
         "type": "simple",
         'column_name':"Company"
     },
+    "production-costs-per-unit":{
+        "chart_type": "waterfall",
+        "type": "balance_sheet",
+        'column_name':"Brand"
+    },
 }
+
+
+CHART_CLASSIFICATION_KEYS = CHART_CLASSIFICATION.keys()
 
 COLUMNS_TO_REMOVE = [
     "Priority",
@@ -575,5 +583,6 @@ ADDITIONAL_PROCESSING_PIPELINE = {
     "competitors-in-city-mea": [process_competitor_city],
     "competitors-in-city-latam": [process_competitor_city],
     "competitors-in-city-europe": [process_competitor_city],
-    "competitors-in-city-apac": [process_competitor_city]
+    "competitors-in-city-apac": [process_competitor_city],
+    "production-costs-per-unit":[process_production_costs]
 }

@@ -196,6 +196,8 @@ def get_waterfall_chart(df, chart_meta, csv_sheet_name, filter):
 
     filtered_df = df[df[column_filter_name] == selected_column_filter]
 
+    
+    print(selected_column_filter)
     trace = {
         "type": "waterfall",
         "name": selected_column_filter,
@@ -229,7 +231,6 @@ def get_group_chart(df, chart_meta, csv_sheet_name, filter):
     chart_type = chart_meta["chart_type"]
     group_by = chart_meta["group_by"]      
     group_column_index = chart_meta["group_column_index"]           
-         
 
     available_column_filters = df[column_filter_name].unique()
     selected_column_filter = filter if filter in available_column_filters else available_column_filters[0]

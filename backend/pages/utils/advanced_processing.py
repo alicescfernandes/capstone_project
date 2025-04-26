@@ -52,7 +52,46 @@ BALANCE_SHEET_CONFIG = {
     "Gross Profit":                             {"ignore": True},
     "Total Expenses":                           {"ignore": True},
     "Miscellaneous Income and Expenses":        {"ignore": True},
+    
+    # Production costs    
+    "Units Produced":   {"ignore": True, "sign": 1},
+    "Direct Materials":   {"ignore": "relative", "sign": 1},
+    "Direct Labor":       {"type": "relative", "sign": 1},
+    "Total Overhead":     {"type": "relative", "sign": 1},
+    "Changeover":         {"type": "relative", "sign": 1},
+    "Production Average": {"type": "total",    "sign": 1},
+
 }
+
+def parse_cell_production(label, value, column_name):
+    original_label = label.strip()
+    label_clean = original_label.lstrip("-+= ").strip()
+
+    config = BALANCE_SHEET_CONFIG[label_clean]
+    if config.get("ignore"):
+        return None  # Skip ignored columns
+
+    # Try to match after cleaning
+    if label_clean not in BALANCE_SHEET_CONFIG:
+        # If not found in mapping, we can skip or assume default logic
+        # Here I'll assume it's relative if starts with "+", total if "="
+        if original_label.startswith("="):
+            measure = "total"
+        else:
+            measure = "relative"
+        sign = 1
+    else:
+        measure = config["type"]
+        sign = config["sign"]
+
+    value = sign * abs(value)
+
+    return {
+        "Brand": column_name,
+        "Label": label_clean,  # Cleaned label without +/= symbols
+        "Measure": measure,
+        "Value": value
+    }
 
 # Helper function for each cell
 def parse_cell(label, value, column_name, df_col):
@@ -157,3 +196,26 @@ def process_competitor_city(df):
 
     df_long = df_long[df_long["Presence"] == 1]
     return parsed_df
+
+
+
+def process_production_costs(df):
+    # Clean and parse
+    parsed_rows = []
+    value_columns = df.columns.drop("Brand")
+
+    # Remove commas and convert to float
+    for col in value_columns:
+        df[col] = df[col].astype(str).str.replace(",", "").astype(float)
+
+    for _, row in df.iterrows():
+        brand = row["Brand"]
+        for col in value_columns:
+            result = parse_cell_production(col, row[col], brand)
+            if result:
+                parsed_rows.append(result)
+
+    parsed_df = pd.DataFrame(parsed_rows)
+    return parsed_df
+
+
