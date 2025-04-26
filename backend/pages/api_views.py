@@ -86,5 +86,4 @@ class ChartDataAPIView(APIView):
             
         except Exception as e:
             empty_response = return_empty_response(quarter_number, slug, e, csv_data.sheet_name_pretty)
-            print(e)
             return Response(quarter_data | empty_response )

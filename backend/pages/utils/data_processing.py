@@ -138,7 +138,6 @@ def parse_sheet(xls, sheet_name):
     parsed_sheet = xls.parse(sheet_name, header=None, dtype=str)
     parsed_sheet = parsed_sheet[~parsed_sheet.apply(lambda row: row.astype(str).str.contains('Selections are indicated').any(), axis=1)]
     
-    print(parsed_sheet)
     return parsed_sheet
 
 def extract_sheet_title(df_raw):

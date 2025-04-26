@@ -59,7 +59,7 @@ class ExcelFile(models.Model):
                     continue
 
                 processed_data_frame, sheet_slug, sheet_title  = run_pipeline_for_sheet(df_raw, sheet_name)
-               
+
                 # Get the column order first, this will be saved in a specific field
                 if(sheet_slug in ADDITIONAL_PROCESSING_PIPELINE):
                     processing_functions= ADDITIONAL_PROCESSING_PIPELINE[sheet_slug]

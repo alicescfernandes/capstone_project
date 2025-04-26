@@ -25,6 +25,7 @@ _Stuff that is not important and just nice haves_
 
 - [x] Adds more charts - ad judgement, demand distrib by channel and others
 - [x] Loading from an # breaks the charts (<http://localhost:8000/#section-balanced-scorecard>)
+- [x] Change the modals to upload files instead of the quarters
 
 ## 04/25/2025
 

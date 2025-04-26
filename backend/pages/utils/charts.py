@@ -197,7 +197,6 @@ def get_waterfall_chart(df, chart_meta, csv_sheet_name, filter):
     filtered_df = df[df[column_filter_name] == selected_column_filter]
 
     
-    print(selected_column_filter)
     trace = {
         "type": "waterfall",
         "name": selected_column_filter,
