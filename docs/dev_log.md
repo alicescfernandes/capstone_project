@@ -22,6 +22,18 @@ _Stuff that is not important and just nice haves_
 - [ ] Loading from an # breaks the charts (<http://localhost:8000/#section-balanced-scorecard>)
 - [ ] Add a zoom feature on the charts, that would open a popup with the chart that was zoomed in
 
+## 04/26/2025
+
+- [x] Adds more charts - ad judgement, demand distrib by channel
+
+## 04/25/2025
+
+- [x] Adds more charts - not sure what it was
+
+## 04/20/2025
+
+- [x] Adds more charts - not sure what it was
+
 ## 04/19/2025
 
 - [x] Adds balance sheet (waterfall) charts

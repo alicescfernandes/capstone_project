@@ -445,7 +445,62 @@ CHART_CLASSIFICATION = {
         "chart_type": "bar",
         "type": "simple",
         "column_name":None
-    }
+    },
+    "ad-judgment-noram": {
+        "chart_type": "bar",
+        "type": "double",
+        'column_name':"Company"
+    },
+    "ad-judgment-mea": {
+        "chart_type": "bar",
+        "type": "double",
+        'column_name':"Company"
+    },
+    "ad-judgment-latam": {
+        "chart_type": "bar",
+        "type": "double",
+        'column_name':"Company"
+    },
+    "ad-judgment-europe": {
+        "chart_type": "bar",
+        "type": "double",
+        'column_name':"Company"
+    },
+    "ad-judgment-apac": {
+        "chart_type": "bar",
+        "type": "double",
+        'column_name':"Company"
+    },
+    "brand-judgment-noram": {
+        "chart_type": "bar",
+        "type": "double",
+        'column_name':"Company"
+    },
+    "brand-judgment-mea": {
+        "chart_type": "bar",
+        "type": "double",
+        'column_name':"Company"
+    },
+    "brand-judgment-latam": {
+        "chart_type": "bar",
+        "type": "double",
+        'column_name':"Company"
+    },
+    "brand-judgment-europe": {
+        "chart_type": "bar",
+        "type": "double",
+        'column_name':"Company"
+    },
+    "brand-judgment-apac": {
+        "chart_type": "bar",
+        "type": "double",
+        'column_name':"Company"
+    },
+    "demand-distribution-by-channel":{
+        "chart_type": "pie",
+        "type": "simple",
+        'column_name':"Company"
+    },
 }
 
 COLUMNS_TO_REMOVE = [
@@ -454,7 +509,11 @@ COLUMNS_TO_REMOVE = [
     "Total Sales People",
     "Total",
     "Importance of further improvements", #TODO: on API get the slug, and if the column is this, then return a whole different dataset
-    "Units Produced"
+    "Units Produced",
+    "Brand Advertised",
+    "Sales Offices Percent [%]",
+    "Web Sales Center Percent [%]",
+    "Total Demand"
 ]
 
 ROWS_TO_REMOVE = [
