@@ -531,6 +531,7 @@ ADDITIONAL_PROCESSING_PIPELINE = {
     "channel-profitability-apac": [process_balance_sheet],
     "income-statement": [process_income_statement],
     "detailed-brand-demand-noram": [process_detailed_brand_demand],
+    "detailed-brand-demand-mea": [process_detailed_brand_demand],
     "detailed-brand-demand-latam": [process_detailed_brand_demand],
     "detailed-brand-demand-europe": [process_detailed_brand_demand],
     "detailed-brand-demand-apac": [process_detailed_brand_demand],

@@ -145,5 +145,4 @@ def process_compensation(df):
 
     parsed_df = pd.concat([parsed_df, pd.DataFrame([merged])])
     
-    print(parsed_df)
     return df
