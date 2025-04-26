@@ -40,6 +40,10 @@ _Stuff that is not important and just nice haves_
 - [x] Adds balance sheet (waterfall) charts
 - [x] Adds other phase2 charts
 
+## 04/19/2025
+
+- [x] Add a zoom feature on the charts, that would open a popup with the chart that was zoomed in
+
 ## 04/18/2025
 
 - [x] Add a user reference to all models

@@ -64,12 +64,13 @@ class PlotlyChart extends HTMLElement {
                     <h5 class="chart-title"></h5>
                     <div class="chart-quarter-navigation"></div>
                 </div>
+                ${this.renderZoomOverlay()}
                 ${hasOptions ? `<p>Filter By: <select class="chart-filter"></select></p>` : ''}
                 <div class="chart" style="width:100%;height:400px;"></div>
             </div>`;
 
-        this.renderChart();
         this.renderQuarterNavigation();
+        this.renderChart();
 
         if (hasOptions) {
             this.renderOptions();
@@ -82,9 +83,12 @@ class PlotlyChart extends HTMLElement {
         const { quarter } = this.state;
 
         container.innerHTML = `
-            <button ${!quarter?.prev ? 'disabled' : ''} class="prev-quarter chart-quarter-nav-btn">←</button>
-            <button ${!quarter?.next ? 'disabled' : ''} class="next-quarter chart-quarter-nav-btn">→</button>`;
+            <button class="chart-quarter-nav-btn chart-zoom-btn"><svg class="w-6 h-6 " aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 4H4m0 0v4m0-4 5 5m7-5h4m0 0v4m0-4-5 5M8 20H4m0 0v-4m0 4 5-5m7 5h4m0 0v-4m0 4-5-5"/></svg></button>
+            <button ${!quarter?.prev ? 'disabled' : ''} class="prev-quarter chart-quarter-nav-btn"><svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M5 12l4-4m-4 4 4 4"/></svg></button>
+            <button ${!quarter?.next ? 'disabled' : ''} class="next-quarter chart-quarter-nav-btn"><svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 12H5m14 0-4 4m4-4-4-4"/></svg></button>`;
     }
+
+
 
     renderSpinner() {
         this.innerHTML = `<div class="spinner-container" role="status">
@@ -93,6 +97,20 @@ class PlotlyChart extends HTMLElement {
                                     <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill"/>
                                 </svg>
                                 <span class="sr-only">Loading...</span>`
+    }
+
+    renderZoomOverlay() {
+        return `
+            <div class="chart-zoom-overlay">
+                <div class="chart-zoom-content">
+                    <button class="chart-quarter-nav-btn chart-zoom-close"><svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 9h4m0 0V5m0 4L4 4m15 5h-4m0 0V5m0 4 5-5M5 15h4m0 0v4m0-4-5 5m15-5h-4m0 0v4m0-4 5 5"/>
+</svg>
+</button>
+                    <div class="chart-zoom-container" style="width:100%; height:100%;"></div>
+                </div>
+            </div>
+        `;
     }
 
     renderError() {
@@ -163,6 +181,23 @@ class PlotlyChart extends HTMLElement {
         }
 
         Plotly.newPlot(container, traces, layout, { responsive: true });
+
+
+        // Zoom logic - needs traces for it to work
+        const zoomBtn = this.querySelector(`#${this.id} .chart-zoom-btn`);
+        const zoomOverlay = this.querySelector(`#${this.id} .chart-zoom-overlay`);
+        const zoomContent = this.querySelector(`#${this.id} .chart-zoom-container`);
+        const closeZoom = this.querySelector(`#${this.id} .chart-zoom-close`);
+
+        zoomBtn?.addEventListener("click", () => {
+            zoomOverlay.style.display = "flex";
+            Plotly.newPlot(zoomContent, traces, layout, { responsive: true });
+        });
+
+        closeZoom?.addEventListener("click", () => {
+            zoomOverlay.style.display = "none";
+            Plotly.purge(zoomContent);
+        });
     }
 
     setupLazyLoad() {
