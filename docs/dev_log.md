@@ -23,6 +23,7 @@ _Stuff that is not important and just nice haves_
 ## 04/27/2025
 
 - [x] Adds more charts - cashflow
+- [x] Fixes quarter navigation when no options are given
 
 ## 04/26/2025
 
