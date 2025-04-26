@@ -343,40 +343,40 @@ CHART_CLASSIFICATION = {
         'column_name':"Column"
     },
     "detailed-brand-demand-mea": {
-        "chart_type": "skankey",
-        "type": "skankey",
+        "chart_type": "sankey",
+        "type": "sankey",
         'column_name':"Company",
         "group_by":['Media', 'Ad'],
         "group_column_index":"Media"
 
     },
     "detailed-brand-demand-noram": {
-        "chart_type": "skankey",
-        "type": "skankey",
+        "chart_type": "sankey",
+        "type": "sankey",
         'column_name':"Company",
         "group_by":['Media', 'Ad'],
         "group_column_index":"Media"
 
     },
     "detailed-brand-demand-latam": {
-        "chart_type": "skankey",
-        "type": "skankey",
+        "chart_type": "sankey",
+        "type": "sankey",
         'column_name':"Company",
         "group_by":['Media', 'Ad'],
         "group_column_index":"Media"
 
     },
     "detailed-brand-demand-europe": {
-        "chart_type": "skankey",
-        "type": "skankey",
+        "chart_type": "sankey",
+        "type": "sankey",
         'column_name':"Company",
         "group_by":['Media', 'Ad'],
         "group_column_index":"Media"
 
     },
     "detailed-brand-demand-apac": {
-        "chart_type": "skankey",
-        "type": "skankey",
+        "chart_type": "sankey",
+        "type": "sankey",
         'column_name':"Company",
         "group_by":['Media', 'Ad'],
         "group_column_index":"Media"

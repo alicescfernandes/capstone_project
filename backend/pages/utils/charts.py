@@ -280,7 +280,7 @@ def get_group_chart(df, chart_meta, csv_sheet_name, filter):
     }
     
     
-def get_skankey_chart(df, chart_meta, csv_sheet_name, filter):
+def get_sankey_chart(df, chart_meta, csv_sheet_name, filter):
     df_long = df.copy()
     chart_type = chart_meta["chart_type"]
     column_filter_name = chart_meta["column_name"]  
