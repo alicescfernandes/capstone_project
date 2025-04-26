@@ -74,8 +74,9 @@ class PlotlyChart extends HTMLElement {
 
         if (hasOptions) {
             this.renderOptions();
-            this.setupEvents();
         }
+
+        this.setupEvents();
     }
 
     renderQuarterNavigation() {
