@@ -1,4 +1,4 @@
-from .advanced_processing import process_balance_sheet, process_income_statement, process_detailed_brand_demand, process_compensation
+from .advanced_processing import process_balance_sheet, process_income_statement, process_detailed_brand_demand, process_compensation, process_competitor_city
 
 CHART_CLASSIFICATION = {
     "industry-results-for": {
@@ -501,6 +501,32 @@ CHART_CLASSIFICATION = {
         "type": "simple",
         'column_name':"Company"
     },
+    # TODO: competitors-in-city-* one could be a stacked bar chart, but it would require specific code to make it happen
+    "competitors-in-city-noram": {
+        "chart_type": "bar", 
+        "type": "simple",
+        'column_name':"Company"
+    },
+    "competitors-in-city-mea": {
+        "chart_type": "bar",
+        "type": "simple",
+        'column_name':"Company"
+    },
+    "competitors-in-city-latam": {
+        "chart_type": "bar",
+        "type": "simple",
+        'column_name':"Company"
+    },
+    "competitors-in-city-europe": {
+        "chart_type": "bar",
+        "type": "simple",
+        'column_name':"Company"
+    },
+    "competitors-in-city-apac": {
+        "chart_type": "bar",
+        "type": "simple",
+        'column_name':"Company"
+    },
 }
 
 COLUMNS_TO_REMOVE = [
@@ -545,4 +571,9 @@ ADDITIONAL_PROCESSING_PIPELINE = {
     "competitors-compensation-for-production-workers-latam": [process_compensation],
     "competitors-compensation-for-production-workers-europe": [process_compensation],
     "competitors-compensation-for-production-workers-apac": [process_compensation],
+    "competitors-in-city-noram": [process_competitor_city],
+    "competitors-in-city-mea": [process_competitor_city],
+    "competitors-in-city-latam": [process_competitor_city],
+    "competitors-in-city-europe": [process_competitor_city],
+    "competitors-in-city-apac": [process_competitor_city]
 }

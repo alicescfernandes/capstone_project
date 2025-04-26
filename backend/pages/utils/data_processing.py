@@ -8,6 +8,8 @@ def convert_df_to_json(df):
 
     df_clean = df.copy()
 
+    df_clean = df_clean.replace('X', 1)
+
     for col in df_clean.columns:
         df_clean[col] = pd.to_numeric(df_clean[col], errors='ignore')
 
@@ -133,7 +135,11 @@ def parse_sheet(xls, sheet_name):
     Returns:
         pd.DataFrame: Raw data from the sheet without headers.
     """
-    return xls.parse(sheet_name, header=None, dtype=str)
+    parsed_sheet = xls.parse(sheet_name, header=None, dtype=str)
+    parsed_sheet = parsed_sheet[~parsed_sheet.apply(lambda row: row.astype(str).str.contains('Selections are indicated').any(), axis=1)]
+    
+    print(parsed_sheet)
+    return parsed_sheet
 
 def extract_sheet_title(df_raw):
     """
@@ -144,7 +150,7 @@ def extract_sheet_title(df_raw):
 
     Returns:
         str: The sheet_title extracted from cell (0, 0).
-    """
+    """    
     return clean_sheet_title(str(df_raw.iloc[0, 0]).strip())
 
 def extract_column_names(df_raw,sheet_title):
@@ -193,6 +199,9 @@ def run_pipeline_for_sheet(df_in, sheet_name):
     Returns:
         tuple[pd.DataFrame, str, str]: A tuple containing the parsed dataframe, sheet slug and sheet title.
     """
+    
+
+
     df_raw = remove_line_breaks_from_data(df_in)
     sheet_title = extract_sheet_title(df_raw)
     columns = extract_column_names(df_raw, sheet_title)
@@ -212,5 +221,6 @@ def run_pipeline_for_sheet(df_in, sheet_name):
         sheet_slug = inflection.parameterize(sheet_title.lower())
 
 
+    
     return (df_clean,  sheet_slug, sheet_title)
 
