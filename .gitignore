@@ -13,3 +13,6 @@ docs/tex/
 
 .env.dev
 .env.prod
+
+*.key
+*.pem

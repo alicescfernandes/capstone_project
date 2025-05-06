@@ -14,25 +14,13 @@ services:
       - ./infra/.env.prod
     depends_on:
       - postgres
-      # - mongo
-  
+        
   postgres:
     image: postgres:15
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     env_file:
       - ./infra/.env.prod
-  
-  # mongo:
-  #   image: mongo:6
-  #   env_file:
-  #   - ./infra/.env.prod
-  #   restart: always
-  #   volumes:
-  #     - mongo_data:/data/db
-  #   expose:
-  #     - 27017
-  
   nginx:
     build: ./infra/nginx
     ports:
@@ -42,6 +30,7 @@ services:
       - web
     volumes:
       - static_volume:/home/app/web/staticfiles
+      - ./infra/nginx/certs:/etc/nginx/certs:ro
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.whoami.rule=Host(`dashboard-app.local`)"
