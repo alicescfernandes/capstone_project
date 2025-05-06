@@ -29,20 +29,33 @@ This also clears the databases since it removes the volumes
 docker-compose down -v
 ```
 
-## Start up Production Environment (TBD)
+## Start up Production Environment
 
-docker-compose -f docker-compose.prod.yml up -d --build
+All of the commands above still apply, but the docker-compose file is different
 
-docker-compose -f docker-compose.prod.yml down -v
+To quickly get the Production environment going:
 
--d --> detached mode
-
-cd backend && node build.js
-
+```sh
 docker-compose -f docker-compose.prod.yml down -v
 docker-compose -f docker-compose.prod.yml up -d --build
 docker-compose -f docker-compose.prod.yml exec web python manage.py migrate --noinput
 docker-compose -f docker-compose.prod.yml exec web python manage.py collectstatic --no-input --clear
+
+docker-compose -f docker-compose.prod.yml exec web python manage.py createsuperuser
+
+```
+
+On Debian 12 (Bookworm)
+
+```sh
+docker compose -f docker-compose.prod.yml down -v
+docker compose -f docker-compose.prod.yml up -d --build
+docker compose -f docker-compose.prod.yml exec web python manage.py migrate --noinput
+docker compose -f docker-compose.prod.yml exec web python manage.py collectstatic --no-input --clear
+
+docker compose -f docker-compose.prod.yml exec web python manage.py createsuperuser
+
+```
 
 ## Other usefull docker commands
 
