@@ -63,7 +63,7 @@ def return_empty_response(quarter_number, slug,error,sheet_name ):
     }
 
 def get_active_csv_for_slug(quarter_number, slug, user):
-    curr_q = get_object_or_404(Quarter, number=quarter_number)
+    curr_q = get_object_or_404(Quarter, number=quarter_number, user=user)
     csv_data = get_object_or_404(
         CSVData,
         sheet_name_slug=slug,

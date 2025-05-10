@@ -20,6 +20,10 @@ _Stuff that is not important and just nice haves_
 
 ## TODO
 
+## 05/10/2025
+
+- [x] Fixes user on the quarter selection causing errors for multiple users
+
 ## 04/27/2025
 
 - [x] Adds more charts - cashflow
