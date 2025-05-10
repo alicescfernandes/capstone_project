@@ -267,8 +267,8 @@ def get_group_chart(df, chart_meta, csv_sheet_name, filter):
                     "title": {"text": ''},
                     "traceorder": 'normal'
                 },
-                "xaxis": {"title": "Cidade"},
-                "yaxis": {"title": "Número de Inserções"}
+                "xaxis": {"title": "City"},
+                "yaxis": {"title": "Number of Inserts"}
             }
         },
         "options": available_column_filters.tolist(),
@@ -285,13 +285,8 @@ def get_sankey_chart(df, chart_meta, csv_sheet_name, filter):
     chart_type = chart_meta["chart_type"]
     column_filter_name = chart_meta["column_name"]  
 
-    # Preencher filtros disponíveis (para dropdowns, por exemplo)
-    available_column_filters = df["Company"].dropna().unique()
-    selected_column_filter = filter if filter in available_column_filters else available_column_filters[0]
-
-    
-    # Filtrar pela empresa selecionada
     available_column_filters = df[column_filter_name].unique()
+    selected_column_filter = filter if filter in available_column_filters else available_column_filters[0]
     
     df_filtered = df_long[df_long[column_filter_name] == selected_column_filter]
 
