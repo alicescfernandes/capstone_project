@@ -233,7 +233,7 @@ def process_compensation(df):
     return df
 
 def process_competitor_city(df):
-    parsed_df = df.copy();
+    parsed_df = df.copy()
 
     for col in parsed_df.columns[1:]:
         parsed_df[col] = parsed_df[col].apply(lambda x: 1 if str(x).strip().upper() == "X" else 0)
