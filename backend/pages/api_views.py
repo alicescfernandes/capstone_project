@@ -8,7 +8,7 @@ from pages.models import Quarter
 from .models import Quarter
 from .utils.chart_classification import CHART_CLASSIFICATION
 from .utils.api import  get_quarter_navigation_object, get_request_params, return_empty_response, get_active_csv_for_slug
-from .utils.charts import process_simple_chart, process_double_chart
+from .utils.charts import get_simple_chart, get_double_chart, get_waterfall_chart, get_group_chart, get_sankey_chart
 class QuarterListAPIView(APIView):
     def get(self, request):
         # Preparar a lista de quarters
@@ -65,11 +65,23 @@ class ChartDataAPIView(APIView):
             df = df[csv_data.column_order] 
 
             if(type == "simple"):
-                chart_response = process_simple_chart(df, chart_meta,csv_data.sheet_name_pretty, filter)
+                chart_response = get_simple_chart(df, chart_meta,csv_data.sheet_name_pretty, filter)
                 return Response(quarter_data | chart_response)
         
             if(type=="double"):
-                chart_response = process_double_chart(df, chart_meta,csv_data.sheet_name_pretty, filter)
+                chart_response = get_double_chart(df, chart_meta,csv_data.sheet_name_pretty, filter)
+                return Response(quarter_data | chart_response)
+            
+            if(type=="balance_sheet"):
+                chart_response = get_waterfall_chart(df, chart_meta,csv_data.sheet_name_pretty, filter)
+                return Response(quarter_data | chart_response)
+            
+            if(type=="grouped"):
+                chart_response = get_group_chart(df, chart_meta,csv_data.sheet_name_pretty, filter)
+                return Response(quarter_data | chart_response)
+            
+            if(type=="sankey"):
+                chart_response = get_sankey_chart(df, chart_meta,csv_data.sheet_name_pretty, filter)
                 return Response(quarter_data | chart_response)
             
         except Exception as e:

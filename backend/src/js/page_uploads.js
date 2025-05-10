@@ -28,12 +28,23 @@ FilePond.create(document.querySelector('#filepond'), {
 export function openEditModal(button) {
     const uuid = button.getAttribute('data-quarter-id');
     const number = button.getAttribute('data-quarter-number');
+    const modalHeaderTitle = button.getAttribute('data-modal-title');
 
     const form = document.getElementById('edit-quarter-form');
     const input = document.getElementById('edit-quarter-number');
 
+    const modalHeader = document.getElementById('modal-title');
+
+    modalHeader.textContent = modalHeaderTitle ?? 'Edit Files'
+
     input.value = number;
-    form.action = `/quarters/edit/${uuid}/`;
+
+    if (uuid === 'new') {
+        form.action = `/quarters/new/`;
+
+    } else {
+        form.action = `/quarters/edit/${uuid}/`;
+    }
 }
 
 // Attach event listener to the document (delegation)

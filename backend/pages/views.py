@@ -8,7 +8,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
 from .models import Quarter, ExcelFile, CSVData
-from .forms import QuarterForm
+from .utils.chart_classification import CHART_CLASSIFICATION_KEYS
 
 # Get the path to the xlsx directory
 current_dir = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
@@ -32,6 +32,8 @@ def is_valid_xlsx(file):
 def home(request):
     # Prepare default case
     quarters = Quarter.objects.filter(user=request.user)
+    
+    files = ExcelFile.objects.filter(user=request.user, is_processed=False)
     if(len(quarters) <= 0):
         return render(request, 'pages/home.html', {
         "app_context":{
@@ -57,13 +59,13 @@ def home(request):
     # Filtrar para manter apenas o primeiro CSV por slug
     seen_slugs = set()
     chart_slugs = []
+    
 
-    # Populate this object
     sections = {}
     
     for csv in latest_csvs:
         slug = csv.sheet_name_slug
-        if slug not in seen_slugs:
+        if slug not in seen_slugs and slug in CHART_CLASSIFICATION_KEYS:
             seen_slugs.add(slug)
 
             chart_slugs.append({
@@ -94,15 +96,19 @@ def home(request):
 @login_required
 def manage_quarters(request):
     quarters = Quarter.objects.filter(user=request.user)
-    form = QuarterForm()
+    next_q = 1
+    
+    if(len(quarters) > 0):
+        next_q = quarters.first().number + 1
 
-    if request.method == 'POST':
-        form = QuarterForm(request.POST)
-        if form.is_valid():
-            quarter = form.save(commit=False)
-            quarter.user = request.user 
-            quarter.save()
-            return redirect('manage_quarters')
+    return render(
+        request,
+        "pages/manage_quarters.html",
+        {
+            "quarters": quarters,
+            "next_q": next_q
+        },
+    )
 
     return render(request, 'pages/manage_quarters.html', {
         'form': form,
@@ -122,15 +128,26 @@ def delete_file(request, uuid):
     return redirect('manage_quarters')
 
 @login_required
-def edit_quarter(request, uuid):
-    quarter = get_object_or_404(Quarter, uuid=uuid, user=request.user)
+def edit_quarter(request, uuid=None):
+    quarter = None
 
-    if request.method == 'POST':
-        new_number = request.POST.get('number')
-        if new_number:
+    if uuid is None:
+        quarter = Quarter(user=request.user)
+    else:
+        quarter = Quarter.objects.get(uuid=uuid, user=request.user)
+
+    if request.method == "POST":
+        new_number = request.POST.get("number")
+
+        if not new_number:
+            return redirect("manage_quarters")
+
+        if quarter:
             quarter.number = new_number
-            quarter.user = request.user 
-            quarter.save()
+        else:
+            quarter = Quarter(number=new_number, user=request.user)
+
+        quarter.save()
 
         files = request.FILES.getlist('files')
         for f in files:
@@ -142,11 +159,12 @@ def edit_quarter(request, uuid):
                     user=request.user
                 )
             except ValidationError as e:
-                # Podes fazer log, mostrar erro, ou armazenar numa lista para mostrar mais tarde
                 print(f"Did not upload '{f.name}': {e}")
                 continue
 
-    return redirect('manage_quarters')
+        return redirect("manage_quarters")
+
+    return redirect("manage_quarters")
 
 @login_required
 def logout_view(request):

@@ -14,14 +14,39 @@ _Stuff that is not important and just nice haves_
 - [ ] Hide Sections when using mobile
 - [ ] Create a "change password page", check if django is able to send emails
 - [ ] Display username on the navbar
+- [ ] Add proper logging for the python app
+- [ ] Consider remove infinite scrolling in favour of actual sections that can show a localized set of charts
+- [ ] Add alert when there is still Excel files in processing
 
 ## TODO
 
-- [ ] Add alert when there is still Excel files in processing
-- [ ] Loading from an # breaks the charts (<http://localhost:8000/#section-balanced-scorecard>)
+## 05/10/2025
+
+- [x] Fixes user on the quarter selection causing errors for multiple users
+
+## 04/27/2025
+
+- [x] Adds more charts - cashflow
+- [x] Fixes quarter navigation when no options are given
+
+## 04/26/2025
+
+- [x] Adds more charts - ad judgement, demand distrib by channel and others
+- [x] Loading from an # breaks the charts (<http://localhost:8000/#section-balanced-scorecard>)
+- [x] Change the modals to upload files instead of the quarters
+
+## 04/25/2025
+
+- [x] Adds more charts - not sure what it was
+
+## 04/20/2025
+
+- [x] Adds more charts - not sure what it was
 
 ## 04/19/2025
 
+- [x] Adds balance sheet (waterfall) charts
+- [x] Adds other phase2 charts
 - [x] Add a zoom feature on the charts, that would open a popup with the chart that was zoomed in
 
 ## 04/18/2025

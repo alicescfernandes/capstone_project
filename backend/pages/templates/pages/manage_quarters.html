@@ -19,7 +19,7 @@
 
   <div class="upload-section-wrapper">
     <div>
-      <button data-modal-target="createQuarterModal" data-modal-toggle="createQuarterModal" class="upload-new-quarter-btn">New Quarter</button>
+      <button data-modal-target="editQuarterModal" data-modal-toggle="editQuarterModal" class="upload-new-quarter-btn upload-edit-link" data-modal-target="editQuarterModal" data-modal-toggle="editQuarterModal" data-quarter-id="new" data-modal-title="Upload files" data-quarter-number="{{ next_q }}">Upload files</button>
     </div>
 
     <div class="upload-grid-quarters">
@@ -57,39 +57,18 @@
     </div>
   </div>
 
-  <div id="createQuarterModal" tabindex="-1" aria-hidden="true" class="fixed top-0 left-0 right-0 z-50 hidden p-4 overflow-x-hidden overflow-y-auto h-[calc(100%-1rem)] max-h-full">
-    <div class="upload-modal-box">
-      <div class="upload-modal-inner">
-        <div class="upload-modal-header">
-          <h3 class="upload-modal-title">Add new quarter</h3>
-          <button type="button" class="upload-close-modal" data-modal-hide="createQuarterModal">✕</button>
-        </div>
-        <form method="post" class="upload-form-wrapper">
-          {% csrf_token %}
-          <div>
-            <label for="id_number" class="upload-label">Quarter Number</label>
-            {{ form.number }}
-          </div>
-          <div class="flex justify-end">
-            <button type="submit" class="upload-modal-submit-btn">Save</button>
-          </div>
-        </form>
-      </div>
-    </div>
-  </div>
-
   <div id="editQuarterModal" tabindex="-1" aria-hidden="true" class="fixed top-0 left-0 right-0 z-50 hidden p-4 overflow-x-hidden overflow-y-auto h-[calc(100%-1rem)] max-h-full">
     <div class="upload-modal-box">
       <div class="upload-modal-inner">
         <div class="upload-modal-header">
-          <h3 class="text-xl font-semibold text-gray-900">Edit quarter</h3>
+          <h3 id="modal-title" class="text-xl font-semibold text-gray-900">Edit files</h3>
           <button type="button" class="upload-close-modal" data-modal-hide="editQuarterModal">✕</button>
         </div>
         <form method="post" id="edit-quarter-form" class="upload-form-wrapper" enctype="multipart/form-data">
           {% csrf_token %}
           <div>
             <label for="edit-quarter-number" class="upload-label">Quarter Number</label>
-            <input type="number" name="number" id="edit-quarter-number" class="upload-input" />
+            <input required type="number" name="number" id="edit-quarter-number" class="upload-input" />
           </div>
 
           <div>

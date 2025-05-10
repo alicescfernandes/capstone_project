@@ -8,12 +8,14 @@ def convert_df_to_json(df):
 
     df_clean = df.copy()
 
+    df_clean = df_clean.replace('X', 1)
+
     for col in df_clean.columns:
         df_clean[col] = pd.to_numeric(df_clean[col], errors='ignore')
 
     # Round the floats to 5 digits 
     numeric_cols = df_clean.select_dtypes(include=['float']).columns
-    df_clean[numeric_cols] = df_clean[numeric_cols].round(5)
+    df_clean[numeric_cols] = df_clean[numeric_cols].round(3)
 
     return df_clean.to_dict(orient='records')
 
@@ -88,9 +90,8 @@ def remove_rows(df):
         )
 
     mask = df.apply(row_should_be_removed, axis=1)
-    return df[~mask]  # Keeps only the lines that must not be removed
-
-
+    #return df[~mask].fillna(0) # Keeps only the lines that must not be removed
+    return df[~mask].dropna() # Keeps only the lines that must not be removed
 
 def remove_columns(df):
     """
@@ -134,7 +135,10 @@ def parse_sheet(xls, sheet_name):
     Returns:
         pd.DataFrame: Raw data from the sheet without headers.
     """
-    return xls.parse(sheet_name, header=None, dtype=str)
+    parsed_sheet = xls.parse(sheet_name, header=None, dtype=str)
+    parsed_sheet = parsed_sheet[~parsed_sheet.apply(lambda row: row.astype(str).str.contains('Selections are indicated').any(), axis=1)]
+    
+    return parsed_sheet
 
 def extract_sheet_title(df_raw):
     """
@@ -145,7 +149,7 @@ def extract_sheet_title(df_raw):
 
     Returns:
         str: The sheet_title extracted from cell (0, 0).
-    """
+    """    
     return clean_sheet_title(str(df_raw.iloc[0, 0]).strip())
 
 def extract_column_names(df_raw,sheet_title):
@@ -194,6 +198,9 @@ def run_pipeline_for_sheet(df_in, sheet_name):
     Returns:
         tuple[pd.DataFrame, str, str]: A tuple containing the parsed dataframe, sheet slug and sheet title.
     """
+    
+
+
     df_raw = remove_line_breaks_from_data(df_in)
     sheet_title = extract_sheet_title(df_raw)
     columns = extract_column_names(df_raw, sheet_title)
@@ -202,5 +209,17 @@ def run_pipeline_for_sheet(df_in, sheet_name):
     df_clean = remove_columns(df_clean)
     df_clean = remove_rows(df_clean)
     sheet_slug = slugify_sheet_name(sheet_name)
+    
+    sheet_title_lowercase = sheet_title.lower()
+
+    # changing the sheet name for regional so it doesn't clash with the local
+    if('regional' in sheet_title_lowercase):
+        sheet_slug = inflection.parameterize(sheet_title.lower())
+        
+    if('compensation' in sheet_title_lowercase):
+        sheet_slug = inflection.parameterize(sheet_title.lower())
+
+
+    
     return (df_clean,  sheet_slug, sheet_title)
 

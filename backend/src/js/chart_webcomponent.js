@@ -1,4 +1,4 @@
-const API_BASE_URL = `${window.location}api/`;
+const API_BASE_URL = `${window.location.origin}/api/`;
 
 class PlotlyChart extends HTMLElement {
     constructor() {
@@ -56,7 +56,7 @@ class PlotlyChart extends HTMLElement {
         if (this.state.isLoading) return this.renderSpinner();
         if (this.state.isError) return this.renderError();
 
-        const hasOptions = Array.isArray(this.state.options) && this.state.options.length > 0;
+        const hasOptions = Array.isArray(this.state.options) && this.state.options.length > 1;
 
         this.innerHTML = `
             <div id="${this.id}">
@@ -74,8 +74,9 @@ class PlotlyChart extends HTMLElement {
 
         if (hasOptions) {
             this.renderOptions();
-            this.setupEvents();
         }
+
+        this.setupEvents();
     }
 
     renderQuarterNavigation() {

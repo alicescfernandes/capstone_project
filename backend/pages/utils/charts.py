@@ -22,7 +22,7 @@ def format_chart_trace(x,y, type, name=""):
             "y": y
         }
 
-def process_box_chart_all(df, chart_meta, csv_sheet_name, filter):
+def get_box_chart_all(df, chart_meta, csv_sheet_name, filter):
 
     indicator_col = df.columns[0]
     value_cols = df.columns[1:]
@@ -48,7 +48,7 @@ def process_box_chart_all(df, chart_meta, csv_sheet_name, filter):
         'selected_option': None
     }
         
-def process_box_chart(df, chart_meta, csv_sheet_name, filter):
+def get_box_chart(df, chart_meta, csv_sheet_name, filter):
     chart_type = chart_meta["chart_type"]
 
     indicator_col = df.columns[0]
@@ -108,12 +108,12 @@ def process_box_chart(df, chart_meta, csv_sheet_name, filter):
         'selected_option': selected_filter
     }
 
-def process_simple_chart(df,chart_meta, csv_sheet_name, filter):
+def get_simple_chart(df,chart_meta, csv_sheet_name, filter):
     chart_type = chart_meta["chart_type"]
     
     # Box charts use a whole different data structure, but is still "simple"
     if(chart_type == 'box'):
-        return process_box_chart(df,chart_meta, csv_sheet_name, filter)
+        return get_box_chart(df,chart_meta, csv_sheet_name, filter)
 
     first_column = df.columns[0]
     filter_cols = df.columns[1:]
@@ -139,8 +139,7 @@ def process_simple_chart(df,chart_meta, csv_sheet_name, filter):
     'selected_option': selected_filter
     }
 
-
-def process_double_chart(df, chart_meta,csv_sheet_name, filter):
+def get_double_chart(df, chart_meta,csv_sheet_name, filter):
     column_filter_name = chart_meta["column_name"]
     chart_type = chart_meta["chart_type"]
 
@@ -171,7 +170,7 @@ def process_double_chart(df, chart_meta,csv_sheet_name, filter):
         'chart_config':{
             "traces":traces,
             "layout":{
-                "barmode": "stack",
+                "barmode": "group",
                 "showlegend":True,
                 "legend": {
                     "title": { "text": '' },     
@@ -183,6 +182,170 @@ def process_double_chart(df, chart_meta,csv_sheet_name, filter):
         'selected_option': selected_column_filter,
         'columns_filter':{
             'available': available_column_filters,
+            'selected': selected_column_filter
+        }
+    }
+    
+
+def get_waterfall_chart(df, chart_meta, csv_sheet_name, filter):
+    column_filter_name = chart_meta["column_name"]
+    chart_type = chart_meta["chart_type"]
+    available_column_filters = df[column_filter_name].unique()
+
+    selected_column_filter = filter if filter in available_column_filters else available_column_filters[0]
+
+    filtered_df = df[df[column_filter_name] == selected_column_filter]
+
+    
+    trace = {
+        "type": "waterfall",
+        "name": selected_column_filter,
+        "x": filtered_df["Label"].tolist(),
+        "y": filtered_df["Value"].tolist(),
+        "measure": filtered_df["Measure"].tolist(),
+        "textposition": "inside"
+    }
+
+    return {
+        'title': csv_sheet_name,
+        'type': chart_type,
+        'chart_config': {
+            "traces": [trace],
+            "layout": {
+                "showlegend": False,
+                "waterfallgap": 0.1,
+            }
+        },
+        "options": available_column_filters.tolist(),
+        'selected_option': selected_column_filter,
+        'columns_filter': {
+            'available': available_column_filters.tolist(),
+            'selected': selected_column_filter
+        }
+    }
+    
+    
+def get_group_chart(df, chart_meta, csv_sheet_name, filter):
+    column_filter_name = chart_meta["column_name"]  
+    chart_type = chart_meta["chart_type"]
+    group_by = chart_meta["group_by"]      
+    group_column_index = chart_meta["group_column_index"]           
+
+    available_column_filters = df[column_filter_name].unique()
+    selected_column_filter = filter if filter in available_column_filters else available_column_filters[0]
+
+    filtered_df = df[df[column_filter_name] == selected_column_filter].copy()
+
+    grouped = (
+        filtered_df
+        .groupby(group_by)['Number of Inserts']
+        .sum()
+        .reset_index()
+    )
+
+    pivot_df = grouped.pivot(index='Ad', columns=group_column_index, values='Number of Inserts').fillna(0)
+
+    traces = []
+    x = pivot_df.columns.tolist() 
+    for ad_name, row in pivot_df.iterrows():
+        traces.append({
+            "x": x,
+            "y": row.tolist(),
+            "name": ad_name,
+            "type": "bar"
+        })
+
+    return {
+        'title': csv_sheet_name,
+        'type': chart_type,
+        'chart_config': {
+            "traces": traces,
+            "layout": {
+                "barmode": "group",
+                "showlegend": True,
+                "legend": {
+                    "title": {"text": ''},
+                    "traceorder": 'normal'
+                },
+                "xaxis": {"title": "City"},
+                "yaxis": {"title": "Number of Inserts"}
+            }
+        },
+        "options": available_column_filters.tolist(),
+        'selected_option': selected_column_filter,
+        'columns_filter': {
+            'available': available_column_filters.tolist(),
+            'selected': selected_column_filter
+        }
+    }
+    
+    
+def get_sankey_chart(df, chart_meta, csv_sheet_name, filter):
+    df_long = df.copy()
+    chart_type = chart_meta["chart_type"]
+    column_filter_name = chart_meta["column_name"]  
+
+    available_column_filters = df[column_filter_name].unique()
+    selected_column_filter = filter if filter in available_column_filters else available_column_filters[0]
+    
+    df_filtered = df_long[df_long[column_filter_name] == selected_column_filter]
+
+    # Certificar que está em formato long com coluna Demand
+    if "Demand" not in df_filtered.columns:
+        df_filtered = df_filtered.melt(
+            id_vars=["Brand", "Company", "City"],
+            var_name="Segment",
+            value_name="Demand"
+        )
+
+    # Gerar os nós únicos
+    all_nodes = pd.unique(df_filtered[["Brand", "Segment", "City"]].values.ravel())
+    node_indices = {name: i for i, name in enumerate(all_nodes)}
+
+    # Brand → Segment
+    bs = df_filtered.groupby(["Brand", "Segment"])["Demand"].sum().reset_index()
+    source1 = bs["Brand"].map(node_indices).tolist()
+    target1 = bs["Segment"].map(node_indices).tolist()
+    value1 = bs["Demand"].tolist()
+
+    # Segment → City
+    sc = df_filtered.groupby(["Segment", "City"])["Demand"].sum().reset_index()
+    source2 = sc["Segment"].map(node_indices).tolist()
+    target2 = sc["City"].map(node_indices).tolist()
+    value2 = sc["Demand"].tolist()
+
+    # Combinar os fluxos
+    source = source1 + source2
+    target = target1 + target2
+    value = value1 + value2
+
+    # Plotly trace
+    traces = [{
+        "type": "sankey",
+        "orientation": "h",
+        "node": {
+            "pad": 15,
+            "thickness": 20,
+            "line": {"color": "black", "width": 0.5},
+            "label": all_nodes.tolist()
+        },
+        "link": {
+            "source": source,
+            "target": target,
+            "value": value
+        }
+    }]
+    
+    return {
+        'title': csv_sheet_name,
+        'type': chart_type,
+        'chart_config': {
+            "traces": traces,
+        },
+        "options": available_column_filters.tolist(),
+        'selected_option': selected_column_filter,
+        'columns_filter': {
+            'available': available_column_filters.tolist(),
             'selected': selected_column_filter
         }
     }

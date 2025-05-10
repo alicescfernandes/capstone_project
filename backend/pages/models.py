@@ -4,6 +4,7 @@ import pandas as pd
 from django.db import models, transaction
 from .utils.data_processing import run_pipeline_for_sheet, extract_section_name, convert_df_to_json, parse_sheet
 from .utils.data_processing import run_pipeline_for_sheet, extract_section_name
+from .utils.chart_classification import ADDITIONAL_PROCESSING_PIPELINE
 from django.contrib.auth import get_user_model
 
 User = get_user_model()
@@ -60,6 +61,15 @@ class ExcelFile(models.Model):
                 processed_data_frame, sheet_slug, sheet_title  = run_pipeline_for_sheet(df_raw, sheet_name)
 
                 # Get the column order first, this will be saved in a specific field
+                if(sheet_slug in ADDITIONAL_PROCESSING_PIPELINE):
+                    processing_functions= ADDITIONAL_PROCESSING_PIPELINE[sheet_slug]
+                    df_processing = processed_data_frame
+                    
+                    for fn in processing_functions:
+                        df_processing = fn(df_processing)
+                    
+                    processed_data_frame = df_processing
+
                 columns = processed_data_frame.columns.tolist()
                 data_json = convert_df_to_json(processed_data_frame)
                 
