@@ -8,8 +8,6 @@ _Stuff that is not important and just nice haves_
 
 - [ ] Use Yarn instead of NPM
 - [ ] Use Axios instead of fetch
-- [ ] Adds preload tags for faster loading of scripts
-- [ ] Check if the flowbite JS file can be imported from node_modules
 - [ ] Django DRF Caching (either Redis or Memcached)
 - [ ] Create a "change password page", check if django is able to send emails
 - [ ] Display username on the navbar
@@ -23,6 +21,8 @@ _Stuff that is not important and just nice haves_
 
 - [x] Adds more VPS configs for deploy
 - [x] Adds Django Unfold
+- [x] Adds preload tags for faster loading of scripts - Scripts were pushed locally for caching
+- [x] Check if the flowbite JS file can be imported from node_modules - Scripts were pushed locally for caching
 
 ## 05/10/2025
 

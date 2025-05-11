@@ -2,67 +2,62 @@
 {% load static %}
 {% load custom_tags %}
 
-{% block title %}Home - Dashboard{% endblock %}
+{% block title %}
+  Home - Dashboard
+{% endblock %}
 
 {% block extra_head %}
-<script src='https://unpkg.com/plotly.js-dist-min@3.0.1/plotly.min.js'></script>
+  <script async src="{% static 'js/plotly.min.js' %}"></script>
+  <script async type="module" src="{% static 'js/chart_webcomponent.js' %}"></script>
 
-<link rel="stylesheet" href="{% static 'css/page_home.css' %}">
+  <link rel="stylesheet" href="{% static 'css/page_home.css' %}" />
 
-<script type="module" src="{% static 'js/chart_webcomponent.js' %}"></script>
-<script defer src="{% static 'js/page_home.js' %}"></script>
-
+  <script defer src="{% static 'js/page_home.js' %}"></script>
 {% endblock %}
 
 {% block content %}
+  {% include 'sections/empty-message.html' %}
 
-{% include 'sections/empty-message.html' %}
-
-{% if not empty %}
-
-<!-- section -->
-<div class="container_home">
-  <aside class="sections_column">
-    <h2>Available Sections</h2>
-    {% for section in toc_data %}
-    <div>
-        <div class="section-item">
-            <a href="?section={{ section.slug }}"
-                class="hover:underline {% if section.slug == selected_section_slug %}text-blue-700{% else %}text-black{% endif %}" >
+  {% if not empty %}
+    <!-- section -->
+    <div class="container_home">
+      <aside class="sections_column">
+        <h2>Available Sections</h2>
+        {% for section in toc_data %}
+          <div>
+            <div class="section-item">
+              <a href="?section={{ section.slug }}"
+                class="hover:underline {% if section.slug == selected_section_slug %}
+                  text-blue-700
+                {% else %}
+                  text-black
+                {% endif %}">
                 {{ section.title }}
-            </a>
+              </a>
 
-            <button title="Expand section to see included charts" type="button" data-toggle="section-{{ section.slug }}">
-            +
-            </button>
-        </div>
+              <button title="Expand section to see included charts" type="button" data-toggle="section-{{ section.slug }}">+</button>
+            </div>
 
-        <ul data-section-id="section-{{ section.slug }}" class="sub-sections hidden">
-            {% for chart in section.charts %}
+            <ul data-section-id="section-{{ section.slug }}" class="sub-sections hidden">
+              {% for chart in section.charts %}
                 <li>{{ chart.title }}</li>
-            {% endfor %}
-        </ul>
-
-    </div>
-
-    {% endfor %}
-  </aside>
-
-  <main class="section_charts">
-    <h2 class="{% if forloop.first %}first{% endif %}">
-        {{ selected_section_title }}
-    </h2>
-    
-    <div class="grid grid-cols-8 gap-4">
-        {% for chart in selected_charts %}
-        <plotly-chart chart_slug="{{ chart.slug }}" q="{{ chart.quarter_number }}"></plotly-chart>
+              {% endfor %}
+            </ul>
+          </div>
         {% endfor %}
+      </aside>
+
+      <main class="section_charts">
+        <h2 class="{% if forloop.first %}first{% endif %}">{{ selected_section_title }}</h2>
+
+        <div class="grid grid-cols-8 gap-4">
+          {% for chart in selected_charts %}
+            <plotly-chart chart_slug="{{ chart.slug }}" q="{{ chart.quarter_number }}"></plotly-chart>
+          {% endfor %}
+        </div>
+      </main>
     </div>
-  </main>
-</div>
 
-{% include 'sections/scroll-to-top.html' %}
-
-{% endif %}
-
+    {% include 'sections/scroll-to-top.html' %}
+  {% endif %}
 {% endblock %}

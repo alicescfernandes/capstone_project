@@ -52,9 +52,18 @@ class PlotlyChart extends HTMLElement {
         this.render();
     }
 
+    renderSpinner() {
+        return `<div class="spinner-container" role="status">
+                                <svg aria-hidden="true" class="spinner-svg" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor"/>
+                                    <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill"/>
+                                </svg>
+                                <span class="sr-only">Loading...</span>`
+    }
+
     render() {
-        if (this.state.isLoading) return this.renderSpinner();
-        if (this.state.isError) return this.renderError();
+        if (this.state.isLoading) this.innerHTML = this.renderSpinner();
+        if (this.state.isError) this.innerHTML = this.renderError();
 
         const hasOptions = Array.isArray(this.state.options) && this.state.options.length > 1;
 
@@ -66,7 +75,9 @@ class PlotlyChart extends HTMLElement {
                 </div>
                 ${this.renderZoomOverlay()}
                 ${hasOptions ? `<p>Filter By: <select class="chart-filter"></select></p>` : ''}
-                <div class="chart" style="width:100%;height:400px;"></div>
+                <div class="chart-container" style="width:100%;height:400px;">
+                ${this.renderSpinner()}
+                </div>
             </div>`;
 
         this.renderQuarterNavigation();
@@ -79,6 +90,22 @@ class PlotlyChart extends HTMLElement {
         this.setupEvents();
     }
 
+    waitForPlotly() {
+
+        if (window.Plotly) {
+            return Promise.resolve()
+        }
+        return new Promise((resolve) => {
+            const check = () => {
+                if (window.Plotly) {
+                    resolve();
+                } else {
+                    setTimeout(check, 500);
+                }
+            };
+            check();
+        });
+    }
     renderQuarterNavigation() {
         const container = this.querySelector(`#${this.id} .chart-quarter-navigation`);
         const { quarter } = this.state;
@@ -91,14 +118,7 @@ class PlotlyChart extends HTMLElement {
 
 
 
-    renderSpinner() {
-        this.innerHTML = `<div class="spinner-container" role="status">
-                                <svg aria-hidden="true" class="spinner-svg" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor"/>
-                                    <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill"/>
-                                </svg>
-                                <span class="sr-only">Loading...</span>`
-    }
+
 
     renderZoomOverlay() {
         return `
@@ -115,7 +135,7 @@ class PlotlyChart extends HTMLElement {
     }
 
     renderError() {
-        this.innerHTML = `
+        return `
             <div class="alert-error" role="alert">
             <svg class="alert-error-svg" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
                 <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
@@ -172,7 +192,7 @@ class PlotlyChart extends HTMLElement {
 
         const { title, chart_config, quarter } = this.state;
         const { traces, layout } = chart_config;
-        const container = this.querySelector(`#${this.id} .chart`);
+        const container = this.querySelector(`#${this.id} .chart-container`);
 
         this.querySelector(`#${this.id} .chart-title`).textContent = `${title} - Q${quarter.current}`;
 
@@ -181,6 +201,8 @@ class PlotlyChart extends HTMLElement {
             return;
         }
 
+        await this.waitForPlotly()
+        container.innerHTML = ""
         Plotly.newPlot(container, traces, layout, { responsive: true });
 
 
@@ -232,6 +254,4 @@ class PlotlyChart extends HTMLElement {
     }
 }
 
-window.addEventListener('load', () => {
-    customElements.define('plotly-chart', PlotlyChart);
-});
+customElements.define('plotly-chart', PlotlyChart);
