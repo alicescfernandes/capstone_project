@@ -9,6 +9,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
 from .models import Quarter, ExcelFile, CSVData
 from .utils.chart_classification import CHART_CLASSIFICATION_KEYS
+from django.utils.text import slugify
+
 
 # Get the path to the xlsx directory
 current_dir = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
@@ -30,68 +32,84 @@ def is_valid_xlsx(file):
     
 @login_required
 def home(request):
-    # Prepare default case
     quarters = Quarter.objects.filter(user=request.user)
-    
-    files = ExcelFile.objects.filter(user=request.user, is_processed=False)
-    if(len(quarters) <= 0):
-        return render(request, 'pages/home.html', {
-        "app_context":{
-            "qn":None,
-            "quuid":None,            
-        },
-        "empty":True,
-        "chart_slugs": []
-    })
-    
-    last_quarter = quarters[0]
 
-    quarter = quarters.get(number=int(last_quarter.number))
-    
+    if not quarters.exists():
+        return render(request, 'pages/home.html', {
+            "app_context": {
+                "qn": None,
+                "quuid": None,
+            },
+            "empty": True,
+            "chart_slugs": []
+        })
+
     latest_csvs = (
         CSVData.objects
-        .filter(user=request.user)
+        .filter(user=request.user, is_current=True)
         .select_related('quarter_file__quarter')
-        .filter(is_current=True) 
         .order_by('sheet_name_slug', '-quarter_file__quarter__number')
-        )
-    
-    # Filtrar para manter apenas o primeiro CSV por slug
-    seen_slugs = set()
-    chart_slugs = []
-    
+    )
 
-    sections = {}
-    
+    seen_chart_slugs = set()
+    all_charts = []
+    charts_by_section = {}
+
     for csv in latest_csvs:
-        slug = csv.sheet_name_slug
-        if slug not in seen_slugs and slug in CHART_CLASSIFICATION_KEYS:
-            seen_slugs.add(slug)
+        chart_slug = csv.sheet_name_slug
+        if chart_slug in seen_chart_slugs or chart_slug not in CHART_CLASSIFICATION_KEYS:
+            continue
 
-            chart_slugs.append({
-                "slug": slug,
-                "quarter_number": csv.quarter_file.quarter.number,
-            })
-            
-            section_name = csv.quarter_file.section_name or "Sem Secção"
+        seen_chart_slugs.add(chart_slug)
 
-            if(sections.get(section_name) == None):
-                sections[section_name] = []
+        section_title = csv.quarter_file.section_name or "All"
+        section_slug = slugify(section_title)
 
-            sections[section_name].append({
-                "slug": slug,
-                "quarter_number": csv.quarter_file.quarter.number,
-            })
+        chart_info = {
+            "slug": chart_slug,
+            "title": csv.sheet_name_pretty,
+            "quarter_number": csv.quarter_file.quarter.number,
+        }
+
+        if section_slug not in charts_by_section:
+            charts_by_section[section_slug] = {
+                "slug": section_slug,
+                "title": section_title,
+                "charts": []
+            }
+
+        charts_by_section[section_slug]["charts"].append(chart_info)
+        all_charts.append(chart_info)
+
+    toc_data = list(charts_by_section.values())
+
+    if toc_data and isinstance(toc_data[0], dict):
+        default_section_slug = toc_data[0].get("slug")
+    else:
+        default_section_slug = None
+
+    selected_section_slug = request.GET.get("section", default_section_slug)
+
+    selected_section = next(
+        (section for section in toc_data if section["slug"] == selected_section_slug),
+        None
+    )
+
+    selected_charts = selected_section["charts"] if selected_section else []
+    selected_section_title = selected_section["title"] if selected_section else "Unknown"
+
+
+    toc_data = list(charts_by_section.values())
+    toc_data.sort(key=lambda section: section["title"].lower())
 
     return render(request, 'pages/home.html', {
-        "app_context":{
-            "qn":quarter.number,
-            "quuid":quarter.uuid,            
-        },
-        'sections': sections,
-        "empty":len(chart_slugs) <= 0,
-        "chart_slugs": chart_slugs
+        "toc_data": toc_data,
+        "selected_section_slug": selected_section_slug,
+        "selected_section_title": selected_section_title,
+        "selected_charts": selected_charts,
+        "empty": len(all_charts) == 0,
     })
+
 
 @login_required
 def manage_quarters(request):

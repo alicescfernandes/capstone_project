@@ -199,6 +199,13 @@ class PlotlyChart extends HTMLElement {
             zoomOverlay.style.display = "none";
             Plotly.purge(zoomContent);
         });
+
+        document.addEventListener('keydown', function (event) {
+            if (event.key === 'Escape' || event.key === 'Esc') {
+                zoomOverlay.style.display = "none";
+                Plotly.purge(zoomContent);
+            }
+        });
     }
 
     setupLazyLoad() {

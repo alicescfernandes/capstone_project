@@ -11,7 +11,6 @@ _Stuff that is not important and just nice haves_
 - [ ] Adds preload tags for faster loading of scripts
 - [ ] Check if the flowbite JS file can be imported from node_modules
 - [ ] Django DRF Caching (either Redis or Memcached)
-- [ ] Hide Sections when using mobile
 - [ ] Create a "change password page", check if django is able to send emails
 - [ ] Display username on the navbar
 - [ ] Add proper logging for the python app
@@ -20,9 +19,16 @@ _Stuff that is not important and just nice haves_
 
 ## TODO
 
+## 05/11/2025
+
+- [x] Adds more VPS configs for deploy
+
 ## 05/10/2025
 
 - [x] Fixes user on the quarter selection causing errors for multiple users
+- [x] Adds fixed sideabar toc and sections show only on mobile
+- [x] Hide Sections when using mobile (ignored)
+- [x] Closes the chart zoom modal when the user clicks ESC
 
 ## 04/27/2025
 
