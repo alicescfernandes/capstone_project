@@ -13,6 +13,7 @@ docs/tex/
 
 .env.dev
 .env.prod
+.env.prod.github
 
 *.key
 *.pem
