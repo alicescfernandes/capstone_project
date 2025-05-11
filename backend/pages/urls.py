@@ -1,8 +1,11 @@
 from django.urls import path
+from django.contrib import admin
 from . import views
 from . import api_views
 
+
 urlpatterns = [
+    path("admin/", admin.site.urls),
     path("", views.home, name="home"),
     path("api/quarters/", api_views.QuarterListAPIView.as_view(), name="api_quarter"),
     path("api/chart/", api_views.ChartDataAPIView.as_view(), name="api_chart"),

@@ -22,6 +22,7 @@ _Stuff that is not important and just nice haves_
 ## 05/11/2025
 
 - [x] Adds more VPS configs for deploy
+- [x] Adds Django Unfold
 
 ## 05/10/2025
 

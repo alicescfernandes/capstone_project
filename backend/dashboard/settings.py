@@ -33,6 +33,7 @@ ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS").split(" ")
 # Application definition
 
 INSTALLED_APPS = [
+    'unfold',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -172,3 +173,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_URL = "login"
 LOGIN_REDIRECT_URL = "home"  # ou outra view
 LOGOUT_REDIRECT_URL = "login"
+
+UNFOLD = {
+    "SHOW_HISTORY": True,
+    "COLLAPSIBLE_INLINES": True,
+}
