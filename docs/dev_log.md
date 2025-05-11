@@ -19,9 +19,9 @@ _Stuff that is not important and just nice haves_
 ## TODO
 
 ## 06/07/2025
+
 - [x] Finished balance sheet chart (with support to multiple traces on the same chart)
 - [x] Finish the remaining graphs (the last money chart and both table charts)
-
 
 ## 06/01/2025
 
