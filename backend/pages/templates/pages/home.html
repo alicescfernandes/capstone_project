@@ -9,6 +9,7 @@
 {% block extra_head %}
   <script async src="{% static 'js/plotly.min.js' %}"></script>
   <script async type="module" src="{% static 'js/chart_webcomponent.js' %}"></script>
+  <script async type="module" src="{% static 'js/table_webcomponent.js' %}"></script>
 
   <link href="https://cdn.datatables.net/v/dt/jq-3.7.0/dt-2.3.1/af-2.7.0/b-3.2.3/b-colvis-3.2.3/b-print-3.2.3/cr-2.1.1/cc-1.0.1/kt-2.12.1/r-3.0.4/rr-1.5.0/sl-3.0.1/datatables.min.css" rel="stylesheet" integrity="sha384-8qW5pta3IyI5S7UOE19eCe3JsnnqEcd7I/NrcWpmNIHWnNVBmheUBPVBVcsQ5JmK" crossorigin="anonymous">
 
@@ -17,7 +18,6 @@
   <link rel="stylesheet" href="{% static 'css/page_home.css' %}" />
   
   <script defer src="{% static 'js/page_home.js' %}"></script>
-  <link rel="stylesheet" href="https://cdn.datatables.net/2.3.1/css/dataTables.dataTables.css">
 
   <style>
     .filter-icon {
@@ -86,8 +86,8 @@
     }
 
     .dt-length select {
-    width: 70px;
-  }
+      width: 70px;
+    }
   </style>
 {% endblock %}
 
@@ -96,21 +96,7 @@
 
   <div class="mb-8">
     <h3 class="text-xl font-semibold mb-4">Sample Data Table</h3>
-    <table id="sampleTable" class="display compact responsive nowrap" style="width:100%">
-      <thead>
-        <tr>
-          <th>Name <span class="filter-icon" data-column="0">🔍</span></th>
-          <th>Position <span class="filter-icon" data-column="1">🔍</span></th>
-          <th>Office <span class="filter-icon" data-column="2">🔍</span></th>
-          <th>Age <span class="filter-icon" data-column="3">🔍</span></th>
-          <th>Start Date <span class="filter-icon" data-column="4">🔍</span></th>
-          <th>Salary <span class="filter-icon" data-column="5">🔍</span></th>
-        </tr>
-      </thead>
-      <tbody>
-        <!-- Data will be populated from JSON -->
-      </tbody>
-    </table>
+    <data-table table_id="sample"></data-table>
   </div>
 
   {% if not empty %}
@@ -168,155 +154,4 @@
 
     {% include 'sections/scroll-to-top.html' %}
   {% endif %}
-
-  <script>
-    // Sample JSON data
-    const sampleData = [
-      {
-        "name": "Tiger Nixon",
-        "position": "System Architect",
-        "office": "Edinburgh",
-        "age": 61,
-        "startDate": "2011/04/25",
-        "salary": "$320,800"
-      },
-      {
-        "name": "Garrett Winters",
-        "position": "Accountant",
-        "office": "Tokyo",
-        "age": 63,
-        "startDate": "2011/07/25",
-        "salary": "$170,750"
-      },
-      {
-        "name": "Ashton Cox",
-        "position": "Junior Technical Author",
-        "office": "San Francisco",
-        "age": 66,
-        "startDate": "2009/01/12",
-        "salary": "$86,000"
-      },
-      {
-        "name": "Cedric Kelly",
-        "position": "Senior Javascript Developer",
-        "office": "Edinburgh",
-        "age": 22,
-        "startDate": "2012/03/29",
-        "salary": "$433,060"
-      },
-      {
-        "name": "Airi Satou",
-        "position": "Accountant",
-        "office": "Tokyo",
-        "age": 33,
-        "startDate": "2008/11/28",
-        "salary": "$162,700"
-      }
-    ];
-
-    // Function to create filter popover
-    function createFilterPopover(column, title) {
-      const popover = document.createElement('div');
-      popover.className = 'filter-popover';
-      
-      const input = document.createElement('input');
-      input.type = 'text';
-      input.placeholder = `Filter ${title}`;
-      
-      const buttonsDiv = document.createElement('div');
-      buttonsDiv.className = 'filter-popover-buttons';
-      
-      const applyBtn = document.createElement('button');
-      applyBtn.className = 'apply-btn';
-      applyBtn.textContent = 'Apply';
-      
-      const clearBtn = document.createElement('button');
-      clearBtn.className = 'clear-btn';
-      clearBtn.textContent = 'Clear';
-
-      buttonsDiv.appendChild(clearBtn);
-      buttonsDiv.appendChild(applyBtn);
-      popover.appendChild(input);
-      popover.appendChild(buttonsDiv);
-
-      // Position the popover
-      const icon = document.querySelector(`.filter-icon[data-column="${column}"]`);
-      const iconPos = icon.getBoundingClientRect();
-      popover.style.top = `${iconPos.bottom + 5}px`;
-      popover.style.left = `${iconPos.left}px`;
-
-      // Handle apply button
-      applyBtn.addEventListener('click', function() {
-        const value = input.value;
-        table.column(column).search(value).draw();
-        icon.classList.toggle('active', value !== '');
-        popover.remove();
-      });
-
-      // Handle clear button
-      clearBtn.addEventListener('click', function() {
-        input.value = '';
-        table.column(column).search('').draw();
-        icon.classList.remove('active');
-        popover.remove();
-      });
-
-      // Close popover when clicking outside
-      document.addEventListener('click', function(e) {
-        if (!e.target.closest('.filter-popover') && !e.target.closest('.filter-icon')) {
-          popover.remove();
-        }
-      });
-
-      return popover;
-    }
-
-    let table;
-
-    // Function to populate table with JSON data
-    function populateTable(data) {
-      table = new DataTable('#sampleTable', {
-        data: data,
-        columns: [
-          { data: 'name' },
-          { data: 'position' },
-          { data: 'office' },
-          { data: 'age' },
-          { data: 'startDate' },
-          { data: 'salary' }
-        ],
-        responsive: true,
-        searching: true,
-        ordering: true,
-        paging: true,
-        language: {
-          search: "Search table:"
-        }
-      });
-
-      // Add click handlers for filter icons
-      document.querySelectorAll('.filter-icon').forEach(icon => {
-        icon.addEventListener('click', function(e) {
-          e.stopPropagation();
-          const column = this.dataset.column;
-          const title = this.parentElement.textContent.trim();
-          
-          // Remove any existing popovers
-          document.querySelectorAll('.filter-popover').forEach(p => p.remove());
-          
-          // Create and show new popover
-          const popover = createFilterPopover(column, title);
-          document.body.appendChild(popover);
-          
-          // Focus the input
-          popover.querySelector('input').focus();
-        });
-      });
-    }
-
-    // Initialize DataTables with JSON data
-    document.addEventListener('DOMContentLoaded', function() {
-      populateTable(sampleData);
-    });
-  </script>
 {% endblock %}
