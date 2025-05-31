@@ -68,10 +68,9 @@ def get_box_chart(df, chart_meta, csv_sheet_name, filter):
     
     # Criar um único trace com todos os valores do indicador selecionado
     trace = format_chart_trace(None, row[value_cols].dropna().tolist(), chart_type, selected_filter) 
-    layout = {
-    }
+    layout = {}
 
-    # Se existir valor da empresa, adicionar linha horizontal
+    # Se existir valor da empresa, adicionar linha vermelha e "legenda flutuante" estilo legenda de gráfico
     if company_value is not None:
         layout["shapes"] = [{
             "type": "line",
@@ -81,21 +80,26 @@ def get_box_chart(df, chart_meta, csv_sheet_name, filter):
             "y1": company_value,
             "line": {
                 "color": "red",
-                "width": 1,
+                "width": 2,
                 "dash": "dash"
             }
         }]
-        
+        # Legenda flutuante: quadrado vermelho + nome da empresa
         layout["annotations"] = [{
-            "x": 0.5,     # último box
-            "y": company_value,
-            "text": f"{company} | {str(company_value)}" ,
+            "x": 1,
+            "y": max(row[value_cols].dropna().tolist()),
+            "xref": "paper",
+            "yref": "y",
+            "text": f"<span style='font-size:22px;color:red;'>■</span> Company: {company}",
             "showarrow": False,
             "font": {
-                "color": "red",
-                "size": 12
+                "size": 14
             },
+            "align": "left",
             "bgcolor": "white",
+            "borderpad": 3,
+            "borderwidth": 0,
+            "opacity": 1
         }]
 
     return {
