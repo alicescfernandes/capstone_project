@@ -1,5 +1,10 @@
 const API_BASE_URL = `${window.location.origin}/api/`;
 
+// Disable all DataTables warnings
+if (window.$.fn.dataTable) {
+    window.$.fn.dataTable.ext.errMode = 'none';
+}
+
 class DataTableComponent extends HTMLElement {
     constructor() {
         super();
@@ -13,22 +18,26 @@ class DataTableComponent extends HTMLElement {
             tableId: this.getAttribute("table_id") || "default",
             quarterNumber: this.getAttribute("q") || "1",
             data: [],
-            columns: [
-                { data: 'name', title: 'Name' },
-                { data: 'position', title: 'Position' },
-                { data: 'office', title: 'Office' },
-                { data: 'age', title: 'Age' },
-                { data: 'startDate', title: 'Start Date' },
-                { data: 'salary', title: 'Salary' }
-            ],
+            columns: [],
             isError: false,
             isLoading: true,
             quarter: {
                 current: "1",
                 prev: null,
-                next: "2"
+                next: null
+            },
+            dataTableSettings:{
+                responsive: true,
+                searching: true,
+                ordering: true,
+                paging: true,
+                destroy: true, // Allow reinitialization
+                debug: false, // Disable debug warnings
+                language: {
+                    search: "Search table:"
+                }
             }
-        };
+        };  
     }
 
     static get observedAttributes() {
@@ -44,7 +53,7 @@ class DataTableComponent extends HTMLElement {
             // TODO: Replace with actual API endpoint
             // const response = await fetch(`/api/table-data/${this.state.tableId}`);
             // const data = await response.json();
-            
+
             // For now, using hardcoded data
             const data = [
                 {
@@ -89,9 +98,18 @@ class DataTableComponent extends HTMLElement {
                 }
             ];
 
+            const columns = [
+                { data: 'name', title: 'Name' },
+                { data: 'position', title: 'Position' },
+                { data: 'office', title: 'Office' },
+                { data: 'age', title: 'Age' },
+                { data: 'startDate', title: 'Start Date' },
+                { data: 'salary', title: 'Salary' }
+            ];
+
             this.setState({
                 data,
-                isLoading: false
+                columns,
             });
         } catch (error) {
             console.error('Error fetching table data:', error);
@@ -148,23 +166,9 @@ class DataTableComponent extends HTMLElement {
                 </div>
                 ${this.renderZoomOverlay()}
                 <div class="chart-container" style="width:100%;height:400px;">
-                    <div class="table-wrapper" style="width:100%;">
-                        <table class="display responsive nowrap" style="width:100%">
-                            <thead>
-                                <tr>
-                                    ${this.state.columns.map(col => `
-                                        <th>${col.title} <span class="filter-icon" data-column="${col.data}">🔍</span></th>
-                                    `).join('')}
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <!-- Data will be populated by DataTables -->
-                            </tbody>
-                        </table>
-                    </div>
+                    <table class="display responsive nowrap" style="width:100%"></table>
                 </div>
             </div>`;
-
         if (this.innerHTML !== newHTML) {
             this.innerHTML = newHTML;
             this.initializeTable();
@@ -190,18 +194,8 @@ class DataTableComponent extends HTMLElement {
                     <button class="chart-quarter-nav-btn chart-zoom-close"><svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 9h4m0 0V5m0 4L4 4m15 5h-4m0 0V5m0 4 5-5M5 15h4m0 0v4m0-4-5 5m15-5h-4m0 0v4m0-4 5 5"/>
                     </svg></button>
-                    <div class="chart-zoom-container" style="width:100%; height:100%;">
+                    <div class="chart-zoom-container" style="padding-top:20px;width:100%; height:100%;">
                         <table class="display responsive nowrap" style="width:100%">
-                            <thead>
-                                <tr>
-                                    ${this.state.columns.map(col => `
-                                        <th>${col.title}</th>
-                                    `).join('')}
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <!-- Data will be populated by DataTables -->
-                            </tbody>
                         </table>
                     </div>
                 </div>
@@ -232,7 +226,7 @@ class DataTableComponent extends HTMLElement {
         }
 
         await this.waitForDataTables();
-        
+
         // Check if the table element exists
         const tableElement = this.querySelector(`#${this.id} table`);
         if (!tableElement) {
@@ -247,32 +241,26 @@ class DataTableComponent extends HTMLElement {
         this.table = new DataTable(`#${this.id} table`, {
             data: this.state.data,
             columns: this.state.columns,
-            responsive: true,
-            searching: true,
-            ordering: true,
-            paging: true,
-            language: {
-                search: "Search table:"
-            },
-            destroy: true // Allow reinitialization
+            ...this.state.dataTableSettings,
+
         });
     }
 
     createFilterPopover(column, title) {
         const popover = document.createElement('div');
         popover.className = 'filter-popover';
-        
+
         const input = document.createElement('input');
         input.type = 'text';
         input.placeholder = `Filter ${title}`;
-        
+
         const buttonsDiv = document.createElement('div');
         buttonsDiv.className = 'filter-popover-buttons';
-        
+
         const applyBtn = document.createElement('button');
         applyBtn.className = 'apply-btn';
         applyBtn.textContent = 'Apply';
-        
+
         const clearBtn = document.createElement('button');
         clearBtn.className = 'clear-btn';
         clearBtn.textContent = 'Clear';
@@ -321,14 +309,11 @@ class DataTableComponent extends HTMLElement {
                 e.stopPropagation();
                 const column = icon.dataset.column;
                 const title = icon.parentElement.textContent.trim();
-                
                 // Remove any existing popovers
                 document.querySelectorAll('.filter-popover').forEach(p => p.remove());
-                
                 // Create and show new popover
                 const popover = this.createFilterPopover(column, title);
                 document.body.appendChild(popover);
-                
                 // Focus the input
                 popover.querySelector('input').focus();
             });
@@ -338,35 +323,36 @@ class DataTableComponent extends HTMLElement {
         this.querySelector(`#${this.id} .prev-quarter`)?.addEventListener('click', () => this.handleQuarterChange('prev'));
         this.querySelector(`#${this.id} .next-quarter`)?.addEventListener('click', () => this.handleQuarterChange('next'));
 
-        // Zoom functionality
-        const zoomBtn = this.querySelector(`#${this.id} .chart-zoom-btn`);
-        const zoomOverlay = this.querySelector(`#${this.id} .chart-zoom-overlay`);
-        const zoomContent = this.querySelector(`#${this.id} .chart-zoom-container`);
-        const closeZoom = this.querySelector(`#${this.id} .chart-zoom-close`);
+        // Zoom functionality - Wait for next tick to ensure DOM is updated
+        setTimeout(() => {
+            const zoomBtn = this.querySelector(`#${this.id} .chart-zoom-btn`);
+            const zoomOverlay = this.querySelector(`#${this.id} .chart-zoom-overlay`);
+            const zoomContent = this.querySelector(`#${this.id} .chart-zoom-container`);
+            const closeZoom = this.querySelector(`#${this.id} .chart-zoom-close`);
 
-        if (zoomBtn && zoomOverlay && zoomContent && closeZoom) {
+
             zoomBtn.addEventListener("click", () => {
                 zoomOverlay.style.display = "flex";
-                // Initialize DataTable in zoom view
-                new DataTable(zoomContent.querySelector('table'), {
-                    data: this.state.data,
-                    columns: this.state.columns,
-                    responsive: true,
-                    searching: true,
-                    ordering: true,
-                    paging: true,
-                    language: {
-                        search: "Search table:"
-                    }
-                });
+
+                const zoomTable = zoomContent.querySelector('table');
+                if (!window.DataTable) return;
+                if (!zoomTable.dataset.initialized) {
+                    new DataTable(zoomTable, {
+                        data: this.state.data,
+                        columns: this.state.columns,
+                        ...this.state.dataTableSettings,
+                    });
+                    zoomTable.dataset.initialized = 'true';
+                }
             });
 
             closeZoom.addEventListener("click", () => {
                 zoomOverlay.style.display = "none";
                 // Destroy DataTable in zoom view
                 const zoomTable = zoomContent.querySelector('table');
-                if ($.fn.DataTable.isDataTable(zoomTable)) {
-                    $(zoomTable).DataTable().destroy();
+                if (window.$ && window.$.fn.DataTable && window.$.fn.DataTable.isDataTable(zoomTable)) {
+                    window.$(zoomTable).DataTable().destroy();
+                    zoomTable.dataset.initialized = '';
                 }
             });
 
@@ -374,12 +360,14 @@ class DataTableComponent extends HTMLElement {
                 if (event.key === 'Escape' || event.key === 'Esc') {
                     zoomOverlay.style.display = "none";
                     const zoomTable = zoomContent.querySelector('table');
-                    if ($.fn.DataTable.isDataTable(zoomTable)) {
-                        $(zoomTable).DataTable().destroy();
+                    if (window.$ && window.$.fn.DataTable && window.$.fn.DataTable.isDataTable(zoomTable)) {
+                        window.$(zoomTable).DataTable().destroy();
+                        zoomTable.dataset.initialized = '';
                     }
                 }
             });
-        }
+
+        }, 0);
     }
 
     handleQuarterChange(direction) {

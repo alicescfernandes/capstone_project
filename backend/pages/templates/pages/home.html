@@ -94,10 +94,6 @@
 {% block content %}
   {% include 'sections/empty-message.html' %}
 
-  <div class="mb-8">
-    <h3 class="text-xl font-semibold mb-4">Sample Data Table</h3>
-    <data-table table_id="sample"></data-table>
-  </div>
 
   {% if not empty %}
     <!-- section -->
@@ -145,6 +141,8 @@
         <h2 class="{% if forloop.first %}first{% endif %}">{{ selected_section_title }}</h2>
 
         <div class="grid grid-cols-8 gap-4">
+          <data-table table_id="sample"></data-table>
+
           {% for chart in selected_charts %}
             <plotly-chart chart_slug="{{ chart.slug }}" q="{{ chart.quarter_number }}"></plotly-chart>
           {% endfor %}
