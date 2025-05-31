@@ -1,6 +1,6 @@
 FilePond.registerPlugin(FilePondPluginFileValidateType);
 
-FilePond.create(document.querySelector('#filepond'), {
+const filePond = FilePond.create(document.querySelector('#filepond'), {
     allowMultiple: true,
     storeAsFile: true,
     acceptedFileTypes: [
@@ -62,5 +62,16 @@ document.addEventListener("click", (e) => {
     const target = e.target.closest('.upload-edit-link');
     if (target) {
         openEditModal(target);
+    }
+});
+
+
+
+// Add event listener for modal close button
+document.addEventListener("click", (e) => {
+    if (e.target.classList.contains('upload-close-modal')) {
+        const form = document.getElementById('edit-quarter-form');
+        form.reset();
+        filePond.removeFiles();
     }
 });

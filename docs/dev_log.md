@@ -24,6 +24,7 @@ _Stuff that is not important and just nice haves_
 
 - [x] Add annotation for quarter diagrams about the balanced score card
 - [x] Add field to allow the user to choose the number precision
+- [X] Reset edit/create form when closed
 
 ## 05/24/2025
 
