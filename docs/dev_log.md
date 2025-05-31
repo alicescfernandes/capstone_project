@@ -12,10 +12,19 @@ _Stuff that is not important and just nice haves_
 - [ ] Create a "change password page", check if django is able to send emails
 - [ ] Display username on the navbar
 - [ ] Add proper logging for the python app
-- [ ] Consider remove infinite scrolling in favour of actual sections that can show a localized set of charts
+
 - [ ] Add alert when there is still Excel files in processing
 
 ## TODO
+
+- [ ] Add annotation for quarter diagrams about the balanced score card
+- [ ] Finish the remaining graphs
+- [ ] Add DataTable charts
+- [ ] Add field to allow the user to choose the number precision
+
+## 05/24/2025
+- [x] Add search functionality with text hightligthing
+
 
 ## 05/11/2025
 
@@ -30,6 +39,7 @@ _Stuff that is not important and just nice haves_
 - [x] Adds fixed sideabar toc and sections show only on mobile
 - [x] Hide Sections when using mobile (ignored)
 - [x] Closes the chart zoom modal when the user clicks ESC
+- [x] Consider remove infinite scrolling in favour of actual sections that can show a localized set of charts
 
 ## 04/27/2025
 

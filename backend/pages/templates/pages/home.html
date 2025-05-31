@@ -23,8 +23,19 @@
     <div class="container_home">
       <aside class="sections_column">
         <h2>Available Sections</h2>
+        <div class="search-container mb-4">
+        <label for="sectionSearch" class="mb-2 text-sm font-medium text-gray-900 sr-only">Search</label>
+        <div class="relative">
+            <div class="search-icon">
+                <svg class="w-4 h-4 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+                </svg>
+            </div>
+            <input id="sectionSearch" type="search" class="search-input" placeholder="Search sections and charts" />
+        </div>
+        </div>
         {% for section in toc_data %}
-          <div>
+          <div class="section-container">
             <div class="section-item">
               <a href="?section={{ section.slug }}"
                 class="hover:underline {% if section.slug == selected_section_slug %}
@@ -40,7 +51,9 @@
 
             <ul data-section-id="section-{{ section.slug }}" class="sub-sections hidden">
               {% for chart in section.charts %}
-                <li>{{ chart.title }}</li>
+              <li>
+                <a class="sub-section-item" href="?section={{ section.slug }}#chart_{{ chart.slug }}">{{ chart.title }}</a>
+              </li>
               {% endfor %}
             </ul>
           </div>
@@ -60,4 +73,8 @@
 
     {% include 'sections/scroll-to-top.html' %}
   {% endif %}
+
+  <script>
+   
+  </script>
 {% endblock %}
