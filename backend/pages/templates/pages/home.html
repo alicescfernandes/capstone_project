@@ -9,22 +9,15 @@
 {% block extra_head %}
   <script async src="{% static 'js/plotly.min.js' %}"></script>
   <script async type="module" src="{% static 'js/chart_webcomponent.js' %}"></script>
-  
-  <!-- DataTables CSS -->
-  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css" />
-  <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.dataTables.min.css" />
-  <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.2/css/buttons.dataTables.min.css" />
-  
-  <!-- jQuery (required for DataTables) -->
-  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-  <!-- DataTables JS -->
-  <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
-  <script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
-  <script src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
+
+  <!-- <link href="https://cdn.datatables.net/v/dt/jq-3.7.0/dt-2.3.1/af-2.7.0/b-3.2.3/b-colvis-3.2.3/b-print-3.2.3/cr-2.1.1/cc-1.0.1/kt-2.12.1/r-3.0.4/rr-1.5.0/sl-3.0.1/datatables.min.css" rel="stylesheet" integrity="sha384-8qW5pta3IyI5S7UOE19eCe3JsnnqEcd7I/NrcWpmNIHWnNVBmheUBPVBVcsQ5JmK" crossorigin="anonymous">
+  -->
+  <script src="https://cdn.datatables.net/v/dt/jq-3.7.0/dt-2.3.1/af-2.7.0/b-3.2.3/b-colvis-3.2.3/b-print-3.2.3/cr-2.1.1/cc-1.0.1/kt-2.12.1/r-3.0.4/rr-1.5.0/sl-3.0.1/datatables.min.js" integrity="sha384-D4YvCIUAm/nUtVMve0bZ51fdtvUnkVPbXn/TtPa9pqfeUj1vKwE1/0rgkz23ZJ3N" crossorigin="anonymous"></script>
 
   <link rel="stylesheet" href="{% static 'css/page_home.css' %}" />
-
+  
   <script defer src="{% static 'js/page_home.js' %}"></script>
+  <link rel="stylesheet" href="https://cdn.datatables.net/2.3.1/css/dataTables.dataTables.css">
 
   <style>
     .filter-icon {
@@ -91,6 +84,10 @@
     .dataTables_wrapper .dataTables_filter {
       margin-bottom: 15px;
     }
+
+    .dt-length select {
+    width: 70px;
+  }
   </style>
 {% endblock %}
 
@@ -280,7 +277,6 @@
         searching: true,
         ordering: true,
         paging: true,
-        pageLength: 10,
         language: {
           search: "Search table:"
         }
