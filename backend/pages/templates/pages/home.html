@@ -9,14 +9,112 @@
 {% block extra_head %}
   <script async src="{% static 'js/plotly.min.js' %}"></script>
   <script async type="module" src="{% static 'js/chart_webcomponent.js' %}"></script>
+  
+  <!-- DataTables CSS -->
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css" />
+  <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.dataTables.min.css" />
+  <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.2/css/buttons.dataTables.min.css" />
+  
+  <!-- jQuery (required for DataTables) -->
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <!-- DataTables JS -->
+  <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
+  <script src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
 
   <link rel="stylesheet" href="{% static 'css/page_home.css' %}" />
 
   <script defer src="{% static 'js/page_home.js' %}"></script>
+
+  <style>
+    .filter-icon {
+      cursor: pointer;
+      margin-left: 5px;
+      color: #6b7280;
+      transition: color 0.2s;
+    }
+    .filter-icon:hover {
+      color: #4f46e5;
+    }
+    .filter-icon.active {
+      color: #4f46e5;
+    }
+    .filter-popover {
+      position: absolute;
+      background: white;
+      border: 1px solid #e5e7eb;
+      border-radius: 6px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      padding: 12px;
+      z-index: 1000;
+      min-width: 200px;
+    }
+    .filter-popover input {
+      width: 100%;
+      padding: 6px;
+      border: 1px solid #d1d5db;
+      border-radius: 4px;
+      margin-bottom: 8px;
+    }
+    .filter-popover input:focus {
+      border-color: #4f46e5;
+      outline: none;
+      box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.2);
+    }
+    .filter-popover-buttons {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+    }
+    .filter-popover button {
+      padding: 4px 12px;
+      border-radius: 4px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+    .filter-popover .apply-btn {
+      background: #4f46e5;
+      color: white;
+      border: none;
+    }
+    .filter-popover .clear-btn {
+      background: white;
+      color: #4b5563;
+      border: 1px solid #d1d5db;
+    }
+    .filter-popover .apply-btn:hover {
+      background: #4338ca;
+    }
+    .filter-popover .clear-btn:hover {
+      background: #f3f4f6;
+    }
+    .dataTables_wrapper .dataTables_filter {
+      margin-bottom: 15px;
+    }
+  </style>
 {% endblock %}
 
 {% block content %}
   {% include 'sections/empty-message.html' %}
+
+  <div class="mb-8">
+    <h3 class="text-xl font-semibold mb-4">Sample Data Table</h3>
+    <table id="sampleTable" class="display responsive nowrap" style="width:100%">
+      <thead>
+        <tr>
+          <th>Name <span class="filter-icon" data-column="0">🔍</span></th>
+          <th>Position <span class="filter-icon" data-column="1">🔍</span></th>
+          <th>Office <span class="filter-icon" data-column="2">🔍</span></th>
+          <th>Age <span class="filter-icon" data-column="3">🔍</span></th>
+          <th>Start Date <span class="filter-icon" data-column="4">🔍</span></th>
+          <th>Salary <span class="filter-icon" data-column="5">🔍</span></th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Data will be populated from JSON -->
+      </tbody>
+    </table>
+  </div>
 
   {% if not empty %}
     <!-- section -->
@@ -75,6 +173,140 @@
   {% endif %}
 
   <script>
-   
+    // Sample JSON data
+    const sampleData = [
+      {
+        "name": "Tiger Nixon",
+        "position": "System Architect",
+        "office": "Edinburgh",
+        "age": 61,
+        "startDate": "2011/04/25",
+        "salary": "$320,800"
+      },
+      {
+        "name": "Garrett Winters",
+        "position": "Accountant",
+        "office": "Tokyo",
+        "age": 63,
+        "startDate": "2011/07/25",
+        "salary": "$170,750"
+      },
+      {
+        "name": "Ashton Cox",
+        "position": "Junior Technical Author",
+        "office": "San Francisco",
+        "age": 66,
+        "startDate": "2009/01/12",
+        "salary": "$86,000"
+      },
+      {
+        "name": "Cedric Kelly",
+        "position": "Senior Javascript Developer",
+        "office": "Edinburgh",
+        "age": 22,
+        "startDate": "2012/03/29",
+        "salary": "$433,060"
+      },
+      {
+        "name": "Airi Satou",
+        "position": "Accountant",
+        "office": "Tokyo",
+        "age": 33,
+        "startDate": "2008/11/28",
+        "salary": "$162,700"
+      }
+    ];
+
+    // Function to create filter popover
+    function createFilterPopover(column, title) {
+      const popover = $('<div class="filter-popover">');
+      const input = $('<input type="text" placeholder="Filter ' + title + '">');
+      const buttonsDiv = $('<div class="filter-popover-buttons">');
+      const applyBtn = $('<button class="apply-btn">Apply</button>');
+      const clearBtn = $('<button class="clear-btn">Clear</button>');
+
+      buttonsDiv.append(clearBtn, applyBtn);
+      popover.append(input, buttonsDiv);
+
+      // Position the popover
+      const icon = $('.filter-icon[data-column="' + column + '"]');
+      const iconPos = icon.offset();
+      popover.css({
+        top: iconPos.top + icon.height() + 5,
+        left: iconPos.left
+      });
+
+      // Handle apply button
+      applyBtn.on('click', function() {
+        const value = input.val();
+        table.column(column).search(value).draw();
+        popover.remove();
+        icon.toggleClass('active', value !== '');
+      });
+
+      // Handle clear button
+      clearBtn.on('click', function() {
+        input.val('');
+        table.column(column).search('').draw();
+        popover.remove();
+        icon.removeClass('active');
+      });
+
+      // Close popover when clicking outside
+      $(document).on('click', function(e) {
+        if (!$(e.target).closest('.filter-popover, .filter-icon').length) {
+          popover.remove();
+        }
+      });
+
+      return popover;
+    }
+
+    let table;
+
+    // Function to populate table with JSON data
+    function populateTable(data) {
+      table = $('#sampleTable').DataTable({
+        data: data,
+        columns: [
+          { data: 'name' },
+          { data: 'position' },
+          { data: 'office' },
+          { data: 'age' },
+          { data: 'startDate' },
+          { data: 'salary' }
+        ],
+        responsive: true,
+        searching: true,
+        ordering: true,
+        paging: true,
+        pageLength: 10,
+        language: {
+          search: "Search table:"
+        }
+      });
+
+      // Add click handlers for filter icons
+      $('.filter-icon').on('click', function(e) {
+        e.stopPropagation();
+        const column = $(this).data('column');
+        const title = $(this).parent().text().trim();
+        
+        // Remove any existing popovers
+        $('.filter-popover').remove();
+        
+        // Create and show new popover
+        const popover = createFilterPopover(column, title);
+        $('body').append(popover);
+        
+        // Focus the input
+        popover.find('input').focus();
+      });
+    }
+
+    // Initialize DataTables with JSON data
+    $(document).ready(function() {
+      populateTable(sampleData);
+    });
   </script>
 {% endblock %}
