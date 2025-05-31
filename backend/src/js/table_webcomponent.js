@@ -11,6 +11,7 @@ class DataTableComponent extends HTMLElement {
     initState() {
         this.state = {
             tableId: this.getAttribute("table_id") || "default",
+            quarterNumber: this.getAttribute("q") || "1",
             data: [],
             columns: [
                 { data: 'name', title: 'Name' },
@@ -21,12 +22,17 @@ class DataTableComponent extends HTMLElement {
                 { data: 'salary', title: 'Salary' }
             ],
             isError: false,
-            isLoading: true
+            isLoading: true,
+            quarter: {
+                current: "1",
+                prev: null,
+                next: "2"
+            }
         };
     }
 
     static get observedAttributes() {
-        return ['table_id'];
+        return ['table_id', 'q'];
     }
 
     connectedCallback() {
@@ -134,25 +140,28 @@ class DataTableComponent extends HTMLElement {
             return;
         }
 
-        // Only update the HTML if it's different
         const newHTML = `
-            <div id="${this.id}" class="table-container">
-                <div class="table-header">
-                    <h5 class="table-title">Sample Data Table</h5>
+            <div id="${this.id}">
+                <div class="chart-header">
+                    <h5 class="chart-title">Sample Data Table - Q${this.state.quarter.current}</h5>
+                    <div class="chart-quarter-navigation"></div>
                 </div>
-                <div class="table-wrapper">
-                    <table class="display responsive nowrap" style="width:100%">
-                        <thead>
-                            <tr>
-                                ${this.state.columns.map(col => `
-                                    <th>${col.title} <span class="filter-icon" data-column="${col.data}">🔍</span></th>
-                                `).join('')}
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <!-- Data will be populated by DataTables -->
-                        </tbody>
-                    </table>
+                ${this.renderZoomOverlay()}
+                <div class="chart-container" style="width:100%;height:400px;">
+                    <div class="table-wrapper" style="width:100%;">
+                        <table class="display responsive nowrap" style="width:100%">
+                            <thead>
+                                <tr>
+                                    ${this.state.columns.map(col => `
+                                        <th>${col.title} <span class="filter-icon" data-column="${col.data}">🔍</span></th>
+                                    `).join('')}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Data will be populated by DataTables -->
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>`;
 
@@ -160,7 +169,44 @@ class DataTableComponent extends HTMLElement {
             this.innerHTML = newHTML;
             this.initializeTable();
             this.setupEvents();
+            this.renderQuarterNavigation();
         }
+    }
+
+    renderQuarterNavigation() {
+        const container = this.querySelector(`#${this.id} .chart-quarter-navigation`);
+        const { quarter } = this.state;
+
+        container.innerHTML = `
+            <button class="chart-quarter-nav-btn chart-zoom-btn"><svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 4H4m0 0v4m0-4 5 5m7-5h4m0 0v4m0-4-5 5M8 20H4m0 0v-4m0 4 5-5m7 5h4m0 0v-4m0 4-5-5"/></svg></button>
+            <button ${!quarter?.prev ? 'disabled' : ''} class="prev-quarter chart-quarter-nav-btn"><svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M5 12l4-4m-4 4 4 4"/></svg></button>
+            <button ${!quarter?.next ? 'disabled' : ''} class="next-quarter chart-quarter-nav-btn"><svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 12H5m14 0-4 4m4-4-4-4"/></svg></button>`;
+    }
+
+    renderZoomOverlay() {
+        return `
+            <div class="chart-zoom-overlay">
+                <div class="chart-zoom-content">
+                    <button class="chart-quarter-nav-btn chart-zoom-close"><svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 9h4m0 0V5m0 4L4 4m15 5h-4m0 0V5m0 4 5-5M5 15h4m0 0v4m0-4-5 5m15-5h-4m0 0v4m0-4 5 5"/>
+                    </svg></button>
+                    <div class="chart-zoom-container" style="width:100%; height:100%;">
+                        <table class="display responsive nowrap" style="width:100%">
+                            <thead>
+                                <tr>
+                                    ${this.state.columns.map(col => `
+                                        <th>${col.title}</th>
+                                    `).join('')}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Data will be populated by DataTables -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        `;
     }
 
     waitForDataTables() {
@@ -269,6 +315,7 @@ class DataTableComponent extends HTMLElement {
     }
 
     setupEvents() {
+        // Filter icon events
         document.querySelectorAll(`#${this.id} .filter-icon`).forEach(icon => {
             icon.addEventListener('click', (e) => {
                 e.stopPropagation();
@@ -286,6 +333,60 @@ class DataTableComponent extends HTMLElement {
                 popover.querySelector('input').focus();
             });
         });
+
+        // Quarter navigation events
+        this.querySelector(`#${this.id} .prev-quarter`)?.addEventListener('click', () => this.handleQuarterChange('prev'));
+        this.querySelector(`#${this.id} .next-quarter`)?.addEventListener('click', () => this.handleQuarterChange('next'));
+
+        // Zoom functionality
+        const zoomBtn = this.querySelector(`#${this.id} .chart-zoom-btn`);
+        const zoomOverlay = this.querySelector(`#${this.id} .chart-zoom-overlay`);
+        const zoomContent = this.querySelector(`#${this.id} .chart-zoom-container`);
+        const closeZoom = this.querySelector(`#${this.id} .chart-zoom-close`);
+
+        if (zoomBtn && zoomOverlay && zoomContent && closeZoom) {
+            zoomBtn.addEventListener("click", () => {
+                zoomOverlay.style.display = "flex";
+                // Initialize DataTable in zoom view
+                new DataTable(zoomContent.querySelector('table'), {
+                    data: this.state.data,
+                    columns: this.state.columns,
+                    responsive: true,
+                    searching: true,
+                    ordering: true,
+                    paging: true,
+                    language: {
+                        search: "Search table:"
+                    }
+                });
+            });
+
+            closeZoom.addEventListener("click", () => {
+                zoomOverlay.style.display = "none";
+                // Destroy DataTable in zoom view
+                const zoomTable = zoomContent.querySelector('table');
+                if ($.fn.DataTable.isDataTable(zoomTable)) {
+                    $(zoomTable).DataTable().destroy();
+                }
+            });
+
+            document.addEventListener('keydown', (event) => {
+                if (event.key === 'Escape' || event.key === 'Esc') {
+                    zoomOverlay.style.display = "none";
+                    const zoomTable = zoomContent.querySelector('table');
+                    if ($.fn.DataTable.isDataTable(zoomTable)) {
+                        $(zoomTable).DataTable().destroy();
+                    }
+                }
+            });
+        }
+    }
+
+    handleQuarterChange(direction) {
+        const next = this.state.quarter?.[direction];
+        if (!next) return;
+        this.setState({ quarterNumber: next });
+        this.fetchData();
     }
 
     setupLazyLoad() {
