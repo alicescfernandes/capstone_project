@@ -10,8 +10,8 @@
   <script async src="{% static 'js/plotly.min.js' %}"></script>
   <script async type="module" src="{% static 'js/chart_webcomponent.js' %}"></script>
 
-  <!-- <link href="https://cdn.datatables.net/v/dt/jq-3.7.0/dt-2.3.1/af-2.7.0/b-3.2.3/b-colvis-3.2.3/b-print-3.2.3/cr-2.1.1/cc-1.0.1/kt-2.12.1/r-3.0.4/rr-1.5.0/sl-3.0.1/datatables.min.css" rel="stylesheet" integrity="sha384-8qW5pta3IyI5S7UOE19eCe3JsnnqEcd7I/NrcWpmNIHWnNVBmheUBPVBVcsQ5JmK" crossorigin="anonymous">
-  -->
+  <link href="https://cdn.datatables.net/v/dt/jq-3.7.0/dt-2.3.1/af-2.7.0/b-3.2.3/b-colvis-3.2.3/b-print-3.2.3/cr-2.1.1/cc-1.0.1/kt-2.12.1/r-3.0.4/rr-1.5.0/sl-3.0.1/datatables.min.css" rel="stylesheet" integrity="sha384-8qW5pta3IyI5S7UOE19eCe3JsnnqEcd7I/NrcWpmNIHWnNVBmheUBPVBVcsQ5JmK" crossorigin="anonymous">
+
   <script src="https://cdn.datatables.net/v/dt/jq-3.7.0/dt-2.3.1/af-2.7.0/b-3.2.3/b-colvis-3.2.3/b-print-3.2.3/cr-2.1.1/cc-1.0.1/kt-2.12.1/r-3.0.4/rr-1.5.0/sl-3.0.1/datatables.min.js" integrity="sha384-D4YvCIUAm/nUtVMve0bZ51fdtvUnkVPbXn/TtPa9pqfeUj1vKwE1/0rgkz23ZJ3N" crossorigin="anonymous"></script>
 
   <link rel="stylesheet" href="{% static 'css/page_home.css' %}" />
@@ -96,7 +96,7 @@
 
   <div class="mb-8">
     <h3 class="text-xl font-semibold mb-4">Sample Data Table</h3>
-    <table id="sampleTable" class="display responsive nowrap" style="width:100%">
+    <table id="sampleTable" class="display compact responsive nowrap" style="width:100%">
       <thead>
         <tr>
           <th>Name <span class="filter-icon" data-column="0">🔍</span></th>
@@ -216,42 +216,54 @@
 
     // Function to create filter popover
     function createFilterPopover(column, title) {
-      const popover = $('<div class="filter-popover">');
-      const input = $('<input type="text" placeholder="Filter ' + title + '">');
-      const buttonsDiv = $('<div class="filter-popover-buttons">');
-      const applyBtn = $('<button class="apply-btn">Apply</button>');
-      const clearBtn = $('<button class="clear-btn">Clear</button>');
+      const popover = document.createElement('div');
+      popover.className = 'filter-popover';
+      
+      const input = document.createElement('input');
+      input.type = 'text';
+      input.placeholder = `Filter ${title}`;
+      
+      const buttonsDiv = document.createElement('div');
+      buttonsDiv.className = 'filter-popover-buttons';
+      
+      const applyBtn = document.createElement('button');
+      applyBtn.className = 'apply-btn';
+      applyBtn.textContent = 'Apply';
+      
+      const clearBtn = document.createElement('button');
+      clearBtn.className = 'clear-btn';
+      clearBtn.textContent = 'Clear';
 
-      buttonsDiv.append(clearBtn, applyBtn);
-      popover.append(input, buttonsDiv);
+      buttonsDiv.appendChild(clearBtn);
+      buttonsDiv.appendChild(applyBtn);
+      popover.appendChild(input);
+      popover.appendChild(buttonsDiv);
 
       // Position the popover
-      const icon = $('.filter-icon[data-column="' + column + '"]');
-      const iconPos = icon.offset();
-      popover.css({
-        top: iconPos.top + icon.height() + 5,
-        left: iconPos.left
-      });
+      const icon = document.querySelector(`.filter-icon[data-column="${column}"]`);
+      const iconPos = icon.getBoundingClientRect();
+      popover.style.top = `${iconPos.bottom + 5}px`;
+      popover.style.left = `${iconPos.left}px`;
 
       // Handle apply button
-      applyBtn.on('click', function() {
-        const value = input.val();
+      applyBtn.addEventListener('click', function() {
+        const value = input.value;
         table.column(column).search(value).draw();
+        icon.classList.toggle('active', value !== '');
         popover.remove();
-        icon.toggleClass('active', value !== '');
       });
 
       // Handle clear button
-      clearBtn.on('click', function() {
-        input.val('');
+      clearBtn.addEventListener('click', function() {
+        input.value = '';
         table.column(column).search('').draw();
+        icon.classList.remove('active');
         popover.remove();
-        icon.removeClass('active');
       });
 
       // Close popover when clicking outside
-      $(document).on('click', function(e) {
-        if (!$(e.target).closest('.filter-popover, .filter-icon').length) {
+      document.addEventListener('click', function(e) {
+        if (!e.target.closest('.filter-popover') && !e.target.closest('.filter-icon')) {
           popover.remove();
         }
       });
@@ -263,7 +275,7 @@
 
     // Function to populate table with JSON data
     function populateTable(data) {
-      table = $('#sampleTable').DataTable({
+      table = new DataTable('#sampleTable', {
         data: data,
         columns: [
           { data: 'name' },
@@ -283,25 +295,27 @@
       });
 
       // Add click handlers for filter icons
-      $('.filter-icon').on('click', function(e) {
-        e.stopPropagation();
-        const column = $(this).data('column');
-        const title = $(this).parent().text().trim();
-        
-        // Remove any existing popovers
-        $('.filter-popover').remove();
-        
-        // Create and show new popover
-        const popover = createFilterPopover(column, title);
-        $('body').append(popover);
-        
-        // Focus the input
-        popover.find('input').focus();
+      document.querySelectorAll('.filter-icon').forEach(icon => {
+        icon.addEventListener('click', function(e) {
+          e.stopPropagation();
+          const column = this.dataset.column;
+          const title = this.parentElement.textContent.trim();
+          
+          // Remove any existing popovers
+          document.querySelectorAll('.filter-popover').forEach(p => p.remove());
+          
+          // Create and show new popover
+          const popover = createFilterPopover(column, title);
+          document.body.appendChild(popover);
+          
+          // Focus the input
+          popover.querySelector('input').focus();
+        });
       });
     }
 
     // Initialize DataTables with JSON data
-    $(document).ready(function() {
+    document.addEventListener('DOMContentLoaded', function() {
       populateTable(sampleData);
     });
   </script>
