@@ -5,4 +5,4 @@ from .models import Quarter
 class QuarterSerializer(serializers.ModelSerializer):
     class Meta:
         model = Quarter
-        fields = ['number', 'uuid', 'created_at']
+        fields = ['number', 'uuid', 'created_at', 'float_precision']

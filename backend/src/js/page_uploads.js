@@ -31,19 +31,29 @@ export function openEditModal(button) {
     const modalHeaderTitle = button.getAttribute('data-modal-title');
 
     const form = document.getElementById('edit-quarter-form');
-    const input = document.getElementById('edit-quarter-number');
+    const numberInput = document.getElementById('edit-quarter-number');
+    const precisionInput = document.getElementById('edit-quarter-precision');
 
     const modalHeader = document.getElementById('modal-title');
 
     modalHeader.textContent = modalHeaderTitle ?? 'Edit Files'
 
-    input.value = number;
+    numberInput.value = number;
+    precisionInput.value = '9';  // Default value for new quarters
 
     if (uuid === 'new') {
         form.action = `/quarters/new/`;
-
     } else {
         form.action = `/quarters/edit/${uuid}/`;
+        // If editing existing quarter, fetch its current precision
+        fetch(`/api/quarters/${uuid}/`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.float_precision) {
+                    precisionInput.value = data.float_precision;
+                }
+            })
+            .catch(error => console.error('Error fetching quarter precision:', error));
     }
 }
 

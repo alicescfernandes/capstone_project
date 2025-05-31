@@ -156,14 +156,16 @@ def edit_quarter(request, uuid=None):
 
     if request.method == "POST":
         new_number = request.POST.get("number")
+        float_precision = request.POST.get("float_precision", 9)  # Default to 9 if not provided
 
         if not new_number:
             return redirect("manage_quarters")
 
         if quarter:
             quarter.number = new_number
+            quarter.float_precision = int(float_precision)
         else:
-            quarter = Quarter(number=new_number, user=request.user)
+            quarter = Quarter(number=new_number, float_precision=int(float_precision), user=request.user)
 
         quarter.save()
 

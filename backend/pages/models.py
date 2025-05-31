@@ -20,6 +20,7 @@ class Quarter(models.Model):
     number = models.PositiveIntegerField()
     created_at = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="quarters")
+    float_precision = models.PositiveIntegerField(default=9)
 
     class Meta:
         ordering = ['-number']
@@ -71,7 +72,7 @@ class ExcelFile(models.Model):
                     processed_data_frame = df_processing
 
                 columns = processed_data_frame.columns.tolist()
-                data_json = convert_df_to_json(processed_data_frame)
+                data_json = convert_df_to_json(processed_data_frame, precision=self.quarter.float_precision)
                 
                 # Check for other CSV's and mark them as not active
                 CSVData.objects.filter(

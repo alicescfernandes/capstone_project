@@ -4,7 +4,7 @@ import re
 from .chart_classification import COLUMNS_TO_REMOVE, ROWS_TO_REMOVE
 import inflection
 
-def convert_df_to_json(df):
+def convert_df_to_json(df, precision):
 
     df_clean = df.copy()
 
@@ -13,13 +13,14 @@ def convert_df_to_json(df):
     for col in df_clean.columns:
         df_clean[col] = pd.to_numeric(df_clean[col], errors='ignore')
 
-    # Round the floats to 5 digits 
+    # Round the floats to specified precision
     numeric_cols = df_clean.select_dtypes(include=['float']).columns
-    df_clean[numeric_cols] = df_clean[numeric_cols].round(3)
+    print("precision", precision)
+    df_clean[numeric_cols] = df_clean[numeric_cols].round(precision)
 
     return df_clean.to_dict(orient='records')
 
-def extract_section_name(file_name):
+def extract_section_name(file_name):\
     # Remove a extensão
     name = os.path.splitext(file_name)[0]
 

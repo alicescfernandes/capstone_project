@@ -19,14 +19,15 @@ _Stuff that is not important and just nice haves_
 
 - [ ] Finish the remaining graphs
 - [ ] Add DataTable charts
-- [ ] Add field to allow the user to choose the number precision
 
 ## 05/31/2025
+
 - [x] Add annotation for quarter diagrams about the balanced score card
+- [x] Add field to allow the user to choose the number precision
 
 ## 05/24/2025
-- [x] Add search functionality with text hightligthing
 
+- [x] Add search functionality with text hightligthing
 
 ## 05/11/2025
 
