@@ -65,6 +65,22 @@ style.textContent = `
     .filter-popover .apply-btn:hover {
         background: #1d4ed8;
     }
+    .dt-button-collection {
+        max-height: 300px !important;
+        overflow-y: auto !important;
+    }
+    .buttons-colvis-search {
+        margin-bottom: 10px !important;
+        width: 100% !important;
+        padding: 8px !important;
+        border: 1px solid #e5e7eb !important;
+        border-radius: 4px !important;
+    }
+    .dt-button-collection .dt-button {
+        width: 100% !important;
+        text-align: left !important;
+        margin: 2px 0 !important;
+    }
 `;
 document.head.appendChild(style);
 
@@ -273,7 +289,6 @@ class DataTableComponent extends HTMLElement {
             data: this.state.data,
             columns: this.state.columns,
             ...this.state.dataTableSettings,
-            searchCols: this.state.columns.map(() => ({ search: '' }))
         });
     }
 
@@ -301,10 +316,6 @@ class DataTableComponent extends HTMLElement {
                         ...this.state.dataTableSettings,
                         pageLength: 10,
                         lengthChange: true,
-                        search: {
-                            smart: false,
-                            caseInsensitive: true
-                        },
                         searchCols: this.state.columns.map(() => ({ search: '' })),
                         dom: 'Bfrtip',
                         columnControl: ['order', ['orderAsc', 'orderDesc', 'search']],
@@ -313,7 +324,15 @@ class DataTableComponent extends HTMLElement {
                                 extend: 'colvis',
                                 text: 'Show/Hide Columns',
                                 className: 'btn btn-primary',
-                                columns: ':gt(0)' // Hide first column by default
+                                columns: ':gt(0)', // Hide first column by default
+                                prefixButtons: [
+                                    {
+                                        extend: 'colvisGroup',
+                                        text: 'Hide All',
+                                        show: ':hidden',
+                                        hide: ':gt(0)'
+                                    }
+                                ]
                             }
                         ],
                         columns: this.state.columns,
