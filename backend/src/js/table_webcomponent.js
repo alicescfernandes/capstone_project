@@ -1,5 +1,73 @@
 const API_BASE_URL = `${window.location.origin}/api/`;
 
+// Add styles for filter icons and popover
+const style = document.createElement('style');
+style.textContent = `
+    .dt-column-header {
+        position: relative;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    .filter-icon {
+        cursor: pointer;
+        opacity: 0.5;
+        transition: opacity 0.2s;
+        display: inline-flex;
+        align-items: center;
+        margin-left: 4px;
+    }
+    .filter-icon:hover {
+        opacity: 1;
+    }
+    .filter-icon.active {
+        opacity: 1;
+        color: #2563eb;
+    }
+    .filter-popover {
+        position: absolute;
+        background: white;
+        border: 1px solid #e5e7eb;
+        border-radius: 6px;
+        padding: 12px;
+        box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+        z-index: 1000;
+        min-width: 200px;
+    }
+    .filter-popover input {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #e5e7eb;
+        border-radius: 4px;
+        margin-bottom: 8px;
+    }
+    .filter-popover-buttons {
+        display: flex;
+        justify-content: flex-end;
+        gap: 8px;
+    }
+    .filter-popover button {
+        padding: 6px 12px;
+        border-radius: 4px;
+        border: 1px solid #e5e7eb;
+        background: white;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .filter-popover button:hover {
+        background: #f3f4f6;
+    }
+    .filter-popover .apply-btn {
+        background: #2563eb;
+        color: white;
+        border-color: #2563eb;
+    }
+    .filter-popover .apply-btn:hover {
+        background: #1d4ed8;
+    }
+`;
+document.head.appendChild(style);
+
 // Disable all DataTables warnings
 if (window.$.fn.dataTable) {
     window.$.fn.dataTable.ext.errMode = 'none';
@@ -268,13 +336,62 @@ class DataTableComponent extends HTMLElement {
 
         this.table = new DataTable(`#${this.id} table`, {
             data: this.state.data,
-            columns: this.state.columns,
+            columns: this.state.columns.map((col, index) => ({
+                ...col,
+                render: (data, type, row, meta) => {
+                    if (type === 'display') {
+                        return `<div class="d-flex justify-content-between align-items-center">
+                            <span>${data}</span>
+                        </div>`;
+                    }
+                    return data;
+                },
+                title: `<div class="dt-column-header">
+                    <span class="dt-column-title">${col.title}</span>
+                    <span class="filter-icon" data-column="${index}">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M15 1H1L6.09 8.59V13L9.91 14V8.59L15 1Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </span>
+                </div>`
+            })),
             ...this.state.dataTableSettings,
-
+            initComplete: () => {
+                // Setup filter icon events after table initialization
+                this.setupFilterEvents();
+            }
         });
     }
 
-    createFilterPopover(column, title) {
+    setupFilterEvents() {
+        // Remove any existing event listeners
+        const existingIcons = document.querySelectorAll(`#${this.id} .filter-icon`);
+        existingIcons.forEach(icon => {
+            icon.replaceWith(icon.cloneNode(true));
+        });
+
+        // Add new event listeners
+        document.querySelectorAll(`#${this.id} .filter-icon`).forEach(icon => {
+            icon.addEventListener('click', (e) => {
+                console.log("click", e.x, e.y);
+                e.stopPropagation();
+                const column = parseInt(icon.dataset.column);
+                const title = icon.closest('.dt-column-header').querySelector('.dt-column-title').textContent.trim();
+                
+                // Remove any existing popovers
+                document.querySelectorAll('.filter-popover').forEach(p => p.remove());
+                
+                // Create and show new popover
+                const popover = this.createFilterPopover(column, title, e.x, e.y);
+                this.appendChild(popover);
+                
+                // Focus the input
+                popover.querySelector('input').focus();
+            });
+        }); 
+    }
+
+    createFilterPopover(column, title, x,y) {
         const popover = document.createElement('div');
         popover.className = 'filter-popover';
 
@@ -298,16 +415,18 @@ class DataTableComponent extends HTMLElement {
         popover.appendChild(input);
         popover.appendChild(buttonsDiv);
 
-        // Position the popover
-        const icon = document.querySelector(`#${this.id} .filter-icon[data-column="${column}"]`);
-        const iconPos = icon.getBoundingClientRect();
-        popover.style.top = `${iconPos.bottom + 5}px`;
-        popover.style.left = `${iconPos.left}px`;
+        popover.style.position = 'absolute';
+        popover.style.top = `${y+20}px`;
+        popover.style.left = `${x-100}px`;
 
-        // Handle apply button
-        applyBtn.addEventListener('click', () => {
+        popover.style.zIndex = '10';
+
+        this.appendChild(popover);
+
+        applyBtn.addEventListener('click', (e) => {
             const value = input.value;
             this.table.column(column).search(value).draw();
+            const icon = document.querySelector(`#${this.id} .filter-icon[data-column="${column}"]`);
             icon.classList.toggle('active', value !== '');
             popover.remove();
         });
@@ -316,8 +435,16 @@ class DataTableComponent extends HTMLElement {
         clearBtn.addEventListener('click', () => {
             input.value = '';
             this.table.column(column).search('').draw();
+            const icon = document.querySelector(`#${this.id} .filter-icon[data-column="${column}"]`);
             icon.classList.remove('active');
             popover.remove();
+        });
+
+        // Handle enter key
+        input.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                applyBtn.click();
+            }
         });
 
         // Close popover when clicking outside
@@ -331,28 +458,11 @@ class DataTableComponent extends HTMLElement {
     }
 
     setupEvents() {
-        // Filter icon events
-        document.querySelectorAll(`#${this.id} .filter-icon`).forEach(icon => {
-            icon.addEventListener('click', (e) => {
-                e.stopPropagation();
-                const column = icon.dataset.column;
-                const title = icon.parentElement.textContent.trim();
-                // Remove any existing popovers
-                document.querySelectorAll('.filter-popover').forEach(p => p.remove());
-                // Create and show new popover
-                const popover = this.createFilterPopover(column, title);
-                document.body.appendChild(popover);
-                // Focus the input
-                popover.querySelector('input').focus();
-            });
-        });
-
         // Quarter navigation events
         this.querySelector(`#${this.id} .prev-quarter`)?.addEventListener('click', () => this.handleQuarterChange('prev'));
         this.querySelector(`#${this.id} .next-quarter`)?.addEventListener('click', () => this.handleQuarterChange('next'));
 
         // Zoom functionality - Wait for next tick to ensure DOM is updated
-        setTimeout(() => {
             const zoomBtn = this.querySelector(`#${this.id} .chart-zoom-btn`);
             const zoomOverlay = this.querySelector(`#${this.id} .chart-zoom-overlay`);
             const zoomContent = this.querySelector(`#${this.id} .chart-zoom-container`);
@@ -398,7 +508,6 @@ class DataTableComponent extends HTMLElement {
                 }
             });
 
-        }, 0);
     }
 
     handleQuarterChange(direction) {
