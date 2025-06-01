@@ -17,14 +17,14 @@ _Stuff that is not important and just nice haves_
 
 ## TODO
 
-- [ ] Finish the remaining graphs
-- [ ] Add DataTable charts
+- [ ] Finish the remaining graphs (the last money chart and both table charts)
 
 ## 05/31/2025
 
 - [x] Add annotation for quarter diagrams about the balanced score card
 - [x] Add field to allow the user to choose the number precision
 - [X] Reset edit/create form when closed
+- [X] Add DataTable charts (added webcomponnet)
 
 ## 05/24/2025
 
