@@ -541,6 +541,10 @@ CHART_CLASSIFICATION = {
         "chart_type": "table",
         "type": "table"
     },
+     "allocation-of-total-manufacturi": {
+        "chart_type": "table",
+        "type": "table"
+    },
 }
 
 

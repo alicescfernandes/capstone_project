@@ -17,7 +17,12 @@ _Stuff that is not important and just nice haves_
 
 ## TODO
 
-- [ ] Finish the remaining graphs (the last money chart and both table charts)
+
+## 06/01/2025
+- [x] Added advanced column fitering to zoomed table
+- [x] Finished "Customers Brand" chart
+- [x] Added manufacturing chart
+- [x] Finish the remaining graphs (the last money chart and both table charts)
 
 ## 05/31/2025
 
