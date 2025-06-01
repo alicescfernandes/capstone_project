@@ -3,21 +3,24 @@ import os
 import re
 from .chart_classification import COLUMNS_TO_REMOVE, ROWS_TO_REMOVE
 import inflection
+import numpy as np
 
 def convert_df_to_json(df, precision):
-
     df_clean = df.copy()
-
     df_clean = df_clean.replace('X', 1)
 
-    for col in df_clean.columns:
-        df_clean[col] = pd.to_numeric(df_clean[col], errors='ignore')
+    # Replace NaN with None (which becomes `null` in JSON)
+    df_clean = df_clean.replace({np.nan: None})
 
+    try:
+        for col in df_clean.columns:
+            df_clean[col] = pd.to_numeric(df_clean[col], errors='ignore')
+    except:
+        pass
     # Round the floats to specified precision
     numeric_cols = df_clean.select_dtypes(include=['float']).columns
-    print("precision", precision)
     df_clean[numeric_cols] = df_clean[numeric_cols].round(precision)
-
+ 
     return df_clean.to_dict(orient='records')
 
 def extract_section_name(file_name):\
@@ -71,7 +74,7 @@ def normalize_column_names(df):
     ]
     return df
 
-def remove_rows(df):
+def remove_rows(df, dropNan=False):
     """
     Remove rows where any cell contains any of the specified keywords (case-insensitive).
 
@@ -91,8 +94,11 @@ def remove_rows(df):
         )
 
     mask = df.apply(row_should_be_removed, axis=1)
-    #return df[~mask].fillna(0) # Keeps only the lines that must not be removed
-    return df[~mask].dropna() # Keeps only the lines that must not be removed
+    if(dropNan):
+        return df[~mask].dropna() # Keeps only the lines that must not be removed
+    else:
+        return df[~mask].fillna(0) # Keeps only the lines that must not be removed
+        # return df[~mask] # Keeps only the lines that must not be removed
 
 def remove_columns(df):
     """
@@ -201,15 +207,22 @@ def run_pipeline_for_sheet(df_in, sheet_name):
     """
     
 
-
     df_raw = remove_line_breaks_from_data(df_in)
     sheet_title = extract_sheet_title(df_raw)
+
+    sheet_slug = slugify_sheet_name(sheet_name)
+
+    # This is a special case for the competitors-ads sheet because the company repeats the same column name for each brand
+    if 'competitors-ads' in sheet_slug:
+        df_raw.iloc[1] = [f"{df_raw.iloc[1][i]} - {df_raw.iloc[2][i]}" for i in range(len(df_raw.iloc[1]))]
+        df_raw = df_raw.drop(index=2).reset_index(drop=True)
+
     columns = extract_column_names(df_raw, sheet_title)
+
     df_clean = extract_clean_data(df_raw, columns)
     df_clean = normalize_column_names(df_clean)
     df_clean = remove_columns(df_clean)
-    df_clean = remove_rows(df_clean)
-    sheet_slug = slugify_sheet_name(sheet_name)
+    df_clean = remove_rows(df_clean,'competitors-ads' not in sheet_slug)
     
     sheet_title_lowercase = sheet_title.lower()
 
@@ -220,7 +233,5 @@ def run_pipeline_for_sheet(df_in, sheet_name):
     if('compensation' in sheet_title_lowercase):
         sheet_slug = inflection.parameterize(sheet_title.lower())
 
-
-    
     return (df_clean,  sheet_slug, sheet_title)
 

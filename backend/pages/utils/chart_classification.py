@@ -544,6 +544,11 @@ CHART_CLASSIFICATION = {
         "chart_type": "table",
         "type": "table"
     },
+    "competitors-ads": {
+        "chart_type": "bar", 
+        "type": "simple",
+        'column_name':"Company"
+    }
 }
 
 
@@ -565,7 +570,8 @@ COLUMNS_TO_REMOVE = [
 ROWS_TO_REMOVE = [
     "Total",
     "Importance of further improvements",
-    "Units Produced"
+    "Units Produced",
+    "Brand advertised"
 ]
 
 ADDITIONAL_PROCESSING_PIPELINE = {

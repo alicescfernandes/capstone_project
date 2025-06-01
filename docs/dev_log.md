@@ -12,17 +12,17 @@ _Stuff that is not important and just nice haves_
 - [ ] Create a "change password page", check if django is able to send emails
 - [ ] Display username on the navbar
 - [ ] Add proper logging for the python app
-
 - [ ] Add alert when there is still Excel files in processing
+- [ ] Default unknown excel files to tables. This is alot of work since that the Pandas is set for specific structure.
 
 ## TODO
-
+- [x] Finish the remaining graphs (the last money chart and both table charts)
 
 ## 06/01/2025
 - [x] Added advanced column fitering to zoomed table
 - [x] Finished "Customers Brand" chart
 - [x] Added manufacturing chart
-- [x] Finish the remaining graphs (the last money chart and both table charts)
+- [x] Added Competitors Ads chart and special processing
 
 ## 05/31/2025
 
