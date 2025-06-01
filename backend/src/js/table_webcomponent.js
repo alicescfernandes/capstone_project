@@ -79,6 +79,7 @@ class DataTableComponent extends HTMLElement {
         this.initState();
         this.id = `table_${this.state.chartSlug}`;
         this.table = null;
+        this.zoomTable = null;
     }
 
     initState() {
@@ -103,6 +104,11 @@ class DataTableComponent extends HTMLElement {
                 debug: false, // Disable debug warnings
                 pageLength: 5,
                 lengthChange: false,
+                search: {
+                    smart: false,
+                    caseInsensitive: true
+                },
+                searchCols: [], // Will be populated with columns when table is initialized
                 language: {
                     search: "Search table:"
                 }
@@ -138,77 +144,6 @@ class DataTableComponent extends HTMLElement {
                 ...rest
             });
         } catch {
-            this.setState({ isError: true });
-        } finally {
-            this.setState({ isLoading: false });
-        }
-    }
-
-    async fetchData2() {
-        try {
-            // TODO: Replace with actual API endpoint
-            // const response = await fetch(`/api/table-data/${this.state.tableId}`);
-            // const data = await response.json();
-
-            // For now, using hardcoded data
-            const data = [
-                {
-                    "name": "Tiger Nixon",
-                    "position": "System Architect",
-                    "office": "Edinburgh",
-                    "age": 61,
-                    "startDate": "2011/04/25",
-                    "salary": "$320,800"
-                },
-                {
-                    "name": "Garrett Winters",
-                    "position": "Accountant",
-                    "office": "Tokyo",
-                    "age": 63,
-                    "startDate": "2011/07/25",
-                    "salary": "$170,750"
-                },
-                {
-                    "name": "Ashton Cox",
-                    "position": "Junior Technical Author",
-                    "office": "San Francisco",
-                    "age": 66,
-                    "startDate": "2009/01/12",
-                    "salary": "$86,000"
-                },
-                {
-                    "name": "Cedric Kelly",
-                    "position": "Senior Javascript Developer",
-                    "office": "Edinburgh",
-                    "age": 22,
-                    "startDate": "2012/03/29",
-                    "salary": "$433,060"
-                },
-                {
-                    "name": "Airi Satou",
-                    "position": "Accountant",
-                    "office": "Tokyo",
-                    "age": 33,
-                    "startDate": "2008/11/28",
-                    "salary": "$162,700"
-                }
-            ];
-
-            const columns = [
-                { data: 'name', title: 'Name' },
-                { data: 'position', title: 'Position' },
-                { data: 'office', title: 'Office' },
-                { data: 'age', title: 'Age' },
-                { data: 'startDate', title: 'Start Date' },
-                { data: 'salary', title: 'Salary' }
-            ];
-
-            this.setState({
-                data,
-                columns,
-            });
-        } catch (error) {
-            console.error('Error fetching table data:', error);
             this.setState({ isError: true });
         } finally {
             this.setState({ isLoading: false });
@@ -258,26 +193,26 @@ class DataTableComponent extends HTMLElement {
             <div id="${this.id}">
                 <div class="chart-header">
                     <h5 class="chart-title">Sample Data Table - Q${this.state.quarter.current}</h5>
-                    <div class="chart-quarter-navigation"></div>
+                    <div class="chart-quarter-navigation">${this.renderQuarterNavigation()}</div>
                 </div>
                 ${this.renderZoomOverlay()}
                 <div class="chart-container" style="width:100%;height:400px;">
                     <table class="display responsive nowrap" style="width:100%"></table>
                 </div>
             </div>`;
-        if (this.innerHTML !== newHTML) {
+
+            console.log("newHTML", newHTML);
+
             this.innerHTML = newHTML;
             this.initializeTable();
             this.setupEvents();
             this.renderQuarterNavigation();
-        }
     }
 
     renderQuarterNavigation() {
-        const container = this.querySelector(`#${this.id} .chart-quarter-navigation`);
         const { quarter } = this.state;
 
-        container.innerHTML = `
+        return `
             <button class="chart-quarter-nav-btn chart-zoom-btn"><svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 4H4m0 0v4m0-4 5 5m7-5h4m0 0v4m0-4-5 5M8 20H4m0 0v-4m0 4 5-5m7 5h4m0 0v-4m0 4-5-5"/></svg></button>
             <button ${!quarter?.prev ? 'disabled' : ''} class="prev-quarter chart-quarter-nav-btn"><svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M5 12l4-4m-4 4 4 4"/></svg></button>
             <button ${!quarter?.next ? 'disabled' : ''} class="next-quarter chart-quarter-nav-btn"><svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 12H5m14 0-4 4m4-4-4-4"/></svg></button>`;
@@ -336,125 +271,10 @@ class DataTableComponent extends HTMLElement {
 
         this.table = new DataTable(`#${this.id} table`, {
             data: this.state.data,
-            columns: this.state.columns.map((col, index) => ({
-                ...col,
-                render: (data, type, row, meta) => {
-                    if (type === 'display') {
-                        return `<div class="d-flex justify-content-between align-items-center">
-                            <span>${data}</span>
-                        </div>`;
-                    }
-                    return data;
-                },
-                title: `<div class="dt-column-header">
-                    <span class="dt-column-title">${col.title}</span>
-                    <span class="filter-icon" data-column="${index}">
-                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M15 1H1L6.09 8.59V13L9.91 14V8.59L15 1Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                    </span>
-                </div>`
-            })),
+            columns: this.state.columns,
             ...this.state.dataTableSettings,
-            initComplete: () => {
-                // Setup filter icon events after table initialization
-                this.setupFilterEvents();
-            }
+            searchCols: this.state.columns.map(() => ({ search: '' }))
         });
-    }
-
-    setupFilterEvents() {
-        // Remove any existing event listeners
-        const existingIcons = document.querySelectorAll(`#${this.id} .filter-icon`);
-        existingIcons.forEach(icon => {
-            icon.replaceWith(icon.cloneNode(true));
-        });
-
-        // Add new event listeners
-        document.querySelectorAll(`#${this.id} .filter-icon`).forEach(icon => {
-            icon.addEventListener('click', (e) => {
-                console.log("click", e.x, e.y);
-                e.stopPropagation();
-                const column = parseInt(icon.dataset.column);
-                const title = icon.closest('.dt-column-header').querySelector('.dt-column-title').textContent.trim();
-                
-                // Remove any existing popovers
-                document.querySelectorAll('.filter-popover').forEach(p => p.remove());
-                
-                // Create and show new popover
-                const popover = this.createFilterPopover(column, title, e.x, e.y);
-                this.appendChild(popover);
-                
-                // Focus the input
-                popover.querySelector('input').focus();
-            });
-        }); 
-    }
-
-    createFilterPopover(column, title, x,y) {
-        const popover = document.createElement('div');
-        popover.className = 'filter-popover';
-
-        const input = document.createElement('input');
-        input.type = 'text';
-        input.placeholder = `Filter ${title}`;
-
-        const buttonsDiv = document.createElement('div');
-        buttonsDiv.className = 'filter-popover-buttons';
-
-        const applyBtn = document.createElement('button');
-        applyBtn.className = 'apply-btn';
-        applyBtn.textContent = 'Apply';
-
-        const clearBtn = document.createElement('button');
-        clearBtn.className = 'clear-btn';
-        clearBtn.textContent = 'Clear';
-
-        buttonsDiv.appendChild(clearBtn);
-        buttonsDiv.appendChild(applyBtn);
-        popover.appendChild(input);
-        popover.appendChild(buttonsDiv);
-
-        popover.style.position = 'absolute';
-        popover.style.top = `${y+20}px`;
-        popover.style.left = `${x-100}px`;
-
-        popover.style.zIndex = '10';
-
-        this.appendChild(popover);
-
-        applyBtn.addEventListener('click', (e) => {
-            const value = input.value;
-            this.table.column(column).search(value).draw();
-            const icon = document.querySelector(`#${this.id} .filter-icon[data-column="${column}"]`);
-            icon.classList.toggle('active', value !== '');
-            popover.remove();
-        });
-
-        // Handle clear button
-        clearBtn.addEventListener('click', () => {
-            input.value = '';
-            this.table.column(column).search('').draw();
-            const icon = document.querySelector(`#${this.id} .filter-icon[data-column="${column}"]`);
-            icon.classList.remove('active');
-            popover.remove();
-        });
-
-        // Handle enter key
-        input.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                applyBtn.click();
-            }
-        });
-
-        // Close popover when clicking outside
-        document.addEventListener('click', (e) => {
-            if (!e.target.closest('.filter-popover') && !e.target.closest('.filter-icon')) {
-                popover.remove();
-            }
-        });
-
-        return popover;
     }
 
     setupEvents() {
@@ -476,12 +296,27 @@ class DataTableComponent extends HTMLElement {
                 if (!window.DataTable) return;
                 
                 if (!zoomTable.dataset.initialized) {
-                    new DataTable(zoomTable, {
+                    this.zoomTable = new DataTable(zoomTable, {
                         data: this.state.data,
-                        columns: this.state.columns,
                         ...this.state.dataTableSettings,
                         pageLength: 10,
                         lengthChange: true,
+                        search: {
+                            smart: false,
+                            caseInsensitive: true
+                        },
+                        searchCols: this.state.columns.map(() => ({ search: '' })),
+                        dom: 'Bfrtip',
+                        columnControl: ['order', ['orderAsc', 'orderDesc', 'search']],
+                        buttons: [
+                            {
+                                extend: 'colvis',
+                                text: 'Show/Hide Columns',
+                                className: 'btn btn-primary',
+                                columns: ':gt(0)' // Hide first column by default
+                            }
+                        ],
+                        columns: this.state.columns,
                     });
                     zoomTable.dataset.initialized = 'true';
                 }
