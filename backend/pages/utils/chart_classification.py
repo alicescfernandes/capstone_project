@@ -537,6 +537,10 @@ CHART_CLASSIFICATION = {
         "type": "balance_sheet",
         'column_name':"Column"
     },
+    "competitors-brands": {
+        "chart_type": "table",
+        "type": "table"
+    },
 }
 
 

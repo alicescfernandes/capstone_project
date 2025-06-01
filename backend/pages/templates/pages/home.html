@@ -141,10 +141,13 @@
         <h2 class="{% if forloop.first %}first{% endif %}">{{ selected_section_title }}</h2>
 
         <div class="grid grid-cols-8 gap-4">
-          <data-table table_id="sample"></data-table>
-
+          
           {% for chart in selected_charts %}
-            <plotly-chart chart_slug="{{ chart.slug }}" q="{{ chart.quarter_number }}"></plotly-chart>
+            {% if chart.type == "table" %}
+              <data-table chart_slug="{{ chart.slug }}" q="{{ chart.quarter_number }}"></data-table>
+            {% else %}
+              <plotly-chart chart_slug="{{ chart.slug }}" q="{{ chart.quarter_number }}"></plotly-chart>
+            {% endif %}
           {% endfor %}
         </div>
       </main>

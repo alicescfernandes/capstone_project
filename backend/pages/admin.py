@@ -2,11 +2,11 @@ from django.contrib import admin
 
 from .models import Quarter, ExcelFile, CSVData
 from unfold.admin import ModelAdmin
-
-
-#@admin.register(MyModel)
-#class CustomAdminClass(ModelAdmin):
-#    pass
+from django.contrib import admin
+from django.db import models
+from django.forms import Textarea
+import json
+from django.utils.html import format_html
 
 @admin.register(Quarter)
 class QuarterAdmin(ModelAdmin):
@@ -25,9 +25,13 @@ class QuarterAdmin(ModelAdmin):
         if request.user.is_superuser:
             return qs
         return qs.filter(user=request.user)
+
 @admin.register(CSVData)
 class CSVDataAdmin(ModelAdmin):
-    list_display = ('sheet_name_slug','user','sheet_name_pretty','is_current','data','quarter_file', 'quarter_uuid','column_order')
+    list_display = (
+        'sheet_name_slug', 'user', 'sheet_name_pretty',
+        'is_current', 'short_data', 'quarter_file', 'quarter_uuid', 'short_column_order'
+    )
     exclude = ('user',)
 
     def save_model(self, request, obj, form, change):
@@ -40,6 +44,26 @@ class CSVDataAdmin(ModelAdmin):
         if request.user.is_superuser:
             return qs
         return qs.filter(user=request.user)
+
+    def short_data(self, obj):
+        try:
+            pretty = json.dumps(obj.data, indent=2)
+            return format_html('<pre style="max-height: 100px; overflow: auto;">{}…</pre>', pretty[:500])
+        except Exception:
+            return "[invalid JSON]"
+        
+    def short_column_order(self, obj):
+        try:
+            pretty = json.dumps(obj.column_order, indent=2)
+            return format_html('<pre style="max-height: 100px; overflow: auto;">{}…</pre>', pretty[:500])
+        except Exception:
+            return "[invalid JSON]"
+
+
+
+    short_data.short_description = 'data'
+    short_column_order.short_description = 'column_order'
+    
 @admin.register(ExcelFile)
 class ExcelFileAdmin(ModelAdmin):
     list_display = ('quarter', 'user', 'is_processed', 'section_name', 'uploaded_at')

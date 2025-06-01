@@ -9,14 +9,14 @@ class DataTableComponent extends HTMLElement {
     constructor() {
         super();
         this.initState();
-        this.id = `table_${this.state.tableId}`;
+        this.id = `table_${this.state.chartSlug}`;
         this.table = null;
     }
 
     initState() {
         this.state = {
-            tableId: this.getAttribute("table_id") || "default",
-            quarterNumber: this.getAttribute("q") || "1",
+            chartSlug: this.getAttribute("chart_slug"),
+            quarterNumber: this.getAttribute("q"),
             data: [],
             columns: [],
             isError: false,
@@ -33,6 +33,8 @@ class DataTableComponent extends HTMLElement {
                 paging: true,
                 destroy: true, // Allow reinitialization
                 debug: false, // Disable debug warnings
+                pageLength: 5,
+                lengthChange: false,
                 language: {
                     search: "Search table:"
                 }
@@ -41,7 +43,7 @@ class DataTableComponent extends HTMLElement {
     }
 
     static get observedAttributes() {
-        return ['table_id', 'q'];
+        return ['chart_slug', 'q'];
     }
 
     connectedCallback() {
@@ -49,6 +51,32 @@ class DataTableComponent extends HTMLElement {
     }
 
     async fetchData() {
+        const params = new URLSearchParams({
+            slug: this.state.chartSlug,
+            q: this.state.quarterNumber,
+            ...(this.state.selectedOption && { opt: this.state.selectedOption })
+        });
+
+        try {
+            const res = await fetch(`${API_BASE_URL}chart/?${params.toString()}`);
+            if (!res.ok) throw new Error(`HTTP error! Status: ${res.status}`);
+            const data = await res.json();
+
+            console.log("data", data);
+            const { selected_option, ...rest } = data;
+
+            this.setState({
+                selectedOption: selected_option || "",
+                ...rest
+            });
+        } catch {
+            this.setState({ isError: true });
+        } finally {
+            this.setState({ isLoading: false });
+        }
+    }
+
+    async fetchData2() {
         try {
             // TODO: Replace with actual API endpoint
             // const response = await fetch(`/api/table-data/${this.state.tableId}`);

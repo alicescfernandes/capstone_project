@@ -8,7 +8,8 @@ from pages.models import Quarter
 from .models import Quarter
 from .utils.chart_classification import CHART_CLASSIFICATION
 from .utils.api import  get_quarter_navigation_object, get_request_params, return_empty_response, get_active_csv_for_slug
-from .utils.charts import get_simple_chart, get_double_chart, get_waterfall_chart, get_group_chart, get_sankey_chart
+from .utils.charts import get_simple_chart, get_double_chart, get_waterfall_chart, get_group_chart, get_sankey_chart, get_table_chart
+
 class QuarterListAPIView(APIView):
     def get(self, request):
         # Preparar a lista de quarters
@@ -49,6 +50,7 @@ class ChartDataAPIView(APIView):
 
         chart_meta = CHART_CLASSIFICATION.get(slug)
         
+        print("chart_meta", chart_meta)
         if not chart_meta:
             return Response(
                 {"error": f"No chart classification found for slug '{slug}'."},
@@ -57,10 +59,14 @@ class ChartDataAPIView(APIView):
 
         type = chart_meta["type"]
 
+        print("before quarter_data")
         quarter_data = get_quarter_navigation_object(quarter_number, slug, request.user) 
         csv_data = get_active_csv_for_slug(quarter_number, slug, request.user)
 
+        print("after quarter_data")
+
         try:
+            print("trying to get the data")
             df = pd.DataFrame(csv_data.data)
             df = df[csv_data.column_order] 
 
@@ -83,6 +89,11 @@ class ChartDataAPIView(APIView):
             if(type=="sankey"):
                 chart_response = get_sankey_chart(df, chart_meta,csv_data.sheet_name_pretty, filter)
                 return Response(quarter_data | chart_response)
+        
+            if(type =="table"):
+                print("table")
+                chart_response = get_table_chart(df, chart_meta,csv_data.sheet_name_pretty, filter)
+                return Response(quarter_data | chart_response)    
             
         except Exception as e:
             empty_response = return_empty_response(quarter_number, slug, e, csv_data.sheet_name_pretty)
