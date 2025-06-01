@@ -111,7 +111,7 @@ class DataTableComponent extends HTMLElement {
                 prev: null,
                 next: null
             },
-            dataTableSettings:{
+            dataTableSettings: {
                 responsive: true,
                 searching: true,
                 ordering: true,
@@ -129,7 +129,7 @@ class DataTableComponent extends HTMLElement {
                     search: "Search table:"
                 }
             }
-        };  
+        };
     }
 
     static get observedAttributes() {
@@ -144,7 +144,6 @@ class DataTableComponent extends HTMLElement {
         const params = new URLSearchParams({
             slug: this.state.chartSlug,
             q: this.state.quarterNumber,
-            ...(this.state.selectedOption && { opt: this.state.selectedOption })
         });
 
         try {
@@ -208,7 +207,7 @@ class DataTableComponent extends HTMLElement {
         const newHTML = `
             <div id="${this.id}">
                 <div class="chart-header">
-                    <h5 class="chart-title">Sample Data Table - Q${this.state.quarter.current}</h5>
+                    <h5 class="chart-title">${this.state.title} - Q${this.state.quarter.current}</h5>
                     <div class="chart-quarter-navigation">${this.renderQuarterNavigation()}</div>
                 </div>
                 ${this.renderZoomOverlay()}
@@ -217,12 +216,10 @@ class DataTableComponent extends HTMLElement {
                 </div>
             </div>`;
 
-            console.log("newHTML", newHTML);
-
-            this.innerHTML = newHTML;
-            this.initializeTable();
-            this.setupEvents();
-            this.renderQuarterNavigation();
+        this.innerHTML = newHTML;
+        this.initializeTable();
+        this.setupEvents();
+        this.renderQuarterNavigation();
     }
 
     renderQuarterNavigation() {
@@ -288,7 +285,7 @@ class DataTableComponent extends HTMLElement {
         this.table = new DataTable(`#${this.id} table`, {
             data: this.state.data,
             columns: this.state.columns,
-            ...this.state.dataTableSettings,
+            ...this.state.dataTableSettings
         });
     }
 
@@ -298,69 +295,107 @@ class DataTableComponent extends HTMLElement {
         this.querySelector(`#${this.id} .next-quarter`)?.addEventListener('click', () => this.handleQuarterChange('next'));
 
         // Zoom functionality - Wait for next tick to ensure DOM is updated
-            const zoomBtn = this.querySelector(`#${this.id} .chart-zoom-btn`);
-            const zoomOverlay = this.querySelector(`#${this.id} .chart-zoom-overlay`);
-            const zoomContent = this.querySelector(`#${this.id} .chart-zoom-container`);
-            const closeZoom = this.querySelector(`#${this.id} .chart-zoom-close`);
+        const zoomBtn = this.querySelector(`#${this.id} .chart-zoom-btn`);
+        const zoomOverlay = this.querySelector(`#${this.id} .chart-zoom-overlay`);
+        const zoomContent = this.querySelector(`#${this.id} .chart-zoom-container`);
+        const closeZoom = this.querySelector(`#${this.id} .chart-zoom-close`);
 
 
-            zoomBtn.addEventListener("click", () => {
-                zoomOverlay.style.display = "flex";
+        zoomBtn.addEventListener("click", () => {
+            zoomOverlay.style.display = "flex";
 
-                const zoomTable = zoomContent.querySelector('table');
-                if (!window.DataTable) return;
-                
-                if (!zoomTable.dataset.initialized) {
-                    this.zoomTable = new DataTable(zoomTable, {
-                        data: this.state.data,
-                        ...this.state.dataTableSettings,
-                        pageLength: 10,
-                        lengthChange: true,
-                        searchCols: this.state.columns.map(() => ({ search: '' })),
-                        dom: 'Bfrtip',
-                        columnControl: ['order', ['orderAsc', 'orderDesc', 'search']],
-                        buttons: [
-                            {
-                                extend: 'colvis',
-                                text: 'Show/Hide Columns',
-                                className: 'btn btn-primary',
-                                columns: ':gt(0)', // Hide first column by default
-                                prefixButtons: [
-                                    {
-                                        extend: 'colvisGroup',
-                                        text: 'Hide All',
-                                        show: ':hidden',
-                                        hide: ':gt(0)'
+            const zoomTable = zoomContent.querySelector('table');
+            if (!window.DataTable) return;
+
+            if (!zoomTable.dataset.initialized) {
+                this.zoomTable = new DataTable(zoomTable, {
+                    data: this.state.data,
+                    ...this.state.dataTableSettings,
+                    pageLength: 10,
+                    lengthChange: true,
+                    searchCols: this.state.columns.map(() => ({ search: '' })),
+                    dom: 'Bfrtip',
+                    columnControl: ['order', ['orderAsc', 'orderDesc', 'search']],
+                    buttons: [
+                        {
+                            extend: 'colvis',
+                            text: 'Show/Hide Columns',
+                            className: 'btn btn-primary',
+                            columns: ':gt(0)', // Hide first column by default
+                            prefixButtons: [
+                                {
+                                    extend: 'colvisGroup',
+                                    text: 'Hide All',
+                                    show: ':hidden',
+                                    hide: ':gt(0)'
+                                },
+                                {
+                                    extend: 'colvisGroup',
+                                    text: 'Show All',
+                                    show: ':gt(0)',
+                                }
+                            ],
+                            autoClose: false,
+                            init: function (node) {
+                                // Wait for dropdown to be opened
+                                $(node).on('click', function (e) {
+                                    const $collection = $('.dt-button-collection');
+                                    if ($collection.find('.colvis-search').length === 0) {
+                                        // Inject search input
+                                        const $input = $('<input type="text" class="colvis-search" placeholder="Search columns...">');
+                                        $collection.prepend($input);
+
+                                        // Stop the menu from closing
+                                        $input.on('click', function (e) {
+                                            e.stopPropagation();
+                                        });
+
+                                        $input.on('keyup', function (e) {
+
+                                            console.log($(this).val().toLowerCase())
+                                            const term = $(this).val().toLowerCase();
+
+                                            $collection.find('.dt-button').each(function () {
+                                                const $btn = $(this);
+                                                const label = $btn.text().trim().toLowerCase();
+                                                // Exclude the search field and Hide All button
+                                                if (term === '') {
+                                                    $btn.show();
+                                                    return;
+                                                }
+                                                $btn.toggle(label.includes(term));
+                                            });
+                                        });
                                     }
-                                ]
+                                });
                             }
-                        ],
-                        columns: this.state.columns,
-                    });
-                    zoomTable.dataset.initialized = 'true';
-                }
-            });
+                        }
+                    ]
+                });
+                zoomTable.dataset.initialized = 'true';
+            }
+        });
 
-            closeZoom.addEventListener("click", () => {
+        closeZoom.addEventListener("click", () => {
+            zoomOverlay.style.display = "none";
+            // Destroy DataTable in zoom view
+            const zoomTable = zoomContent.querySelector('table');
+            if (window.$ && window.$.fn.DataTable && window.$.fn.DataTable.isDataTable(zoomTable)) {
+                window.$(zoomTable).DataTable().destroy();
+                zoomTable.dataset.initialized = '';
+            }
+        });
+
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape' || event.key === 'Esc') {
                 zoomOverlay.style.display = "none";
-                // Destroy DataTable in zoom view
                 const zoomTable = zoomContent.querySelector('table');
                 if (window.$ && window.$.fn.DataTable && window.$.fn.DataTable.isDataTable(zoomTable)) {
                     window.$(zoomTable).DataTable().destroy();
                     zoomTable.dataset.initialized = '';
                 }
-            });
-
-            document.addEventListener('keydown', (event) => {
-                if (event.key === 'Escape' || event.key === 'Esc') {
-                    zoomOverlay.style.display = "none";
-                    const zoomTable = zoomContent.querySelector('table');
-                    if (window.$ && window.$.fn.DataTable && window.$.fn.DataTable.isDataTable(zoomTable)) {
-                        window.$(zoomTable).DataTable().destroy();
-                        zoomTable.dataset.initialized = '';
-                    }
-                }
-            });
+            }
+        });
 
     }
 
