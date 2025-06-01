@@ -364,11 +364,14 @@ class DataTableComponent extends HTMLElement {
 
                 const zoomTable = zoomContent.querySelector('table');
                 if (!window.DataTable) return;
+                
                 if (!zoomTable.dataset.initialized) {
                     new DataTable(zoomTable, {
                         data: this.state.data,
                         columns: this.state.columns,
                         ...this.state.dataTableSettings,
+                        pageLength: 10,
+                        lengthChange: true,
                     });
                     zoomTable.dataset.initialized = 'true';
                 }

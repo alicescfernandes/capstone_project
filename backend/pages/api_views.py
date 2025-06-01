@@ -59,14 +59,10 @@ class ChartDataAPIView(APIView):
 
         type = chart_meta["type"]
 
-        print("before quarter_data")
         quarter_data = get_quarter_navigation_object(quarter_number, slug, request.user) 
         csv_data = get_active_csv_for_slug(quarter_number, slug, request.user)
 
-        print("after quarter_data")
-
         try:
-            print("trying to get the data")
             df = pd.DataFrame(csv_data.data)
             df = df[csv_data.column_order] 
 
@@ -91,7 +87,6 @@ class ChartDataAPIView(APIView):
                 return Response(quarter_data | chart_response)
         
             if(type =="table"):
-                print("table")
                 chart_response = get_table_chart(df, chart_meta,csv_data.sheet_name_pretty, filter)
                 return Response(quarter_data | chart_response)    
             
