@@ -501,7 +501,6 @@ CHART_CLASSIFICATION = {
         "type": "simple",
         'column_name':"Company"
     },
-    # TODO: competitors-in-city-* one could be a stacked bar chart, but it would require specific code to make it happen
     "competitors-in-city-noram": {
         "chart_type": "bar", 
         "type": "simple",

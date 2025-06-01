@@ -35,7 +35,7 @@ class ExcelFile(models.Model):
     quarter = models.ForeignKey("Quarter", on_delete=models.CASCADE, related_name="files")
     file = models.FileField(upload_to=user_quarter_upload_path)
     uploaded_at = models.DateTimeField(auto_now_add=True)
-    is_processed = models.BooleanField(default=False, editable=True) # TODO: Flip this to true
+    is_processed = models.BooleanField(default=False, editable=True)
     section_name = models.CharField(max_length=255, editable=False, blank=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="excel_files")
     

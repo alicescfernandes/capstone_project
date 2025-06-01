@@ -151,7 +151,6 @@ class DataTableComponent extends HTMLElement {
             if (!res.ok) throw new Error(`HTTP error! Status: ${res.status}`);
             const data = await res.json();
 
-            console.log("data", data);
             const { selected_option, ...rest } = data;
 
             this.setState({
@@ -300,6 +299,37 @@ class DataTableComponent extends HTMLElement {
         const zoomContent = this.querySelector(`#${this.id} .chart-zoom-container`);
         const closeZoom = this.querySelector(`#${this.id} .chart-zoom-close`);
 
+        // Datatable uses jQuery so its easier to write logic for datatable with jQuery
+        const showAllTextFilter = (node) => {
+            $(node).on('click', function (e) {
+                // Wait for the dropdown to be created
+                    const $collection = $('.dt-button-collection');
+                    if ($collection.find('.colvis-search').length === 0) {
+                        // Create and inject search input
+                        const $input = $('<input type="text" class="colvis-search" placeholder="Search columns...">');
+                        $collection.prepend($input);
+
+                        // Prevent click from closing the dropdown
+                        $input.on('click', function (e) {
+                            e.stopPropagation();
+                        });
+
+                        // Handle search filtering
+                        $input.on('keyup', function (e) {
+                            const term = $(this).val().toLowerCase();
+                            $collection.find('.dt-button').each(function () {
+                                const $btn = $(this);
+                                const label = $btn.text().trim().toLowerCase();
+                                if (term === '') {
+                                    $btn.show();
+                                    return;
+                                }
+                                $btn.toggle(label.includes(term));
+                            });
+                        });
+                    }
+            });
+        }
 
         zoomBtn.addEventListener("click", () => {
             zoomOverlay.style.display = "flex";
@@ -336,38 +366,8 @@ class DataTableComponent extends HTMLElement {
                                 }
                             ],
                             autoClose: false,
-                            init: function (node) {
-                                // Wait for dropdown to be opened
-                                $(node).on('click', function (e) {
-                                    const $collection = $('.dt-button-collection');
-                                    if ($collection.find('.colvis-search').length === 0) {
-                                        // Inject search input
-                                        const $input = $('<input type="text" class="colvis-search" placeholder="Search columns...">');
-                                        $collection.prepend($input);
-
-                                        // Stop the menu from closing
-                                        $input.on('click', function (e) {
-                                            e.stopPropagation();
-                                        });
-
-                                        $input.on('keyup', function (e) {
-
-                                            console.log($(this).val().toLowerCase())
-                                            const term = $(this).val().toLowerCase();
-
-                                            $collection.find('.dt-button').each(function () {
-                                                const $btn = $(this);
-                                                const label = $btn.text().trim().toLowerCase();
-                                                // Exclude the search field and Hide All button
-                                                if (term === '') {
-                                                    $btn.show();
-                                                    return;
-                                                }
-                                                $btn.toggle(label.includes(term));
-                                            });
-                                        });
-                                    }
-                                });
+                            init: function (dt, node, config) {
+                                showAllTextFilter(node);
                             }
                         }
                     ]
