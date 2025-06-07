@@ -1,94 +1,4 @@
 const API_BASE_URL = `${window.location.origin}/api/`;
-
-// Add styles for filter icons and popover
-const style = document.createElement('style');
-style.textContent = `
-    .dt-column-header {
-        position: relative;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-    }
-    .filter-icon {
-        cursor: pointer;
-        opacity: 0.5;
-        transition: opacity 0.2s;
-        display: inline-flex;
-        align-items: center;
-        margin-left: 4px;
-    }
-    .filter-icon:hover {
-        opacity: 1;
-    }
-    .filter-icon.active {
-        opacity: 1;
-        color: #2563eb;
-    }
-    .filter-popover {
-        position: absolute;
-        background: white;
-        border: 1px solid #e5e7eb;
-        border-radius: 6px;
-        padding: 12px;
-        box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
-        z-index: 1000;
-        min-width: 200px;
-    }
-    .filter-popover input {
-        width: 100%;
-        padding: 8px;
-        border: 1px solid #e5e7eb;
-        border-radius: 4px;
-        margin-bottom: 8px;
-    }
-    .filter-popover-buttons {
-        display: flex;
-        justify-content: flex-end;
-        gap: 8px;
-    }
-    .filter-popover button {
-        padding: 6px 12px;
-        border-radius: 4px;
-        border: 1px solid #e5e7eb;
-        background: white;
-        cursor: pointer;
-        transition: all 0.2s;
-    }
-    .filter-popover button:hover {
-        background: #f3f4f6;
-    }
-    .filter-popover .apply-btn {
-        background: #2563eb;
-        color: white;
-        border-color: #2563eb;
-    }
-    .filter-popover .apply-btn:hover {
-        background: #1d4ed8;
-    }
-    .dt-button-collection {
-        max-height: 300px !important;
-        overflow-y: auto !important;
-    }
-    .buttons-colvis-search {
-        margin-bottom: 10px !important;
-        width: 100% !important;
-        padding: 8px !important;
-        border: 1px solid #e5e7eb !important;
-        border-radius: 4px !important;
-    }
-    .dt-button-collection .dt-button {
-        width: 100% !important;
-        text-align: left !important;
-        margin: 2px 0 !important;
-    }
-`;
-document.head.appendChild(style);
-
-// Disable all DataTables warnings
-if (window.$.fn.dataTable) {
-    window.$.fn.dataTable.ext.errMode = 'none';
-}
-
 class DataTableComponent extends HTMLElement {
     constructor() {
         super();
@@ -248,6 +158,10 @@ class DataTableComponent extends HTMLElement {
 
     waitForDataTables() {
         if (window.DataTable) {
+            // Disable all DataTables warnings
+            if (window.$.fn.dataTable) {
+                window.$.fn.dataTable.ext.errMode = 'none';
+            }   
             return Promise.resolve();
         }
         return new Promise((resolve) => {
