@@ -548,7 +548,12 @@ CHART_CLASSIFICATION = {
         "chart_type": "bar", 
         "type": "simple",
         'column_name':"Company"
-    }
+    },
+    "balance-sheet":{
+        "chart_type": "waterfall",
+        "type": "balance_sheet",
+        'column_name':"Column"
+    },
 }
 
 
@@ -603,5 +608,7 @@ ADDITIONAL_PROCESSING_PIPELINE = {
     "competitors-in-city-europe": [process_competitor_city],
     "competitors-in-city-apac": [process_competitor_city],
     "production-costs-per-unit":[process_production_costs],
-    "cash-flow":[process_cashflow]
+    "cash-flow":[process_cashflow], # this sheets have multiple quarters, but we are only showing the data that from the quarter that this was uploaded into
+    "balance-sheet": [process_cashflow ] # this sheets have multiple quarters, but we are only showing the data that from the quarter that this was uploaded into
+
 }

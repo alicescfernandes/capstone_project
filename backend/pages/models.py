@@ -15,8 +15,6 @@ def user_quarter_upload_path(instance, filename):
 
 class Quarter(models.Model):
     uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
-    number = models.PositiveIntegerField(unique=True)
-    created_at = models.DateTimeField(auto_now_add=True)
     number = models.PositiveIntegerField()
     created_at = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="quarters")
@@ -67,7 +65,7 @@ class ExcelFile(models.Model):
                     df_processing = processed_data_frame
                     
                     for fn in processing_functions:
-                        df_processing = fn(df_processing)
+                        df_processing = fn(df_processing, self.quarter)
                     
                     processed_data_frame = df_processing
 
