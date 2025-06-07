@@ -8,16 +8,15 @@
 
 {% block extra_head %}
   <script async src="{% static 'js/plotly.min.js' %}"></script>
-  <script async type="module" src="{% static 'js/chart_webcomponent.js' %}"></script>
-  <script async type="module" src="{% static 'js/table_webcomponent.js' %}"></script>
+  <script async src="https://cdn.datatables.net/v/dt/jq-3.7.0/dt-2.3.1/af-2.7.0/b-3.2.3/b-colvis-3.2.3/b-print-3.2.3/cr-2.1.1/cc-1.0.1/kt-2.12.1/r-3.0.4/rr-1.5.0/sl-3.0.1/datatables.min.js" integrity="sha384-D4YvCIUAm/nUtVMve0bZ51fdtvUnkVPbXn/TtPa9pqfeUj1vKwE1/0rgkz23ZJ3N" crossorigin="anonymous"></script>
+
 
   <link href="https://cdn.datatables.net/v/dt/jq-3.7.0/dt-2.3.1/af-2.7.0/b-3.2.3/b-colvis-3.2.3/b-print-3.2.3/cr-2.1.1/cc-1.0.1/kt-2.12.1/r-3.0.4/rr-1.5.0/sl-3.0.1/datatables.min.css" rel="stylesheet" integrity="sha384-8qW5pta3IyI5S7UOE19eCe3JsnnqEcd7I/NrcWpmNIHWnNVBmheUBPVBVcsQ5JmK" crossorigin="anonymous">
-
-  <script src="https://cdn.datatables.net/v/dt/jq-3.7.0/dt-2.3.1/af-2.7.0/b-3.2.3/b-colvis-3.2.3/b-print-3.2.3/cr-2.1.1/cc-1.0.1/kt-2.12.1/r-3.0.4/rr-1.5.0/sl-3.0.1/datatables.min.js" integrity="sha384-D4YvCIUAm/nUtVMve0bZ51fdtvUnkVPbXn/TtPa9pqfeUj1vKwE1/0rgkz23ZJ3N" crossorigin="anonymous"></script>
-
   <link rel="stylesheet" href="{% static 'css/page_home.css' %}" />
   
   <script defer src="{% static 'js/page_home.js' %}"></script>
+  <script defer type="module" src="{% static 'js/chart_webcomponent.js' %}"></script>
+  <script defer type="module" src="{% static 'js/table_webcomponent.js' %}"></script>
 
   <style>
     .filter-icon {
