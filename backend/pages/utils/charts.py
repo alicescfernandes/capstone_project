@@ -234,7 +234,6 @@ def get_waterfall_chart(df, chart_meta, csv_sheet_name, filter):
 
     traces = []
 
-    print(csv_sheet_name)
     if(csv_sheet_name == "Balance Sheet"):
         traces = generate_multiple_waterfall_traces(filtered_df) # creates multiple traces for each "section" of the waterfall
     else:
