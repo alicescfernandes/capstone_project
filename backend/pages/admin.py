@@ -1,9 +1,13 @@
-from django.contrib import admin
+import json
 
+from django.contrib import admin
+from unfold.admin import ModelAdmin
 from .models import Quarter, ExcelFile, CSVData
+from django.db import models
+from django.utils.html import format_html
 
 @admin.register(Quarter)
-class QuarterAdmin(admin.ModelAdmin):
+class QuarterAdmin(ModelAdmin):
     list_display = ('id', 'user', 'number', 'uuid', 'created_at')
     search_fields = ('number', 'uuid')
     ordering = ('-created_at',)
@@ -19,9 +23,13 @@ class QuarterAdmin(admin.ModelAdmin):
         if request.user.is_superuser:
             return qs
         return qs.filter(user=request.user)
+
 @admin.register(CSVData)
-class CSVDataAdmin(admin.ModelAdmin):
-    list_display = ('sheet_name_slug','user','sheet_name_pretty','is_current','data','quarter_file', 'quarter_uuid','column_order')
+class CSVDataAdmin(ModelAdmin):
+    list_display = (
+        'sheet_name_slug', 'user', 'sheet_name_pretty',
+        'is_current', 'short_data', 'quarter_file', 'quarter_uuid', 'short_column_order'
+    )
     exclude = ('user',)
 
     def save_model(self, request, obj, form, change):
@@ -34,8 +42,28 @@ class CSVDataAdmin(admin.ModelAdmin):
         if request.user.is_superuser:
             return qs
         return qs.filter(user=request.user)
+
+    def short_data(self, obj):
+        try:
+            pretty = json.dumps(obj.data, indent=2)
+            return format_html('<pre style="max-height: 100px; overflow: auto;">{}…</pre>', pretty[:500])
+        except Exception:
+            return "[invalid JSON]"
+        
+    def short_column_order(self, obj):
+        try:
+            pretty = json.dumps(obj.column_order, indent=2)
+            return format_html('<pre style="max-height: 100px; overflow: auto;">{}…</pre>', pretty[:500])
+        except Exception:
+            return "[invalid JSON]"
+
+
+
+    short_data.short_description = 'data'
+    short_column_order.short_description = 'column_order'
+    
 @admin.register(ExcelFile)
-class ExcelFileAdmin(admin.ModelAdmin):
+class ExcelFileAdmin(ModelAdmin):
     list_display = ('quarter', 'user', 'is_processed', 'section_name', 'uploaded_at')
     exclude = ('user',)
 

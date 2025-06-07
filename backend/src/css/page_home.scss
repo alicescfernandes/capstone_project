@@ -22,12 +22,55 @@
     margin: 0 2px !important;
 }
 
+.container_home {
+    @apply flex gap-10;
+
+    h2{
+        @apply font-semibold text-gray-800 mb-3 text-2xl
+    }
+
+
+    .sections_column{
+        @apply shrink-0 hidden lg:block text-sm;
+        width: 250px;
+
+
+        .section-item{
+            @apply flex justify-between items-center
+        }
+
+        .sub-sections {
+            @apply ml-2 text-sm text-gray-400;
+            border-left: 3px solid #e8e8e8;
+            margin: 0px;
+            padding-left: 0.5rem;
+
+            a{
+                @apply hover:text-blue-700;
+            }
+            li{
+                @apply my-2
+            }
+        }
+
+        button{
+            @apply text-lg text-gray-500 hover:text-gray-800;
+        }
+    }
+
+    .section_charts{
+        @apply flex-1 mb-12
+    }
+
+}
 
 /* Web Components */
-plotly-chart {
-    @apply col-span-8 lg:col-span-4 p-6 bg-white border border-gray-200 rounded-lg shadow-sm;
+plotly-chart,data-table {
+    @apply col-span-8 p-4 bg-white border border-gray-200 rounded-lg shadow-sm;
     min-height: 350px;
-    
+    scroll-margin-top: 80px;
+    overflow-x: auto;
+
     .spinner{
         &-container{
             @apply h-full flex justify-center items-center;
@@ -55,7 +98,7 @@ plotly-chart {
             @apply flex justify-between mb-2;
         }
         &-title{
-            @apply text-2xl font-semibold tracking-tight flex-1;
+            @apply text-xl font-semibold tracking-tight flex-1;
         }
 
         &-filter{
@@ -72,7 +115,7 @@ plotly-chart {
         }
         
         &-zoom-content {
-            @apply bg-white p-4 rounded-lg w-[80vw] h-[80vh] overflow-auto relative;
+            @apply bg-white p-4 rounded-lg w-[90vw] h-[90vh] overflow-auto relative;
         }
         
         &-zoom-close {
@@ -147,6 +190,8 @@ h2 {
 .dropdown {
     &-items-list {
         @apply z-10 font-normal bg-white divide-y divide-gray-100 rounded-lg shadow-xl border border-gray-200;
+        max-height: 300px;
+        overflow: scroll;
 
         a{
             @apply block px-4;
@@ -158,6 +203,16 @@ h2 {
     }
     
     &-container {
-        @apply flex flex-col font-medium rounded-lg md:space-x-8 rtl:space-x-reverse md:flex-row md:border-0 md:bg-white;
+        @apply flex flex-col font-medium rounded-lg md:space-x-8 rtl:space-x-reverse md:flex-row md:border-0 md:bg-white lg:hidden;
     }
 }
+
+
+.search-input{
+    @apply block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 placeholder:text-gray-500;
+}
+
+.search-icon{
+    @apply absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none;
+}
+

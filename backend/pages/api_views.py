@@ -8,7 +8,8 @@ from pages.models import Quarter
 from .models import Quarter
 from .utils.chart_classification import CHART_CLASSIFICATION
 from .utils.api import  get_quarter_navigation_object, get_request_params, return_empty_response, get_active_csv_for_slug
-from .utils.charts import process_simple_chart, process_double_chart
+from .utils.charts import get_simple_chart, get_double_chart, get_waterfall_chart, get_group_chart, get_sankey_chart, get_table_chart
+
 class QuarterListAPIView(APIView):
     def get(self, request):
         # Preparar a lista de quarters
@@ -49,6 +50,7 @@ class ChartDataAPIView(APIView):
 
         chart_meta = CHART_CLASSIFICATION.get(slug)
         
+        print("chart_meta", chart_meta)
         if not chart_meta:
             return Response(
                 {"error": f"No chart classification found for slug '{slug}'."},
@@ -65,12 +67,28 @@ class ChartDataAPIView(APIView):
             df = df[csv_data.column_order] 
 
             if(type == "simple"):
-                chart_response = process_simple_chart(df, chart_meta,csv_data.sheet_name_pretty, filter)
+                chart_response = get_simple_chart(df, chart_meta,csv_data.sheet_name_pretty, filter)
                 return Response(quarter_data | chart_response)
         
             if(type=="double"):
-                chart_response = process_double_chart(df, chart_meta,csv_data.sheet_name_pretty, filter)
+                chart_response = get_double_chart(df, chart_meta,csv_data.sheet_name_pretty, filter)
                 return Response(quarter_data | chart_response)
+            
+            if(type=="balance_sheet"):
+                chart_response = get_waterfall_chart(df, chart_meta,csv_data.sheet_name_pretty, filter)
+                return Response(quarter_data | chart_response)
+            
+            if(type=="grouped"):
+                chart_response = get_group_chart(df, chart_meta,csv_data.sheet_name_pretty, filter)
+                return Response(quarter_data | chart_response)
+            
+            if(type=="sankey"):
+                chart_response = get_sankey_chart(df, chart_meta,csv_data.sheet_name_pretty, filter)
+                return Response(quarter_data | chart_response)
+        
+            if(type =="table"):
+                chart_response = get_table_chart(df, chart_meta,csv_data.sheet_name_pretty, filter)
+                return Response(quarter_data | chart_response)    
             
         except Exception as e:
             empty_response = return_empty_response(quarter_number, slug, e, csv_data.sheet_name_pretty)

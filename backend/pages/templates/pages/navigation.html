@@ -1,6 +1,6 @@
 
 <nav class="navbar sticky top-0 z-40">
-  <div class="container navbar-container mx-auto">
+  <div class="container base-container navbar-container  ">
     <a href="/" class="navbar-logo">
       <span class="navbar-logo-text">Dashboards</span>
     </a>
@@ -13,7 +13,7 @@
     
     <div class="hidden navbar-menu" id="navbar-default">
       <ul class="navbar-menu-list">
-        {% include 'sections/floating-toc.html' %}
+        {% include 'sections/navbar-section.html' %}
         <li>
           <a href="/" class="{% if request.path == '/' %} navbar-link navbar-link-active {% else %} navbar-link {% endif %}" {% if request.path == '/' %} aria-current="page" {% endif %}>
             Home

@@ -2,40 +2,160 @@
 {% load static %}
 {% load custom_tags %}
 
-{% block title %}Home - Dashboard{% endblock %}
+{% block title %}
+  Home - Dashboard
+{% endblock %}
 
 {% block extra_head %}
-<script src='https://unpkg.com/plotly.js-dist-min@3.0.1/plotly.min.js'></script>
+  <script async src="{% static 'js/plotly.min.js' %}"></script>
+  <script async src="https://cdn.datatables.net/v/dt/jq-3.7.0/dt-2.3.1/af-2.7.0/b-3.2.3/b-colvis-3.2.3/b-print-3.2.3/cr-2.1.1/cc-1.0.1/kt-2.12.1/r-3.0.4/rr-1.5.0/sl-3.0.1/datatables.min.js" integrity="sha384-D4YvCIUAm/nUtVMve0bZ51fdtvUnkVPbXn/TtPa9pqfeUj1vKwE1/0rgkz23ZJ3N" crossorigin="anonymous"></script>
 
-<link rel="stylesheet" href="{% static 'css/page_home.css' %}">
-<script type="module" src="{% static 'js/chart_webcomponent.js' %}"></script>
-<script defer src="{% static 'js/page_home.js' %}"></script>
 
+  <link href="https://cdn.datatables.net/v/dt/jq-3.7.0/dt-2.3.1/af-2.7.0/b-3.2.3/b-colvis-3.2.3/b-print-3.2.3/cr-2.1.1/cc-1.0.1/kt-2.12.1/r-3.0.4/rr-1.5.0/sl-3.0.1/datatables.min.css" rel="stylesheet" integrity="sha384-8qW5pta3IyI5S7UOE19eCe3JsnnqEcd7I/NrcWpmNIHWnNVBmheUBPVBVcsQ5JmK" crossorigin="anonymous">
+  <link rel="stylesheet" href="{% static 'css/page_home.css' %}" />
+  
+  <script defer src="{% static 'js/page_home.js' %}"></script>
+  <script defer type="module" src="{% static 'js/chart_webcomponent.js' %}"></script>
+  <script defer type="module" src="{% static 'js/table_webcomponent.js' %}"></script>
+
+  <style>
+    .filter-icon {
+      cursor: pointer;
+      margin-left: 5px;
+      color: #6b7280;
+      transition: color 0.2s;
+    }
+    .filter-icon:hover {
+      color: #4f46e5;
+    }
+    .filter-icon.active {
+      color: #4f46e5;
+    }
+    .filter-popover {
+      position: absolute;
+      background: white;
+      border: 1px solid #e5e7eb;
+      border-radius: 6px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      padding: 12px;
+      z-index: 1000;
+      min-width: 200px;
+    }
+    .filter-popover input {
+      width: 100%;
+      padding: 6px;
+      border: 1px solid #d1d5db;
+      border-radius: 4px;
+      margin-bottom: 8px;
+    }
+    .filter-popover input:focus {
+      border-color: #4f46e5;
+      outline: none;
+      box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.2);
+    }
+    .filter-popover-buttons {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+    }
+    .filter-popover button {
+      padding: 4px 12px;
+      border-radius: 4px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+    .filter-popover .apply-btn {
+      background: #4f46e5;
+      color: white;
+      border: none;
+    }
+    .filter-popover .clear-btn {
+      background: white;
+      color: #4b5563;
+      border: 1px solid #d1d5db;
+    }
+    .filter-popover .apply-btn:hover {
+      background: #4338ca;
+    }
+    .filter-popover .clear-btn:hover {
+      background: #f3f4f6;
+    }
+    .dataTables_wrapper .dataTables_filter {
+      margin-bottom: 15px;
+    }
+
+    .dt-length select {
+      width: 70px;
+    }
+  </style>
 {% endblock %}
 
 {% block content %}
+  {% include 'sections/empty-message.html' %}
 
-{% include 'sections/empty-message.html' %}
-  
-{% for section_name, charts in sections.items %}
-<div id="section-{{section_name|slugify}}">
-    <h2 class="{% if forloop.first %}first{% endif %}">
-        {{ section_name }}
-    </h2>
-    <div class="grid grid-cols-8 gap-4">
-        {% for chart in charts %}
-            <plotly-chart chart_slug="{{ chart.slug }}" q="{{ chart.quarter_number }}"></plotly-chart>
+
+  {% if not empty %}
+    <!-- section -->
+    <div class="container_home">
+      <aside class="sections_column">
+        <h2>Available Sections</h2>
+        <div class="search-container mb-4">
+        <label for="sectionSearch" class="mb-2 text-sm font-medium text-gray-900 sr-only">Search</label>
+        <div class="relative">
+            <div class="search-icon">
+                <svg class="w-4 h-4 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+                </svg>
+            </div>
+            <input id="sectionSearch" type="search" class="search-input" placeholder="Search sections and charts" />
+        </div>
+        </div>
+        {% for section in toc_data %}
+          <div class="section-container">
+            <div class="section-item">
+              <a href="?section={{ section.slug }}"
+                class="hover:underline {% if section.slug == selected_section_slug %}
+                  text-blue-700
+                {% else %}
+                  text-black
+                {% endif %}">
+                {{ section.title }}
+              </a>
+
+              <button title="Expand section to see included charts" type="button" data-toggle="section-{{ section.slug }}">+</button>
+            </div>
+
+            <ul data-section-id="section-{{ section.slug }}" class="sub-sections hidden">
+              {% for chart in section.charts %}
+              <li>
+                <a class="sub-section-item" href="?section={{ section.slug }}#chart_{{ chart.slug }}">{{ chart.title }}</a>
+              </li>
+              {% endfor %}
+            </ul>
+          </div>
         {% endfor %}
+      </aside>
+
+      <main class="section_charts">
+        <h2 class="{% if forloop.first %}first{% endif %}">{{ selected_section_title }}</h2>
+
+        <div class="grid grid-cols-8 gap-4">
+          
+          {% for chart in selected_charts %}
+            {% if chart.type == "table" %}
+              <data-table chart_slug="{{ chart.slug }}" q="{{ chart.quarter_number }}"></data-table>
+            {% else %}
+              <plotly-chart chart_slug="{{ chart.slug }}" q="{{ chart.quarter_number }}"></plotly-chart>
+            {% endif %}
+          {% endfor %}
+        </div>
+      </main>
     </div>
-</div>
-{% endfor %}
 
+    {% include 'sections/scroll-to-top.html' %}
+  {% endif %}
 
-<script>
-    const app_context = {
-        quarter_uuid: "{{app_context.quuid }}",
-        quarter_number: parseInt("{{ app_context.qn }}"),
-    }
-
-</script>
+  <script>
+   
+  </script>
 {% endblock %}

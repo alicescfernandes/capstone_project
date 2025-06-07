@@ -8,7 +8,9 @@ from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
 from .models import Quarter, ExcelFile, CSVData
-from .forms import QuarterForm
+from .utils.chart_classification import CHART_CLASSIFICATION_KEYS, CHART_CLASSIFICATION
+from django.utils.text import slugify
+
 
 # Get the path to the xlsx directory
 current_dir = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
@@ -30,79 +32,102 @@ def is_valid_xlsx(file):
     
 @login_required
 def home(request):
-    # Prepare default case
     quarters = Quarter.objects.filter(user=request.user)
-    if(len(quarters) <= 0):
-        return render(request, 'pages/home.html', {
-        "app_context":{
-            "qn":None,
-            "quuid":None,            
-        },
-        "empty":True,
-        "chart_slugs": []
-    })
-    
-    last_quarter = quarters[0]
 
-    quarter = quarters.get(number=int(last_quarter.number))
-    
+    if not quarters.exists():
+        return render(request, 'pages/home.html', {
+            "app_context": {
+                "qn": None,
+                "quuid": None,
+            },
+            "empty": True,
+            "chart_slugs": []
+        })
+
     latest_csvs = (
         CSVData.objects
-        .filter(user=request.user)
+        .filter(user=request.user, is_current=True)
         .select_related('quarter_file__quarter')
-        .filter(is_current=True) 
         .order_by('sheet_name_slug', '-quarter_file__quarter__number')
-        )
-    
-    # Filtrar para manter apenas o primeiro CSV por slug
-    seen_slugs = set()
-    chart_slugs = []
+    )
 
-    # Populate this object
-    sections = {}
-    
+    seen_chart_slugs = set()
+    all_charts = []
+    charts_by_section = {}
+
     for csv in latest_csvs:
-        slug = csv.sheet_name_slug
-        if slug not in seen_slugs:
-            seen_slugs.add(slug)
+        chart_slug = csv.sheet_name_slug
+        if chart_slug in seen_chart_slugs or chart_slug not in CHART_CLASSIFICATION_KEYS:
+            continue
 
-            chart_slugs.append({
-                "slug": slug,
-                "quarter_number": csv.quarter_file.quarter.number,
-            })
-            
-            section_name = csv.quarter_file.section_name or "Sem Secção"
+        seen_chart_slugs.add(chart_slug)
 
-            if(sections.get(section_name) == None):
-                sections[section_name] = []
+        section_title = csv.quarter_file.section_name or "All"
+        section_slug = slugify(section_title)
 
-            sections[section_name].append({
-                "slug": slug,
-                "quarter_number": csv.quarter_file.quarter.number,
-            })
+        chart_info = {
+            "slug": chart_slug,
+            "title": csv.sheet_name_pretty,
+            "quarter_number": csv.quarter_file.quarter.number,
+            "type": CHART_CLASSIFICATION[chart_slug]["type"]
+        }
+
+        if section_slug not in charts_by_section:
+            charts_by_section[section_slug] = {
+                "slug": section_slug,
+                "title": section_title,
+                "charts": []
+            }
+
+        charts_by_section[section_slug]["charts"].append(chart_info)
+        all_charts.append(chart_info)
+
+    toc_data = list(charts_by_section.values())
+
+    if toc_data and isinstance(toc_data[0], dict):
+        default_section_slug = toc_data[0].get("slug")
+    else:
+        default_section_slug = None
+
+    selected_section_slug = request.GET.get("section", default_section_slug)
+
+    selected_section = next(
+        (section for section in toc_data if section["slug"] == selected_section_slug),
+        None
+    )
+
+    selected_charts = selected_section["charts"] if selected_section else []
+    selected_section_title = selected_section["title"] if selected_section else "Unknown"
+
+
+    toc_data = list(charts_by_section.values())
+    toc_data.sort(key=lambda section: section["title"].lower())
 
     return render(request, 'pages/home.html', {
-        "app_context":{
-            "qn":quarter.number,
-            "quuid":quarter.uuid,            
-        },
-        'sections': sections,
-        "empty":len(chart_slugs) <= 0,
-        "chart_slugs": chart_slugs
+        "toc_data": toc_data,
+        "selected_section_slug": selected_section_slug,
+        "selected_section_title": selected_section_title,
+        "selected_charts": selected_charts,
+        "empty": len(all_charts) == 0,
     })
+
 
 @login_required
 def manage_quarters(request):
     quarters = Quarter.objects.filter(user=request.user)
-    form = QuarterForm()
+    next_q = 1
+    
+    if(len(quarters) > 0):
+        next_q = quarters.first().number + 1
 
-    if request.method == 'POST':
-        form = QuarterForm(request.POST)
-        if form.is_valid():
-            quarter = form.save(commit=False)
-            quarter.user = request.user 
-            quarter.save()
-            return redirect('manage_quarters')
+    return render(
+        request,
+        "pages/manage_quarters.html",
+        {
+            "quarters": quarters,
+            "next_q": next_q
+        },
+    )
 
     return render(request, 'pages/manage_quarters.html', {
         'form': form,
@@ -122,15 +147,28 @@ def delete_file(request, uuid):
     return redirect('manage_quarters')
 
 @login_required
-def edit_quarter(request, uuid):
-    quarter = get_object_or_404(Quarter, uuid=uuid, user=request.user)
+def edit_quarter(request, uuid=None):
+    quarter = None
 
-    if request.method == 'POST':
-        new_number = request.POST.get('number')
-        if new_number:
+    if uuid is None:
+        quarter = Quarter(user=request.user)
+    else:
+        quarter = Quarter.objects.get(uuid=uuid, user=request.user)
+
+    if request.method == "POST":
+        new_number = request.POST.get("number")
+        float_precision = request.POST.get("float_precision", 9)  # Default to 9 if not provided
+
+        if not new_number:
+            return redirect("manage_quarters")
+
+        if quarter:
             quarter.number = new_number
-            quarter.user = request.user 
-            quarter.save()
+            quarter.float_precision = int(float_precision)
+        else:
+            quarter = Quarter(number=new_number, float_precision=int(float_precision), user=request.user)
+
+        quarter.save()
 
         files = request.FILES.getlist('files')
         for f in files:
@@ -142,11 +180,12 @@ def edit_quarter(request, uuid):
                     user=request.user
                 )
             except ValidationError as e:
-                # Podes fazer log, mostrar erro, ou armazenar numa lista para mostrar mais tarde
                 print(f"Did not upload '{f.name}': {e}")
                 continue
 
-    return redirect('manage_quarters')
+        return redirect("manage_quarters")
+
+    return redirect("manage_quarters")
 
 @login_required
 def logout_view(request):

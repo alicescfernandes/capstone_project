@@ -1,0 +1,23 @@
+{% load custom_tags %}
+
+{% if toc_data %}
+  <ul class="dropdown-container">
+    <li>
+      <button id="dropdownNavbarLink" data-dropdown-toggle="floating-toc" class="navbar-link-section">
+        Sections<svg class="w-2.5 h-2.5 ms-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+          <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4" />
+        </svg>
+      </button>
+      <!-- Dropdown menu -->
+      <div id="floating-toc" class="hidden dropdown-items-list">
+        <ul class="dropdown-list-item" aria-labelledby="dropdownNavbarLink">
+          {% for section in toc_data %}
+            <li>
+              <a class="dropdown-list-item {% if section.slug == selected_section_slug %} active {% endif %}" href="?section={{ section.slug }}">{{ section.title }}</a>
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </li>
+  </ul>
+{% endif %}

@@ -24,7 +24,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = bool(os.environ.get("DEBUG", default=0))
+# environ reads variables as strings, always
+DEBUG = bool(int(os.environ.get("DEBUG", default=0)))
 
 #ALLOWED_HOSTS = ["localhost", "127.0.0.1", "django", "dashboard-app.local"]
 ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS").split(" ")
@@ -32,6 +33,7 @@ ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS").split(" ")
 # Application definition
 
 INSTALLED_APPS = [
+    'unfold',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -81,13 +83,17 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost",
     "http://127.0.0.1",
     "http://dashboard-app.local",
+    "https://demo.alicescfernandes.pt",
+    
 ]
 
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost",
     "http://localhost:1337",
     "http://127.0.0.1",
-    "http://dashboard-app.local",]
+    "http://dashboard-app.local",
+    "https://demo.alicescfernandes.pt",
+]
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
@@ -167,3 +173,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_URL = "login"
 LOGIN_REDIRECT_URL = "home"  # ou outra view
 LOGOUT_REDIRECT_URL = "login"
+
+UNFOLD = {
+    "SHOW_HISTORY": True,
+    "COLLAPSIBLE_INLINES": True,
+}

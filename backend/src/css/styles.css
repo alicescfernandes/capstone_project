@@ -17,3 +17,7 @@ a.active {
 .container {
     @apply px-2 lg:px-20 bg-white;
 }
+
+.base-container {
+    @apply py-4 px-8 shadow-none mx-auto;
+}

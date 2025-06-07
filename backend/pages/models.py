@@ -4,7 +4,11 @@ import pandas as pd
 from django.db import models, transaction
 from .utils.data_processing import run_pipeline_for_sheet, extract_section_name, convert_df_to_json, parse_sheet
 from .utils.data_processing import run_pipeline_for_sheet, extract_section_name
+from .utils.chart_classification import ADDITIONAL_PROCESSING_PIPELINE
 from django.contrib.auth import get_user_model
+from django.db import models
+from django.core.validators import MinValueValidator, MaxValueValidator
+
 
 User = get_user_model()
 
@@ -14,12 +18,14 @@ def user_quarter_upload_path(instance, filename):
 
 class Quarter(models.Model):
     uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
-    number = models.PositiveIntegerField(unique=True)
-    created_at = models.DateTimeField(auto_now_add=True)
     number = models.PositiveIntegerField()
     created_at = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="quarters")
-
+    float_precision = models.PositiveIntegerField(
+        default=9,
+        validators=[MinValueValidator(1), MaxValueValidator(10)]
+    )
+    
     class Meta:
         ordering = ['-number']
         unique_together = ('user', 'number')
@@ -33,7 +39,7 @@ class ExcelFile(models.Model):
     quarter = models.ForeignKey("Quarter", on_delete=models.CASCADE, related_name="files")
     file = models.FileField(upload_to=user_quarter_upload_path)
     uploaded_at = models.DateTimeField(auto_now_add=True)
-    is_processed = models.BooleanField(default=False, editable=True) # TODO: Flip this to true
+    is_processed = models.BooleanField(default=False, editable=True)
     section_name = models.CharField(max_length=255, editable=False, blank=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="excel_files")
     
@@ -60,8 +66,17 @@ class ExcelFile(models.Model):
                 processed_data_frame, sheet_slug, sheet_title  = run_pipeline_for_sheet(df_raw, sheet_name)
 
                 # Get the column order first, this will be saved in a specific field
+                if(sheet_slug in ADDITIONAL_PROCESSING_PIPELINE):
+                    processing_functions= ADDITIONAL_PROCESSING_PIPELINE[sheet_slug]
+                    df_processing = processed_data_frame
+                    
+                    for fn in processing_functions:
+                        df_processing = fn(df_processing, self.quarter)
+                    
+                    processed_data_frame = df_processing
+
                 columns = processed_data_frame.columns.tolist()
-                data_json = convert_df_to_json(processed_data_frame)
+                data_json = convert_df_to_json(processed_data_frame, precision=self.quarter.float_precision)
                 
                 # Check for other CSV's and mark them as not active
                 CSVData.objects.filter(
