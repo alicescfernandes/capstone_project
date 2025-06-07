@@ -14,7 +14,6 @@ _Stuff that is not important and just nice haves_
 - [ ] Add proper logging for the python app
 - [ ] Add alert when there is still Excel files in processing
 - [ ] Default unknown excel files to tables. This is alot of work since that the Pandas is set for specific structure.
-- [ ] Change quarter button to upload files, add quarter field as required and add the file form
 - [ ] Change the errors and messages from the charts into a light grey with string type of message
 
 ## TODO
@@ -56,6 +55,7 @@ _Stuff that is not important and just nice haves_
 - [x] Hide Sections when using mobile (ignored)
 - [x] Closes the chart zoom modal when the user clicks ESC
 - [x] Consider remove infinite scrolling in favour of actual sections that can show a localized set of charts
+- [x] Change quarter button to upload files, add quarter field as required and add the file form
 
 ## 04/27/2025
 
