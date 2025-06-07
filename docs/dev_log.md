@@ -16,9 +16,14 @@ _Stuff that is not important and just nice haves_
 - [ ] Default unknown excel files to tables. This is alot of work since that the Pandas is set for specific structure.
 
 ## TODO
+
+## 06/07/2025
+- [x] Finished balance sheet chart (with support to multiple traces on the same chart)
 - [x] Finish the remaining graphs (the last money chart and both table charts)
 
+
 ## 06/01/2025
+
 - [x] Added advanced column fitering to zoomed table
 - [x] Finished "Customers Brand" chart
 - [x] Added manufacturing chart
