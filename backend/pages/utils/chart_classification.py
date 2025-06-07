@@ -501,7 +501,6 @@ CHART_CLASSIFICATION = {
         "type": "simple",
         'column_name':"Company"
     },
-    # TODO: competitors-in-city-* one could be a stacked bar chart, but it would require specific code to make it happen
     "competitors-in-city-noram": {
         "chart_type": "bar", 
         "type": "simple",
@@ -537,6 +536,24 @@ CHART_CLASSIFICATION = {
         "type": "balance_sheet",
         'column_name':"Column"
     },
+    "competitors-brands": {
+        "chart_type": "table",
+        "type": "table"
+    },
+     "allocation-of-total-manufacturi": {
+        "chart_type": "table",
+        "type": "table"
+    },
+    "competitors-ads": {
+        "chart_type": "bar", 
+        "type": "simple",
+        'column_name':"Company"
+    },
+    "balance-sheet":{
+        "chart_type": "waterfall",
+        "type": "balance_sheet",
+        'column_name':"Column"
+    },
 }
 
 
@@ -558,7 +575,8 @@ COLUMNS_TO_REMOVE = [
 ROWS_TO_REMOVE = [
     "Total",
     "Importance of further improvements",
-    "Units Produced"
+    "Units Produced",
+    "Brand advertised"
 ]
 
 ADDITIONAL_PROCESSING_PIPELINE = {
@@ -590,5 +608,7 @@ ADDITIONAL_PROCESSING_PIPELINE = {
     "competitors-in-city-europe": [process_competitor_city],
     "competitors-in-city-apac": [process_competitor_city],
     "production-costs-per-unit":[process_production_costs],
-    "cash-flow":[process_cashflow]
+    "cash-flow":[process_cashflow], # this sheets have multiple quarters, but we are only showing the data that from the quarter that this was uploaded into
+    "balance-sheet": [process_cashflow ] # this sheets have multiple quarters, but we are only showing the data that from the quarter that this was uploaded into
+
 }

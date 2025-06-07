@@ -68,10 +68,9 @@ def get_box_chart(df, chart_meta, csv_sheet_name, filter):
     
     # Criar um único trace com todos os valores do indicador selecionado
     trace = format_chart_trace(None, row[value_cols].dropna().tolist(), chart_type, selected_filter) 
-    layout = {
-    }
+    layout = {}
 
-    # Se existir valor da empresa, adicionar linha horizontal
+    # Se existir valor da empresa, adicionar linha vermelha e "legenda flutuante" estilo legenda de gráfico
     if company_value is not None:
         layout["shapes"] = [{
             "type": "line",
@@ -81,21 +80,26 @@ def get_box_chart(df, chart_meta, csv_sheet_name, filter):
             "y1": company_value,
             "line": {
                 "color": "red",
-                "width": 1,
+                "width": 2,
                 "dash": "dash"
             }
         }]
-        
+        # Legenda flutuante: quadrado vermelho + nome da empresa
         layout["annotations"] = [{
-            "x": 0.5,     # último box
-            "y": company_value,
-            "text": f"{company} | {str(company_value)}" ,
+            "x": 1,
+            "y": max(row[value_cols].dropna().tolist()),
+            "xref": "paper",
+            "yref": "y",
+            "text": f"<span style='font-size:22px;color:red;'>■</span> Company: {company}",
             "showarrow": False,
             "font": {
-                "color": "red",
-                "size": 12
+                "size": 14
             },
+            "align": "left",
             "bgcolor": "white",
+            "borderpad": 3,
+            "borderwidth": 0,
+            "opacity": 1
         }]
 
     return {
@@ -187,6 +191,38 @@ def get_double_chart(df, chart_meta,csv_sheet_name, filter):
     }
     
 
+
+
+def generate_multiple_waterfall_traces(quarter_df):
+    if "Total Assets" not in quarter_df["Label"].values:
+        raise ValueError("'Total Assets' row not found in DataFrame.")
+
+    idx_total_assets = quarter_df[quarter_df["Label"] == "Total Assets"].index[0]
+
+    assets_df = quarter_df.iloc[:idx_total_assets + 1]
+
+    trace_assets = {
+        "type": "waterfall",
+        "name": "Assets",
+        "x": assets_df["Label"].tolist(),
+        "y": assets_df["Value"].tolist(),
+        "measure": assets_df["Measure"].tolist(),
+        "textposition": "inside"
+    }
+
+    liabilities_df = quarter_df.iloc[idx_total_assets + 1:]
+
+    trace_liabilities = {
+        "type": "waterfall",
+        "name": "Debt & Equity",
+        "x": liabilities_df["Label"].tolist(),
+        "y": liabilities_df["Value"].tolist(),
+        "measure": liabilities_df["Measure"].tolist(),
+        "textposition": "inside"
+    }
+
+    return [trace_assets, trace_liabilities]
+
 def get_waterfall_chart(df, chart_meta, csv_sheet_name, filter):
     column_filter_name = chart_meta["column_name"]
     chart_type = chart_meta["chart_type"]
@@ -196,23 +232,28 @@ def get_waterfall_chart(df, chart_meta, csv_sheet_name, filter):
 
     filtered_df = df[df[column_filter_name] == selected_column_filter]
 
-    
-    trace = {
-        "type": "waterfall",
-        "name": selected_column_filter,
-        "x": filtered_df["Label"].tolist(),
-        "y": filtered_df["Value"].tolist(),
-        "measure": filtered_df["Measure"].tolist(),
-        "textposition": "inside"
-    }
+    traces = []
+
+    print(csv_sheet_name)
+    if(csv_sheet_name == "Balance Sheet"):
+        traces = generate_multiple_waterfall_traces(filtered_df) # creates multiple traces for each "section" of the waterfall
+    else:
+        traces.append({
+            "type": "waterfall",
+            "name": selected_column_filter,
+            "x": filtered_df["Label"].tolist(),
+            "y": filtered_df["Value"].tolist(),
+            "measure": filtered_df["Measure"].tolist(),
+            "textposition": "inside"
+        })
 
     return {
         'title': csv_sheet_name,
         'type': chart_type,
         'chart_config': {
-            "traces": [trace],
+            "traces": traces,
             "layout": {
-                "showlegend": False,
+                "showlegend": True,
                 "waterfallgap": 0.1,
             }
         },
@@ -348,4 +389,22 @@ def get_sankey_chart(df, chart_meta, csv_sheet_name, filter):
             'available': available_column_filters.tolist(),
             'selected': selected_column_filter
         }
+    }
+
+def get_table_chart(df, chart_meta, csv_sheet_name, selected_filter):
+    # Convert DataFrame to list of lists for data
+    data = df.values.tolist()
+    
+    # Create columns configuration from DataFrame columns
+    columns = [{"title": col} for col in df.columns]
+   
+    return {
+        'chart_config': {
+        },
+        "columns": columns,
+        "data": data,
+        'title': csv_sheet_name,
+        'type': "table",
+        "options": [],
+        'selected_option': None
     }

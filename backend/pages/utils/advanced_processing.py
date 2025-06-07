@@ -79,6 +79,24 @@ BALANCE_SHEET_CONFIG = {
     "Dividends":                                {"type": "relative", "sign": -1},
     "Total Financing Activities":               {"ignore": True},
     "Cash Balance, End of Period":              {"type": "total",    "sign": 1},
+    "Cash Balance, Beginning of Period":        {"type": "relative", "sign": 1},
+    
+    # Balance Sheet
+    "Cash": {"type": "relative", "sign": 1},
+    "3 Month Certificate of Deposit": {"type": "relative", "sign": 1},
+    "Finished Goods Inventory": {"type": "relative", "sign": 1},
+    "Skinking Fund": {"type": "relative", "sign": 1},
+    "Net Fixed Assets": {"type": "relative", "sign": 1},
+    "Total Assets": {"type": "total",    "sign": 1},
+
+    "Conventional Bank Loan": {"type": "relative", "sign": 1},
+    "Long Term Loan": {"type": "relative", "sign": 1},
+    "Emergency Loan": {"type": "relative", "sign": 1},
+    "Common Stock": {"type": "relative", "sign":1},
+    "Retained Earnings": {"type": "relative", "sign": -1},
+    "Total Debt and Equity": {"type": "total",    "sign": 1},
+
+    
 }
 
 def parse_cell_cashflow(label, value, column_name, df_col):
@@ -169,7 +187,7 @@ def parse_cell(label, value, column_name, df_col):
     }
 
 # Clean and parse all numeric columns
-def process_balance_sheet(df,):
+def process_balance_sheet(df,quarter):
     parsed_rows = []
     value_columns = df.columns.drop("Report Item")
 
@@ -188,7 +206,7 @@ def process_balance_sheet(df,):
     return parsed_df
 
 
-def process_income_statement(df):
+def process_income_statement(df,quarter):
     # extract last quarter from sheet (sheets have all the quarters, but we are only interested on the last)
     quarter_columns = [col for col in df.columns if col.startswith("Quarter")]
     latest_quarter = quarter_columns[-1] if quarter_columns else None
@@ -214,13 +232,13 @@ def process_income_statement(df):
     return parsed_df
 
 
-def process_detailed_brand_demand(df):
+def process_detailed_brand_demand(df,quarter):
     parsed_df = df.melt(id_vars=["Brand", "Company", "City"], var_name="Segment", value_name="Demand")
 
     return parsed_df
 
 # dropna is dropping all rows with nan values, and that is causing some rows to get removed
-def process_compensation(df):
+def process_compensation(df,quarter):
     last_two = df.tail(2)
 
     # Merges last two lines so that we have a single column
@@ -232,7 +250,7 @@ def process_compensation(df):
     
     return df
 
-def process_competitor_city(df):
+def process_competitor_city(df,quarter):
     parsed_df = df.copy()
 
     for col in parsed_df.columns[1:]:
@@ -245,7 +263,7 @@ def process_competitor_city(df):
 
 
 
-def process_production_costs(df):
+def process_production_costs(df,quarter):
     # Clean and parse
     parsed_rows = []
     value_columns = df.columns.drop("Brand")
@@ -265,20 +283,30 @@ def process_production_costs(df):
     return parsed_df
 
 
-def process_cashflow(df):
+def process_cashflow(df,quarter):
+    expected_column = f"Quarter {quarter.number}"
     quarter_columns = [col for col in df.columns if col.startswith("Quarter")]
-    latest_quarter = quarter_columns[-1] if quarter_columns else None
 
-    df = df[["Report Item", latest_quarter]].dropna()
-    df[latest_quarter] = df[latest_quarter].astype(str).str.replace(",", "").astype(float)
+    # Determine which column to use
+    if expected_column in quarter_columns:
+        selected_column = expected_column
+    else:
+        if quarter_columns:
+            selected_column = quarter_columns[-1]  # fallback to the latest
+            print(f"Warning: Column '{expected_column}' not found. Defaulting to '{selected_column}'.")
+        else:
+            raise ValueError("No 'Quarter' columns found in DataFrame.")
+
+    # Extract and clean the data
+    df = df[["Report Item", selected_column]].dropna()
+    df[selected_column] = df[selected_column].astype(str).str.replace(",", "").astype(float)
 
     parsed_rows = []
     for _, row in df.iterrows():
-        parsed = parse_cell(row["Report Item"], row[latest_quarter], latest_quarter, df[["Report Item", latest_quarter]])
+        parsed = parse_cell(row["Report Item"], row[selected_column], selected_column, df[["Report Item", selected_column]])
 
         if parsed:
             parsed_rows.append(parsed)
 
     parsed_df = pd.DataFrame(parsed_rows)
     return parsed_df
-
