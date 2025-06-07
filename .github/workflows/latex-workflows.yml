@@ -30,6 +30,7 @@ jobs:
 
       - name: Run LaTeX build script
         run: |
+          chmod +x docker.sh
           docker run --rm -v ${{ github.workspace }}/docs/final_report:/data final-report-image ./docker.sh runonly
 
       - name: Upload compiled PDF
