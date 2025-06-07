@@ -138,14 +138,121 @@ Com os casos de utilização estabelecidos, foram identificados então os requis
 \section{Fundamentos}
 \label{sec:fundamentos}
 
-A Marketplace Simulations  é uma empresa que desenvolve plataformas de simulação para fins educativos, ou seja, ferramentas que colocam os estudantes numa espécie de "jogo" onde cada equipa gere a sua própria empresa e compete com os colegas em cenários de mercado realistas. Isto acaba por funcionar como uma espécie de laboratório virtual, usado em faculdades de gestão e economia, como no \gls{iscal}, onde os alunos aplicam os conceitos aprendidos numa experiência em contexto educativo.
 
-No caso concreto do nosso projeto, o módulo em questão chama-se \textit{International Corporate Management} (referida doravante como plataforma de simulação), e é utilizado tipicamente no último semestre, na cadeira Projeto de Simulação em Negócios Internacionais  da Licenciatura de Comércio e Negócios Internacionais. Aqui, cada grupo de alunos representa uma empresa que tem de atuar num mercado competitivo — tomando decisões sobre posicionamento de produto, investimento, preços, distribuição, contratação de equipas e por aí fora. Essas decisões são processadas pela plataforma, que simula o comportamento do mercado com base num algoritmo interno. 
+\subsection{Marketplace Simulations}
+A Marketplace Simulations  é uma empresa que desenvolve plataformas de simulação para fins educativos, ou seja, ferramentas que colocam os estudantes numa espécie de jogo onde cada equipa gere a sua própria empresa e compete com os colegas em cenários simulados. Acaba então por funcionar como uma espécie de laboratório virtual que pode ser usado no ensino superior, como no \gls{iscal}, onde os alunos aplicam os conceitos aprendidos numa experiência em contexto educativo.
 
-No final de cada ronda (ou trimestre), os dados são disponibilizados na plataforma nas várias secções disponiveis numa visualização tabular, o que, na prática, faz com que os alunos saltem entre secções, fazer gráficos à mão e tirar conclusões com base em tabelas.
+No caso concreto do nosso projeto, a aplicação em questão chama-se International Corporate Management (referida doravante como plataforma de simulação) \cite{MarketplaceSim_2025}, e é utilizado tipicamente no último semestre, na cadeira Projeto de Simulação em Negócios Internacionais da Licenciatura de Comércio e Negócios Internacionais \cite{FUC_ISCAL_2025}. 
 
-Em termos de estrutura temporal, a simulação decorre ao longo de vários períodos, normalmente designados por quarters. Cada um destes quarters representa uma fase do ciclo de vida da empresa simulada — incluindo decisões estratégicas, execução e análise de resultados. Ou seja, no final de cada trimestre, os alunos recebem os dados com os resultados das decisões anteriores, o que obriga a uma análise comparativa constante entre períodos. É precisamente esta lógica iterativa — decidir, analisar, ajustar, repetir — que dá ritmo à simulação e aproxima o exercício de uma situação real de gestão empresarial.
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\textwidth]{./img/marketplace1}
+ \caption{Captura de ecrã da aplicação International Corporate Management}
+ \end{figure}
 
+Aqui, cada grupo de alunos representa uma empresa que tem de atuar num mercado internacional, tomando decisões sobre o posicionamento de produto, investimento, preços, distribuição, entre outras opções. Essas decisões são processadas pela plataforma, que simula o comportamento do mercado com base num algoritmo interno. 
+
+A cadência da simulação é dada por quarters, que representam uma semana simulada. No final de cada quarter, os alunos recebem os dados com os resultados das decisões anteriores, o que obriga a uma análise comparativa constante entre períodos. É precisamente esta ciclo, decidir, analisar, ajustar, repetir, que dá ritmo à simulação e aproxima o exercício de uma situação real.
+
+Para a análise, os alunos têm à disposição os dados, na plataforma,  nas várias secções disponiveis que na sua maioria são apresentados em tabelas, o que faz com que os alunos saltem entre secções, ou tenham de fazer gráficos à mão ou em ultimo caso, extrair a informação da plataforma. 
+
+\subsection{Sistemas de apoio à decisão}
+\label{sec:sad}
+Um \gls{sad} é uma aplicação ou conjunto de ferramentas desenhadas para ajudar os utilizadores a tomar decisões mais informadas e fundamentadas, geralmente com base na análise de dados. Na prática, um \gls{sad} recolhe, organiza e processa dados, muitas vezes em tempo real ou a partir de ficheiros carregados pelo utilizador, e apresenta esses dados de forma visual (como gráficos ou dashboards), permitindo aplicar filtros e explorar cenários. Ou seja, não toma decisões por si só, mas fornece os elementos certos para que o utilizador possa decidir melhor, especialmente em contextos complexos ou com grande volume de informação.
+
+
+\subsection{Backend e Frontend}
+
+A aplicação desenvolvida neste projeto segue uma arquitetura típica de aplicações web, dividida em duas grandes camadas: \textbf{backend} e \textbf{frontend}.
+
+O \textbf{backend} corresponde à "parte invisível" da aplicação,  é o lado do servidor, responsável por tratar os dados, executar a lógica da aplicação e responder aos pedidos feitos pelos utilizadores. No contexto deste projeto, o backend é responsável por funcionalidades como o carregamento de ficheiros Excel, processamento e normalização dos dados, gestão de utilizadores e autenticação, bem como a disponibilização desses dados através de uma API. Esta camada foi implementada usando o framework \textit{Django}, que oferece uma estrutura robusta para gerir modelos de dados, segurança e acesso à base de dados.
+
+O \textbf{frontend}, por outro lado, é a "parte visível" da aplicação, é o que o utilizador vê e com o que interage diretamente no browser. Inclui os formulários de upload, menus, filtros e gráficos criados com os dados processados. No projeto, o frontend foi desenvolvido usando HTML e Javascript, permitindo criar uma interface moderna, interativa e fácil de usar.
+
+Esta separação entre backend e frontend facilita a manutenção do sistema e permite que ambas as partes evoluam de forma independente, podendo até ser substituídas ou melhoradas sem necessidade de reescrever o sistema completo.
+
+
+\subsection{Tipos de gráficos}
+
+Durante a análise que fizemos foram selecionados diferentes tipos de gráficos, de acordo com o tipo de análise que cada conjunto de dados pretendia suportar. Cada tipo de gráfico foi escolhido com base na sua capacidade de representar visualmente os dados e a sua facilidade de interpretação.
+
+\textbf{Gráfico de Barras (Bar Chart):}
+Este tipo de gráfico foi utilizado para comparar valores entre diferentes categorias, como marcas, cidades ou segmentos de mercado. A disposição visual das barras permite uma leitura rápida das diferenças de desempenho entre categorias, sendo util para dados que não são temporais. Foram usadas variantes como barras empilhadas e barras agrupadas, dependendo da granularidade pretendida.
+
+\begin{figure}[H]
+\centering
+\includegraphics[max width=12cm, keepaspectratio]{./img/barras1}
+\caption{Exemplo de gráfico de barras}
+\end{figure}
+\noindent
+
+\begin{figure}[H]
+\centering
+\includegraphics[max width=12cm, keepaspectratio]{./img/agrupada}
+\caption{Exemplo de gráfico de barras agrupadas}
+\end{figure}
+\noindent
+
+\begin{figure}[H]
+\centering
+\includegraphics[max width=12cm, keepaspectratio]{./img/empilhada}
+\caption{Exemplo de gráfico de barras empilhadas}
+\end{figure}
+\noindent
+
+\textbf{Gráfico de Sectores (Pie Chart):}  
+Utilizado para representar distribuições percentuais, como a repartição de dados por segmento. Este tipo é  intuitivo para visualizar como uma totalidade se divide entre diferentes partes, sendo adequado para dados onde se pretendia enfatizar proporções relativas (como por exemplo dados categorizados por segmentos)
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[max width=12cm, keepaspectratio]{./img/pie}
+    \caption{Exemplo de gráfico de sectores}
+\end{figure}
+\noindent
+
+\textbf{Gráfico Financeiro (Waterfall Chart):}  
+Empregado especificamente para representar balanços financeiros, como resultados acumulados de receitas e despesas. O gráfico cascata” (waterfall) permite visualizar como diferentes contribuições individuais afetam um valor final, facilitando a análise de ganhos e perdas ao longo do tempo ou de processos financeiros.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[max width=12cm, keepaspectratio]{./img/waterfall}
+    \caption{Exemplo de gráfico financeiro}
+\end{figure}
+\noindent
+
+\textbf{Diagrama de Quartis (Box Plot):}
+Os diagramas de quartis, foram utilizados para representar dados que eram distribuições, permitindo visualizar de forma rápida a mediana, os quartis e possíveis valores extremos. Este tipo de diagrama é util para comparar a diferença entre diferentes categorias, como por exemplo comparar a dispersão de vendas entre várias marcas ou cidades. A interpretação deste tipo de visualização exige um conhecimento prévio de conceitos estatísticos como mediana e quartis, o que pde dificultar a leitura para o público-alvo, mas que simplifica a representação dos dados.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[max width=12cm, keepaspectratio]{./img/box}
+    \caption{Exemplo de Diagramas de Quartis}
+\end{figure}
+\noindent
+
+\textbf{Diagrama de Sankey (Sankey Diagram):}
+Os diagramas de Sankey são utilizados para representar fluxos entre diferentes categorias, destacando a quantidade transferida de uma categoria para outra. Estes diagramas são particularmente úteis para ilustrar a passagem de clientes entre necessidades ou segmentos. Cada fluxo é representado por uma linha cuja largura é proporcional à quantidade movida, permitindo uma visualização intuitiva da importancia dos fluxos. Para evitar representações complexas, decidimos apenas recorrer a este tipo apenas quando os dados não poderiam ser representados de outra forma, ou tratados de forma a simplificar a representação.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[max width=12cm, keepaspectratio]{./img/skankey}
+    \caption{Exemplo de gráfico de Sankey}
+\end{figure}
+\noindent
+
+Outros tipos de gráficos relevantes para o projeto, mas que não foram utilizados foram:
+
+\textbf{Gráfico de Linhas (Line Chart):}  
+Escolhido para representar séries temporais, como a evolução de vendas ou de quotas ao longo de vários trimestres. As linhas permitem identificar tendências e variações. No nosso projeto, não tivemos necessidade de usar este tipo uma vez que nenhum dos dados recebidos era relativos a séries temporais, pelo que a sua utilização não era intuitiva para os utilizadores.
+
+\textbf{Gráfico de Radar (Radar Chart):}  
+Utilizado para comparar múltiplas variáveis em relação a um centro comum, como no caso da avaliação de diferentes necessidades dos clientes em simultâneo. Este tipo de gráfico permite identificar rapidamente pontos fortes e fracos em várias dimensões de análise. Apesar destas vantagens, nos dados que recebemos não conseguimos identificar utilizações onde este tipo de gráfico beneficiasse os utilizadores finais.
+
+\textbf{Gráfico de Dispersão (Scatter Plot):}
+Os gráficos de dispersão foram considerados para representar relações entre duas variáveis quantitativas, como por exemplo entre o preço e a procura de determinados produtos. Cada ponto no gráfico representa uma observação individual, permitindo identificar padrões de correlação (positiva, negativa ou inexistente) entre variáveis. No nosso caso, consideramos utilizar um tipo especifico de gráfico de dispersão (gráfico de dispersão num mapa) mas a leitura tornou-se confusa, uma vez que era pouco legivel para alunos, e não considerava localizações ficticias.
+\end{itemize}
+
+A seleção dos tipos de gráficos teve como objetivo maximizar a clareza e facilidade da informação e permitir diferentes análises sobre os dados extraídos. Cada gráfico foi pensado para às características das categorias disponíveis, considerando tanto a o formato dos dados (quantitativa ou categórica) como o objetivo da análise (comparação, distribuição, evolução ou composição).
 
 %%________________________________________________________________________
 \section{Abordagem}
@@ -165,44 +272,130 @@ Por todos estes motivos, optámos por não seguir esta via. Em vez disso, defini
 
 \subsection{Exportação e carregamento manual de ficheiros}
 
-A abordagem que acabamos por usar foi os alunos exportam manualmente os dados diretamente da plataforma de simulação e carregarem esses ficheiros na nossa plataforma. A partir daí, o sistema processa automaticamente os dados, normaliza os conteúdos e cria visualizações interativas. Esta abordagem, apesar de requerer uma ação manual inicial por parte do utilizador, é mais segura e prática quando comparada com a alternativa de web scraping, que, como vimos acima, apresentava vários desafios que poderiam ir contra os termos do serviço. Deste modo, garantimos um equilíbrio entre usabilidade, segurança e fiabilidade do sistema. Acabamos então por criar um \gla{sad} (\cf, capítulo \ref{ch:sad}) que permita os estudantes tomarem melhores decisões.
+A abordagem que acabamos por usar foi os alunos exportam manualmente os dados diretamente da plataforma de simulação e carregarem esses ficheiros na nossa plataforma. A partir daí, o sistema processa automaticamente os dados, normaliza os conteúdos e cria visualizações interativas. Esta abordagem, apesar de requerer uma ação manual inicial por parte do utilizador, é mais segura e prática quando comparada com a alternativa de web scraping, que, como vimos acima, apresentava vários desafios que poderiam ir contra os termos do serviço. Deste modo, garantimos um equilíbrio entre usabilidade, segurança e fiabilidade do sistema. Acabamos então por criar um \gla{sad} (\cf, capítulo \ref{sec:sad}) que permita os estudantes tomarem melhores decisões.
 
 
 Para isso, procurámos que a nossa aplicação refletisse a estrutura da própria simulação. Como tal, os dados são organizados por quarters, como acontece na plataforma de simulação e permitir o carregamento dos dados exportados. Estes ficheiros são depois processados o que nos permite trabalhar com dados mais consistentes. 
 
-Esta estrutura base implica a existência de três entidades principais na nossa aplicação (que iremos descrever a seguir) e cuja interação define o funcionamento base do sistema.
+Esta estrutura base implica a existência de três entidades principais na nossa aplicação (que iremos descrever nos capítulos seguintes) e cuja interação define o funcionamento do sistema.
 
 
 \subsubsection{\textit{Quarters}}
-Os quarters funcionam como \textit{buckets} lógicos para organizar os ficheiros carregados pelos utilizadores. Cada utilizador pode criar múltiplos quarters, identificados de forma única por um número. Este número serve tambem de identificador, sendo que não é possível ter dois quarters identificados como 1 para cada utilizador.
+Os quarters funcionam como \textit{buckets} lógicos para organizar os ficheiros carregados pelos utilizadores. Cada utilizador pode criar múltiplos quarters, identificados de forma única por um número.
 
-A nível de implementação, cada quarter está associado unicamente a um utilizador e é identificado por um UUID (gerado automaticamente pelo \textit{Django}), que garante que o quarter seja único.
+O propósito em incluir este conceito é para que a aplicação consiga associar os dados extraidos dos ficheiros carregados ao quarter correspondente sem depender de manipulações do nome do ficheiro carregado, e desde modo assegurar que a plataforma consegue identificar corretamente os quarters. A desvantagem é que requer input do utilizador para que seja criado ou atribuido o quarter correto. De modo a minimizar a fricção causada por esta funcionalidade, tentamos que experiência de utilização fosse centrada no carregamento de ficheiros, limitando os quarters a um campo obrigatório no formulário de upload.
 
 \subsubsection{Ficheiros}
 
-Os ficheiros são inicialmente carregados no formato \gls{xlsx}, contendo uma ou várias folhas de cálculo. Cada folha é tratada como uma entidade individual e transformada para \gls{csv}. O ficheiro \gls{xlsx} é guardado como referência, mas não é diretamente utilizado para visualização.
+Os ficheiros são inicialmente carregados no formato \gls{xlsx} (que é o formato que a plataforma de simulação exporta), contendo uma ou várias folhas de cálculo. Cada folha é tratada como uma entidade individual e os dados contidos nessa folha serão processados. O ficheiro \gls{xlsx} é guardado como referência, mas não é diretamente utilizado para visualização, ficando apenas como artefacto interno da aplicação.
 
-Este processo de conversão para \gls{csv} é acompanhado por uma \textit{pipeline} de normalização de dados, que limpa os dados (como por exemplo, remover quebras de linha, colunas sem representação, nomes inconsistentes) e aplica regras para que os gráficos possam ser gerados de forma consistente. Cada ficheiro \gls{csv} gerado é associado ao seu ficheiro \gls{xlsx} de origem, ao quarter correspondente, e o seu nome será baseado no nome da folha de onde foi extraído. Aos ficheiros \gls{csv} é também associado uma \textit{slug}, baseado também no nome, que identifica a informação que o \gls{csv} representa.
+Este processamento que é aplicado é uma \textit{pipeline} de transformação de dados (conhecido na industria como \gls{etl}), que limpa os dados (como por exemplo, remover quebras de linha, colunas sem representação, nomes inconsistentes) e aplica regras para que os gráficos possam ser gerados de forma consistente. Os dados resultantes desta transformação estão associados ao ficheiro \gls{xlsx} original, sendo até possivel reprocessar ficheiros de forma a recriar informação (esta funcionalidade não é disponibilizada aos utilizadores finais).
 
-A plataforma garante que só existe uma versão ativa de cada ficheiro por tipo — caso o utilizador carregue novamente um ficheiro com o mesmo nome lógico, o anterior será marcado como não ativo, evitando duplicações e garantindo que os gráficos usam apenas dados mais recentes.
+A plataforma garante que só existe uma versão ativa de cada ficheiro por tipo. Caso o utilizador carregue novamente um ficheiro com o mesmo nome, o anterior será marcado como não ativo, evitando duplicações e garantindo que os gráficos usam apenas dados mais recentes. 
+
+\subsubsection{\textit{Pipeline} de Transformação de Dados}
+
+Outro contributo diferenciador foi o desenvolvimento de uma \textit{pipeline} transformação de dados. O objetivo é garantir que os ficheiros carregados, que muitas vezes contêm nomes de colunas inconsistentes, quebras de linha, espaços em excesso ou colunas irrelevantes, sejam adaptados para serem visualizados. 
+
+Como podemos receber muitos ficheiros, a variabilidade entre os dados recebidos é muito alta, pelo que alguns dados passam por mais do que uma fase de transformação. Esta decisão foi tomada com base numa análise manual, em que identificámos possíveis fontes de dados que precisam de mais do que uma fase de transformação. As várias fases de transformação alteram os dados de modo a facilitar a representação visual dos mesmos e é um passo essencial no projeto, porque garante que a aplicação trabalha com formatos e regras conhecidas, e remove a variabilidade dos ficheiros importados.
+
+As fases de transformação irão ser descritas em mais detalhe nos capítulos seguintes, uma vez que a implementação destas pipeline estão relacionadas à tecnologia escolhida, mas o desenvolvimento desta \textit{pipeline} é um fator diferenciador deste projeto, uma vez que tem de lidar com dados que não estão estruturados de forma a facilitar representações visuais. 
+
+Este processo de transformação é semelhante aos processos \gls{etl} ainda que neste projeto tenha sido desenvolvido com uma escala menor.
 
 \subsubsection{Utilizadores}
 
 A plataforma foi desenhada para funcionar com utilizadores. Cada utilizador tem a sua conta, e pode criar quarters, carregar ou alterar ficheiros, e ver aos gráficos gerados a partir desses ficheiros.
 
-Cada utilizador tem acesso apenas aos seus próprios dados, garantindo o isolamento da informação. Esta separação é feita a nível da base de dados, através da associação de cada entidade ao utilizador que criou.
-
 Apesar da plataforma não suportar explicitamente equipas ou grupos, assume-se que alunos do mesmo grupo podem carregar ficheiros semelhantes, mas o sistema trata-os como ficheiros diferentes. Assim, evita-se a complexidade adicional de gerir permissões ou partilha de dados entre contas. Também se assume que as contas podem ser criadas ao nível do grupo, pelo que para a plataforma, é indiferente se a conta é individual ou partilhada entre membros desse grupo.
+
+Cada utilizador tem acesso apenas aos seus próprios dados, garantindo o isolamento da informação. Esta separação é feita a nível da base de dados, através da associação de cada entidade ao utilizador que criou.
 
 No futuro, pode ser considerada a funcionalidade de desativação automática de contas (por exemplo, após o final do semestre), mas para já o modelo é simples e robusto: conta individual, dados isolados, e controlo completo sobre os próprios uploads.
 
-\subsubsection{\textit{Pipeline} de Normalização de Dados}
+No próximo capitulo iremos então descrever as escolhas tecnicas tomadas de forma a concretizar este modelo.
 
-Outro contributo diferenciador foi o desenvolvimento de uma \textit{pipeline} modular de normalização de dados. O objetivo é garantir que os ficheiros carregados, que muitas vezes contêm nomes de colunas inconsistentes, quebras de linha, espaços em excesso ou colunas irrelevantes, sejam adaptados para serem visualizados. 
 
-Como podemos receber muitos ficheiros, a variabilidade entre os dados recebidos é muito alta, pelo que alguns dados passam por mais do que uma fase de normalização. Esta decisão foi tomada com base numa análise manual, em que identificámos possíveis fontes de dados que precisam de mais do que uma fase de normalização. As várias fases de normalização alteram os dados de modo a facilitar a representação visual dos mesmos e é um passo essencial no projeto, porque garante que a aplicação trabalha com formatos e regras conhecidas, e remove a variabilidade dos ficheiros importados.
+\section{Arquitetura Tecnológica}
+\label{sec:tec}
 
-As fases de normalização irão ser descritas em mais detalhe nos capítulos seguintes, uma vez que a implementação destas pipeline estão relacionadas à tecnologia escolhida, mas o desenvolvimento desta \textit{pipeline} é um fator diferenciador deste projeto, uma vez que tem de lidar com dados que não estão estruturados de forma a facilitar representações visuais. 
+A definição da arquitetura, a seleção das tecnologias e a organização dos dados foram guiadas por critérios de fiabilidade, modularidade, simplicidade de manutenção e possibilidade de evolução futura.  Nas seguintes secções especificamos que tecnologias escolhemos e quais as funções que desempenham no sistema.
 
-Este processo de normalização é semelhante aos processos \gls{etl} ainda que neste projeto tenha sido desenvolvido com uma escala menor.
+\subsection{Django}
 
+Para o desenvolvimento do backend da aplicação, optámos por usar a \textit{framework} Django. A escolha deveu-se ao facto  de o Django ser uma framework muito madura e com uma arquitetura bem formada.
+
+Uma das principais vantagens do Django é o facto de seguir o padrão de arquitetura \gls{mvc}, o que facilita bastante a organização do sistema e a separação de responsabilidades. Para além disso, o Django oferece um \gls{orm} integrado, que permite interagir com bases de dados de forma mais intuitiva, sem necessidade de escrever \gls{sql} manualmente, e evitando algumas das falhas de segurança conhecidas como SQL Injection. Outro ponto muito forte é a gestão de utilizadores e sessões já estar incluida, facilitando assim o desenvolvimento e ajudando o programador a focar-se no desenvolvimento das funcionalidades específicas da aplicação.
+
+Outro fator decisivo foi a integração natural com outras bibliotecas do ecossistema Python, como o \textit{Pandas}, que usamos para o processamento dos ficheiros carregados. Esta compatibilidade torna o desenvolvimento mais rápido, reduzindo a quantidade de trabalho necessário para ligar diferentes tecnologias.
+
+Escolher Django em vez de alternativas como \textit{Flask} ou \textit{FastAPI} prendeu-se também com o contexto do projeto. Apesar de FastAPI ser mais recente e mais rápido para APIs REST, o nosso sistema, focado na transformação de dados e visualização, não necessitava de uma abordagem altamente assíncrona e não funciona totalmente com API's REST. Já o Flask, apesar de ser mais leve, implicaria uma maior responsabilidade na definição de toda a arquitetura e gestão de extensões, o que poderia aumentar a complexidade projeto.
+
+Relativamente a outras opções como WordPress (que alguns poderiam sugerir para aplicações web), descartámos logo essa hipótese. O WordPress, ainda que muito eficaz para sites de conteúdo, não é adequado para projetos que exigem controlo total sobre a estrutura dos dados, processamento pesado no backend e integração com pipelines de ciência de dados.
+
+
+\subsection{Pandas}
+
+Para a manipulação de dados, a biblioteca escolhida foi o \textit{Pandas}. Esta escolha surgiu naturalmente, tendo em conta a sua forte integração com o ecossistema Python e o facto de ser amplamente utilizada em projetos de ciência de dados e engenharia de dados.
+
+O Pandas permite ler, transformar e filtrar dados em ficheiros Excel com grande facilidade e poucas linhas de código. A sua sintaxe expressiva e as funcionalidades integradas para operações como normalização, filtragem, agrupamento ou ordenação tornaram-na particularmente adequada para o tipo de tarefas necessárias neste projeto.
+
+Uma das vantagens mais importantes foi a capacidade de converter os dados diretamente para formatos como JSON, o que facilitou a sua integração com o frontend através da API.
+
+Apesar destas vantagens, o Pandas não é a melhor opção quando falamos de datasets muito grandes, uma vez que funciona inteiramente em memória. Em contextos com maiores volumes de dados, poderiam ser consideradas bibliotecas como \textit{Dask} ou \textit{Polars} por terem capacidades de lidar com um maior fluxo de informação, como paralelismo.
+
+No entanto, para os objetivos e escala deste projeto, o Pandas ofereceu um equilíbrio excelente entre funcionalidade, simplicidade e tempo de desenvolvimento.
+
+\subsection{Plotly}
+
+Para gerar os gráficos da aplicação, optámos por utilizar o \textit{Plotly}, uma biblioteca  que permite criar visualizações interativas, que está disponivel em várias linguagens como Python e Javascript. Esta escolha foi motivada pelo facto de o Plotly suportar suportar uma API declarativa, o que facilitou muito a integração com o frontend e backend, porque assim a configuração dos gráficos pode ser retornada do servidor, permitindo uma configuração dinâmica e garantindo que todos os utilizadores vêm o mesmo tipo de gráfico. Internamente, o Ploty utiliza uma outra biblioteca, D3.js, que é uma biblioteca com capacidade de criar gráficos personalizados.
+
+Além disso, a biblioteca oferece suporte a uma grande variedade de gráficos, desde os mais comuns (barras, linhas, circulares) até formatos mais especializados (como gráficos de cascata ou mapas de calor), o que foi importante para cobrir os vários tipos de visualização pretendidos. Em comparação, bibliotecas como Chart.js, embora sejam mais leves, limitam-se a um conjunto reduzido de gráficos e oferecem menos controlo sobre detalhes avançados de visualização. Por este motivo, Plotly revelou-se uma solução mais adequada para a flexibilidade e diversidade de visualizações pretendida neste projeto. Uma lista completa das diferencas pode ser consultada no (\cf, capítulo \ref{ch:charts}).
+
+A versão Python desta biblioteca foi também instrumental no desenvolvimento dos gráficos, uma vez que nos permitiu explorar os dados de forma independente do sistema (fora da aplicação) de modo escolher que tipo de gráfico seria o mais adequado aos dados que estavamos a analisar e que transformações eram necessárias para obter os gráficos escolhidos. 
+
+É importante ter em consideração que o tamanho dos ficheiros JavaScript do Plotly é maior do que outras bibliotecas mais minimalistas, mas, no contexto deste projeto, a qualidade e a flexibilidade gráfica foram consideradas prioritárias.
+
+\subsection{WebComponents}
+
+No frontend, decidimos utilizar \textit{WebComponents}, sem recorrer a frameworks como React ou Vue. Esta decisão teve como base a necessidade de criar uma interface modular e leve, e garantir que a aplicação reage aos inputs do utilizador.
+
+Os WebComponents são uma especificação nativa dos browsers modernos, que permite definir componentes reutilizáveis com encapsulamento de estilo e comportamento. Ao evitarmos dependências pesadas como o React, conseguimos reduzir a complexidade técnica da aplicação, mantendo ao mesmo tempo a flexibilidade e capacidade de reutilização dos componentes desenvolvidos.
+
+Apesar de React ser uma framework muito utilizada para aplicações web,  com um ecossistema muito maduro e uma comunidade grande, considerámos que para este projeto, a sua introdução seria um excesso em termos de dependências e complexidade. A alternativa escolhida proporcionou uma solução mais leve e igualmente eficaz. Outra razão que nos levou a esta escolha foi o facto do Django já trazer consigo as funcionalidades de autenticação, pelo que se a aplicação web fosse escrita totalmente em React, teriamos de usar o Django apenas como uma API REST, e utilizar métodos alternativos de autenticação como OAuth2.
+
+\subsection{PostgreSQL}
+
+Para a persistência de dados, utilizámos o sistema de gestão de bases de dados \textit{PostgreSQL}, uma das soluções open-source mais completas e robustas disponíveis atualmente. Inicialmente foi considerada a utilização de SQLite por simplicidade durante o desenvolvimento, mas rapidamente a necessidade de maior escalabilidade e de suporte a funcionalidades como campos JSON, levou à adoção do PostgreSQL.
+
+PostgreSQL oferece um excelente desempenho, suporte a operações complexas, integridade transacional e compatibilidade com o ORM do Django, o que permitiu tirar partido do modelo relacional sem abdicar da produtividade no desenvolvimento.
+
+Comparado com outras alternativas como MySQL, o PostgreSQL destaca-se pelo seu suporte avançado a tipos de dados (\gls{JSON}, arrays, enums), pela conformidade com standards SQL e pela sua fiabilidade em ambientes de produção.
+
+Esta escolha garantiu que a aplicação tivesse uma base de dados capaz de crescer com o sistema, suportando tanto a fase académica como uma possível evolução futura para cenários reais de utilização.
+
+\subsection{Docker}
+
+O Docker foi utilizado neste projeto como solução de virtualização, tanto para desenvolvimento como para ambientes de produção. A principal vantagem da sua adoção prende-se com a criação de ambientes consistentes e isolados, garantindo que a aplicação corre da mesma forma em diferentes máquinas, sem conflitos de dependências ou configurações, e consistentemente em vários sistemas operativos.
+
+Durante o desenvolvimento, o Docker facilitou a orquestração dos serviços necessários (como a aplicação Django, a base de dados PostgreSQL e o servidor \gls{http} Nginx configurado como \textit{reverse proxy}), utilizando ficheiros \texttt{Dockerfile} e \texttt{docker-compose.yml}. Isto permitiu montar rapidamente o ambiente completo da aplicação, sem necessidade de instalações manuais por parte dos programadores.
+
+Para produção, o Docker permite distribuir a aplicação como uma imagem imutável, o que facilita o processo de deploy, integração contínua e escalabilidade futura. Esta abordagem garante que o código testado é exatamente o que será executado em produção, reduzindo erros e aumentando a fiabilidade do sistema.
+
+O Docker foi também utilizado durante o desenvolvimento deste relatório, porque permitiu ao grupo ter um ambiente LaTex configurado com todas as extensões apenas com um único comando no terminal, e permitiu-nos desenvolver mecanismos de compilação automáticos durante a escrita. 
+
+
+\section{Outras ferramentas utilizadas}
+\label{sec:tools}
+
+Além das tecnologias centrais utilizadas no projeto, foi também fundamental o recurso a um conjunto de ferramentas de suporte que facilitaram o trabalho, a organização e a eficiência durante o desenvolvimento do projeto. As principais ferramentas utilizadas foram:
+
+\begin{itemize}
+    \item \textbf{Git \cite{git} e Github \cite{github}}: Para assegurar o controlo de versões, foi utilizado o sistema Git, em conjunto com a plataforma Github. Esta combinação permitiu não só manter um histórico  das alterações feitas, mas também garantir a colaboração e a integridade do desenvolvimento ao longo do tempo.
+
+    \item \textbf{Notion \cite{notion}}: A gestão de tarefas e a organização de trabalho foram centralizadas na plataforma Notion. Esta ferramenta é muito versátil para planear as tarefas temporalmente, definir prioridades, acompanhar o progresso das diferentes fases do projeto. É também uma ferramenta muito fácil de usar, e que permite também tirar notas durante o desenvolvimento, que foram importantes para o desenvolvimento do relatório.
+
+    \item \textbf{\gls{vscode}\cite{vscode}}: Como editor, foi utilizado o \gls{vscode}, um ambiente de desenvolvimento  leve, e muito extensível. Através da instalação de extensões específicas, foi possível adaptar o \gls{vscode} às necessidades do projeto, potenciando a produtividade e melhorando a experiência de programação.
+\end{itemize}
+
+Estas ferramentas, utilizadas de forma integrada e consistente, desempenharam um papel decisivo para a boa execução do projeto, não só do ponto de vista técnico, mas também no que respeita à organização, planeamento do projeto.

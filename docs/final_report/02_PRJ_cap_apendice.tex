@@ -8,17 +8,6 @@
 %% v01: original
 %% PTS / MAR.2022 / MAI.2013 / 23.MAI.2012 (construído)
 %%________________________________________________________________________
-
-
-
-
-%%________________________________________________________________________
-\chapter{Sistemas de Apoio à Decisão}
-\label{ch:sad}
-%%________________________________________________________________________
-
-Um \gls{sad} é uma aplicação ou conjunto de ferramentas desenhadas para ajudar os utilizadores a tomar decisões mais informadas e fundamentadas, geralmente com base na análise de dados. Na prática, um \gls{sad} recolhe, organiza e processa dados, muitas vezes em tempo real ou a partir de ficheiros carregados pelo utilizador, e apresenta esses dados de forma visual (como gráficos ou dashboards), permitindo aplicar filtros e explorar cenários. Ou seja, não toma decisões por si só, mas fornece os elementos certos para que o utilizador possa decidir melhor, especialmente em contextos complexos ou com grande volume de informação.
-
 \chapter{Tabelas de Requisitos}
 \label{ch:tabRequisitos}
 
@@ -84,13 +73,36 @@ R4.2 & Aplicar filtros & Visível & Visualização de Dados \\
 
 
 \chapter{Classificação das folhas \gls{xlsx}}
-\label{ch:asd}
 
 
+\chapter{Comparação de gráficos suportados pelo Plotly e Chart.js}
+\label{ch:charts}
 
-
-
-
-
-
-
+\begin{table}[H]
+\centering
+\caption{Comparação de tipos de gráficos suportados por Plotly.js e Chart.js}
+\begin{tabular}{|l|c|c|}
+\hline
+\textbf{Tipo de Gráfico} & \textbf{Plotly.js} & \textbf{Chart.js} \\
+\hline
+Barras                         & Suportado & Suportado \\
+Linhas                         & Suportado & Suportado \\
+Dispersão (Scatter)            & Suportado & Suportado \\
+Circular (Pie)                 & Suportado & Suportado \\
+Área                           & Suportado & Suportado \\
+Radar                          & Suportado & Suportado \\
+Histograma                     & Suportado & Suportado \\
+Box Plot                       & Suportado & Não Suportado \\
+Mapa de Calor (Heatmap)        & Suportado & Não Suportado \\
+Cascata (Waterfall)            & Suportado & Não Suportado \\
+Indicadores (Gauges)           & Suportado & Não Suportado \\
+Candlestick (Finanças)         & Suportado & Não Suportado \\
+OHLC (Finanças)                & Suportado & Não Suportado \\
+Treemap                        & Suportado & Não Suportado \\
+Sunburst                       & Suportado & Não Suportado \\
+Violin                         & Suportado & Não Suportado \\
+Mapa (Geo)                     & Suportado & Não Suportado \\
+\hline
+\end{tabular}
+\label{tab:charts}
+\end{table}
