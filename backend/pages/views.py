@@ -8,7 +8,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
 from .models import Quarter, ExcelFile, CSVData
-from .utils.chart_classification import CHART_CLASSIFICATION_KEYS
+from .utils.chart_classification import CHART_CLASSIFICATION_KEYS, CHART_CLASSIFICATION
 from django.utils.text import slugify
 
 
@@ -69,6 +69,7 @@ def home(request):
             "slug": chart_slug,
             "title": csv.sheet_name_pretty,
             "quarter_number": csv.quarter_file.quarter.number,
+            "type": CHART_CLASSIFICATION[chart_slug]["type"]
         }
 
         if section_slug not in charts_by_section:
@@ -156,14 +157,16 @@ def edit_quarter(request, uuid=None):
 
     if request.method == "POST":
         new_number = request.POST.get("number")
+        float_precision = request.POST.get("float_precision", 9)  # Default to 9 if not provided
 
         if not new_number:
             return redirect("manage_quarters")
 
         if quarter:
             quarter.number = new_number
+            quarter.float_precision = int(float_precision)
         else:
-            quarter = Quarter(number=new_number, user=request.user)
+            quarter = Quarter(number=new_number, float_precision=int(float_precision), user=request.user)
 
         quarter.save()
 

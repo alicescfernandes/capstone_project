@@ -12,15 +12,69 @@ _Stuff that is not important and just nice haves_
 - [ ] Create a "change password page", check if django is able to send emails
 - [ ] Display username on the navbar
 - [ ] Add proper logging for the python app
-
 - [ ] Add alert when there is still Excel files in processing
+- [ ] Default unknown excel files to tables. This is alot of work since that the Pandas is set for specific structure.
+- [ ] Change the errors and messages from the charts into a light grey with string type of message
 
 ## TODO
 
-- [ ] Add alert when there is still Excel files in processing
-- [ ] Loading from an # breaks the charts (<http://localhost:8000/#section-balanced-scorecard>)
-- [ ] Change quarter button to upload files, add quarter field as required and add the file form
-- [ ] Change the errors and messages from the charts into a light grey with string type of message
+## 06/07/2025
+- [x] Finished balance sheet chart (with support to multiple traces on the same chart)
+- [x] Finish the remaining graphs (the last money chart and both table charts)
+
+
+## 06/01/2025
+
+- [x] Added advanced column fitering to zoomed table
+- [x] Finished "Customers Brand" chart
+- [x] Added manufacturing chart
+- [x] Added Competitors Ads chart and special processing
+
+## 05/31/2025
+
+- [x] Add annotation for quarter diagrams about the balanced score card
+- [x] Add field to allow the user to choose the number precision
+- [X] Reset edit/create form when closed
+- [X] Add DataTable charts (added webcomponnet)
+
+## 05/24/2025
+
+- [x] Add search functionality with text hightligthing
+
+## 05/11/2025
+
+- [x] Adds more VPS configs for deploy
+- [x] Adds Django Unfold
+- [x] Adds preload tags for faster loading of scripts - Scripts were pushed locally for caching
+- [x] Check if the flowbite JS file can be imported from node_modules - Scripts were pushed locally for caching
+
+## 05/10/2025
+
+- [x] Fixes user on the quarter selection causing errors for multiple users
+- [x] Adds fixed sideabar toc and sections show only on mobile
+- [x] Hide Sections when using mobile (ignored)
+- [x] Closes the chart zoom modal when the user clicks ESC
+- [x] Consider remove infinite scrolling in favour of actual sections that can show a localized set of charts
+- [x] Change quarter button to upload files, add quarter field as required and add the file form
+
+## 04/27/2025
+
+- [x] Adds more charts - cashflow
+- [x] Fixes quarter navigation when no options are given
+
+## 04/26/2025
+
+- [x] Adds more charts - ad judgement, demand distrib by channel and others
+- [x] Loading from an # breaks the charts (<http://localhost:8000/#section-balanced-scorecard>)
+- [x] Change the modals to upload files instead of the quarters
+
+## 04/25/2025
+
+- [x] Adds more charts - not sure what it was
+
+## 04/20/2025
+
+- [x] Adds more charts - not sure what it was
 
 ## 04/19/2025
 
