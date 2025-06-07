@@ -335,43 +335,33 @@ Relativamente a outras opções como WordPress, excluímos essa hipótese. O Wor
 
 \subsection{Pandas}
 
-Para a manipulação de dados, a biblioteca escolhida foi o \textit{Pandas}. Esta escolha surgiu naturalmente, tendo em conta a sua forte integração com o ecossistema Python e o facto de ser amplamente utilizada em projetos de ciência de dados e engenharia de dados.
+Para o processamento de dados, a biblioteca que decidimos usar foi o \textit{Pandas}. Esta escolha foi motivada pelo facto de ser muito utilizada em projetos de ciência e engenharia de dados, e por ser escrita em Python.
 
-O Pandas permite ler, transformar e filtrar dados em ficheiros Excel com grande facilidade e poucas linhas de código. A sua sintaxe expressiva e as funcionalidades integradas para operações como normalização, filtragem, agrupamento ou ordenação tornaram-na particularmente adequada para o tipo de tarefas necessárias neste projeto.
+O Pandas permite ler e transformar ficheiros Excel com facilidade. A sua sintaxe e as funcionalidades para operações como normalização, filtragem, agrupamento ou ordenação tornaram-na adequada para o tipo de tarefas necessárias neste projeto.  Outra vantagem mais é a capacidade de converter os dados diretamente para formatos como JSON, o que facilitou a sua integração com o resto do sistema.
 
-Uma das vantagens mais importantes foi a capacidade de converter os dados diretamente para formatos como JSON, o que facilitou a sua integração com o frontend através da API.
-
-Apesar destas vantagens, o Pandas não é a melhor opção quando falamos de datasets muito grandes, uma vez que funciona inteiramente em memória. Em contextos com maiores volumes de dados, poderiam ser consideradas bibliotecas como \textit{Dask} ou \textit{Polars} por terem capacidades de lidar com um maior fluxo de informação, como paralelismo.
-
-No entanto, para os objetivos e escala deste projeto, o Pandas ofereceu um equilíbrio excelente entre funcionalidade, simplicidade e tempo de desenvolvimento.
+Apesar destas vantagens, o Pandas não é a melhor opção se considerarmos datasets muito grandes, uma vez que funciona inteiramente em memória. Em contextos com maiores volumes de dados, poderiam ser consideradas bibliotecas como \textit{Dask} ou \textit{Polars} por terem capacidades de paralelismo para lidar com um maior conjunto de dados. No entanto, para os objetivos e escala deste projeto, o Pandas é a escolha mais equilibbrada considerando o scope do projeto que desenvolvemos.
 
 \subsection{Plotly}
 
-Para gerar os gráficos da aplicação, optámos por utilizar o \textit{Plotly}, uma biblioteca  que permite criar visualizações interativas, que está disponivel em várias linguagens como Python e Javascript. Esta escolha foi motivada pelo facto de o Plotly suportar suportar uma API declarativa, o que facilitou muito a integração com o frontend e backend, porque assim a configuração dos gráficos pode ser retornada do servidor, permitindo uma configuração dinâmica e garantindo que todos os utilizadores vêm o mesmo tipo de gráfico. Internamente, o Ploty utiliza uma outra biblioteca, D3.js, que é uma biblioteca com capacidade de criar gráficos personalizados.
+Para mostrar os gráficos da aplicação, optámos por utilizar o \textit{Plotly}, que é uma biblioteca  que permite criar visualizações, e que está disponivel em várias linguagens como Python e Javascript. Esta escolha foi motivada pelo facto de o Plotly suportar suportar uma API declarativa, o que torna mais prática a integração com o frontend e backend, porque assim a configuração dos gráficos pode ser retornada pelo servidor, permitindo uma configuração mais estável e garantindo que todos os utilizadores vêm o mesmo tipo de gráfico. Internamente, o Ploty utiliza uma outra biblioteca, D3.js, que é uma biblioteca com capacidade de criar gráficos personalizados.
 
-Além disso, a biblioteca oferece suporte a uma grande variedade de gráficos, desde os mais comuns (barras, linhas, circulares) até formatos mais especializados (como gráficos de cascata ou mapas de calor), o que foi importante para cobrir os vários tipos de visualização pretendidos. Em comparação, bibliotecas como Chart.js, embora sejam mais leves, limitam-se a um conjunto reduzido de gráficos e oferecem menos controlo sobre detalhes avançados de visualização. Por este motivo, Plotly revelou-se uma solução mais adequada para a flexibilidade e diversidade de visualizações pretendida neste projeto. Uma lista completa das diferencas pode ser consultada no (\cf, capítulo \ref{ch:charts}).
+Além disso, a biblioteca oferece suporte a uma grande variedade de gráficos, desde os mais comuns (barras, linhas, circulares) até formatos mais especializados (como gráficos de cascata ou mapas de calor), o que foi importante para cobrir os vários tipos de visualização pretendidos. Em comparação, bibliotecas como Chart.js, embora sejam mais leves, limitam-se a um conjunto reduzido de gráficos e oferecem menos controlo sobre detalhes de visualização. Por este motivo, Plotly era a solução mais adequada para a flexibilidade e diversidade de visualizações que queriamos. Uma lista completa das diferencas pode ser consultada no (\cf, capítulo \ref{ch:charts}).
 
-A versão Python desta biblioteca foi também instrumental no desenvolvimento dos gráficos, uma vez que nos permitiu explorar os dados de forma independente do sistema (fora da aplicação) de modo escolher que tipo de gráfico seria o mais adequado aos dados que estavamos a analisar e que transformações eram necessárias para obter os gráficos escolhidos. 
-
-É importante ter em consideração que o tamanho dos ficheiros JavaScript do Plotly é maior do que outras bibliotecas mais minimalistas, mas, no contexto deste projeto, a qualidade e a flexibilidade gráfica foram consideradas prioritárias.
+A versão Python desta biblioteca foi também importante no desenvolvimento dos gráficos, uma vez que nos permitiu explorar os dados de forma independente do sistema (fora da aplicação) de modo escolher que tipo de gráfico seria o mais adequado aos dados que estavamos a analisar e que transformações eram necessárias para obter os gráficos escolhidos. Este processo de exploração permitiu-nos perceber o que era possivel fazer, e com a ajuda dos orientadores, definir estratégias alternativas para os conjuntos de informação que queriams mostrar.
 
 \subsection{WebComponents}
 
-No frontend, decidimos utilizar \textit{WebComponents}, sem recorrer a frameworks como React ou Vue. Esta decisão teve como base a necessidade de criar uma interface modular e leve, e garantir que a aplicação reage aos inputs do utilizador.
+No frontend, decidimos utilizar \textit{WebComponents}, sem recorrer a frameworks como React ou Vue. Esta decisão teve como base a necessidade de criar uma interface leve, e garantir que a aplicação reage aos inputs do utilizador. 
 
-Os WebComponents são uma especificação nativa dos browsers modernos, que permite definir componentes reutilizáveis com encapsulamento de estilo e comportamento. Ao evitarmos dependências pesadas como o React, conseguimos reduzir a complexidade técnica da aplicação, mantendo ao mesmo tempo a flexibilidade e capacidade de reutilização dos componentes desenvolvidos.
+Os WebComponents são uma especificação nativa dos browsers, que permite definir componentes reutilizáveis com encapsulamento de estilo e comportamento. Ao evitarmos dependências pesadas como o React, conseguimos reduzir a complexidade técnica da aplicação, mantendo ao mesmo tempo a flexibilidade e capacidade de reutilização dos componentes desenvolvidos.
 
-Apesar de React ser uma framework muito utilizada para aplicações web,  com um ecossistema muito maduro e uma comunidade grande, considerámos que para este projeto, a sua introdução seria um excesso em termos de dependências e complexidade. A alternativa escolhida proporcionou uma solução mais leve e igualmente eficaz. Outra razão que nos levou a esta escolha foi o facto do Django já trazer consigo as funcionalidades de autenticação, pelo que se a aplicação web fosse escrita totalmente em React, teriamos de usar o Django apenas como uma API REST, e utilizar métodos alternativos de autenticação como OAuth2.
+Apesar de React ser uma framework muito utilizada para aplicações web,  com um ecossistema já muito maduro e uma comunidade grande, considerámos que para este projeto, a sua introdução seria um excesso em termos de dependências e complexidade. A alternativa escolhida proporcionou uma solução mais leve e mais fácil de manter. Outra razão que nos levou a esta escolha foi o facto do Django já trazer consigo as funcionalidades de autenticação, pelo que se a aplicação web fosse escrita totalmente em React, teriamos de usar o Django apenas como uma API REST, e utilizar métodos alternativos de autenticação como OAuth2.
 
 \subsection{PostgreSQL}
 
 Para a persistência de dados, utilizámos o sistema de gestão de bases de dados \textit{PostgreSQL}, uma das soluções open-source mais completas e robustas disponíveis atualmente. Inicialmente foi considerada a utilização de SQLite por simplicidade durante o desenvolvimento, mas rapidamente a necessidade de maior escalabilidade e de suporte a funcionalidades como campos JSON, levou à adoção do PostgreSQL.
 
-PostgreSQL oferece um excelente desempenho, suporte a operações complexas, integridade transacional e compatibilidade com o ORM do Django, o que permitiu tirar partido do modelo relacional sem abdicar da produtividade no desenvolvimento.
-
-Comparado com outras alternativas como MySQL, o PostgreSQL destaca-se pelo seu suporte avançado a tipos de dados (\gls{JSON}, arrays, enums), pela conformidade com standards SQL e pela sua fiabilidade em ambientes de produção.
-
-Esta escolha garantiu que a aplicação tivesse uma base de dados capaz de crescer com o sistema, suportando tanto a fase académica como uma possível evolução futura para cenários reais de utilização.
+PostgreSQL oferece um bom desempenho, suporte a operações complexas e é compatível com o ORM do Django, o que permitiu tirar partido do modelo relacional sem abdicar da produtividade no desenvolvimento. Comparado com outras alternativas como MySQL, o PostgreSQL distingue-se pelo seu suporte avançado a tipos de dados (\gls{JSON}, arrays, enums), entre outras funcionalidades.
 
 \subsection{Docker}
 
@@ -392,9 +382,9 @@ Além das tecnologias centrais utilizadas no projeto, foi também fundamental o 
 \begin{itemize}
     \item \textbf{Git \cite{git} e Github \cite{github}}: Para assegurar o controlo de versões, foi utilizado o sistema Git, em conjunto com a plataforma Github. Esta combinação permitiu não só manter um histórico  das alterações feitas, mas também garantir a colaboração e a integridade do desenvolvimento ao longo do tempo.
 
-    \item \textbf{Notion \cite{notion}}: A gestão de tarefas e a organização de trabalho foram centralizadas na plataforma Notion. Esta ferramenta é muito versátil para planear as tarefas temporalmente, definir prioridades, acompanhar o progresso das diferentes fases do projeto. É também uma ferramenta muito fácil de usar, e que permite também tirar notas durante o desenvolvimento, que foram importantes para o desenvolvimento do relatório.
+    \item \textbf{Notion \cite{notion}}: A gestão de tarefas e a organização de trabalho foram centralizadas na plataforma Notion. Esta ferramenta é prática de fácil de usar, e para planear as tarefas, definir prioridades, acompanhar o progresso das diferentes fases do projeto. É também uma ferramenta muito fácil de usar, e que permite também tirar notas durante o desenvolvimento, que foram importantes para o desenvolvimento do relatório.
 
-    \item \textbf{\gls{vscode}\cite{vscode}}: Como editor, foi utilizado o \gls{vscode}, um ambiente de desenvolvimento  leve, e muito extensível. Através da instalação de extensões específicas, foi possível adaptar o \gls{vscode} às necessidades do projeto, potenciando a produtividade e melhorando a experiência de programação.
+    \item \textbf{\gls{vscode}\cite{vscode}}: Como editor, foi utilizado o \gls{vscode}. Através da instalação de extensões específicas, foi possível adaptar o \gls{vscode} às necessidades do projeto, melhorando a experiência de programação.
 \end{itemize}
 
-Estas ferramentas, utilizadas de forma integrada e consistente, desempenharam um papel decisivo para a boa execução do projeto, não só do ponto de vista técnico, mas também no que respeita à organização, planeamento do projeto.
+Estas ferramentas, utilizadas de forma consistente, desempenharam um papel decisivo na execução do projeto, não só do ponto de vista técnico, mas também no que respeita à organização e planeamento do mesmo.
