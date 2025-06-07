@@ -50,7 +50,6 @@ class ChartDataAPIView(APIView):
 
         chart_meta = CHART_CLASSIFICATION.get(slug)
         
-        print("chart_meta", chart_meta)
         if not chart_meta:
             return Response(
                 {"error": f"No chart classification found for slug '{slug}'."},
