@@ -15,27 +15,28 @@
 \label{ch:introducao}
 %%________________________________________________________________________
 
-No contexto do ensino superior, tem-se dado cada vez mais importância à integração de ferramentas tecnológicas que tornem o processo de aprendizagem mais eficaz e prático, como é o caso do simulador utilizado pelos alunos do \gls{iscal}. Esta ferramenta permite que os estudantes apliquem, de forma interativa, os conhecimentos adquiridos ao longo do curso, colocando-os em situações de tomada de decisão semelhantes às que enfrentariam num ambiente real. Deste modo, o simulador não só reforça os conteúdos teóricos, como também promove o desenvolvimento de competências analíticas e estratégicas, essenciais para a sua formação. 
+No contexto do ensino superior, tem-se dado cada vez mais importância à integração de ferramentas tecnológicas que tornem o processo de aprendizagem mais prático, como é o caso do simulador utilizado pelos alunos do \gls{iscal}. Esta ferramenta permite que os estudantes apliquem, de forma interativa, os conhecimentos adquiridos ao longo do curso, colocando-os em situações de tomada de decisão semelhantes às que enfrentariam num ambiente real. Deste modo, o simulador não só reforça os conteúdos teóricos, como também reforça o desenvolvimento das competências aprendidas. 
 
-Neste contexto, a análise eficiente de dados (da plataforma de simulação) torna-se essencial para a tomada de decisões estratégicas e tem impacto na avaliação final dos alunos, no entanto, a complexidade e a falta de visuais que ajudem a perceber as informações apresentadas pela plataforma original podem representar um desafio significativo para os estudantes.
+Neste contexto, a análise eficiente de dados (da plataforma de simulação) torna-se essencial para a tomada de decisões estratégicas e tem impacto na avaliação final dos alunos, no entanto, a complexidade e a falta de uma ferramenta visual que ajude a perceber as informações apresentadas pela plataforma de simulação podem representar um desafio grande para os estudantes.
 
 \section{Motivação}
-O presente projeto surgiu da necessidade  entre os alunos do \gls{iscal} que utilizam o simulador \textit{Marketplace Simulations - International Corporate Management} (que iremos descrever no capítulo seguinte), que é um simulador de negócios internacionais, onde os alunos se agrupam em empresas e simulam a criação de um negócio num mercado internacional. Embora a plataforma forneça toda a informação necessária à tomada de decisões na simulação, esses dados estão dispersos em múltiplas secções e apresentados em tabelas, com poucas funcionalidades de visualização gráfica. Esta limitação obriga os alunos a alternar entre páginas, copiar dados manualmente e criar folhas de cálculo externas, comprometendo a eficiência e a análise da informação.
-
+O presente projeto surgiu da necessidade  entre os alunos do \gls{iscal} que utilizam o simulador \textit{Marketplace Simulations - International Corporate Management}, que é um simulador de negócios internacionais e que iremos descrever no capítulo seguinte, onde os alunos se agrupam em empresas fictícias e simulam a criação de um negócio num mercado internacional. Embora a plataforma apresente toda a informação necessária à tomada de decisões na simulação, esses dados estão dividos em múltiplas secções e apresentados em tabelas, com poucas funcionalidades de visualização. Esta limitação obriga os alunos a alternar entre páginas, copiar dados manualmente e criar folhas de cálculo externas, comprometendo a eficiência e a análise da informação.
 
 \section{Objetivos}
 
 A aplicação proposta neste relatório pretende ajudar nesse sentido, oferecendo uma interface que permite aos utilizadores carregar dados retirados da plataforma de simulação e tornar esses ficheiros em visualizações que podem ser consultadas e manipuladas. A aplicação permitirá aos utilizadores:
+
 \begin{itemize}
     \item Criar uma conta na plataforma que permita persistir a informação carregada.
-    \item Carregar ficheiros exportados da plataforma original;
+    \item Carregar ficheiros exportados da plataforma de simulação;
     \item Visualizar os dados em gráficos interativos;
+    \item Conseguir ter uma experiência de utilização intuitiva e fácil;
 \end{itemize}
 
-Do ponto de vista técnico, queremos que  projeto adote uma arquitetura fácil de manter e que vá de encontro à utilização da plataforma, dando ênfase aos seguintes itens:
+Do ponto de vista técnico, queremos que a aplicação adote uma arquitetura fácil de manter e que vá de encontro à utilização da plataforma, dando importância aos seguintes itens:
 \begin{itemize}
     \item A normalização e transformação automática de dados provenientes de fontes externas;
-    \item A facilidade na gestão de ficheiros, com o objetivo de oferecer uma interface facil para os utilizadores finais.
+    \item A facilidade na gestão de ficheiros, com o objetivo de oferecer uma interface fácil para os utilizadores finais.
     \item Organizar a informação por utilizador, garantindo que o utilizador apenas consegue consultar a informação carregada.
     \item Adotar um modelo de funcionamento semelhante à plataforma de simulação, de modo a tornar a experiência de utilização mais intuitiva e garantido que a nossa aplicação tenha fronteiras claras de utilização.
 \end{itemize}
@@ -47,13 +48,11 @@ Ao longo deste relatório, serão detalhadamente apresentadas as decisões tomad
 \label{ch:trabalhoRelacionado}
 %%________________________________________________________________________
 
-O presente projeto insere-se num contexto mais geral de ferramentas pedagógicas e \gls{sad}, ainda que neste caso concreto,  em ambientes simulados no ensino superior. No âmbito do \gls{iscal}, é frequente a utilização de plataformas como a que iremos descrever nos seguintes capítulos \textit{Marketplace Simulations}, que permitem aos estudantes desenvolver competências práticas em ambientes virtuais de negócios, replicando o funcionamento de mercados reais. Esta necessidade de suporte digital à análise e simulação motivou o desenvolvimento de outras ferramentas auxiliares, com destaque para um projeto também realizado em parceria com o \gls{iscal}, focado em simulações parciais de modelos económicos.
+O presente projeto insere-se num contexto mais geral de ferramentas pedagógicas e \gls{sad}, ainda que neste caso concreto, em ambientes simulados no ensino superior. No âmbito do \gls{iscal}, a utilização da plataforma \textit{Marketplace Simulations} e permite aos estudantes desenvolver competências práticas em ambientes virtuais de negócios, simulando o funcionamento de mercados reais. A necessidade de suporte digital à análise e simulação motivou o desenvolvimento de outras ferramentas auxiliares, com destaque para um projeto também realizado em parceria com o \gls{iscal}, focado em simulações parciais de modelos económicos.
 
-Esse projeto, embora partilhe uma motivação semelhante (criar micro-simulações) apresenta uma abordagem distinta. Em particular, a aplicação permite simular cenários específicos com base em inputs manuais, o que pode ser útil para quando se procura prever resultados com foco muito concreto (por exemplo, simular o impacto de uma única variável nos resultados). Esta plataforma foca-se numa outra vertente, em que pretende ser uma ferramenta para auxiliar o ensino de forma prática.
+Esse projeto, embora partilhe uma motivação semelhante, segue uma abordagem distinta. Em particular, a aplicação permite simular cenários específicos com base em inputs manuais, o que pode ser útil para quando se procura prever resultados com foco muito concreto (por exemplo, simular o impacto de uma única variável nos resultados). A nossa plataforma foca-se numa outra vertente, em que pretende ser uma ferramenta para auxiliar o ensino de forma prática.
 
-O projeto atual distingue-se, tanto pelo seu foco como pela componente técnica. Ao contrário do sistema anterior, que se baseava em simulações parametrizadas modelos estáticos, esta nova aplicação aposta numa abordagem orientada a dados, onde a informação real dos jogos de simulação é carregada diretamente pelo utilizador. Essa escolha trouxe consigo a necessidade de resolver questões de normalização, estruturação e tratamento de dados, algo que não era pedido no projeto relacionado.
-
-Este trabalho assume, portanto como pressuposto, o uso de dados extraídos diretamente da plataforma de simulação, e a valorização da experiência do utilização na apresentação de dados. Em conjunto, estes elementos definem uma solução mais abrangente e alinhada com os desafios técnicos reais da análise de dados em contexto educativo, indo além das simulações reduzidas ou controladas que caracterizavam os trabalhos relacionados anteriormente desenvolvidos.
+O nosso projeto assume então o uso de dados extraídos diretamente da plataforma de simulação, e a valorização da experiência do utilizador na apresentação de dados. 
 
 %%________________________________________________________________________
 \chapter{Modelo Proposto}
@@ -116,7 +115,7 @@ Com base nos requisitos funcionais e não funcionais identificados na secção a
     
     \item \textbf{Criação de um quarter: } \\
     O utilizador, já autenticado, pode criar um novo quarter, identificando-o por um número. O sistema garante que esse número é único para o utilizador. \\
-    \textit{Este caso reflete o requisito funcional de organização por quarters, e está diretamente ligado à estrutura de dados definida no modelo.}
+    \textit{Este caso de utilização reflete o requisito funcional de organização por quarters, e está diretamente ligado à estrutura de dados definida no modelo.}
     
     \item \textbf{Carregamento de ficheiros: } \\
     O utilizador escolhe um quarter e carrega ficheiros exportados da plataforma de simulação. O sistema valida a extensão, processa os ficheiros, aplica a pipeline de normalização para cada folha do Excel. Os dados serão associados ao quarter de onde foram criados. \\
@@ -140,6 +139,7 @@ Com os casos de utilização estabelecidos, foram identificados então os requis
 
 
 \subsection{Marketplace Simulations}
+
 A Marketplace Simulations  é uma empresa que desenvolve plataformas de simulação para fins educativos, ou seja, ferramentas que colocam os estudantes numa espécie de jogo onde cada equipa gere a sua própria empresa e compete com os colegas em cenários simulados. Acaba então por funcionar como uma espécie de laboratório virtual que pode ser usado no ensino superior, como no \gls{iscal}, onde os alunos aplicam os conceitos aprendidos numa experiência em contexto educativo.
 
 No caso concreto do nosso projeto, a aplicação em questão chama-se International Corporate Management (referida doravante como plataforma de simulação) \cite{MarketplaceSim_2025}, e é utilizado tipicamente no último semestre, na cadeira Projeto de Simulação em Negócios Internacionais da Licenciatura de Comércio e Negócios Internacionais \cite{FUC_ISCAL_2025}. 
@@ -158,19 +158,20 @@ Para a análise, os alunos têm à disposição os dados, na plataforma,  nas v�
 
 \subsection{Sistemas de apoio à decisão}
 \label{sec:sad}
-Um \gls{sad} é uma aplicação ou conjunto de ferramentas desenhadas para ajudar os utilizadores a tomar decisões mais informadas e fundamentadas, geralmente com base na análise de dados. Na prática, um \gls{sad} recolhe, organiza e processa dados, muitas vezes em tempo real ou a partir de ficheiros carregados pelo utilizador, e apresenta esses dados de forma visual (como gráficos ou dashboards), permitindo aplicar filtros e explorar cenários. Ou seja, não toma decisões por si só, mas fornece os elementos certos para que o utilizador possa decidir melhor, especialmente em contextos complexos ou com grande volume de informação.
+Um \gls{sad} é uma aplicação ou conjunto de aplicações projetadas para ajudar os utilizadores a tomar decisões mais informadas e fundamentadas, geralmente com base na análise de dados. Na prática, um \gls{sad} recolhe, organiza e processa dados, e apresenta esses dados de forma visual (como gráficos), permitindo aplicar filtros e explorar cenários. Ou seja, não toma decisões por si só, mas fornece os elementos certos para que o utilizador possa decidir melhor, especialmente em contextos complexos ou com muitos dados.
 
 
 \subsection{Backend e Frontend}
 
-A aplicação desenvolvida neste projeto segue uma arquitetura típica de aplicações web, dividida em duas grandes camadas: \textbf{backend} e \textbf{frontend}.
+O projeto desenvolvido segue uma arquitetura de aplicações web, dividida em duas grandes camadas: \textit{backend} e \textit{frontend}.
 
-O \textbf{backend} corresponde à "parte invisível" da aplicação,  é o lado do servidor, responsável por tratar os dados, executar a lógica da aplicação e responder aos pedidos feitos pelos utilizadores. No contexto deste projeto, o backend é responsável por funcionalidades como o carregamento de ficheiros Excel, processamento e normalização dos dados, gestão de utilizadores e autenticação, bem como a disponibilização desses dados através de uma API. Esta camada foi implementada usando o framework \textit{Django}, que oferece uma estrutura robusta para gerir modelos de dados, segurança e acesso à base de dados.
+O \textit{backend} corresponde à "parte invisível" da aplicação, é o lado do servidor, responsável por tratar os dados, executar "lógica de negócio" e responder aos pedidos feitos pelos utilizadores. No contexto deste projeto, o \textit{backend} é responsável por funcionalidades como o carregamento de ficheiros, processamento e normalização dos dados,  autenticação e a disponibilização desses dados através de uma API.
 
-O \textbf{frontend}, por outro lado, é a "parte visível" da aplicação, é o que o utilizador vê e com o que interage diretamente no browser. Inclui os formulários de upload, menus, filtros e gráficos criados com os dados processados. No projeto, o frontend foi desenvolvido usando HTML e Javascript, permitindo criar uma interface moderna, interativa e fácil de usar.
+O \textit{frontend}, por outro lado, é a "parte visível" da aplicação, é o que o utilizador vê e com o que interage diretamente no \textit{browser}. Inclui os formulários, gráficos e outros elementos criados a partir dos dados processados.
 
-Esta separação entre backend e frontend facilita a manutenção do sistema e permite que ambas as partes evoluam de forma independente, podendo até ser substituídas ou melhoradas sem necessidade de reescrever o sistema completo.
+Esta separação entre \textit{backend} e \textit{frontend} facilita a manutenção do sistema e permite que ambas as partes evoluam de forma independente, podendo até ser substituídas sem necessidade de reescrever o sistema completo.
 
+As tecnologias utilizadas para o desenvolvimento serão descritas no capítulo \ref{ch:tecnologias}.
 
 \subsection{Tipos de gráficos}
 
@@ -246,13 +247,13 @@ Outros tipos de gráficos relevantes para o projeto, mas que não foram utilizad
 Escolhido para representar séries temporais, como a evolução de vendas ou de quotas ao longo de vários trimestres. As linhas permitem identificar tendências e variações. No nosso projeto, não tivemos necessidade de usar este tipo uma vez que nenhum dos dados recebidos era relativos a séries temporais, pelo que a sua utilização não era intuitiva para os utilizadores.
 
 \textbf{Gráfico de Radar (Radar Chart):}  
-Utilizado para comparar múltiplas variáveis em relação a um centro comum, como no caso da avaliação de diferentes necessidades dos clientes em simultâneo. Este tipo de gráfico permite identificar rapidamente pontos fortes e fracos em várias dimensões de análise. Apesar destas vantagens, nos dados que recebemos não conseguimos identificar utilizações onde este tipo de gráfico beneficiasse os utilizadores finais.
+Utilizado para comparar múltiplas variáveis em relação a um valor comumn, como no caso da avaliação de diferentes necessidades dos clientes em simultâneo. Este tipo de gráfico permite identificar rapidamente pontos fortes e fracos em várias dimensões de análise. Apesar destas vantagens, nos dados que recebemos não conseguimos identificar utilizações onde este tipo de gráfico beneficiasse os utilizadores finais.
 
 \textbf{Gráfico de Dispersão (Scatter Plot):}
 Os gráficos de dispersão foram considerados para representar relações entre duas variáveis quantitativas, como por exemplo entre o preço e a procura de determinados produtos. Cada ponto no gráfico representa uma observação individual, permitindo identificar padrões de correlação (positiva, negativa ou inexistente) entre variáveis. No nosso caso, consideramos utilizar um tipo especifico de gráfico de dispersão (gráfico de dispersão num mapa) mas a leitura tornou-se confusa, uma vez que era pouco legivel para alunos, e não considerava localizações ficticias.
 \end{itemize}
 
-A seleção dos tipos de gráficos teve como objetivo maximizar a clareza e facilidade da informação e permitir diferentes análises sobre os dados extraídos. Cada gráfico foi pensado para às características das categorias disponíveis, considerando tanto a o formato dos dados (quantitativa ou categórica) como o objetivo da análise (comparação, distribuição, evolução ou composição).
+A escolha dos tipos de gráficos teve como objetivo manter a clareza e facilidade da informação e permitir diferentes leituras sobre os dados extraídos. Cada gráfico foi pensado para às características das categorias disponíveis, considerando tanto a o formato dos dados (quantitativa ou categórica) como o objetivo da análise (comparação, distribuição, evolução ou composição).
 
 %%________________________________________________________________________
 \section{Abordagem}
@@ -262,50 +263,50 @@ A seleção dos tipos de gráficos teve como objetivo maximizar a clareza e faci
 O projeto proposto pretende então ajudar nesse sentido, de conseguir transformar dados desta plataforma em algo mais fácil e rápido de analisar. Tento o contexto da plataforma, iremos então descrever duas abordagens que considerámos.
 
 \subsection{Web Scraping}
-A primeira abordagem que consideramos foi a hipótese de automatizar a extração dos dados diretamente da plataforma do Marketplace Simulations, através de técnicas de web scraping. A ideia parecia interessante numa fase conceptual, já que permitiria reduzir a dependência do utilizador no processo de exportação manual dos dados. No entanto, rapidamente percebemos que esta abordagem trazia vários desafios que, na prática, a tornavam pouco viável, ou mesmo arriscada.
+A primeira abordagem que consideramos foi a hipótese de automatizar a extração dos dados diretamente da plataforma do Marketplace Simulations, através de técnicas de web scraping. A ideia parecia interessante numa fase inicial, já que permitiria reduzir a dependência do utilizador no processo de exportação  dos dados. No entanto, rapidamente percebemos que esta abordagem trazia vários desafios que, na prática, a tornavam pouco viável, ou mesmo arriscada.
 
-Primeiro, cada conta na plataforma está associada a um grupo de alunos, ou seja, é uma conta ativa e personalizada, usada diretamente durante a simulação. Isto significa que qualquer processo automático que iniciasse sessão, mesmo que fosse só para leitura, poderia inadvertidamente interagir com a interface e acabar por alterar alguma opção crítica — o que seria desastroso num contexto académico em que cada decisão tem impacto na avaliação. Além disso, como o acesso à plataforma é feito por licenças pagas, não existe qualquer possibilidade de criar uma service account ou utilizador apenas para leitura com permissões de administração. Ou seja, qualquer tentativa de scraping teria de reutilizar credenciais reais, o que levanta não só questões de segurança, mas também (possivelmente) legais.  
+Primeiro, cada conta na plataforma está associada a um grupo de alunos, ou seja, é uma conta ativa e única, usada diretamente durante a simulação. Isto significa que qualquer processo automático que iniciasse sessão, mesmo que fosse só para leitura, poderia de forma acidental interagir com a interface e acabar por alterar alguma opção, o que não seria bom para os alunos porque podia afetar a sua avaliação final. Além disso, como o acesso à plataforma é feito por licenças pagas, não existe qualquer possibilidade de criar uma conta de serviço ou utilizador apenas para leitura. Ou seja, qualquer tentativa de scraping teria de reutilizar credenciais reais, o que levanta não só questões de segurança, mas também (possivelmente) legais, uma vez que a plataforma pode não permitir o scraping
 
-Outro fator que pesou na decisão foi o próprio risco técnico do scraping: plataformas deste tipo estão muitas vezes protegidas com mecanismos anti-automação (por exemplo: desafios CAPTCHA), e não conhecendo em detalhe a aplicação, poderíamos facilmente encontrar barreiras inesperadas, ou mesmo cair em práticas que fossem contra os termos de uso do serviço.
+Outro fator que influenciou a nossa decisão foi o próprio risco técnico do scraping: plataformas deste tipo estão muitas vezes protegidas com mecanismos contra automação (como por exemplo ecrãs CAPTCHA), e não conhecendo em detalhe a aplicação, poderíamos facilmente encontrar esse tipo de proteções, que são difícies de automatizar.
 
-Por todos estes motivos, optámos por não seguir esta via. Em vez disso, definimos como parte do fluxo normal da aplicação que os próprios alunos devem exportar dados a partir da plataforma de simulação e, de seguida, carregar para a nossa aplicação. Esta solução, embora mais manual, garante segurança, respeita a integridade das contas dos utilizadores, e evita problemas legais ou técnicos com a aplicação de simulação.
+Pelos motivos acima, optámos por não seguir esta abordagem. Em vez disso, definimos como parte da utilização da nossa aplicação que os próprios alunos devem exportar dados a partir da plataforma de simulação e carregar para a nossa aplicação. Esta solução, embora mais manual, garante segurança, respeita a integridade das contas dos utilizadores, e evita problemas legais ou técnicos com a aplicação de simulação.
 
 \subsection{Exportação e carregamento manual de ficheiros}
 
-A abordagem que acabamos por usar foi os alunos exportam manualmente os dados diretamente da plataforma de simulação e carregarem esses ficheiros na nossa plataforma. A partir daí, o sistema processa automaticamente os dados, normaliza os conteúdos e cria visualizações interativas. Esta abordagem, apesar de requerer uma ação manual inicial por parte do utilizador, é mais segura e prática quando comparada com a alternativa de web scraping, que, como vimos acima, apresentava vários desafios que poderiam ir contra os termos do serviço. Deste modo, garantimos um equilíbrio entre usabilidade, segurança e fiabilidade do sistema. Acabamos então por criar um \gla{sad} (\cf, capítulo \ref{sec:sad}) que permita os estudantes tomarem melhores decisões.
+A abordagem que acabamos por usar foi os alunos exportam manualmente os dados diretamente da plataforma de simulação e carregarem esses ficheiros na nossa plataforma. A partir daí, o sistema processa e normaliza os dados recebidos, e mostra gráficos com base nesses dados. Esta abordagem, apesar de requerer uma ação manual do lado do utilizador, é mais segura que a alternativa de web scraping, pelos os motivos apresentados acima. Deste modo, garantimos um equilíbrio entre usabilidade, segurança e fiabilidade do sistema. Acabamos então por criar um \gls{sad} (\cf, capítulo \ref{sec:sad}) que permita os estudantes tomarem melhores decisões.
 
+Com esse objetivo, procurámos que a nossa aplicação refletisse a estrutura da própria simulação. Como tal, os dados são organizados por quarters, como acontece na plataforma de simulação e permitir o carregamento dos dados exportados. Estes ficheiros são depois processados o que nos permite trabalhar com dados mais consistentes. 
 
-Para isso, procurámos que a nossa aplicação refletisse a estrutura da própria simulação. Como tal, os dados são organizados por quarters, como acontece na plataforma de simulação e permitir o carregamento dos dados exportados. Estes ficheiros são depois processados o que nos permite trabalhar com dados mais consistentes. 
-
-Esta estrutura base implica a existência de três entidades principais na nossa aplicação (que iremos descrever nos capítulos seguintes) e cuja interação define o funcionamento do sistema.
+Esta estrutura base implica a existência de três entidades principais na nossa aplicação (que iremos descrever nos capítulos seguintes) e cuja interação define  o funcionamennto do sistema.
 
 
 \subsubsection{\textit{Quarters}}
-Os quarters funcionam como \textit{buckets} lógicos para organizar os ficheiros carregados pelos utilizadores. Cada utilizador pode criar múltiplos quarters, identificados de forma única por um número.
 
-O propósito em incluir este conceito é para que a aplicação consiga associar os dados extraidos dos ficheiros carregados ao quarter correspondente sem depender de manipulações do nome do ficheiro carregado, e desde modo assegurar que a plataforma consegue identificar corretamente os quarters. A desvantagem é que requer input do utilizador para que seja criado ou atribuido o quarter correto. De modo a minimizar a fricção causada por esta funcionalidade, tentamos que experiência de utilização fosse centrada no carregamento de ficheiros, limitando os quarters a um campo obrigatório no formulário de upload.
+Os quarters funcionam como \textit{buckets} para organizar os ficheiros carregados pelos utilizadores. Cada utilizador pode criar múltiplos quarters, identificados de forma única por um número.
+
+O propósito em incluir este conceito é para que a aplicação consiga associar os dados extraidos dos ficheiros carregados ao quarter correspondente sem depender de manipulações do nome do ficheiro carregado, e desde modo assegurar que a plataforma consegue identificar corretamente os quarters. A desvantagem é que requer input do utilizador para que seja criado ou atribuido o quarter correto. De modo a facilitar a criação de quarters, tentamos que experiência de utilização fosse centrada no carregamento de ficheiros, limitando os quarters a um campo obrigatório no formulário de carregamento auto-preenchido, ou seja, tornando implicita a criação de quarters no momento de carregamento de ficheiros.
 
 \subsubsection{Ficheiros}
 
-Os ficheiros são inicialmente carregados no formato \gls{xlsx} (que é o formato que a plataforma de simulação exporta), contendo uma ou várias folhas de cálculo. Cada folha é tratada como uma entidade individual e os dados contidos nessa folha serão processados. O ficheiro \gls{xlsx} é guardado como referência, mas não é diretamente utilizado para visualização, ficando apenas como artefacto interno da aplicação.
+Os ficheiros são inicialmente carregados no formato \gls{xlsx} (que é o formato que a plataforma de simulação exporta), contendo uma ou várias folhas de cálculo. Cada folha é tratada como uma fonte de dados individual e é de onde são extraidos. O ficheiro \gls{xlsx} é guardado como referência, mas não é diretamente utilizado para visualização, ficando apenas como artefacto interno da aplicação.
 
-Este processamento que é aplicado é uma \textit{pipeline} de transformação de dados (conhecido na industria como \gls{etl}), que limpa os dados (como por exemplo, remover quebras de linha, colunas sem representação, nomes inconsistentes) e aplica regras para que os gráficos possam ser gerados de forma consistente. Os dados resultantes desta transformação estão associados ao ficheiro \gls{xlsx} original, sendo até possivel reprocessar ficheiros de forma a recriar informação (esta funcionalidade não é disponibilizada aos utilizadores finais).
+O processamento que é aplicado é uma \textit{pipeline} de transformação de dados (conhecido na industria como \gls{etl}), que limpa os dados (como por exemplo, remover quebras de linha, colunas sem representação, nomes inconsistentes) e aplica regras para que os gráficos possam ser mostrados de forma consistente. Os dados resultantes desta transformação estão associados ao ficheiro \gls{xlsx} original, sendo até possivel reprocessar ficheiros de forma a recriar informação (esta funcionalidade não é disponibilizada aos utilizadores finais).
 
-A plataforma garante que só existe uma versão ativa de cada ficheiro por tipo. Caso o utilizador carregue novamente um ficheiro com o mesmo nome, o anterior será marcado como não ativo, evitando duplicações e garantindo que os gráficos usam apenas dados mais recentes. 
+A plataforma garante que só existe uma versão ativa de cada ficheiro. Caso o utilizador carregue novamente um ficheiro com o mesmo nome, o anterior será marcado como não ativo, evitando duplicações e garantindo que os gráficos usam apenas dados mais recentes, e em caso de remoção, garante que conseguimos reverter para a versão anterior.
 
 \subsubsection{\textit{Pipeline} de Transformação de Dados}
 
-Outro contributo diferenciador foi o desenvolvimento de uma \textit{pipeline} transformação de dados. O objetivo é garantir que os ficheiros carregados, que muitas vezes contêm nomes de colunas inconsistentes, quebras de linha, espaços em excesso ou colunas irrelevantes, sejam adaptados para serem visualizados. 
+Para conseguirmos então garantir uma experiência de utilização consistente, desenvolvemos uma \textit{pipeline} transformação de dados. O objetivo é garantir que os ficheiros carregados, que muitas vezes contêm nomes de colunas inconsistentes, quebras de linha, espaços em excesso ou colunas irrelevantes, sejam adaptados para serem visualizados, e que o processamento seja deterministico.
 
-Como podemos receber muitos ficheiros, a variabilidade entre os dados recebidos é muito alta, pelo que alguns dados passam por mais do que uma fase de transformação. Esta decisão foi tomada com base numa análise manual, em que identificámos possíveis fontes de dados que precisam de mais do que uma fase de transformação. As várias fases de transformação alteram os dados de modo a facilitar a representação visual dos mesmos e é um passo essencial no projeto, porque garante que a aplicação trabalha com formatos e regras conhecidas, e remove a variabilidade dos ficheiros importados.
+Como podemos receber muitos ficheiros, a variabilidade entre os dados recebidos é muito alta, pelo que alguns dados passam por mais do que uma fase de transformação. Esta decisão foi tomada com base numa análise manual, em que identificámos possíveis fontes de dados que precisam de mais do que uma fase de transformação. As várias fases de transformação alteram os dados de modo a facilitar a representação visual dos mesmos e é um passo essencial no projeto, porque garante que a aplicação trabalha com formatos e regras conhecidas, e remove a variabilidade dos ficheiros importados. Para proteger a aplicação, decidimos apenas mostrar os dados que foram extraidos de ficheiros conhecidos, de modo a garantir a consistencia dos dados mostrados.
 
 As fases de transformação irão ser descritas em mais detalhe nos capítulos seguintes, uma vez que a implementação destas pipeline estão relacionadas à tecnologia escolhida, mas o desenvolvimento desta \textit{pipeline} é um fator diferenciador deste projeto, uma vez que tem de lidar com dados que não estão estruturados de forma a facilitar representações visuais. 
 
-Este processo de transformação é semelhante aos processos \gls{etl} ainda que neste projeto tenha sido desenvolvido com uma escala menor.
+Este processo de transformação é semelhante aos processos \gls{etl} ainda que neste projeto tenha sido desenvolvido com uma escala mais pequena, e com recurso a bibliotecas de processamento de dados.
 
 \subsubsection{Utilizadores}
 
-A plataforma foi desenhada para funcionar com utilizadores. Cada utilizador tem a sua conta, e pode criar quarters, carregar ou alterar ficheiros, e ver aos gráficos gerados a partir desses ficheiros.
+A plataforma foi projetada para funcionar com utilizadores. Cada utilizador tem a sua conta, e pode criar quarters, carregar ou alterar ficheiros, e ver aos gráficos gerados a partir desses ficheiros.
 
 Apesar da plataforma não suportar explicitamente equipas ou grupos, assume-se que alunos do mesmo grupo podem carregar ficheiros semelhantes, mas o sistema trata-os como ficheiros diferentes. Assim, evita-se a complexidade adicional de gerir permissões ou partilha de dados entre contas. Também se assume que as contas podem ser criadas ao nível do grupo, pelo que para a plataforma, é indiferente se a conta é individual ou partilhada entre membros desse grupo.
 
@@ -315,7 +316,6 @@ No futuro, pode ser considerada a funcionalidade de desativação automática de
 
 No próximo capitulo iremos então descrever as escolhas tecnicas tomadas de forma a concretizar este modelo.
 
-
 \section{Arquitetura Tecnológica}
 \label{sec:tec}
 
@@ -323,16 +323,15 @@ A definição da arquitetura, a seleção das tecnologias e a organização dos 
 
 \subsection{Django}
 
-Para o desenvolvimento do backend da aplicação, optámos por usar a \textit{framework} Django. A escolha deveu-se ao facto  de o Django ser uma framework muito madura e com uma arquitetura bem formada.
+Para o desenvolvimento do backend da aplicação, optámos por usar a biblioteca Django. A escolha deveu-se ao facto de o Django ser uma biblioteca madura, com uma arquitetura conhecida e uma comunidade grande.
 
-Uma das principais vantagens do Django é o facto de seguir o padrão de arquitetura \gls{mvc}, o que facilita bastante a organização do sistema e a separação de responsabilidades. Para além disso, o Django oferece um \gls{orm} integrado, que permite interagir com bases de dados de forma mais intuitiva, sem necessidade de escrever \gls{sql} manualmente, e evitando algumas das falhas de segurança conhecidas como SQL Injection. Outro ponto muito forte é a gestão de utilizadores e sessões já estar incluida, facilitando assim o desenvolvimento e ajudando o programador a focar-se no desenvolvimento das funcionalidades específicas da aplicação.
+Uma das principais vantagens do Django é o facto de seguir o padrão de arquitetura \gls{mvc}, o que facilita bastante a organização do sistema e a separação de responsabilidades. Para além disso, o Django oferece um \gls{orm} integrado, que permite interagir com bases de dados de forma mais intuitiva, sem necessidade de escrever \gls{sql} manualmente, e evitando algumas das falhas de segurança. Outro vantagem é a gestão de utilizadores e sessões já estar incluida, facilitando assim o desenvolvimento e facilitandoo desenvolvimento das funcionalidades específicas da aplicação.
 
-Outro fator decisivo foi a integração natural com outras bibliotecas do ecossistema Python, como o \textit{Pandas}, que usamos para o processamento dos ficheiros carregados. Esta compatibilidade torna o desenvolvimento mais rápido, reduzindo a quantidade de trabalho necessário para ligar diferentes tecnologias.
+Outro fator que consideramos positivo foi a integração  com outras bibliotecas Python, como o \textit{Pandas}, que usamos para o processamento de dados. Esta compatibilidade torna o desenvolvimento mais rápido, reduzindo a quantidade de trabalho necessário de ligar diferentes tecnologias.
 
-Escolher Django em vez de alternativas como \textit{Flask} ou \textit{FastAPI} prendeu-se também com o contexto do projeto. Apesar de FastAPI ser mais recente e mais rápido para APIs REST, o nosso sistema, focado na transformação de dados e visualização, não necessitava de uma abordagem altamente assíncrona e não funciona totalmente com API's REST. Já o Flask, apesar de ser mais leve, implicaria uma maior responsabilidade na definição de toda a arquitetura e gestão de extensões, o que poderia aumentar a complexidade projeto.
+Em alternativa, podiamos ter escolhido bibliotecas como \textit{Flask} ou \textit{FastAPI}. Apesar de FastAPI ser mais recente e mais rápido para APIs REST, o nosso sistema, focado na transformação de dados e visualização, não necessitava de uma abordagem completamente assíncrona e não funciona totalmente com API's REST. Já o Flask, apesar de ser mais leve, implicaria uma maior responsabilidade na definição de toda a arquitetura e gestão de utilizadores, o que aumentava a complexidade do projeto.
 
-Relativamente a outras opções como WordPress (que alguns poderiam sugerir para aplicações web), descartámos logo essa hipótese. O WordPress, ainda que muito eficaz para sites de conteúdo, não é adequado para projetos que exigem controlo total sobre a estrutura dos dados, processamento pesado no backend e integração com pipelines de ciência de dados.
-
+Relativamente a outras opções como WordPress, excluímos essa hipótese. O WordPress, ainda que muito eficaz para sites de conteúdo, não é adequado para projetos que exigem controlo total sobre a estrutura dos dados, processamento pesado no backend e não integra bem com as outras tecnologias escolhidas.
 
 \subsection{Pandas}
 
