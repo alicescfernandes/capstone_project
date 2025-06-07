@@ -1,11 +1,9 @@
-from django.contrib import admin
-
-from .models import Quarter, ExcelFile, CSVData
-from unfold.admin import ModelAdmin
-from django.contrib import admin
-from django.db import models
-from django.forms import Textarea
 import json
+
+from django.contrib import admin
+from unfold.admin import ModelAdmin
+from .models import Quarter, ExcelFile, CSVData
+from django.db import models
 from django.utils.html import format_html
 
 @admin.register(Quarter)

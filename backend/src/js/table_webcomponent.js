@@ -386,7 +386,7 @@ class DataTableComponent extends HTMLElement {
             }
         });
 
-        document.addEventListener('keydown', (event) => {
+        this.onKeyDown = (event) => {
             if (event.key === 'Escape' || event.key === 'Esc') {
                 zoomOverlay.style.display = "none";
                 const zoomTable = zoomContent.querySelector('table');
@@ -395,7 +395,9 @@ class DataTableComponent extends HTMLElement {
                     zoomTable.dataset.initialized = '';
                 }
             }
-        });
+        };
+        
+        document.addEventListener('keydown', this.onKeyDown);
 
     }
 
@@ -430,10 +432,27 @@ class DataTableComponent extends HTMLElement {
     }
 
     disconnectedCallback() {
-        // Clean up DataTable instance when component is removed
+                // Destroy main table
         if (this.table) {
             this.table.destroy();
             this.table = null;
+        }
+
+        // Destroy zoom table
+        if (this.zoomTable) {
+            this.zoomTable.destroy();
+            this.zoomTable = null;
+        }
+        // Disconnect lazy‐load observer
+        if (this.observer) {
+            this.observer.disconnect();
+            this.observer = null;
+        }
+
+        // Remove global Escape key handler
+        if (this.onKeyDown) {
+            document.removeEventListener('keydown', this.onKeyDown);
+            this.onKeyDown = null;
         }
     }
 }

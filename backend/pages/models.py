@@ -6,6 +6,9 @@ from .utils.data_processing import run_pipeline_for_sheet, extract_section_name,
 from .utils.data_processing import run_pipeline_for_sheet, extract_section_name
 from .utils.chart_classification import ADDITIONAL_PROCESSING_PIPELINE
 from django.contrib.auth import get_user_model
+from django.db import models
+from django.core.validators import MinValueValidator, MaxValueValidator
+
 
 User = get_user_model()
 
@@ -18,8 +21,11 @@ class Quarter(models.Model):
     number = models.PositiveIntegerField()
     created_at = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="quarters")
-    float_precision = models.PositiveIntegerField(default=9)
-
+    float_precision = models.PositiveIntegerField(
+        default=9,
+        validators=[MinValueValidator(1), MaxValueValidator(10)]
+    )
+    
     class Meta:
         ordering = ['-number']
         unique_together = ('user', 'number')

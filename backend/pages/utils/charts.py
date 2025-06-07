@@ -391,7 +391,7 @@ def get_sankey_chart(df, chart_meta, csv_sheet_name, filter):
         }
     }
 
-def get_table_chart(df, chart_meta, csv_sheet_name, filter):
+def get_table_chart(df, chart_meta, csv_sheet_name, selected_filter):
     # Convert DataFrame to list of lists for data
     data = df.values.tolist()
     
@@ -408,5 +408,3 @@ def get_table_chart(df, chart_meta, csv_sheet_name, filter):
         "options": [],
         'selected_option': None
     }
-
-
