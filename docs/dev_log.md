@@ -14,6 +14,8 @@ _Stuff that is not important and just nice haves_
 - [ ] Add proper logging for the python app
 - [ ] Add alert when there is still Excel files in processing
 - [ ] Default unknown excel files to tables. This is alot of work since that the Pandas is set for specific structure.
+- [ ] Change quarter button to upload files, add quarter field as required and add the file form
+- [ ] Change the errors and messages from the charts into a light grey with string type of message
 
 ## TODO
 
@@ -139,7 +141,7 @@ _Stuff that is not important and just nice haves_
 - [x] Show legends on the charts even when its a single trace
 - [x] Only allow for excel files uploads
 - [x] When no data is able to be show, an empty state message
-- [X] When a graph has an error, don't render the chart but the error message
+- [x] When a graph has an error, don't render the chart but the error message
 
 ### Data filtering problems
 
@@ -151,8 +153,8 @@ Elevatech 3.0 3,400 0 1
 
 But if we only apply the following filter Company== CTTG, then we get multiple lines of information
 Elevatech 3.0 3,400 0 1
-Express 3.0   3,000 200 2
-TurboLiteV2     1,850 100 3
+Express 3.0 3,000 200 2
+TurboLiteV2 1,850 100 3
 
 The second data is more useful than the first, since it immediatly displays all products of the CTTG brand. The same thought process can be applied to all "double" charts, where we should really only filter by a single column information.
 
