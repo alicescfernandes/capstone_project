@@ -2,7 +2,7 @@ import json
 
 from django.contrib import admin
 from unfold.admin import ModelAdmin
-from .models import Quarter, ExcelFile, CSVData
+from .models import Quarter, ExcelFile, ChartData
 from django.db import models
 from django.utils.html import format_html
 
@@ -24,8 +24,8 @@ class QuarterAdmin(ModelAdmin):
             return qs
         return qs.filter(user=request.user)
 
-@admin.register(CSVData)
-class CSVDataAdmin(ModelAdmin):
+@admin.register(ChartData)
+class ChartDataAdmin(ModelAdmin):
     list_display = (
         'sheet_name_slug', 'user', 'sheet_name_pretty',
         'is_current', 'short_data', 'quarter_file', 'quarter_uuid', 'short_column_order'

@@ -18,7 +18,7 @@ classDiagram
         +process_and_store_csv()
     }
 
-    class CSVData {
+    class ChartData {
         UUID uuid
         Char sheet_name_pretty
         Char sheet_name_slug
@@ -31,6 +31,6 @@ classDiagram
     }
 
     Quarter "1" --> "*" ExcelFile : files
-    ExcelFile "1" --> "*" CSVData : csvs
-    CSVData --> ExcelFile : quarter_file
+    ExcelFile "1" --> "*" ChartData : chart_data
+    ChartData --> ExcelFile : quarter_file
     ExcelFile --> Quarter : quarter
