@@ -77,15 +77,19 @@ Em termos de representações utilizadas, a distribuição é a seguinte:
  \end{figure}
 
 \section{Processamento dos dados}
-Após a análise inicial e classificação dos dados, foi necessário desenvolver um \textit{pipeline} de processamento que permitisse normalizar e transformar os dados dos ficheiros em um formato mais adequado para visualização e para guardar na base de dados. Este processo foi desenvolvido com recurso a biblioteca Pandas (Python), que oferece métodos para manipulação e transformação de dados.
 
-Esta \textit{pipeline} funciona de forma assincrona, e é chamada pelo backend quando um ficheiro é carregado, de forma a não bloquear a interface do utilizador.
+Após a análise inicial e classificação dos dados, foi necessário desenvolver um \textit{pipeline} de processamento que permitisse normalizar e transformar os dados dos ficheiros em um formato mais adequado para visualização e para guardar na base de dados. Este processo foi desenvolvido com recurso a biblioteca Pandas (Python), que oferece métodos para manipulação e transformação de dados. Esta \textit{pipeline} funciona de forma assincrona, e é chamada pelo \textit{backend} quando um ficheiro é carregado, de forma a não bloquear a interface do utilizador.
 
 \subsection{\textit{Pipeline} de transformação dos dados}
+
 O \textit{pipeline} de processamento foi dividido em várias fases, cada uma com um objetivo específico na transformação dos dados:
 
 \subsubsection{Extracção e Normalização Inicial}
+
 Nesta fase, os dados são extraídos dos ficheiros Excel e normalizados para um formato consistente:
+
+TODO: Talvez um gráfico para explicar esta pipeline em vez de texto
+
 \begin{itemize}
     \item Extração do título do gráfico a partir da primeira linha de cada folha
     \item Normalização dos cabeçalhos das colunas (remoção de quebras de linha, espaços extras)
@@ -107,6 +111,7 @@ Após a normalização inicial, os dados passam por transformações específica
 \end{itemize}
 
 \subsection{Conversão e Armazenamento em Base de Dados}
+
 Após o processamento dos dados ser feito, os mesmos são guardados como JSON num campo especifico JSONField da base de dados que decidimos utilizar, PostgreSQL. Estes dados guardados tentam ser os mais próximos ao dados mostrados ao utilizador, mas sem perder informação quando contem várias séries.
 
 Para garantir a consistência dos dados e evitar conflitos de ficheiros com o mesmo nome a serem carregados para o mesmo quarter, foi implementado um mecanismo que permite marcar ficheiros como processados/ não processados e como correntes ou não. Quando um utilizador carrega um ficheiro, este é marcado como processado e como corrente, e os dados são guardados na base de dados. Quando um utilizador carrega um novo ficheiro com o mesmo nome, este é marcado como não processado e como não corrente, e os dados são substituídos pelos novos dados. Em nenhum momento é apagado versões anteriores dos dados nem os ficheiros originais que foram carregados.
@@ -118,17 +123,16 @@ Este sistema de processamento permitiu transformar os dados brutos dos ficheiros
 No final, obtemos dados que são práticos de representar, próximos ao formato final que pretendemos mostrar ao utilizador, e que podem ser facilmente utilizados pela aplicação web para mostrar os gráficos.
 
 \begin{figure}[H]
-    \centering
-    \includegraphics[width=\textwidth]{./img/before}
- \caption{Excerto de uma folha de cálculo recebida}
- \end{figure}
+\centering
+\includegraphics[width=\textwidth]{./img/before}
+\caption{Excerto de uma folha de cálculo recebida}
+\end{figure}
 
-
- \begin{figure}[H]
-    \centering
-    \includegraphics[width=\textwidth]{./img/after}
- \caption{Gráfico extraido da mesma folha acima com filtro aplicado para o Quarter 5}
- \end{figure}
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{./img/after}
+\caption{Gráfico extraido da mesma folha acima com filtro aplicado para o Quarter 5}
+\end{figure}
 
 \section{Desenvolvimento da Aplicação Web}
 
@@ -210,7 +214,7 @@ A camada de visualização de dados é composta por componentes Web personalizad
  \caption{Utilização de WebComponents na aplicação}
  \end{figure}
 
-A comunicação com o backend é feita através de chamadas assíncronas aos \textit{endpoints} desenvolvidos, passando parâmetros como o quarter selecionado e os filtros ativos. O backend devolve a estrutura necessária para renderização com Plotly, assegurando que cada gráfico é gerado com os dados e configurações corretas. Os gráficos são carregados de forma progressiva, com um \textit{skeleton} que é substituido pelo gráfico quando os dados estão prontos, e apenas são mostrados quando entram dentro do \textit{viewport} do utilizador (\textit{lazy load}). O \textit{lazy load} permite que os servidor nao fique sobre-carregado com pedidos, e que no lado do cliente, a memória utilizada seja minimizada visto que não são carregados todos os gráficos de uma vez.	
+A comunicação com o backend é feita através de chamadas assíncronas aos \textit{endpoints} desenvolvidos, passando parâmetros como o quarter selecionado e os filtros ativos. O backend devolve a estrutura necessária para renderização com Plotly, assegurando que cada gráfico é gerado com os dados e configurações corretas. Os gráficos são carregados de forma progressiva, com um \textit{skeleton} que é substituido pelo gráfico quando os dados estão prontos, e apenas são mostrados quando entram dentro do \textit{viewport} do utilizador (\textit{lazy load}). O \textit{lazy load} permite que os servidor não fique sobre-carregado com pedidos, e que no lado do cliente, a memória utilizada seja minimizada visto que não são carregados todos os gráficos de uma vez.	
 
 As bibliotecas Plotly e Datatables foram integradas diretamente com os WebComponents, fazendo com que o WebComponent consiga mostrar gráficos e tabelas de forma encapsulada. Esta integração permite também que o carregamento seja feito de forma progressiva: cada gráfico é inicialmente substituído por um \textit{skeleton} (uma represetnação visual com um \textit{spinner} e com a largura e altura aproximada de um gráfico) que desaparece quando os dados ficam disponíveis. A ideia deste \textit{skeleton} é que o utilizador veja que o gráfico está a ser carregado, e que não cause um grande deslocamento do gráfico na interface quando os dados estão prontos.
 
