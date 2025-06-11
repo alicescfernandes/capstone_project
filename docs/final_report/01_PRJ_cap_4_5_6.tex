@@ -79,6 +79,8 @@ Em termos de representações utilizadas, a distribuição é a seguinte:
 \section{Processamento dos dados}
 Após a análise inicial e classificação dos dados, foi necessário desenvolver um \textit{pipeline} de processamento que permitisse normalizar e transformar os dados dos ficheiros em um formato mais adequado para visualização e para guardar na base de dados. Este processo foi desenvolvido com recurso a biblioteca Pandas (Python), que oferece métodos para manipulação e transformação de dados.
 
+Este a pipeline funciona de forma assincrona, e é chamada pelo backend quando um ficheiro é carregado, de forma a não bloquear a interface do utilizador.
+
 \subsection{\textit{Pipeline} de transformação dos dados}
 O \textit{pipeline} de processamento foi dividido em várias fases, cada uma com um objetivo específico na transformação dos dados:
 
@@ -131,54 +133,114 @@ No final, obtemos dados que são práticos de representar, próximos ao formato 
 \section{Desenvolvimento da Aplicação Web}
 
 Esta secção foca-se na estrutura e funcionamento da aplicação web — tanto o backend em Django como a interface construída com HTML, WebComponents e Flowbite.
+
 \subsection{Arquitetura da aplicação Django}
+A aplicação web foi desenvolvida utilizando o framework Django como já descrito na secção \ref{sec:fundamentos}. A arquitetura foi desenhada para garantir o isolamento dos dados por utilizador e uma gestão dos ficheiros e dados processados.
 
+\subsubsection{Modelos de Dados}
+A aplicação utiliza três modelos principais para gerir os dados, cada um com um papel específico na gestão e organização da informação. Estes modelos formam a base da aplicação, permitindo uma estrutura clara e organizada dos dados.
+
+Incluir aqui um diagrama de classes com os modelos de dados e as relações entre eles.
+
+\begin{itemize}
+    \item \textbf{Quarter:} Representa um trimestre específico para um utilizador. Cada quarter tem:
     \begin{itemize}
-        \item Descrever como está organizada a aplicação: os modelos principais (Quarter, ExcelFile, CSVFile), as relações entre eles e como são usados para garantir o isolamento por utilizador.
-        \item Explicar o sistema de autenticação (Django Auth) e como se garantem as permissões e o acesso aos dados por utilizador.
-        \item Referir também o uso do sistema de media (uploads) com UUIDs por quarter, e a criação automática das pastas.
+        \item Um número único por utilizador
+        \item Uma precisão configurável para valores numéricos (por omissão 9 casas decimais)
+        \item Um UUID único para identificação
+        \item Relação com o utilizador que o criou
     \end{itemize}
 
-\subsection{Endpoints e API interna}
-
-    Detalhar os principais endpoints utilizados: uploads, visualização de gráficos, listagem de ficheiros, etc.
-
+    \item \textbf{ExcelFile:} Representa um ficheiro Excel carregado para um quarter específico:
     \begin{itemize}
-        \item Mencionar a estrutura REST dos endpoints e como a interface os consome (por exemplo, o /api/charts/<chart_id>/<quarter>/).
-        \item 
-        \item Referir como se gere o estado do sistema com propriedades como \textit{is_current}, e o que acontece quando se substitui um ficheiro existente.
+        \item Armazena o ficheiro físico em pastas organizadas por UUID
+        \item Mantém o estado de processamento (processado/não processado)
+        \item Guarda metadados como a secção do ficheiro
+        \item Relaciona-se com o quarter e o utilizador
     \end{itemize}
 
-\subsection{Sistema de processamento assíncrono e normalização}
-
+    \item \textbf{CSVData:} Armazena os dados processados de cada folha do Excel:
     \begin{itemize}
-        \item Falar sobre o \textit{run_pipeline_for_sheet}(...) do data_processing.py e como isso se encaixa com o modelo ExcelFile.
-        \item 
-        \item Comentar o sistema de marcação dos ficheiros como processados e o uso de flags como processed.
+        \item Guarda os dados em formato JSON
+        \item Mantém a ordem original das colunas
+        \item Controla qual versão dos dados está ativa
+        \item Relaciona-se com o ficheiro Excel de origem e o utilizador
     \end{itemize}
+\end{itemize}
+
+\subsubsection{Sistema de Autenticação e Permissões}
+A aplicação utiliza o sistema de autenticação incluido com a biblioteca Django. Este sistema oferece uma camada de segurança essencial, garantindo que apenas utilizadores autenticados possam aceder aos dados. A autenticação é feita através de username e password, com gestão de sessões integrada.
+
+Para garantir a segurança dos dados, todas as rotas sensíveis são protegidas através de decoradores como \texttt{@login\_required}. Além disso, a aplicação isola dados dados por utilizador, garantindo que cada utilizador só pode aceder aos seus próprios. Este isolamento é implementado através de filtros nas pesquisas, que são aplicados automaticamente em todas as operações de leitura e escrita que são feitas.
+
+\subsubsection{Gestão de Ficheiros e Processamento}
+A gestão de ficheiros foi pensada para garantir a integridade dos ficheiros carregados. Os ficheiros são armazenados em pastas, identificadas pelo o seu UUID, o que garante uma organização que evita conflitos de nomes. O processamento dos ficheiros é iniciado automaticamente após o carregamento de um ficheiro.
+
+Uma característica importante do sistema é a manutenção de um histórico de versões dos dados processados. Quando um novo ficheiro é carregado, o sistema segue um processo: marca a versão anterior como não corrente, processa o novo ficheiro, atualiza os dados na base de dados e mantém a versão anterior para possível recuperação. Esta abordagem permite a possibilidade de recuperar versões anteriores em caso de necessidade.
+
+\subsubsection{API e Endpoints}
+A aplicação expõe uma série de endpoints REST que permitem a interação com o frontend. Estes endpoints são organizados de forma lógica, com rotas específicas para diferentes funcionalidades. A API inclui endpoints para gestão de quarters (\texttt{/api/quarters/}) e visualização de gráficos (\texttt{/api/chart/})  O endpoint para visualização de gráficos é o mais importante, e é o que é utilizado para mostrar os gráficos na aplicação web, e permite uma série de parâmetros para filtrar os dados e mostrar gráficos de diferentes tipos. 
+
+Quando a aplicação carrega, não mostra logo todos os gráficos, mas sim um "skeleton" que depois é substituido pelos gráficos, permitindo uma melhor experiência do utilizador. Esse carregamento é feito de forma assincrona, por Javascript, e utiliza o endpoint para visualização de gráficos para obter a configuração final de um gráfico especifico a ser mostrado. A configuração retornada é especifica para a biblioteca Plotly, que depois, juntamente com o restante código Javascript, consegue mostrar o gráfico e aplicar filtros com base nos parâmetros passados.
+
+O frontend comunica com o backend através destes endpoints REST. Estes endpoints recebem parâmetros como filtros ou identificadores e devolvem dados prontos a serem usados mostrados. A lógica de filtragem de dados é realizada no backend com Pandas, garantindo que o frontend recebe apenas os dados necessários para a visualização. 
+
+**Explicar que endpoints rest temos**
+
+\subsection{Interface Gráfica e Experiência do Utilizador (Frontend)}
+
+A interface da aplicação foi desenhada com foco na usabilidade e consistência visual, com a utilizaçã de tecnologias modernas como WebComponents e através de um design systemm, Flowbite. O objetivo era garantir uma experiência responsiva, adequada para desktop e que suportassse minimanmente dispositivos móveis, sem comprometer a performance nem a clareza na apresentação dos dados.
+
+\subsubsection{Design System com Flowbite}
+
+A escolha do Flowbite, assente sobre Tailwind CSS, permitiu acelerar o desenvolvimento com componentes reutilizáveis e visualmente consistentes. Esta abordagem simplificou a criação de elementos como modais, formulários, botões entre outros elementos, garantindo uma interface limpa e padronizada. A navegação é feita através de uma barra lateral com todas as secções disponiveis, enquanto modais são usados para operações críticas como confirmações e carregamento de ficheiros. A coerência visual é reforçada por tipografia, cores e espaçamentos, permitindo aos utilizadores focarem-se na análise sem distrações.
+
+\subsubsection{WebComponents}
+
+A camada de visualização de dados é composta por componentes Web personalizados, cada um encapsulando a lógica de um tipo específico de gráfico. Esta abordagem modular garante isolamento entre componentes, facilita a reutilização e simplifica a manutenção do código Jasvascript. Na prática, a especificação WebComponents permite criar os nossos nós DOM, e extende as interfaces DOM já existentes. Esta extensão permite criar componentes que se comportam como elementos HTML, e que podem ser utilizados como tal, e que também podem receber estilos e outras propriedades e atributos. 
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{./img/webc}
+ \caption{Utilização de WebComponents na aplicação}
+ \end{figure}
 
 
+A comunicação com o backend é feita através de chamadas assíncronas aos endpoints desenvolvidos, passando parâmetros como o quarter selecionado e os filtros ativos. O backend devolve a estrutura necessária para renderização com Plotly, assegurando que cada gráfico é gerado com os dados e configurações corretas. Os gráficos são carregados de forma progressiva, com um skeleton que é substituido pelo gráfico quando os dados estão prontos, e apenas são mostrados quando entram dentro do viewport do utilizador (lazy load). O lazy load permite que os servidor nao fique sobre-carregado com pedidos, e que no lado do cliente, a memória utilizada seja minimizada visto que não são carregados todos os gráficos de uma vez.	
 
-    \section{Interface Gráfica e Experiência do Utilizador (Frontend)}
+As bibliotecas Plotly e Datatables foram integradas diretamente com os WebComponents, fazendo com que o WebComponent consiga mostrar gráficos e tabelas de forma encapsulada. Esta integração permite também que o carregamento seja feito de forma progressiva: cada gráfico é inicialmente substituído por um skeleton (uma represetnação visual com um spinner e com a largura e altura aproximada de um gráfico) que desaparece quando os dados ficam disponíveis. A ideia deste skeleton é que o utilizador veja que o gráfico está a ser carregado, e que não cause um grande deslocamento do gráfico na interface quando os dados estão prontos.
 
-Aqui explicas como a interface foi pensada, as ferramentas utilizadas e como os gráficos são construídos com base nos dados enviados pelo backend.
-\subsection{Design System e Flowbite}
+\subsubsection{Responsividade e Interatividade}
 
-    Explicar por que escolheste Flowbite e como ele ajudou a construir uma UI consistente e reutilizável.
+Toda a interface foi pensada para ser utilizada em computadores devido à quantidade de gráficos que são apresentados. A interface adapta-se bem a dispositivos moveis, mas devido ao espaço disponivel, não é posssivel garantir uma boa experiencia de utilização em dispostivos moveis. A aplicação tem, essencialmente, 2 media queries. Uma media query que até aos 1023px que inclui telemóveis, tablets e ecrãs pequenos, e uma media query a partir dos 1024px que inclui computadores e ecrãs maiores.
 
-    Mostrar exemplos de componentes reutilizados, como modais, botões, tabs, etc.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{./img/res_1023}
+ \caption{Media query até 1023px}
+\end{figure}
 
-\subsection{WebComponents e gráficos interativos}
 
-    Falar sobre como encapsulaste a lógica dos gráficos usando WebComponents, para evitar conflitos de JS e garantir modularidade.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{./img/res_1920}
+ \caption{Media query a partir dos 1024px}
+\end{figure}
 
-    Descrever a comunicação entre os WebComponents e o backend via fetch, passando parâmetros (por exemplo, o quarter atual, ou filtros).
 
-\subsection{Gestão de Quarters e Uploads}
+Os filtros dinâmicos permitem ajustar os gráficos em tempo real, com feedback visual imediato não sendo necessário recarregar a página. No momento em que o filtro troca, é feito um pedido a API de gráficos que retorna um novo conjunto de dados para mostrar.s
 
-    Mostrar como funciona a criação de quarters e a navegação entre diferentes trimestres (com os botões e setas).
+\subsection{Upload de Ficheiros}
 
-    Explicar o fluxo de upload de ficheiros e como a interface valida o tipo de ficheiro, evita duplicações, e atualiza a visualização após carregamento.
+A organização dos dados foi pensada para refletir a lógica do projeto Marketplace Simulations. Cada utilizador pode criar múltiplos quarters no momento em que carrega um ficheiro. Estes quarters funcionam como buckets isolados onde são armazenados os ficheiros carregados. A navegação entre quarters é facilitada por setas laterais em cada gráfico apresentado. A criação e remoção de quarters, bem como o upload de ficheiros, é acompanhada por feedback visual no momento da acção.
+
+Durante o upload, a interface valida se os ficheiros são do tipo correto. Apenas ficheiros dos mimetypes reconhecidos são permitidos. Quando um ficheiro com o mesmo nome é enviado, este não sobrescreve o anterior,  mas é marcado os ficheiros antigos como não correntes.
+
+
+\subsection{Resumo da Arquitetura Frontend}
+
+Esta combinação de tecnologias — Flowbite, Tailwind CSS, WebComponents, Plotly.js — resulta numa aplicação moderna, modular e altamente interativa. Cada decisão arquitetural foi orientada para simplificar o desenvolvimento, garantir manutenibilidade e proporcionar uma boa experiência de utilizador. O sistema responde rapidamente, adapta-se a diferentes ecrãs e facilita a análise visual de dados complexos sem exigir conhecimentos técnicos aprofundados por parte dos utilizadores finais.
+
 
 %%________________________________________________________________________
 \chapter{Validação e Testes}
