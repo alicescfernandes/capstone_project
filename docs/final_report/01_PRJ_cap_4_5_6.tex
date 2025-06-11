@@ -76,31 +76,40 @@ Em termos de representações utilizadas, a distribuição é a seguinte:
  \end{figure}
 
 \section{Processamento dos dados}
-- Iniciar o tema de processamento de informação, converter informação desconhecida para um formato normalizado.
-- explicar como foi feito o processamento, em que alguns ficheiros passam por várias fases
-
+Após a análise inicial e classificação dos dados, foi necessário desenvolver um \textit{pipeline} de processamento que permitisse normalizar e transformar os dados dos ficheiros em um formato mais adequado para visualização e para guardar na base de dados. Este processo foi desenvolvido com recurso a biblioteca Pandas (Python), que oferece métodos para manipulação e transformação de dados.
 
 \subsection{\textit{Pipeline} de transformação dos dados}
-A primeira fase de normalização segue os seguintes passos:
-\begin{itemize}
-    \item Extrai o nome do gráfico a partir da primeira linha de cada folha.
-    \item Usa a segunda linha como cabeçalhos e normaliza os nomes (ex: substitui espaços por \textit{underscores}, remove quebras de linha).
-    \item Remove colunas irrelevantes com base numa lista de columnas que não tem representação.
-    \item Normaliza dados nas células (como por exemolo: remove quebras de linha, espaços duplos).
-\end{itemize}
+O \textit{pipeline} de processamento foi dividido em várias fases, cada uma com um objetivo específico na transformação dos dados:
 
-A segunda fase vai depender do ficheiro e do gráfico que queremos apresentar, mas no geral,
+\begin{enumerate}
+    \item \textbf{Extracção e Normalização Inicial:}
+    \begin{itemize}
+        \item Extração do título do gráfico a partir da primeira linha de cada folha
+        \item Normalização dos cabeçalhos das colunas (remoção de quebras de linha, espaços extras)
+        \item Remoção de colunas irrelevantes baseada em uma lista predefinida
+        \item Normalização dos dados nas células (remoção de quebras de linha, espaços duplos)
+        \item Tratamento de valores nulos e vazios
+        \item Normalização de valores numéricos com precisão configurável
+        \item Manutenção da ordem original das colunas para preservar a estrutura dos dados. A biblioteca Pandas automaticamente ordena as colunas, pelo que é necessário manter a ordem original das colunas para preservar a estrutura dos dados.
+    \end{itemize}
 
-(...) completar isto
+    \item \textbf{Processamento Específico por Tipo:}
+    \begin{itemize}
+        \item Aplicação de transformações específicas baseadas no tipo de gráfico identificado
+        \item Processamento especial para balanços financeiros, incluindo cálculos de percentagens e valores relativos
+        \item Transformação de dados marcados como "X" em formato binário (0/1) para indicar presença/ausência de valores
+        \item Normalização de valores monetários e percentagens com base num valor escolhido pelo utilizador (com o valor por omissão a 9)
+    \end{itemize}
+\end{enumerate}
 
-- Falar como foi desenvolvida, e as várias fases  de transformação A desenvolvida em \textit{Python} com recurso ao Pandas. 
+\subsection{Conversão e Armazenamento em Base de Dados}
+Após o processamento dos dados ser feito, os mesmos são guardados como JSON num campo especifico JSONField da base de dados que decidimos utilizar, PostgreSQL. Estes dados guardados tentam ser os mais próximos ao dados mostrados ao utilizador, mas sem perder informação quando contem várias séries.
 
+Para garantir a integridade dos dados e evitar conflitos entre diferentes versões dos ficheiros ou conflitos de ficheiros com o mesmo nome a serem carregados para o mesmo quarter, foi implementado um sistema que permite marcar ficheiros como processados e não processados e como correntes ou não. Quando um utilizador carrega um ficheiro, este é marcado como processado e como corrente, e os dados são guardados na base de dados. Quando um utilizador carrega um novo ficheiro com o mesmo nome, este é marcado como não processado e como não corrente, e os dados são substituídos pelos novos dados. Em nenhum momento é apagado versões anteriores dos dados nem os ficheiros que os originaram.
 
-\subsection{Conversão e Exportação para \gls{csv}}
-- Falar sobre a transformação do pandas\n
-- Falar da exportação do \gls{csv}\n
-- Falar da gestão de ficheiros  \gls{csv} e \gls{xlsx}, e metodologias para não haver conflito entre ficheiros carregados\n
+Isto permite recuperar versões anteriores dos dados quando o utilizador apaga um ficheiro ou quando existe algum erro no processamento, uma vez que os dados resultantes só são marcados como correntes quando são extraidos e processsados com sucessso.
 
+Este sistema de processamento permitiu transformar os dados brutos dos ficheiros Excel em um formato estruturado e normalizado, facilitando a visualização e análise dos dados através da aplicação web. A modularidade do \textit{pipeline} também permitiu a fácil adição de novos tipos de processamento conforme necessário, mantendo a consistência dos dados processados.
 
 \section{Desenvolvimento da Aplicação Web}
 
