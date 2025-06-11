@@ -59,7 +59,7 @@ No grupo \textbf{quartis}, classificámos ficheiros onde os dados contem minimos
 
 O grupo \textbf{setores} inclui ficheiros onde a segmentação do mercado ou da performance está organizada por setores económicos ou geográficos. Nestes casos, faz sentido usar gráficos de setores (também conhecidos como \textit{pie charts}),  dependendo da necessidade de comparar proporções entre segmentos.
 
-Finalmente, o grupo de \textbf{análise específica} são ficheiros que não se encaixam diretamente nos formatos anteriores, como análises mais detalhadas por cidade, por segmento ou quando os dados incluem várias unidades na mesma folha (percentagens com euros). Para estes casos, o processo passou por simplificar a informação de modo a encaixar num dos grupos acima ou excecionalmente aplicar um novo tipo de gráfico, e a análise foi feita manualmente para cada caso. Para casos em que a não era possível aplicar um \textit{template} de gráfico, não foi possivel simplificar a informação e não encontrámos uma represetnação gráfica que fosse fácil de intepreta, optámos por não aplicar nenhum gráfico, e apenas apenas mostrar uma tabela interativa com os dados onde o utilizador podia filtrar os dados por diferentes colunas.
+Finalmente, o grupo de \textbf{análise específica} são ficheiros que não se encaixam diretamente nos formatos anteriores, como análises mais detalhadas por cidade, por segmento ou quando os dados incluem várias unidades na mesma folha (percentagens com euros). Para estes casos, o processo passou por simplificar a informação de modo a encaixar num dos grupos acima ou excecionalmente aplicar um novo tipo de gráfico, e a análise foi feita manualmente para cada caso. Para casos em que a não era possível aplicar um \textit{template} de gráfico, não foi possivel simplificar a informação e não encontrámos uma representação gráfica que fosse fácil de intepreta, optámos por não aplicar nenhum gráfico, e apenas apenas mostrar uma tabela interativa com os dados onde o utilizador podia filtrar os dados por diferentes colunas.
 
 
 No final, dos 103 ficheiros recebidos, a classificação foi a seguinte:
@@ -206,7 +206,7 @@ A escolha do Flowbite, assente sobre Tailwind CSS, permitiu acelerar o desenvolv
 
 \subsubsection{WebComponents}
 
-A camada de visualização de dados é composta por componentes Web personalizados, cada um encapsulando a lógica de um tipo específico de gráfico. Esta abordagem modular garante isolamento entre componentes, facilita a reutilização e simplifica a manutenção do código Jasvascript. Na prática, a especificação WebComponents permite criar os nossos nós DOM, e extende as interfaces DOM já existentes. Esta funcionalidade permite criar componentes que se comportam como elementos HTML, e que podem ser utilizados como tal, e que também podem receber estilos e outras propriedades e atributos. 
+A camada de visualização de dados é composta por componentes Web personalizados, cada um encapsulando a lógica de um tipo específico de gráfico. Esta abordagem modular garante isolamento entre componentes, facilita a reutilização e simplifica a manutenção do código Jasvascript. Na prática, a especificação WebComponents\cite{webcomponents} permite criar os nossos nós DOM, e extende as interfaces DOM já existentes. Esta funcionalidade permite criar componentes que se comportam como elementos HTML, e que podem ser utilizados como tal, e que também podem receber estilos e outras propriedades e atributos. 
 
 \begin{figure}[H]
     \centering
@@ -216,7 +216,7 @@ A camada de visualização de dados é composta por componentes Web personalizad
 
 A comunicação com o backend é feita através de chamadas assíncronas aos \textit{endpoints} desenvolvidos, passando parâmetros como o quarter selecionado e os filtros ativos. O backend devolve a estrutura necessária para renderização com Plotly, assegurando que cada gráfico é gerado com os dados e configurações corretas. Os gráficos são carregados de forma progressiva, com um \textit{skeleton} que é substituido pelo gráfico quando os dados estão prontos, e apenas são mostrados quando entram dentro do \textit{viewport} do utilizador (\textit{lazy load}). O \textit{lazy load} permite que os servidor não fique sobre-carregado com pedidos, e que no lado do cliente, a memória utilizada seja minimizada visto que não são carregados todos os gráficos de uma vez.	
 
-As bibliotecas Plotly e Datatables foram integradas diretamente com os WebComponents, fazendo com que o WebComponent consiga mostrar gráficos e tabelas de forma encapsulada. Esta integração permite também que o carregamento seja feito de forma progressiva: cada gráfico é inicialmente substituído por um \textit{skeleton} (uma represetnação visual com um \textit{spinner} e com a largura e altura aproximada de um gráfico) que desaparece quando os dados ficam disponíveis. A ideia deste \textit{skeleton} é que o utilizador veja que o gráfico está a ser carregado, e que não cause um grande deslocamento do gráfico na interface quando os dados estão prontos.
+As bibliotecas Plotly e Datatables foram integradas diretamente com os WebComponents\cite{webcomponents}, fazendo com que o WebComponent consiga mostrar gráficos e tabelas de forma encapsulada. Esta integração permite também que o carregamento seja feito de forma progressiva em cada gráfico é inicialmente substituído por um \textit{skeleton} (uma representação visual com um \textit{spinner} e com a largura e altura aproximada de um gráfico) que desaparece quando os dados ficam disponíveis. A ideia deste \textit{skeleton} é que o utilizador veja que o gráfico está a ser carregado, e que não cause um grande deslocamento do gráfico na interface quando os dados estão prontos.
 
 \subsubsection{Responsividade em dispositivos móveis}
 
@@ -243,7 +243,7 @@ A organização dos dados foi pensada para refletir a lógica do projeto Marketp
 
 TODO: Explicitar que mime types são aceites
 
-Durante o upload, a interface valida se os ficheiros são do tipo correto. Apenas ficheiros dos "mimetypes" reconhecidos são permitidos. Quando um ficheiro com o mesmo nome é enviado, este não sobrescreve o anterior,  mas é marcado os ficheiros antigos como não correntes.
+Durante o upload, a interface valida se os ficheiros são do tipo correto. Apenas ficheiros dos "mimetypes" reconhecidos são permitidos. Quando um ficheiro com o mesmo nome é enviado, este não sobrescreve o anterior,  mas é marcado os ficheiros antigos como não correntes. Uma outra funcionalidade é a resiliencia a ficheiros maliciosos. No nosso caso, a biblioteca Pandas não permite a execução de código, pelo que não é possivel executar código malicioso que seja incluido nos ficheiros. 
 
 %%________________________________________________________________________
 \chapter{Validação e Testes}
