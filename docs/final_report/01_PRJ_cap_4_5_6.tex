@@ -48,20 +48,37 @@ A análise inicial dos ficheiros fornecidos permitiu-nos perceber que, apesar da
 
 Os grupos definidos foram os seguintes: \textbf{simples}, \textbf{agrupado}, \textbf{balanços}, \textbf{quartis}, \textbf{setores} e \textbf{análise específica}. Vamos então descrever o significado de cada grupo e identificar o que é comum entre os gráficos pertencentes a cada um deles.
 
-O grupo \textbf{simples} inclui ficheiros cuja estrutura é mais direta, geralmente com apenas duas colunas: uma coluna que representa uma categoria (como por exemplo empresas ou segmentos de mercado) e uma coluna numérica (como por exemplo vendas ou lucros). Nestes casos, optámos por gráficos de barras, uma vez que o objetivo principal é comparar rapidamente valores individuais entre categorias. Nos ficheiros que avaliamos, não encontramos séries temporais, pelo que não justificou gráficos de linhas.
+O grupo \textbf{simples} inclui ficheiros cuja estrutura é mais direta, geralmente com apenas duas colunas: uma coluna que representa uma categoria (como por exemplo empresas ou segmentos de mercado) e uma coluna numérica (como por exemplo vendas ou lucros). Nestes casos, optámos por gráficos de barras, uma vez que o objetivo principal é comparar rapidamente valores individuais entre categorias. Nos ficheiros que avaliamos, não encontramos séries temporais, pelo que não justificou gráficos de linhas. Também nesta categoria, alguns dados eram séries mais espcificas (como dados relativos a médias e medianas) mas mantinham a mesma estrutura de dados, pelo que foram classificados como \textbf{simples} mas utilizaram gráficos diferentes como gráficos de diagramas e quartis e gráficos de setores (também conhecidos como \textit{pie charts}).
 
-O grupo \textbf{agrupado} refere-se a ficheiros onde existem múltiplas séries de dados associadas à mesma categoria. Ou seja, para cada categoria, existem vários valores (ou várias séries) que precisam de ser representados lado a lado. Para estes casos, a escolha que fizemos foi apresentar gráficos de barras agrupadas, permitindo uma comparação direta entre diferentes séries de dados para a mesma categoria, e permite visualizar todos os dados relacionados com essa categoria.
+O grupo \textbf{duplo} refere-se a ficheiros onde existem múltiplas séries de dados associadas à mesma categoria. Ou seja, para cada categoria, existem vários valores (ou várias séries) que precisam de ser representados lado a lado. Para estes casos, a escolha que fizemos foi apresentar gráficos de barras agrupadas, permitindo uma comparação direta entre diferentes séries de dados para a mesma categoria, e permite visualizar todos os dados relacionados com essa categoria.
 
-O grupo \textbf{balanços} abrange ficheiros associados a balanços financeiros ou variações de stock, onde faz sentido representar aumentos e diminuições de valores ao longo de um processo ou período. Para estes ficheiros, o \textit{template} selecionado foi o gráfico de cascata (ou um gráfico financial waterfall), dado que este tipo de visualização representa as várias componentes do valor total.
+O grupo \textbf{balanços} abrange ficheiros associados a balanços financeiros ou variações de stock, onde faz sentido representar aumentos e diminuições de valores ao longo de um processo ou período. Para estes ficheiros, o \textit{template} selecionado foi o gráfico de cascata (ou um gráfico \textit{financial waterfall}), dado que este tipo de visualização representa as várias componentes do valor total.
 
-No grupo \textbf{quartis}, classificámos ficheiros onde os dados contem minimos, máximos e médias. Aqui, optámos por representar a informação através de gráficos de quartis, que são uteis para mostrar a mediana, a dispersão e possíveis valores \textit{outliers}.
+No grupo \textbf{quartis}, classificámos ficheiros onde os dados contem minimos, máximos e médias. Aqui, optámos por representar a informação através de gráficos de quartis, que são uteis para mostrar a mediana, a dispersão e possíveis valores \textit{outliers}. Para este tipo de grárfico, tentámos sempre fazer com que a leitura do mesmo seja o mais fácil possível.
 
-O grupo \textbf{setores} inclui ficheiros onde a segmentação do mercado ou da performance está organizada por setores económicos ou geográficos. Nestes casos, faz sentido usar gráficos de setores ou gráficos de barras empilhadas, dependendo da necessidade de comparar proporções entre segmentos.
+O grupo \textbf{setores} inclui ficheiros onde a segmentação do mercado ou da performance está organizada por setores económicos ou geográficos. Nestes casos, faz sentido usar gráficos de setores (também conhecidos como pie charts),  dependendo da necessidade de comparar proporções entre segmentos.
 
-Finalmente, o grupo de \textbf{análise específica} engloba casos que não se encaixam diretamente nos formatos anteriores, como análises mais detalhadas por cidade, por segmento ou quando temos várias unidades na mesma folha (percentagens com euros). Para estes casos, o processo passou por simplificar a informação de modo a encaixar num dos grupos acima ou excecionalmente aplicar um novo tipo de gráfico, e a análise foi feita manualmente para cada caso.
+Finalmente, o grupo de \textbf{análise específica} são ficheiros que não se encaixam diretamente nos formatos anteriores, como análises mais detalhadas por cidade, por segmento ou quando os dados incluem várias unidades na mesma folha (percentagens com euros). Para estes casos, o processo passou por simplificar a informação de modo a encaixar num dos grupos acima ou excecionalmente aplicar um novo tipo de gráfico, e a análise foi feita manualmente para cada caso. Para casos em que a não era possível aplicar um \textit{template} de gráfico, não foi possivel simplificar a informação e não encontrámos uma represetnação gráfica que fosse fácil de intepreta, optámos por não aplicar nenhum gráfico, e apenas apenas mostrar uma tabela interativa com os dados onde o utilizador podia filtrar os dados por diferentes colunas.
+
+
+No final, dos 103 ficheiros recebidos, a classificação foi a seguinte:
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\textwidth]{./img/stats1}
+ \caption{Classificação dos ficheiros - contagem final dos grupos}
+ \end{figure}
+
+Em termos de representações utilizadas, a distribuição é a seguinte:
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\textwidth]{./img/stats2}
+ \caption{Classificação dos ficheiros - contagem final de representações utilizadas}
+ \end{figure}
 
 \section{Processamento dos dados}
 - Iniciar o tema de processamento de informação, converter informação desconhecida para um formato normalizado.
+- explicar como foi feito o processamento, em que alguns ficheiros passam por várias fases
+
 
 \subsection{\textit{Pipeline} de transformação dos dados}
 A primeira fase de normalização segue os seguintes passos:
