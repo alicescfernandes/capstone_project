@@ -35,26 +35,26 @@ Durante esta análise preliminar, verificámos que:
 
 Com base nesta primeira análise, concluímos que seria necessário:
 \begin{itemize}
-    \item Fazer uma normalização da informação recebida para garantir uma integração consistente na aplicação;
-    \item Separar os vários ficheiros possiveis em grupos, de forma a identificar pontos em comum;
-    \item Guardar os dados extraídos num formato que permita consultas e que seja prático de representar.
+    \item Fazer uma normalização da informação recebida para garantir uma utilização consistente da aplicação;
+    \item Separar os vários ficheiros possiveis em grupos, de forma a identificar dados em comum que podessemos aplicar \textit{templates} de gráfico;
+    \item Guardar os dados extraídos num formato mais prático, e que permita uma filtragem dinâmica da informação carregada (de forma a faciltiar a visualização dos dados)-
 \end{itemize}
 
-Esta análise inicial permitiu-nos delinear as fase seguintes em relação ao tratamento que iremos dar aos vários ficheiros possiveis. Para isso, decidimos classificar a informação em várias categorias, e aplicar tipos de gráficos especificos a cada categoria, tendo assim \textit{templates} que podemos aplicar programaticamente. 
+Esta análise inicial permitiu-nos estabelecer as fases seguintes em relação ao tratamento que iremos dar aos vários ficheiros possiveis. Para isso, decidimos classificar a informação em várias categorias, e aplicar tipos de gráficos especificos a cada categoria, tendo assim \textit{templates} que podemos aplicar programaticamente. 
 
 \subsection{Classificação da informação}
 
-A análise inicial dos ficheiros fornecidos permitiu-nos perceber que, apesar da diversidade dos mesmos,  existiam padrões consistentes na estrutura. Com base nisso, tomámos a decisão de agrupar os ficheiros em "buckets" ou categorias lógicas. Cada um desses grupos ficou associado a um \textit{template} gráfico específico, o que nos permite não só uniformizar a apresentação dos dados, como também automatizar o processo de transformação e visualização a partir dos ficheiros.
+A análise inicial dos ficheiros fornecidos permitiu-nos perceber que, apesar da diversidade dos mesmos,  existiam padrões consistentes na estrutura. Com base nisso, tomámos a decisão de agrupar os ficheiros em \textit{buckets} ou categorias lógicas. Cada um desses grupos ficou associado a um \textit{template} gráfico específico, o que nos permite não só uniformizar a apresentação dos dados, como também automatizar o processo de transformação e visualização a partir dos ficheiros.
 
 Os grupos definidos foram os seguintes: \textbf{simples}, \textbf{agrupado}, \textbf{balanços}, \textbf{quartis}, \textbf{setores} e \textbf{análise específica}. Vamos então descrever o significado de cada grupo e identificar o que é comum entre os gráficos pertencentes a cada um deles.
 
-O grupo \textbf{simples} inclui ficheiros cuja estrutura é mais direta, geralmente com apenas duas colunas relevantes: uma coluna categórica e uma coluna numérica . Nestes casos, optámos por gráficos de barras, uma vez que o objetivo principal é comparar rapidamente valores individuais entre categorias. Nos ficheiros que avaliamos, não encontramos séries temporais, pelo que não justificou gráficos de linhas.
+O grupo \textbf{simples} inclui ficheiros cuja estrutura é mais direta, geralmente com apenas duas colunas: uma coluna que representa uma categoria (como por exemplo empresas ou segmentos de mercado) e uma coluna numérica (como por exemplo vendas ou lucros). Nestes casos, optámos por gráficos de barras, uma vez que o objetivo principal é comparar rapidamente valores individuais entre categorias. Nos ficheiros que avaliamos, não encontramos séries temporais, pelo que não justificou gráficos de linhas.
 
-O grupo \textbf{agrupado} refere-se a ficheiros onde existem múltiplas séries de dados associadas à mesma categoria. Ou seja, para cada entrada no eixo X, existem vários valores que precisam de ser representados lado a lado. Para estes casos, a escolha recaiu sobre gráficos de barras agrupadas, permitindo uma comparação direta entre diferentes séries de dados para a mesma categoria.
+O grupo \textbf{agrupado} refere-se a ficheiros onde existem múltiplas séries de dados associadas à mesma categoria. Ou seja, para cada categoria, existem vários valores (ou várias séries) que precisam de ser representados lado a lado. Para estes casos, a escolha que fizemos foi apresentar gráficos de barras agrupadas, permitindo uma comparação direta entre diferentes séries de dados para a mesma categoria, e permite visualizar todos os dados relacionados com essa categoria.
 
-O grupo \textbf{balanços} abrange ficheiros associados a balanços financeiros ou variações de stock, onde faz sentido representar aumentos e diminuições de valores ao longo de um processo ou período. Para estes ficheiros, o \textit{template} selecionado foi o gráfico de cascata, dado que este tipo de visualização representa as várias componentes do valor total.
+O grupo \textbf{balanços} abrange ficheiros associados a balanços financeiros ou variações de stock, onde faz sentido representar aumentos e diminuições de valores ao longo de um processo ou período. Para estes ficheiros, o \textit{template} selecionado foi o gráfico de cascata (ou um gráfico financial waterfall), dado que este tipo de visualização representa as várias componentes do valor total.
 
-No grupo \textbf{quartis}, classificámos ficheiros onde os dados contem minimos, máximos e médias. Aqui, optámos por representar a informação através de gráficos de quartis, que são uteis para mostrar a mediana, a dispersão e possíveis valores \texit{outliers}.
+No grupo \textbf{quartis}, classificámos ficheiros onde os dados contem minimos, máximos e médias. Aqui, optámos por representar a informação através de gráficos de quartis, que são uteis para mostrar a mediana, a dispersão e possíveis valores \textit{outliers}.
 
 O grupo \textbf{setores} inclui ficheiros onde a segmentação do mercado ou da performance está organizada por setores económicos ou geográficos. Nestes casos, faz sentido usar gráficos de setores ou gráficos de barras empilhadas, dependendo da necessidade de comparar proporções entre segmentos.
 
