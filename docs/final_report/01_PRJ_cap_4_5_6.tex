@@ -15,13 +15,17 @@
 \label{ch:implementacaoDoModelo}
 %%________________________________________________________________________
 
-TODO: Introducao do capitulo
+Neste capítulo iremos descrever de forma detalhada como foi feita a transição do modelo proposto para a implementação  da aplicação. A abordagem seguida foi iterativa, com várias fases de experimentação e validação, sempre em articulação com os objetivos definidos para o projeto e os dados reais obtidos anteriormente.
+
+Começamos por abordar o processo de análise e classificação dos dados, uma vez que a estrutura e qualidade da informação recebida tiveram um impacto direto na forma como os dados seriam processados, armazenados e, mais tarde, visualizados. A seguir, exploramos a construção do pipeline de transformação, a lógica de organização dos ficheiros e o modo como garantimos que cada carregamento fosse tratado de forma automática. Por fim, explicamos as decisões que nos levaram à escolha de representações gráficas específicas, assim como os mecanismos que permitem ao utilizador interagir com os dados.
 
 \section{Análise dos dados}
 
 O processo de análise começou após a reunião inicial comm os orientadores do projeto, onde recebemos os ficheiros com que iamos trabalhar. Tratar este ficheiros implicou várias fases de análise, onde delineamos estratégias para conseguir extrair dados e possiveis gráficos. Antes de falarmos das várias fases, teremos só de estabelecer que tipos de gráficos são os indicados para as informações que queremos mostrar.
 
 \subsection{Análise inicial da informação}
+\label{sec:analiseInicial}
+
 Após termos recebido os dados, fizemos uma primeira análise com o objetivo de perceber a informação recebida e os próximos passos a tomar.
 
 No total, recebemos 103 ficheiros \gls{xlsx} que foram exportados da plataforma, correspondentes às diferentes secções da plataforma de simulação, com vários indicadores como segmentos de mercado, características de produto, vendas, entre outros. Cada ficheiro pode conter várias folhas de cálculo, organizadas por marcas, cidades entre outros marcadores.
@@ -180,21 +184,21 @@ TODO: Incluir aqui um diagrama de classes com os modelos de dados e as relaçõe
 
 \subsubsection{Gestão de Utilizadores}
 
-A aplicação utiliza o sistema de autenticação incluido com a biblioteca Django. Este sistema oferece uma camada de segurança essencial, garantindo que apenas utilizadores autenticados possam aceder aos dados. A autenticação é feita através de username e password, com gestão de sessões integrada.
+A aplicação utiliza o mecanismo de utilizadores que já vem incluido com o Django. Este sistema oferece uma camada de segurança, garantindo que apenas utilizadores autenticados possam aceder aos dados. A autenticação na aplicação é feita através de nome de utilizador e palavra-passe e as sessões são geridas pelo Django.
 
-Para garantir a segurança dos dados, todas as rotas sensíveis são protegidas com o decorador \texttt{@login\_required}. Além disso, a aplicação isola dados dados por utilizador, garantindo que cada utilizador só pode aceder aos seus próprios. Este isolamento é implementado através de filtros nas pesquisas, que são aplicados automaticamente em todas as operações de leitura e escrita que são feitas.
+Para garantir a segurança dos dados, todas as rotas que requerem autenticação estão decoradas com \texttt{@login\_required}. Além disso, a aplicação isola dados dados por utilizador, garantindo que cada utilizador só pode aceder aos seus próprios. Este isolamento é implementado através de filtros nas pesquisas, que são aplicados automaticamente em todas as operações de leitura e escrita que são feitas.
 
 Os utilizadores podem criar conta na aplicação, sendo que podem criar conta para si ou para um grupo de utilizadores. A aplicação não faz distinção entre uma conta para um utilzizador ou para uma conta para multiplos utilizadores.
 
 \subsubsection{Gestão de Ficheiros e Processamento de dados}
 
-A gestão de ficheiros foi pensada para garantir a integridade dos ficheiros carregados. Os ficheiros são armazenados em pastas, identificadas pelo o seu UUID, o que garante uma organização que evita conflitos de nomes. O processamento dos ficheiros é iniciado automaticamente após o carregamento de um ficheiro.
+Para conseguirmos manter vários ficheiros em disco, tivemos de pensar num mecanismo capaz de manter ficheiros organizados. Para isso, desenvolvemos um sistem que garante que os dados carregados pelos utilizadores não só ficam protegidos e organizados. Em vez de depender apenas do nome do ficheiro (o que podia facilmente gerar conflitos ou sobreposições), o sistema cria automaticamente uma pasta associada a um UUID, o que garante que cada ficheiro fica isolado do resto. Isto evita situações em que dois ficheiros com nomes iguais se sobrepõem e, ao mesmo tempo, facilita bastante a estruturação interna por quarter, utilizador, ou qualquer outra lógica que venha a ser implementada. Assim que o ficheiro é carregado, o processamento é iniciado, sem depender de passos manuais , ou seja, o utilizador só precisa de fazer o upload e o resto é tratado pelo sistema.
 
-Uma característica importante do sistema é a manutenção de um histórico de versões dos dados processados. Quando um novo ficheiro é carregado, o sistema segue um processo: marca a versão anterior como não corrente, processa o novo ficheiro, atualiza os dados na base de dados e mantém a versão anterior para possível recuperação. Esta abordagem permite a possibilidade de recuperar versões anteriores em caso de necessidade.
+Para além disso, o sistema guarda registos de todos os ficheiros carregados. Quando se carrega um novo ficheiro para substituir outro com o mesmo nome ou que resulta nos mesmos dados, o sistema não apaga o anterior. Em vez disso, marca-o como não atual, processa o novo, atualiza os dados relevantes na base de dados, e mantém o anterior guardado. Esta versão antiga pode ser usada mais tarde, caso seja necessário recuperar informação, validar alterações ou simplesmente reverter um erro. Não foi uma funcionalidade pensada para ser exposta diretamente ao utilizador, e não faz parte do uso normal, mas surgiu como consequência da arquitetura escolhida (ficheiros correntes e não correntes).
 
 \subsubsection{Endpoints para comunicação com o frontend}
 
-A aplicação expõe uma série de endpoints REST que permitem a interação com o frontend. Estes endpoints são organizados de forma lógica, com rotas específicas para diferentes funcionalidades. A API inclui endpoints para gestão de quarters (\texttt{/api/quarters/}) e visualização de gráficos (\texttt{/api/chart/})  O endpoint para visualização de gráficos é o mais importante, e é o que é utilizado para mostrar os gráficos na aplicação web, e permite uma série de parâmetros para filtrar os dados e mostrar gráficos de diferentes tipos. 
+A aplicação expõe uma série de endpoints \textit{rest} que permitem a interação com o frontend. Estes endpoints são organizados de forma lógica, com rotas específicas para diferentes funcionalidades. A API inclui endpoints para gestão de quarters (\texttt{/api/quarters/}) e visualização de gráficos (\texttt{/api/chart/})  O endpoint para visualização de gráficos é o mais importante, e é o que é utilizado para mostrar os gráficos na aplicação web, e permite uma série de parâmetros para filtrar os dados e mostrar gráficos de diferentes tipos. 
 
 Quando a aplicação carrega, não mostra logo todos os gráficos, mas sim um \textit{skeleton} que depois é substituido pelos gráficos, permitindo uma melhor experiência do utilizador. Esse carregamento é feito de forma assincrona, por Javascript, e utiliza o endpoint para visualização de gráficos para obter a configuração final de um gráfico especifico a ser mostrado. A configuração retornada é especifica para a biblioteca Plotly, que depois, juntamente com o restante código Javascript, consegue mostrar o gráfico e aplicar filtros com base nos parâmetros passados.
 
@@ -210,7 +214,16 @@ A escolha do Flowbite, assente sobre Tailwind CSS, permitiu acelerar o desenvolv
 
 \subsubsection{WebComponents}
 
-A camada de visualização de dados é composta por componentes Web personalizados, cada um encapsulando a lógica de um tipo específico de gráfico. Esta abordagem modular garante isolamento entre componentes, facilita a reutilização e simplifica a manutenção do código Jasvascript. Na prática, a especificação WebComponents\cite{webcomponents} permite criar os nossos nós DOM, e extende as interfaces DOM já existentes. Esta funcionalidade permite criar componentes que se comportam como elementos HTML, e que podem ser utilizados como tal, e que também podem receber estilos e outras propriedades e atributos. 
+A camada de visualização de dados é composta por componentes Web personalizados, cada um encapsulando a lógica de um tipo específico de gráfico. Esta abordagem modular garante isolamento entre componentes, facilita a reutilização e simplifica a manutenção do código Jasvascript. Na prática, a especificação WebComponents\cite{webcomponents} permite criar os nossos nós DOM, e extende as interfaces DOM já existentes. Esta funcionalidade permite criar componentes que se comportam como elementos HTML, e que podem ser utilizados como tal, e que também podem receber estilos e outras propriedades e atributos e é suportada já pelos os browsers mais usados (como pode ser consultado no site Can I Use\cite{caniuse} que é um site que consegue consultar o suporte de uma funcionalidade em diferentes browsers).
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{./img/caniuse}
+ \caption{Suporte de WebComponents em navegadores}
+ \end{figure}
+
+
+Na nossa aplicação, os WebComponents são usados como elementos HTML normais, que recebem apenas o gráfico que é para mostrar. Ao carregar, fazem uma chamada a um \textit{endpoint} do backend, que retorna a configuração do gráfico, e que é utilizada para mostrar o gráfico.
 
 \begin{figure}[H]
     \centering
@@ -241,13 +254,13 @@ Toda a interface foi pensada para ser utilizada em computadores devido à quanti
 
 Estes \textit{media queries} são muito utilizados para adaptar a interface aos diferentes tamanhos de ecrã, garantindo uma boa experiência de utilização em todos os dispositivos, sendo que não tivemos de fazer código explicitamente para a aplicação se adaptar para dispositivos móveis. Os filtros dinâmicos permitem ajustar os gráficos em tempo real, com \textit{feedback} visual imediato não sendo necessário recarregar a página. No momento em que o filtro troca, é feito um pedido a API de gráficos que retorna um novo conjunto de dados para mostrar, com a configuração do gráfico atualizada.
 
-\subsection{Upload de Ficheiros}
+\subsubsection{Carregamento de ficheiros}
 
-A organização dos dados foi pensada para refletir a lógica do projeto Marketplace Simulations. Cada utilizador pode criar múltiplos quarters no momento em que carrega um ficheiro. Estes quarters funcionam como buckets isolados onde são armazenados os ficheiros carregados. A navegação entre quarters é facilitada por setas laterais em cada gráfico apresentado. A criação e remoção de quarters, bem como o upload de ficheiros, é acompanhada por feedback visual no momento da acção.
+A organização dos dados foi pensada para refletir a lógica do projeto Marketplace Simulations. Cada utilizador pode criar múltiplos quarters no momento em que carrega um ficheiro. Estes quarters funcionam como buckets isolados onde são armazenados os ficheiros carregados. A navegação entre quarters é facilitada por setas laterais em cada gráfico apresentado. A criação e remoção de quarters, bem como o carregamento de ficheiros, é acompanhada por feedback visual no momento da acção.
 
-TODO: Explicitar que mime types são aceites
+Para verificar se os ficheiros são do tipo correto, decidimos validar através do \textit{MIME type}, que é um identificador padronizado utilizado para descrever o tipo de conteúdo de um ficheiro. Os \textit{MIME types} seguem o formato \texttt{tipo/subtipo}, como por exemplo \texttt{text/csv} para ficheiros CSV ou \texttt{application/vnd.openxmlformats-officedocument.spreadsheetml.sheet} para ficheiros Excel no formato \texttt{.xlsx}. Esta abordagem permite garantir que os ficheiros carregados correspondem realmente ao formato esperado, independentemente da extensão do nome do ficheiro, que pode ser facilmente manipulada. Ao inspecionar o \textit{MIME type} real do conteúdo, conseguimos rejeitar ficheiros inválidos ou maliciosos de forma mais robusta. No contexto deste projeto, esta verificação revelou-se essencial, uma vez que apenas ficheiros \texttt{.xlsx} válidos devem ser processados. Assim, a validação por \textit{MIME type} contribui tanto para a segurança como para a integridade do sistema.
 
-Durante o upload, a interface valida se os ficheiros são do tipo correto. Apenas ficheiros dos "mimetypes" reconhecidos são permitidos. Quando um ficheiro com o mesmo nome é enviado, este não sobrescreve o anterior,  mas é marcado os ficheiros antigos como não correntes. Uma outra funcionalidade é a resiliencia a ficheiros maliciosos. No nosso caso, a biblioteca Pandas não permite a execução de código, pelo que não é possivel executar código malicioso que seja incluido nos ficheiros. 
+Durante o carregamento, a interface valida se os ficheiros são do tipo correto. Apenas ficheiros dos mime type \texttt{application/vnd.openxmlformats-officedocument.spreadsheetml.sheet} e \texttt{application/vnd.ms-excel} são permitidos. Quando um ficheiro com o mesmo nome é enviado, este não sobrescreve o anterior,  mas é marcado os ficheiros antigos como não correntes. Uma outra funcionalidade é a resiliencia a ficheiros maliciosos. No nosso caso, a biblioteca Pandas não permite a execução de código, pelo que não é possivel executar código malicioso que seja incluido nos ficheiros. 
 
 %%________________________________________________________________________
 \chapter{Validação e Testes}
@@ -276,9 +289,9 @@ Esta ferramenta Lighthouse, apesar de não ser tão detalhada como a Axe, sinali
 \caption{Testes de acessibilidade com a ferramenta Lighthouse após as correções}
 \end{figure}
 
-Já o Axe, da empresa Deque, é uma biblioteca de testes de acessibilidade mais focada, muito utilizada em ambientes de desenvolvimento profissional. Pode ser usada como extensão do browser ou integrada com ferramentas de testes automatizados como Cypress ou Selenium. O Axe segue os critérios \gls{wcag} com mais profundidade e reporta violações como a ausência de nomes acessíveis (\texit{accessible names}), uso incorreto de landmarks \glsl{aria}, falhas de foco, ou elementos visuais sem correspondência textual. Além disso, o Axe permite navegar entre os erros diretamente na interface do browser, o que torna o processo de debugging muito mais fácil.
+Já o Axe, da empresa Deque, é uma biblioteca de testes de acessibilidade mais focada, muito utilizada em ambientes de desenvolvimento profissional. Pode ser usada como extensão do browser ou integrada com ferramentas de testes automatizados como Cypress ou Selenium. O Axe segue os critérios \gls{wcag} com mais profundidade e reporta violações como a ausência de nomes acessíveis (\textit{accessible names}), uso incorreto de landmarks \gls{aria}, falhas de foco, ou elementos visuais sem correspondência textual. Além disso, o Axe permite navegar entre os erros diretamente na interface do browser, o que torna o processo de debugging muito mais fácil.
 
-Nos primeiros testes corridos com a ferramenta Axe, as ferramentas sinalizaram alguns problemas relativos a acessibilidade, como a falta de textos alternativos para alguns elementos visuais, e os niveis dos titulos não estavam a ser usados de forma adequada.
+Nos primeiros testes feitos com a ferramenta Axe, as ferramentas sinalizaram alguns problemas relativos a acessibilidade, como a falta de textos alternativos para alguns elementos visuais, e os niveis dos titulos não estavam a ser usados de forma adequada.
 
 \begin{figure}[H]
     \centering
@@ -295,7 +308,7 @@ Após resolver os problemas indicados pela ferramenta Axe, conseguimos então me
 \caption{Testes de acessibilidade com a ferramenta Axe após as correções}
 \end{figure}
 
-No nosso caso, ambas as ferramentas foram utilizadas de forma complementar: o Lighthouse ajudou-nos a identificar problemas mais genéricos e dar uma visão rápida do estado da acessibilidade da aplicação, enquanto o Axe foi essencial para validar critérios mais técnicos e detetar problemas complexos que o Lighthouse pode não cobrir. Os testes foram feitos tanto em páginas com dados carregados como em estados vazios, e procurámos garantir que todas as interações essenciais da plataforma,  como o upload de ficheiros, usabilidade e navegação entre gráficos fossem utilizáveis por utilizadores com leitores de ecrã e navegação apenas por teclado.
+No nosso caso, ambas as ferramentas foram utilizadas de forma complementar: o Lighthouse ajudou-nos a identificar problemas mais genéricos e dar uma visão rápida do estado da acessibilidade da aplicação, enquanto o Axe foi essencial para validar critérios mais técnicos e detetar problemas complexos que o Lighthouse pode não cobrir. Os testes foram feitos tanto em páginas com dados carregados como em estados vazios, e procurámos garantir que todas as interações essenciais da plataforma,  como o Carregamento de ficheiros, usabilidade e navegação entre gráficos fossem utilizáveis por utilizadores com leitores de ecrã e navegação apenas por teclado.
 
 Desta forma, procurámos alinhar a aplicação com boas práticas de desenvolvimento inclusivo, respeitando não só normas técnicas mas também a responsabilidade social de criar interfaces acessíveis a todos, com foco nas seguintes funcionalidades:
 \begin{itemize}
@@ -317,7 +330,7 @@ Foi pedido a cinco testadores independentes para executarem estes testes manualm
     \item Operações com dados (carregar e apagar ficheiros, visualização de gráficos)
 \end{itemize}
 
-Cada cenário foi documentado usando a sintaxe Given-When-Then do Gherkin, permitindo uma clara compreensão dos pré-requisitos, ações e resultados esperados, commo exemplificado abaixo. Os restantes cenarios Gherkin irão ser incluidos em anexo.
+Cada cenário foi documentado usando a sintaxe Gherkin, permitindo uma clara compreensão dos pré-requisitos, ações e resultados esperados, como exemplificado abaixo. Os restantes cenarios Gherkin irão ser incluidos em anexo.
 
 \begin{verbatim}
 Scenario: Creating an account
@@ -334,6 +347,7 @@ Scenario: Creating an account
 	Then I should be redirected to the "Login" page
 \end{verbatim}
 
+Os restantes cenários Gherkin foram incluídos no apêndice \ref{ch:cenariosGherkin}.
 
 Apesar desta amostra não ser muito representativa, foi possivel encontrar bugs na aplicação, como por exemplo, a falta de alguns dados em alguns gráficos, e algums gráficos náo serem coerentes com a informação que estavam a mostrar. Estes bugs foram corrigidos assim que foram reportados pelos testadores.
 
@@ -378,14 +392,49 @@ Estas validações confirmaram que a aplicação atende aos requisitos estabelec
 \label{ch:conclusoesTrabalhoFuturo}
 %%________________________________________________________________________
 
-Conclusões e trabalho futuro aqui \ldots
+O desenvolvimento deste projeto culminou numa aplicação web funcional que responde de forma direta e eficaz às necessidades dos estudantes do ISCAL no que diz respeito à análise dos dados exportados da plataforma Marketplace Simulations. Desde o início, o objétivo foi construir uma solução prática, que facilitasse a leitura e exploração da informação, e ao mesmo tempo fosse suficientemente robusta e escalável para crescer com os utilizadores e os dados.
 
-Quais as principais mensagens a transmitir ao leitor deste trabalho? O leitor está certamente interessado nos temas aqui abordados. Em geral procurará, neste projeto, pistas para algum outro objetivo. Assim, é muito importante que o leitor perceba rapidamente a relação entre este trabalho e o seu próprio (do leitor) objetivo.
+\section{Conclusões}
 
-Aqui é o local próprio para condensar a experiência adquirida neste projeto e apresentá-la a outros (futuros leitores).
+Um dos pontos fortes deste projeto foi a implementação de um sistema automático para gerir ficheiros e transformar dados em gráficos. Esta funcionalidade, de os utilizadores poderem carregar ficheiros diretamente exportados do simulador e, a partir daí, obterem gráficos interativos, sem qualquer necessidade de formatação manual representa uma melhoria relação ao processo anterior, que era manual, demorado e propenso a erros. 
 
-O pressuposto é o de que de que este projeto é um \aspas{elemento vivo} que recorreu a outros elementos (\cf, capítulo \ref{ch:trabalhoRelacionado}) para ser construído e que poderá servir de suporte à construção de futuros projetos.
+A decisão de usar Django como base para o backend revelou-se acertada. Além de facilitar a autenticação e gestão de utilizadores, a  bibliteca permitiu implementar uma boa arquitetura, com separação entre as camadas frontend e backend. A autenticação integrada, associada ao isolamento de dados por utilizador, garantiu uma camada extra de segurança sem complicar a lógica da aplicação. A API REST que foi construída permitiu uma comunicação fluida entre as várias partes do sistema, suportando atualizações dinâmicas dos gráficos sem impácto na performance.
 
+No lado do frontend, optou-se por uma abordagem prática, usando bibliotecas para garantir a responsividade e usabilidade. A biblioteca Plotly foi fundamental para criar gráficos interativos que, além de apelativos, ajudam os estudantes a interpretar os dados.
+
+Durante o desenvolvimento surgiram alguns desafios técnicos. Um dos principais foi lidar com a diversidade estrutural dos ficheiros. Alguns traziam folhas com formatação irregular, nomes de colunas inconsistentes ou dados dificeis de perceber. Isso obrigou à criação de uma pipeline de normalização robusto e reutilizável que é uma componente essencial para garantir que os dados fossem processados corretamente e de forma previsível. Apesar da solução atual funcionar bem no contexto do projeto, poderá ser necessário alterar no futuro caso os ficheiros evoluam ou incluam novos tipos de dados. Outro ponto que pode ser melhorado é a interface de gestão de quarters, que embora funcional, ainda exige alguma familiaridade com o conceito por parte do utilizador.
+
+Para além do lado técnico, este projeto foi também uma excelente oportunidade de crescimento pessoal. Antes de começar, não tinha experiência prática com Django nem com bibliotecas como Pandas, e o contacto com estas tecnologias acabou por ser fundamental. Esta aprendizagem provou o valor da adaptação contínua e da experimentação prática como pilares fundamentais do desenvolvimento de software.
+
+Em síntese, este projeto mostrou como a combinação de ferramentas modernas pode resultar numa solução escalável e com impacto direto na experiência de aprendizagem. A aplicação desenvolvida resolve um problema enfrentado pelos estudantes do ISCAL, e deixa aberta a porta para futuras melhorias e novos casos de uso. É uma base sólida, que pode ser facilmente estendida ou adaptada a outros contextos educacionais onde a análise de dados seja um desafio.
+
+\section{Trabalho Futuro}
+
+Apesar de o sistema atual já cumprir os objetivos definidos inicialmente, foram identificadas diversas oportunidades de evolução e expansão que poderão ser exploradas em futuras iterações do projeto. Estas propostas estão organizadas em diferentes áreas de desenvolvimento.
+
+\subsection{Interface e Experiência do Utilizador}
+
+Uma das direções mais imediatas para evolução está ao nível da interface. Pretende-se alargar o leque de visualizações disponíveis, incluindo novos tipos de gráficos, como dispersões, histogramas ou até mapas interativos, sendo que é sempre importante ter em mente a experiencia de utilização. Para além disso, seria interessante permitir a criação de \textit{dashboards} personalizáveis, onde cada utilizador poderia compor visualizações de acordo com os seus objetivos, e até juntar vários tipos de dados na mesma visualização.
+
+Outro aspeto relevante prende-se com a configuração dinâmica dos gráficos. A ideia é deixar de apresentar visualizações estáticas e passar a oferecer ao utilizador a possibilidade de escolher, em tempo real, os tipos de gráfico, métricas e dimensões que pretende analisar. Esta abordagem aumentaria substancialmente a flexibilidade da ferramenta.
+
+\subsection{Análise de Dados e Otimização de Performance}
+
+Do ponto de vista analítico, uma evolução natural do sistema passa pela incorporação de técnicas de análise preditiva. A utilização de modelos de regressão ou algoritmos de aprendizagem automática simples poderá ajudar os estudantes a identificar padrões e antecipar tendências de mercado com base nos dados da simulação.
+
+Em paralelo, importa melhorar a eficiência do sistema no processamento de dados de maior volume. Será relevante avaliar o uso de bibliotecas como \texttt{Dask} ou \texttt{Polars}, que oferecem soluções otimizadas para manipulação de grandes \textit{datasets}, mantendo tempos de resposta aceitáveis e garantindo uma boa experiência de utilização.
+
+\subsection{Gestão de Utilizadores e Colaboração}
+
+Ao nível da gestão da plataforma, propõe-se o reforço das funcionalidades de administração de utilizadores. Isto poderá incluir a criação de perfis diferenciados (por exemplo, administrador, editor, visualizador) e mecanismos de controlo de permissões.
+
+Adicionalmente, seria interessante introduzir funcionalidades de colaboração entre utilizadores, nomeadamente a partilha de visualizações e filtros de dados. Este tipo de funcionalidade é particularmente útil em contextos académicos, onde os trabalhos são frequentemente realizados em grupo ao longo do semestre.
+
+\subsection{Integração com Outras Plataformas}
+
+Por fim, um caminho a explorar passa pela integração direta com a plataforma \textit{Marketplace Simulations}, de onde os dados são originalmente extraídos. Uma abordagem possível seria o desenvolvimento de extensões de navegador (para \textit{Chrome}, \textit{Firefox} ou \textit{Edge}) que permitam importar automaticamente os dados para o nosso sistema, eliminando etapas manuais do processo de upload.
+
+De forma geral, estas propostas de melhoria mostram que o projeto pode continuar a evoluir significativamente, servindo como base para novas investigações ou aplicaç
 
 
 

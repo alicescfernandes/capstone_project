@@ -59,8 +59,11 @@ O nosso projeto assume então o uso de dados extraídos diretamente da plataform
 \label{ch:modeloProposto}
 %%________________________________________________________________________
 
-(falta introduzir o modelo proposto)
+Neste capítulo descrevemos o modelo conceptual que serviu de base à implementação da aplicação, com foco na forma como os dados são organizados, processados e apresentados ao utilizador. A estrutura proposta resulta diretamente das necessidades identificadas durante a análise dos ficheiros fornecidos pela plataforma de simulação, bem como dos requisitos definidos com os orientadores do projeto.
 
+O modelo tem como objetivo garantir que os dados carregados pelos utilizadores são armazenados de forma segura, estruturada e facilmente acessível para operações futuras, como visualização gráfica, filtragem avançada ou validação de versões. Para isso, foram definidos vários componentes principais, incluindo a forma como os ficheiros são organizados por trimestre, o tipo de transformações aplicadas, e o modo como os gráficos são associados automaticamente a cada folha de cálculo.
+
+Nos próximos parágrafos vamos então detalhar cada uma das partes do modelo proposto, estabelencedo também os requisitos funcionais e não funcionais que foram definidos para o sistema.
 
 %%________________________________________________________________________
 \section{Requisitos}
@@ -158,24 +161,29 @@ Para a análise, os alunos têm à disposição os dados, na plataforma,  nas v�
 
 \subsection{Sistemas de apoio à decisão}
 \label{sec:sad}
-Um \gls{sad} é uma aplicação ou conjunto de aplicações projetadas para ajudar os utilizadores a tomar decisões mais informadas e fundamentadas, geralmente com base na análise de dados. Na prática, um \gls{sad} recolhe, organiza e processa dados, e apresenta esses dados de forma visual (como gráficos), permitindo aplicar filtros e explorar cenários. Ou seja, não toma decisões por si só, mas fornece os elementos certos para que o utilizador possa decidir melhor, especialmente em contextos complexos ou com muitos dados.
 
+Um \gls{sad} é uma aplicação, ou um conjunto de aplicações, concebida para auxiliar utilizadores na tomada de decisões mais informadas e fundamentadas. Ao contrário de sistemas automatizados que tomam decisões de forma autónoma, um \gls{sad} funciona como uma ferramenta que mostra aos utilizadores os dados e análises necessárias para que estes possam avaliar alternativas, prever resultados e escolher a melhor ação possível.
+
+Na prática, um \gls{sad} é responsável por recolher, organizar e processar grandes volumes de dados, muitas vezes com rigem em multiplas fontes, e transformá-los em informação relevante. Esta informação é normalmente apresentada através de tabelas, indicadores ou representações visuais como gráficos de barras, linhas, setores ou até mapas interativos. Um aspeto fundamental é a capacidade de aplicar filtros e explorar diferentes cenários, o que permite ao utilizador testar hipóteses, identificar padrões e comparar opções de forma mais eficiente.
+
+Estes sistemas são particularmente úteis em contextos onde há grande complexidade ou incerteza, por exemplo, na gestão empresarial, em análises financeiras, em planeamento estratégico, ou na análise de mercados. Num ambiente académico ou de simulação, como é o caso da plataforma usada neste projeto, um \gls{sad} ajuda os estudantes a perceber melhor o impacto das suas decisões, mostrando dados históricos e tendências que podem passar despercebidas numa visualização mais limitada.
+É importante reforçar que o \gls{sad} não substitui o julgamento humano. Em vez disso, potencia a capacidade do utilizador de interpretar a informação disponível e tomar decisões com base em evidência, reduzindo o risco de erro e aumentando a confiança no processo de decisão.
 
 \subsection{Backend e Frontend}
 
 O projeto desenvolvido segue uma arquitetura de aplicações web, dividida em duas grandes camadas: \textit{backend} e \textit{frontend}.
 
-O \textit{backend} corresponde à "parte invisível" da aplicação, é o lado do servidor, responsável por tratar os dados, executar "lógica de negócio" e responder aos pedidos feitos pelos utilizadores. No contexto deste projeto, o \textit{backend} é responsável por funcionalidades como o carregamento de ficheiros, processamento e normalização dos dados,  autenticação e a disponibilização desses dados através de uma API.
+O \textit{backend} corresponde à ``parte invisível" da aplicação, é o lado do servidor, responsável por tratar os dados, executar lógica de negócio e responder aos pedidos feitos pelos utilizadores. No contexto deste projeto, o \textit{backend} é responsável por funcionalidades como o carregamento de ficheiros, processamento e normalização dos dados, autenticação e a disponibilização desses dados através de uma \gls{api}.
 
-O \textit{frontend}, por outro lado, é a "parte visível" da aplicação, é o que o utilizador vê e com o que interage diretamente no \textit{browser}. Inclui os formulários, gráficos e outros elementos criados a partir dos dados processados.
+O \textit{frontend}, por outro lado, é a ``parte visível" da aplicação, é o que o utilizador vê e com o que interage diretamente no \textit{browser}. Inclui os formulários, gráficos e outros elementos criados a partir dos dados processados.
 
 Esta separação entre \textit{backend} e \textit{frontend} facilita a manutenção do sistema e permite que ambas as partes evoluam de forma independente, podendo até ser substituídas sem necessidade de reescrever o sistema completo.
 
-As tecnologias utilizadas para o desenvolvimento serão descritas no capítulo \ref{ch:tecnologias}.
+As tecnologias utilizadas para o desenvolvimento serão descritas no capítulo \ref{sec:tec}.
 
 \subsection{Tipos de gráficos}
 
-Durante a análise que fizemos foram selecionados diferentes tipos de gráficos, de acordo com o tipo de análise que cada conjunto de dados pretendia suportar. Cada tipo de gráfico foi escolhido com base na sua capacidade de representar visualmente os dados e a sua facilidade de interpretação.
+Durante a análise que fizemos foram selecionados diferentes tipos de gráficos, de acordo com o tipo de análise que cada conjunto de dados pretendia suportar. Cada tipo de gráfico foi escolhido com base na sua capacidade de representar visualmente os dados e a sua facilidade de interpretação. Durante o projeto, consideramos os seguintes tipos de gráficos quando avaliavamos os dados recebidos:
 
 \textbf{Gráfico de Barras (Bar Chart):}
 Este tipo de gráfico foi utilizado para comparar valores entre diferentes categorias, como marcas, cidades ou segmentos de mercado. A disposição visual das barras permite uma leitura rápida das diferenças de desempenho entre categorias, sendo util para dados que não são temporais. Foram usadas variantes como barras empilhadas e barras agrupadas, dependendo da granularidade pretendida.
@@ -202,7 +210,8 @@ Este tipo de gráfico foi utilizado para comparar valores entre diferentes categ
 \noindent
 
 \textbf{Gráfico de Sectores (Pie Chart):}  
-Utilizado para representar distribuições percentuais, como a repartição de dados por segmento. Este tipo é  intuitivo para visualizar como uma totalidade se divide entre diferentes partes, sendo adequado para dados onde se pretendia enfatizar proporções relativas (como por exemplo dados categorizados por segmentos)
+
+Utilizado para representar distribuições percentuais, como partições de dados por segmento. Este tipo é de gráfico é intuitivo para visualizar como uma totalidade se divide entre diferentes partes, sendo apropriadp para dados onde se pretendia mostrar proporções relativas (como por exemplo dados categorizados por segmentos)
 
 \begin{figure}[H]
     \centering
@@ -212,7 +221,8 @@ Utilizado para representar distribuições percentuais, como a repartição de d
 \noindent
 
 \textbf{Gráfico Financeiro (Waterfall Chart):}  
-Empregado especificamente para representar balanços financeiros, como resultados acumulados de receitas e despesas. O gráfico cascata” (waterfall) permite visualizar como diferentes contribuições individuais afetam um valor final, facilitando a análise de ganhos e perdas ao longo do tempo ou de processos financeiros.
+
+Utilizado especificamente para representar balanços financeiros, como valores acumulados de receitas e despesas. Permite também visualizar como diferentes contribuições individuais afetam um valor final, facilitando a análise de ganhos e perdas.
 
 \begin{figure}[H]
     \centering
@@ -222,7 +232,8 @@ Empregado especificamente para representar balanços financeiros, como resultado
 \noindent
 
 \textbf{Diagrama de Quartis (Box Plot):}
-Os diagramas de quartis, foram utilizados para representar dados que eram distribuições, permitindo visualizar de forma rápida a mediana, os quartis e possíveis valores extremos. Este tipo de diagrama é util para comparar a diferença entre diferentes categorias, como por exemplo comparar a dispersão de vendas entre várias marcas ou cidades. A interpretação deste tipo de visualização exige um conhecimento prévio de conceitos estatísticos como mediana e quartis, o que pde dificultar a leitura para o público-alvo, mas que simplifica a representação dos dados.
+
+Os diagramas de quartis foram utilizados para representar dados que eram distribuições com minimos e máximos, permitindo visualizar de forma prática a mediana, os quartis e valores extremos.  A interpretação deste tipo de visualização exige um conhecimento prévio de conceitos estatísticos como mediana e quartis, o que pode dificultar a leitura, mas que simplifica a representação dos dados.
 
 \begin{figure}[H]
     \centering
@@ -232,7 +243,8 @@ Os diagramas de quartis, foram utilizados para representar dados que eram distri
 \noindent
 
 \textbf{Diagrama de Sankey (Sankey Diagram):}
-Os diagramas de Sankey são utilizados para representar fluxos entre diferentes categorias, destacando a quantidade transferida de uma categoria para outra. Estes diagramas são particularmente úteis para ilustrar a passagem de clientes entre necessidades ou segmentos. Cada fluxo é representado por uma linha cuja largura é proporcional à quantidade movida, permitindo uma visualização intuitiva da importancia dos fluxos. Para evitar representações complexas, decidimos apenas recorrer a este tipo apenas quando os dados não poderiam ser representados de outra forma, ou tratados de forma a simplificar a representação.
+
+Os diagramas de Sankey são utilizados para representar fluxos entre diferentes categorias, sublinhando a quantidade transferida de uma categoria para outra. Cada fluxo é representado por uma linha cuja largura é proporcional à quantidade movida, permitindo uma visualização intuitiva da importancia dos fluxos. Para evitar representações complexas, decidimos apenas recorrer a este tipo apenas quando os dados não poderiam ser representados de outra forma, ou tratados de forma a simplificar a representação.
 
 \begin{figure}[H]
     \centering
@@ -244,13 +256,25 @@ Os diagramas de Sankey são utilizados para representar fluxos entre diferentes 
 Outros tipos de gráficos relevantes para o projeto, mas que não foram utilizados foram:
 
 \textbf{Gráfico de Linhas (Line Chart):}  
-Escolhido para representar séries temporais, como a evolução de vendas ou de quotas ao longo de vários trimestres. As linhas permitem identificar tendências e variações. No nosso projeto, não tivemos necessidade de usar este tipo uma vez que nenhum dos dados recebidos era relativos a séries temporais, pelo que a sua utilização não era intuitiva para os utilizadores.
+
+Escolhido para representar séries temporais, como a evolução de uma variável ao longo do tempo. As linhas permitem identificar tendências e variações. No nosso projeto, não tivemos necessidade de usar este tipo uma vez que nenhum dos dados recebidos era relativos a séries temporais, pelo que a sua utilização não era intuitiva para os utilizadores nem resultava numa visualização que fizesse sentido para os dados recebidos.
 
 \textbf{Gráfico de Radar (Radar Chart):}  
-Utilizado para comparar múltiplas variáveis em relação a um valor comumn, como no caso da avaliação de diferentes necessidades dos clientes em simultâneo. Este tipo de gráfico permite identificar rapidamente pontos fortes e fracos em várias dimensões de análise. Apesar destas vantagens, nos dados que recebemos não conseguimos identificar utilizações onde este tipo de gráfico beneficiasse os utilizadores finais.
+
+Utilizado para comparar múltiplas variáveis em relação a um valor comum, como no caso da avaliação de diferentes necessidades dos clientes em simultâneo. Este tipo de gráfico permite identificar rapidamente pontos fortes e fracos em várias dimensões de análise. Apesar destas vantagens, nos dados que recebemos não conseguimos identificar utilizações onde este tipo de gráfico beneficiasse os utilizadores finais.
 
 \textbf{Gráfico de Dispersão (Scatter Plot):}
-Os gráficos de dispersão foram considerados para representar relações entre duas variáveis quantitativas, como por exemplo entre o preço e a procura de determinados produtos. Cada ponto no gráfico representa uma observação individual, permitindo identificar padrões de correlação (positiva, negativa ou inexistente) entre variáveis. No nosso caso, consideramos utilizar um tipo especifico de gráfico de dispersão (gráfico de dispersão num mapa) mas a leitura tornou-se confusa, uma vez que era pouco legivel para alunos, e não considerava localizações ficticias.
+
+Os gráficos de dispersão foram considerados para representar relações entre duas variáveis. Cada ponto no gráfico representa uma observação individual, permitindo identificar padrões de correlação (positiva, negativa ou inexistente) entre variáveis. No nosso caso, consideramos utilizar um tipo especifico de gráfico de dispersão (gráfico de dispersão num mapa) mas a leitura tornou-se confusa, uma vez que era pouco legivel para alunos, e não considerava localizações ficticias, e algumas localizações eram em continentes diferentes, fazendo com que a leitura fosse difícil.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[max width=12cm, keepaspectratio]{./img/scatter_map}
+    \caption{Exemplo de gráfico de dispersão num mapa}
+\end{figure}
+\noindent
+
+
 \end{itemize}
 
 A escolha dos tipos de gráficos teve como objetivo manter a clareza e facilidade da informação e permitir diferentes leituras sobre os dados extraídos. Cada gráfico foi pensado para às características das categorias disponíveis, considerando tanto a o formato dos dados (quantitativa ou categórica) como o objetivo da análise (comparação, distribuição, evolução ou composição).
@@ -260,9 +284,10 @@ A escolha dos tipos de gráficos teve como objetivo manter a clareza e facilidad
 \label{sec:abordagem}
 %%________________________________________________________________________
 
-O projeto proposto pretende então ajudar nesse sentido, de conseguir transformar dados desta plataforma em algo mais fácil e rápido de analisar. Tento o contexto da plataforma, iremos então descrever duas abordagens que considerámos.
+O projeto proposto pretende então ajudar nesse sentido, de conseguir transformar dados desta plataforma em algo mais fácil e rápido de analisar. Tendo o contexto da plataforma, iremos então descrever duas abordagens que considerámos.
 
 \subsection{Web Scraping}
+
 A primeira abordagem que consideramos foi a hipótese de automatizar a extração dos dados diretamente da plataforma do Marketplace Simulations, através de técnicas de web scraping. A ideia parecia interessante numa fase inicial, já que permitiria reduzir a dependência do utilizador no processo de exportação  dos dados. No entanto, rapidamente percebemos que esta abordagem trazia vários desafios que, na prática, a tornavam pouco viável, ou mesmo arriscada.
 
 Primeiro, cada conta na plataforma está associada a um grupo de alunos, ou seja, é uma conta ativa e única, usada diretamente durante a simulação. Isto significa que qualquer processo automático que iniciasse sessão, mesmo que fosse só para leitura, poderia de forma acidental interagir com a interface e acabar por alterar alguma opção, o que poderia comprementer a avaliação dos alunos porque podia afetar a sua avaliação final. Além disso, como o acesso à plataforma é feito por licenças pagas, não existe qualquer possibilidade de criar uma conta de serviço ou utilizador apenas para leitura. Ou seja, qualquer tentativa de scraping teria de reutilizar credenciais reais, o que levanta não só questões de segurança, mas também (possivelmente) legais, uma vez que a plataforma pode não permitir o scraping
@@ -278,7 +303,6 @@ A abordagem que acabamos por usar foi os alunos exportam manualmente os dados di
 Com esse objetivo, procurámos que a nossa aplicação refletisse a estrutura da própria simulação. Como tal, os dados são organizados por quarters, como acontece na plataforma de simulação e permitir o carregamento dos dados exportados. Estes ficheiros são depois processados o que nos permite trabalhar com dados mais consistentes. 
 
 Esta estrutura base implica a existência de três entidades principais na nossa aplicação (que iremos descrever nos capítulos seguintes) e cuja interação define  o funcionamennto do sistema.
-
 
 \subsubsection{\textit{Quarters}}
 
@@ -319,7 +343,14 @@ No próximo capitulo iremos então descrever as escolhas tomadas de forma a conc
 \section{Arquitetura Tecnológica}
 \label{sec:tec}
 
-A definição da arquitetura, a seleção das tecnologias e a organização dos dados foram guiadas por critérios de fiabilidade, modularidade, simplicidade de manutenção e possibilidade de evolução futura.  Nas seguintes secções especificamos que tecnologias escolhemos e quais as funções que desempenham no sistema.
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{./img/arch}
+\caption{Arquitetura do sistema}
+\label{fig:arquitectura}
+\end{figure}
+
+A arquitetura final do sistema pode ser observada na Figura~\ref{fig:arquitectura}. Esta segue o modelo clássico cliente-servidor, onde os utilizadores interagem com a aplicação através de um browser. A definição da arquitetura, a seleção das tecnologias e a organização dos dados foram guiadas por critérios de fiabilidade, simplicidade de manutenção e possibilidade de evolução futura.  Nas seguintes secções especificamos que tecnologias escolhemos e quais as funções que desempenham no sistema.
 
 \subsection{Django}
 
@@ -361,7 +392,8 @@ Apesar de React ser uma framework muito utilizada para aplicações web,  com um
 
 Para a persistência de dados, utilizámos o sistema de gestão de bases de dados \textit{PostgreSQL}, uma das soluções open-source mais completas e robustas disponíveis atualmente. Inicialmente foi considerada a utilização de SQLite por simplicidade durante o desenvolvimento, mas rapidamente a necessidade de maior escalabilidade e de suporte a funcionalidades como campos JSON, levou à adoção do PostgreSQL.
 
-PostgreSQL oferece um bom desempenho, suporte a operações complexas e é compatível com o ORM do Django, o que permitiu tirar partido do modelo relacional sem abdicar da produtividade no desenvolvimento. Comparado com outras alternativas como MySQL, o PostgreSQL distingue-se pelo seu suporte avançado a tipos de dados (\gls{JSON}, arrays, enums), entre outras funcionalidades.
+PostgreSQL oferece um bom desempenho, suporte a operações complexas e é compatível com o ORM do Django, o que permitiu tirar partido do modelo relacional sem abdicar da produtividade no desenvolvimento. Comparado com outras alternativas como MySQL, o PostgreSQL distingue-se pelo seu suporte avançado a tipos de dados (\gls{json}, arrays, enums), entre outras funcionalidades.
+
 
 \subsection{Docker}
 
