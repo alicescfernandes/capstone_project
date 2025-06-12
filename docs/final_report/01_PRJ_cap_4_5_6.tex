@@ -261,17 +261,42 @@ A acessibilidade foi uma preocupação central no desenvolvimento da aplicação
 
 O Lighthouse, desenvolvido pela Google, é uma ferramenta open source que corre diretamente no Chrome DevTools ou como CLI. Permite auditar uma página web em várias categorias, nomeadamente Performance, SEO, Best Practices e, claro, Accessibility. A secção de acessibilidade do Lighthouse verifica, por exemplo, se os elementos têm contrastes suficientes, se os formulários estão corretamente etiquetados com aria-label, se há títulos estruturados (h1, h2, etc.) numa hierarquia lógica e se os elementos interativos (como botões e links) são acessíveis via teclado. O Lighthouse fornece uma pontuação de 0 a 100 e destaca problemas comuns com sugestões práticas de como resolver.
 
+Esta ferramenta Lighthouse, apesar de não ser tão detalhada como a Axe, sinalizou alguns problemas, como a falta de compressão Gzip e alguns erros de acessibilidade e SEO. Estes problemas foram resolvidos, e a ferramenta Lighthouse passou a dar uma pontuação melhor nos vários critérios que avalia.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{./img/lh_before}
+\caption{Testes de acessibilidade com a ferramenta Lighthouse}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{./img/lh_after}
+\caption{Testes de acessibilidade com a ferramenta Lighthouse após as correções}
+\end{figure}
+
 Já o Axe, da empresa Deque, é uma biblioteca de testes de acessibilidade mais focada, muito utilizada em ambientes de desenvolvimento profissional. Pode ser usada como extensão do browser ou integrada com ferramentas de testes automatizados como Cypress ou Selenium. O Axe segue os critérios WCAG com mais profundidade e reporta violações como a ausência de nomes acessíveis (accessible names), uso incorreto de landmarks ARIA, falhas de foco, ou elementos visuais sem correspondência textual. Além disso, o Axe permite navegar entre os erros diretamente na interface do browser, o que torna o processo de debugging muito mais fácil.
+
+Nos primeiros testes corridos com a ferramenta Axe, as ferramentas sinalizaram alguns problemas relativos a acessibilidade, como a falta de textos alternativos para alguns elementos visuais, e os niveis dos titulos não estavam a ser usados de forma adequada.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{./img/axe}
+    \caption{Testes de acessibilidade com a ferramenta Axe}
+    \end{figure}
+
+
+Após resolver os problemas indicados pela ferramenta Axe, conseguimos então melhorar a acessibilidade da aplicação
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{./img/axe_after}
+\caption{Testes de acessibilidade com a ferramenta Axe após as correções}
+\end{figure}
 
 No nosso caso, ambas as ferramentas foram utilizadas de forma complementar: o Lighthouse ajudou-nos a identificar problemas mais genéricos e dar uma visão rápida do estado da acessibilidade da aplicação, enquanto o Axe foi essencial para validar critérios mais técnicos e detetar problemas complexos que o Lighthouse pode não cobrir. Os testes foram feitos tanto em páginas com dados carregados como em estados vazios, e procurámos garantir que todas as interações essenciais da plataforma,  como o upload de ficheiros, usabilidade e navegação entre gráficos fossem utilizáveis por utilizadores com leitores de ecrã e navegação apenas por teclado.
 
 Desta forma, procurámos alinhar a aplicação com boas práticas de desenvolvimento inclusivo, respeitando não só normas técnicas mas também a responsabilidade social de criar interfaces acessíveis a todos.
 
-Nos primeiros testes corridos com a ferramenta Axe, as ferramentas sinalizaram alguns problemas relativos a acessibilidade, como a falta de textos alternativos para alguns elementos visuais, e os niveis dos titulos não estavam a ser usados de forma adequada, que prontamente foram resolvidos.
-
-A ferramenta Lighthouse, apesar de não ser tão detalhada como a Axe, também sinalizou alguns problemas, como a falta de contrastes suficientes entre texto e fundo, e a falta de navegação por teclado. Estes problemas foram resolvidos, e a ferramenta Lighthouse passou a dar uma pontuação de 100/100 nos critérios de acessibilidade.
-
-Os resultados obtidos foram particularmente positivos, com uma pontuação média de 95/100 nos critérios de acessibilidade. As principais melhorias implementadas incluíram:
 
 \begin{itemize}
     \item Adição de textos alternativos para todos os elementos visuais
