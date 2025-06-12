@@ -18,12 +18,13 @@
 TODO: Introducao do capitulo
 
 \section{Análise dos dados}
+
 O processo de análise começou após a reunião inicial comm os orientadores do projeto, onde recebemos os ficheiros com que iamos trabalhar. Tratar este ficheiros implicou várias fases de análise, onde delineamos estratégias para conseguir extrair dados e possiveis gráficos. Antes de falarmos das várias fases, teremos só de estabelecer que tipos de gráficos são os indicados para as informações que queremos mostrar.
 
 \subsection{Análise inicial da informação}
 Após termos recebido os dados, fizemos uma primeira análise com o objetivo de perceber a informação recebida e os próximos passos a tomar.
 
-No total, recebemos 100 ficheiros \gls{xlsx} que foram exportados da plataforma, correspondentes às diferentes secções da plataforma de simulação, com vários indicadores como segmentos de mercado, características de produto, vendas, entre outros. Cada ficheiro pode conter várias folhas de cálculo, organizadas por marcas, cidades entre outros marcadores.
+No total, recebemos 103 ficheiros \gls{xlsx} que foram exportados da plataforma, correspondentes às diferentes secções da plataforma de simulação, com vários indicadores como segmentos de mercado, características de produto, vendas, entre outros. Cada ficheiro pode conter várias folhas de cálculo, organizadas por marcas, cidades entre outros marcadores.
 
 Durante esta análise preliminar, verificámos que:
 \begin{itemize}
@@ -115,7 +116,7 @@ De forma a modularizar toda a lógica de normalização de dados, decidimos cria
 
 \subsection{Conversão e Armazenamento em Base de Dados}
 
-Após o processamento dos dados ser feito, os mesmos são guardados como JSON num campo especifico JSONField da base de dados que decidimos utilizar, PostgreSQL. Estes dados guardados tentam ser os mais próximos ao dados mostrados ao utilizador, mas sem perder informação quando contem várias séries.
+Após o processamento dos dados ser feito, os mesmos são guardados como \gls{json} num campo especifico JSONField da base de dados que decidimos utilizar, PostgreSQL. Estes dados guardados tentam ser os mais próximos ao dados mostrados ao utilizador, mas sem perder informação quando contem várias séries.
 
 Para garantir a consistência dos dados e evitar conflitos de ficheiros com o mesmo nome a serem carregados para o mesmo quarter, foi implementado um mecanismo que permite marcar ficheiros como processados/ não processados e como correntes ou não. Quando um utilizador carrega um ficheiro, este é marcado como processado e como corrente, e os dados são guardados na base de dados. Quando um utilizador carrega um novo ficheiro com o mesmo nome, este é marcado como não processado e como não corrente, e os dados são substituídos pelos novos dados. Em nenhum momento é apagado versões anteriores dos dados nem os ficheiros originais que foram carregados.
 
@@ -170,7 +171,7 @@ TODO: Incluir aqui um diagrama de classes com os modelos de dados e as relaçõe
 
     \item \textbf{CSVData:} Armazena os dados processados de cada folha do Excel:
     \begin{itemize}
-        \item Guarda os dados em formato JSON
+        \item Guarda os dados em formato \gls{json}
         \item Mantém a ordem original das colunas
         \item Controla qual versão dos dados está ativa
         \item Relaciona-se com o ficheiro Excel de origem e o utilizador
@@ -257,11 +258,11 @@ A validação e testes da aplicação foram realizados através de múltiplas ab
 
 \section{Testes de Acessibilidade}
 
-A acessibilidade foi uma preocupação central no desenvolvimento da aplicação, e para isso foram seguidas as diretrizes WCAG 2.1 (Web Content Accessibility Guidelines), que definem critérios técnicos para tornar os conteúdos web mais acessíveis a todos os utilizadores, incluindo pessoas com deficiências visuais, motoras, auditivas, cognitivas ou neurológicas. Para garantir a conformidade com estas diretrizes, recorremos a uma abordagem prática combinada de testes automáticos e validação manual. Entre as ferramentas utilizadas destacam-se duas principais: o Lighthouse e o Axe.
+A acessibilidade foi uma preocupação no desenvolvimento da aplicação, e para isso foram seguidas as diretrizes \gls{wcag} 2.1, que definem critérios técnicos para tornar os conteúdos web mais acessíveis a todos os utilizadores, incluindo pessoas com deficiências visuais, motoras, auditivas, cognitivas ou neurológicas. Para garantir a conformidade com estas diretrizes, recorremos a uma abordagem prática combinada de testes automáticos e validação manual. Entre as ferramentas utilizadas destacam-se duas principais: o Lighthouse e o Axe.
 
-O Lighthouse, desenvolvido pela Google, é uma ferramenta open source que corre diretamente no Chrome DevTools ou como CLI. Permite auditar uma página web em várias categorias, nomeadamente Performance, SEO, Best Practices e, claro, Accessibility. A secção de acessibilidade do Lighthouse verifica, por exemplo, se os elementos têm contrastes suficientes, se os formulários estão corretamente etiquetados com aria-label, se há títulos estruturados (h1, h2, etc.) numa hierarquia lógica e se os elementos interativos (como botões e links) são acessíveis via teclado. O Lighthouse fornece uma pontuação de 0 a 100 e destaca problemas comuns com sugestões práticas de como resolver.
+O Lighthouse, desenvolvido pela Google, é uma ferramenta open source que corre diretamente no Chrome DevTools ou como \gls{cli}. Permite auditar uma página web em várias categorias, nomeadamente Performance, SEO, Best Practices e, claro, Accessibility. A secção de acessibilidade do Lighthouse verifica, por exemplo, se os elementos têm contrastes suficientes, se os formulários estão corretamente identificadas com atributos aria-label, se há títulos estruturados (h1, h2, etc.) numa hierarquia lógica e se os elementos interativos (como botões e links) são acessíveis por teclado. O Lighthouse fornece uma pontuação de 0 a 100 e destaca problemas comuns com sugestões de como resolver.
 
-Esta ferramenta Lighthouse, apesar de não ser tão detalhada como a Axe, sinalizou alguns problemas, como a falta de compressão Gzip e alguns erros de acessibilidade e SEO. Estes problemas foram resolvidos, e a ferramenta Lighthouse passou a dar uma pontuação melhor nos vários critérios que avalia.
+Esta ferramenta Lighthouse, apesar de não ser tão detalhada como a Axe, sinalizou alguns problemas, como a falta de compressão \gls{gzip} e alguns erros de acessibilidade e \gls{seo}. Estes problemas foram resolvidos (fazendo alterações na configuração do servidor Nginx e no código da aplicaçãos), e a ferramenta Lighthouse passou a dar uma pontuação melhor nos vários critérios que avalia.
 
 \begin{figure}[H]
 \centering
@@ -275,9 +276,10 @@ Esta ferramenta Lighthouse, apesar de não ser tão detalhada como a Axe, sinali
 \caption{Testes de acessibilidade com a ferramenta Lighthouse após as correções}
 \end{figure}
 
-Já o Axe, da empresa Deque, é uma biblioteca de testes de acessibilidade mais focada, muito utilizada em ambientes de desenvolvimento profissional. Pode ser usada como extensão do browser ou integrada com ferramentas de testes automatizados como Cypress ou Selenium. O Axe segue os critérios WCAG com mais profundidade e reporta violações como a ausência de nomes acessíveis (accessible names), uso incorreto de landmarks ARIA, falhas de foco, ou elementos visuais sem correspondência textual. Além disso, o Axe permite navegar entre os erros diretamente na interface do browser, o que torna o processo de debugging muito mais fácil.
+Já o Axe, da empresa Deque, é uma biblioteca de testes de acessibilidade mais focada, muito utilizada em ambientes de desenvolvimento profissional. Pode ser usada como extensão do browser ou integrada com ferramentas de testes automatizados como Cypress ou Selenium. O Axe segue os critérios \gls{wcag} com mais profundidade e reporta violações como a ausência de nomes acessíveis (\texit{accessible names}), uso incorreto de landmarks \glsl{aria}, falhas de foco, ou elementos visuais sem correspondência textual. Além disso, o Axe permite navegar entre os erros diretamente na interface do browser, o que torna o processo de debugging muito mais fácil.
 
 Nos primeiros testes corridos com a ferramenta Axe, as ferramentas sinalizaram alguns problemas relativos a acessibilidade, como a falta de textos alternativos para alguns elementos visuais, e os niveis dos titulos não estavam a ser usados de forma adequada.
+
 \begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth]{./img/axe}
@@ -285,7 +287,7 @@ Nos primeiros testes corridos com a ferramenta Axe, as ferramentas sinalizaram a
     \end{figure}
 
 
-Após resolver os problemas indicados pela ferramenta Axe, conseguimos então melhorar a acessibilidade da aplicação
+Após resolver os problemas indicados pela ferramenta Axe, conseguimos então melhorar a acessibilidade da aplicação, como se pode ver na imagem abaixo.
 
 \begin{figure}[H]
 \centering
@@ -295,52 +297,47 @@ Após resolver os problemas indicados pela ferramenta Axe, conseguimos então me
 
 No nosso caso, ambas as ferramentas foram utilizadas de forma complementar: o Lighthouse ajudou-nos a identificar problemas mais genéricos e dar uma visão rápida do estado da acessibilidade da aplicação, enquanto o Axe foi essencial para validar critérios mais técnicos e detetar problemas complexos que o Lighthouse pode não cobrir. Os testes foram feitos tanto em páginas com dados carregados como em estados vazios, e procurámos garantir que todas as interações essenciais da plataforma,  como o upload de ficheiros, usabilidade e navegação entre gráficos fossem utilizáveis por utilizadores com leitores de ecrã e navegação apenas por teclado.
 
-Desta forma, procurámos alinhar a aplicação com boas práticas de desenvolvimento inclusivo, respeitando não só normas técnicas mas também a responsabilidade social de criar interfaces acessíveis a todos.
-
-
+Desta forma, procurámos alinhar a aplicação com boas práticas de desenvolvimento inclusivo, respeitando não só normas técnicas mas também a responsabilidade social de criar interfaces acessíveis a todos, com foco nas seguintes funcionalidades:
 \begin{itemize}
     \item Adição de textos alternativos para todos os elementos visuais
     \item Garantia de contraste adequado entre texto e fundo
     \item Implementação de navegação por teclado
-    \item Estruturação semântica do HTML
+    \item Estruturação semântica de \gls{html}
     \item Suporte a leitores de ecrã
 \end{itemize}
 
 \section{Testes Manuais}
 
-Para complementar os testes automatizados, foi desenvolvido um conjunto abrangente de testes manuais utilizando a linguagem Gherkin para descrever os cenários de teste. Cinco testadores independentes foram recrutados para executar estes testes, cada um focando em diferentes aspectos da aplicação.
+Para complementar os testes automatizados, foi desenvolvido um conjunto abrangente de testes manuais utilizando a linguagem Gherkin para descrever os cenários de teste. Gherkin é uma linguagem estruturada, mas legível por humanos, que permite descrever comportamentos esperados do sistema em forma de cenários do tipo Dado-Quando-Então. Esta abordagem facilita a comunicação entre equipas técnicas e não técnicas, garantindo que todos os intervenientes compreendam os objetivos de cada teste.
 
-Os cenários de teste foram organizados em três categorias principais:
+Foi pedido a cinco testadores independentes para executarem estes testes manualmente, com base nos cenários escritos em Gherkin, e no final preencherem um formulário com os resultados de cada execução, incluindo observações e eventuais desvios face ao comportamento esperado. Os cenários de teste foram organizados em duas categorias principais:
 
 \begin{itemize}
-    \item Fluxos de utilizador básicos (criação de conta, login, navegação)
-    \item Operações com dados (upload de ficheiros, visualização de gráficos)
-    \item Casos de erro e recuperação
+    \item Fluxos de utilizador (criação de conta, login, navegação)
+    \item Operações com dados (carregar e apagar ficheiros, visualização de gráficos)
 \end{itemize}
 
-Cada cenário foi documentado usando a sintaxe Given-When-Then do Gherkin, permitindo uma clara compreensão dos pré-requisitos, ações e resultados esperados. Por exemplo:
+Cada cenário foi documentado usando a sintaxe Given-When-Then do Gherkin, permitindo uma clara compreensão dos pré-requisitos, ações e resultados esperados, commo exemplificado abaixo. Os restantes cenarios Gherkin irão ser incluidos em anexo.
 
 \begin{verbatim}
-Given um utilizador autenticado
-When o utilizador carrega um ficheiro Excel
-Then o sistema deve processar o ficheiro
-And mostrar uma mensagem de sucesso
+Scenario: Creating an account
+	Given I access the page 
+	And I don't have an account or logged in
+	Then I should see the "Create Account" link
+	When I click the "Create Account" link
+	Then I should be redirected to the "Create Account" form
+	And I should see the username field
+	And I should see the password filed
+	And I should see the confirm password field
+	When I fill that form
+	And I click "Save"
+	Then I should be redirected to the "Login" page
 \end{verbatim}
 
-Os resultados dos testes manuais revelaram algumas áreas para melhoria, particularmente na experiência de utilizador em dispositivos móveis e na clareza das mensagens de erro.
 
-\section{Testes Automáticos}
+Apesar desta amostra não ser muito representativa, foi possivel encontrar bugs na aplicação, como por exemplo, a falta de alguns dados em alguns gráficos, e algums gráficos náo serem coerentes com a informação que estavam a mostrar. Estes bugs foram corrigidos assim que foram reportados pelos testadores.
 
-Além dos testes de acessibilidade com Lighthouse, foram implementados outros testes automatizados para garantir a qualidade da aplicação:
-
-\begin{itemize}
-    \item Testes de integração para validar a comunicação entre frontend e backend
-    \item Testes de performance para garantir tempos de resposta adequados
-    \item Testes de segurança para identificar potenciais vulnerabilidades
-    \item Testes de compatibilidade com diferentes navegadores
-\end{itemize}
-
-Os resultados dos testes de performance mostraram tempos de carregamento consistentes, com uma média de 2.5 segundos para o carregamento inicial da página e 1.2 segundos para o carregamento de gráficos individuais.
+TODO: Falta falar sobre a análise dos resultados dos testes manuais.
 
 \section{Compatibilidade com Navegadores}
 
@@ -353,7 +350,7 @@ A compatibilidade com diferentes navegadores foi testada utilizando a plataforma
     \item Safari (versões 14+)
 \end{itemize}
 
-A aplicação demonstrou compatibilidade total com todos os navegadores modernos, com exceção do Internet Explorer 11, que não é suportado devido a limitações técnicas e à baixa utilização atual deste navegador.
+A aplicação demonstrou compatibilidade com os navegadores testados, com exceção do Internet Explorer 11, que não é suportado devido a limitações técnicas e à baixa utilização atual deste navegador.
 
 Os testes de compatibilidade incluíram:
 \begin{itemize}
