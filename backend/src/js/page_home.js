@@ -1,9 +1,15 @@
 document.addEventListener("DOMContentLoaded", () => {
 
+    console.log("hello")
     // Scroll to top functionality
     const scrollBtn = document.getElementById('scrollToTopBtn');
 
+    scrollBtn.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
     window.addEventListener('scroll', () => {
+        console.log(window.scrollY);
         if (window.scrollY > 500) {
             scrollBtn.classList.remove('hidden');
         } else {

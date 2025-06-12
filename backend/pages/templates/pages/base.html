@@ -26,11 +26,8 @@
       {% include 'pages/navigation.html' %}
     {% endif %}
 
-    <main class="container base-container {% block main_classes %}
-
-      {% endblock %}">
+    <main class="container base-container {% block main_classes %}{% endblock %}">
       {% block content %}
-
       {% endblock %}
     </main>
 
