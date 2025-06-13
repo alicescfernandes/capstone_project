@@ -18,6 +18,11 @@ _Stuff that is not important and just nice haves_
 
 ## TODO
 
+## 06/12/2025
+
+- [x] Fixed two bugs on charts
+- [x] Changed all CSV references to ChartData
+
 ## 06/07/2025
 
 - [x] Finished balance sheet chart (with support to multiple traces on the same chart)
