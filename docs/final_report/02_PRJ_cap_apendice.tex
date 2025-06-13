@@ -196,6 +196,20 @@ Uma \textit{pipeline} \gls{etl} é um processo utilizado em sistemas de tratamen
 
 As \textit{pipelines} \gls{etl} são muito utilizadas em contextos onde há necessidade de consolidar dados de várias origens, permitindo análises mais completas. São fundamentais em áreas como \textit{business intelligence}, ciência de dados e integração de sistemas.
 
+\chapter{Controlo de Versões e GitHub}
+
+O controlo de versões é uma componente essencial em qualquer projeto de desenvolvimento de software, uma vez que permite acompanhar de forma sistemática todas as alterações ao código, colaborar entre vários programadores e garantir a integridade e consistência do código ao longo do tempo.
+
+No contexto deste projeto, o controlo de versões revelou-se particularmente importante para organizar a implementação da plataforma, bem como para permitir uma evolução controlada e iterativa da aplicação, com ciclos de desenvolvimento, testes e correção de erros bem definidos.
+
+Para responder a estas necessidades, foi escolhido o sistema de controlo de versões \textit{Git}, uma ferramenta amplamente utilizada no setor, sendo uma das mais antigas e mais bem suportadas. O \textit{Git} permite criar \textit{branches} de forma simples, o que facilita o desenvolvimento em paralelo de novas funcionalidades sem interferir com a versão principal da aplicação.
+
+Durante o desenvolvimento da plataforma, esta capacidade de criar \textit{branches} foi útil para testar funcionalidades específicas como o processamento assíncrono dos ficheiros, o sistema de autenticação ou o carregamento e normalização automática dos dados. Cada conjunto de funcionalidades foram desenvolvidas de forma isolada, permitindo testes controlados e evitando conflitos no código principal.
+
+Além do \textit{Git}, foi utilizado o \textit{GitHub} como interface principal para alojar o repositório do projeto e gerir a colaboração. O \textit{GitHub} é uma plataforma web que facilita a revisão de código, a gestão de \textit{pull requests} e o acompanhamento de tarefas e problemas. A integração com \textit{Git} é direta, o que permitiu manter o desenvolvimento organizado e acessível a partir de qualquer dispositivo ou ambiente de trabalho.
+
+Após cada \textit{merge} no \textit{GitHub} é corrido um \textit{workflow} que automaticamente atualiza a versão do código que corre dentro da \gls{vps} que usamos para fazer o correr a aplicação (o nosso ambiente de produção) durante o desenvolvimento. Este \textit{workflow} liga-se por \gls{ssh} ao servidor, puxa a última versão do \textit{branch} principal, e re-inicia os \textit{containers} da aplicação, aplicando as alterações aos modelos de dados e aos ficheiros estáticos.
+
 \chapter{Cenários Gherkin}
 \label{ch:cenariosGherkin}
 
