@@ -23,12 +23,10 @@ jobs:
         with:
           context: ./docs/final_report
           file: ./docs/final_report/Dockerfile  # ajusta o caminho se necessário
-          tags: final-report-image:latest
           load: true  # Faz o build e carrega a imagem localmente
 
       - name: Run LaTeX build script
         run: |
-          chmod +x docker.sh
           docker run --rm -v ${{ github.workspace }}/docs/final_report:/data final-report-image ./docker.sh runonly
 
       - name: Upload compiled PDF
