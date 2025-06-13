@@ -64,7 +64,7 @@ No grupo \textbf{quartis}, classificámos ficheiros onde os dados contem minimos
 
 O grupo \textbf{setores} inclui ficheiros onde a segmentação do mercado ou da performance está organizada por setores económicos ou geográficos. Nestes casos, faz sentido usar gráficos de setores (também conhecidos como \textit{pie charts}),  dependendo da necessidade de comparar proporções entre segmentos.
 
-Finalmente, o grupo de \textbf{análise específica} são ficheiros que não se encaixam diretamente nos formatos anteriores, como análises mais detalhadas por cidade, por segmento ou quando os dados incluem várias unidades na mesma folha (percentagens com euros). Para estes casos, o processo passou por simplificar a informação de modo a encaixar num dos grupos acima ou excecionalmente aplicar um novo tipo de gráfico, e a análise foi feita manualmente para cada caso. Para casos em que a não era possível aplicar um \textit{template} de gráfico, não foi possivel simplificar a informação e não encontrámos uma representação gráfica que fosse fácil de intepretar, optámos por não aplicar nenhum gráfico, e apenas apenas mostrar uma tabela interativa com os dados onde o utilizador podia filtrar os dados por diferentes colunas.
+Finalmente, o grupo de \textbf{análise específica} são ficheiros que não se encaixam diretamente nos formatos anteriores, como análises mais detalhadas por cidade, por segmento ou quando os dados incluem várias unidades na mesma folha (percentagens com euros). Para estes casos, o processo passou por simplificar a informação de modo a encaixar num dos grupos acima ou excecionalmente aplicar um novo tipo de gráfico, e a análise foi feita manualmente para cada caso. Para casos em que a não era possível aplicar um \textit{template} de gráfico, não foi possivel simplificar a informação e não encontrámos uma representação gráfica que fosse fácil de interpretar, optámos por não aplicar nenhum gráfico, e apenas apenas mostrar uma tabela interativa com os dados onde o utilizador podia filtrar os dados por diferentes colunas.
 
 
 No final, dos 103 ficheiros recebidos, a classificação foi a seguinte:
@@ -116,7 +116,7 @@ Após a normalização inicial, os dados passam por transformações específica
 \end{itemize}
 
 
-De forma a modularizar toda a lógica de normalização de dados, decidimos criar configurações na aplicação que mapeiam ficheiros a gráficos e as suas transformações e outras configurações associadas a colunas que são usadas para representar os dados. Esta configuração não é guardada na base de dados, e só pode ser editada em código, porque os dados extraidos, para serem mostrados, precisam de ser processados de forma especifica de modo a que consigam ser representados, e a sua visualização foi pensada para ser um gráfico especifico, pelo que não era possivel suportar várias representações para a mesma série de dados. Após os dados serem processados, já não é possivel alterar a visualização dos dados, porque o processamento adapta a informação que recebe para a visualização pretendida.
+De forma a tornar modular toda a lógica de normalização de dados, decidimos criar configurações na aplicação que mapeiam ficheiros a gráficos e as suas transformações e outras configurações associadas a colunas que são usadas para representar os dados. Esta configuração não é guardada na base de dados, e só pode ser editada em código, porque os dados extraidos, para serem mostrados, precisam de ser processados de forma especifica de modo a que consigam ser representados, e a sua visualização foi pensada para ser um gráfico especifico, pelo que não era possivel suportar várias representações para a mesma série de dados. Após os dados serem processados, já não é possivel alterar a visualização dos dados, porque o processamento adapta a informação que recebe para a visualização pretendida.
 
 \subsection{Conversão e Armazenamento em Base de Dados}
 
@@ -206,7 +206,7 @@ A comunicação com o backend é feita através de chamadas assíncronas aos \te
 
 \subsection{Interface Gráfica (Frontend)}
 
-A interface da aplicação foi desenhada com foco na usabilidade e consistência visual, através da utilização de tecnologias modernas como WebComponents e através de um design system, Flowbite. O objetivo era garantir uma experiência responsiva, adequada para desktop e que suportasse minimanmente dispositivos móveis, sem comprometer a performance nem a clareza na apresentação dos dados.
+A interface da aplicação foi desenhada com foco na usabilidade e consistência visual, através da utilização de tecnologias modernas como WebComponents e através de um design system, Flowbite. O objetivo era garantir uma experiência responsiva, adequada para desktop e que suportasse minimamente dispositivos móveis, sem comprometer a performance nem a clareza na apresentação dos dados.
 
 \subsubsection{Design System com Flowbite}
 
@@ -214,7 +214,7 @@ A escolha do Flowbite, assente sobre Tailwind CSS, permitiu acelerar o desenvolv
 
 \subsubsection{WebComponents}
 
-A camada de visualização de dados é composta por componentes Web personalizados, cada um encapsulando a lógica de um tipo específico de gráfico. Esta abordagem modular garante isolamento entre componentes, facilita a reutilização e simplifica a manutenção do código Jasvascript. Na prática, a especificação WebComponents\cite{webcomponents} permite criar os nossos nós DOM, e extende as interfaces DOM já existentes. Esta funcionalidade permite criar componentes que se comportam como elementos HTML, e que podem ser utilizados como tal, e que também podem receber estilos e outras propriedades e atributos e é suportada já pelos os browsers mais usados (como pode ser consultado no site Can I Use\cite{caniuse} que é um site que consegue consultar o suporte de uma funcionalidade em diferentes browsers).
+A camada de visualização de dados é composta por componentes Web personalizados, cada um encapsulando a lógica de um tipo específico de gráfico. Esta abordagem modular garante isolamento entre componentes, facilita a reutilização e simplifica a manutenção do código Javascript. Na prática, a especificação WebComponents\cite{webcomponents} permite criar os nossos nós DOM, e estende as interfaces DOM já existentes. Esta funcionalidade permite criar componentes que se comportam como elementos HTML, e que podem ser utilizados como tal, e que também podem receber estilos e outras propriedades e atributos e é suportada já pelos os browsers mais usados (como pode ser consultado no site Can I Use\cite{caniuse} que é um site que consegue consultar o suporte de uma funcionalidade em diferentes browsers).
 
 \begin{figure}[H]
     \centering
@@ -237,7 +237,7 @@ As bibliotecas Plotly e Datatables foram integradas diretamente com os WebCompon
 
 \subsubsection{Responsividade em dispositivos móveis}
 
-Toda a interface foi pensada para ser utilizada em computadores devido à quantidade de gráficos que são apresentados. A interface adapta-se bem a dispositivos moveis, mas devido ao espaço disponivel, não é posssivel garantir uma boa experiencia de utilização em dispostivos moveis. A aplicação tem, essencialmente, 2 \textit{media queries}. Uma \textit{media query} que até aos 1023px que inclui telemóveis, tablets e ecrãs pequenos, e uma \textit{media query} a partir dos 1024px que inclui computadores e ecrãs maiores.
+Toda a interface foi pensada para ser utilizada em computadores devido à quantidade de gráficos que são apresentados. A interface adapta-se bem a dispositivos moveis, mas devido ao espaço disponivel, não é possível garantir uma boa experiencia de utilização em dispositivos moveis. A aplicação tem, essencialmente, 2 \textit{media queries}. Uma \textit{media query} que até aos 1023px que inclui telemóveis, tablets e ecrãs pequenos, e uma \textit{media query} a partir dos 1024px que inclui computadores e ecrãs maiores.
 
 \begin{figure}[H]
     \centering
@@ -256,7 +256,7 @@ Estes \textit{media queries} são muito utilizados para adaptar a interface aos 
 
 \subsubsection{Carregamento de ficheiros}
 
-A organização dos dados foi pensada para refletir a lógica do projeto Marketplace Simulations. Cada utilizador pode criar múltiplos \textit{quarters} no momento em que carrega um ficheiro. Estes \textit{quarters} funcionam como buckets isolados onde são armazenados os ficheiros carregados. A navegação entre \textit{quarters} é facilitada por setas laterais em cada gráfico apresentado. A criação e remoção de \textit{quarters}, bem como o carregamento de ficheiros, é acompanhada por feedback visual no momento da acção.
+A organização dos dados foi pensada para refletir a lógica do projeto Marketplace Simulations. Cada utilizador pode criar múltiplos \textit{quarters} no momento em que carrega um ficheiro. Estes \textit{quarters} funcionam como buckets isolados onde são armazenados os ficheiros carregados. A navegação entre \textit{quarters} é facilitada por setas laterais em cada gráfico apresentado. A criação e remoção de \textit{quarters}, bem como o carregamento de ficheiros, é acompanhada por feedback visual no momento da ação.
 
 Para verificar se os ficheiros são do tipo correto, decidimos validar através do \textit{MIME type}, que é um identificador padronizado utilizado para descrever o tipo de conteúdo de um ficheiro. Os \textit{MIME types} seguem o formato \texttt{tipo/subtipo}, como por exemplo \texttt{text/csv} para ficheiros CSV ou \texttt{application/vnd.openxmlformats-officedocument.spreadsheetml.sheet} para ficheiros Excel no formato \texttt{.xlsx}. Esta abordagem permite garantir que os ficheiros carregados correspondem realmente ao formato esperado, independentemente da extensão do nome do ficheiro, que pode ser facilmente manipulada. Ao inspecionar o \textit{MIME type} real do conteúdo, conseguimos rejeitar ficheiros inválidos ou maliciosos de forma mais robusta. No contexto deste projeto, esta verificação revelou-se essencial, uma vez que apenas ficheiros \texttt{.xlsx} válidos devem ser processados. Assim, a validação por \textit{MIME type} contribui tanto para a segurança como para a integridade do sistema.
 
@@ -267,7 +267,7 @@ Durante o carregamento, a interface valida se os ficheiros são do tipo correto.
 \label{ch:validacaoTestes}
 %%________________________________________________________________________
 
-A validação e testes da aplicação foram realizados através de múltiplas abordagens, garantindo uma cobertura de testes  da funcionalidade como da usabilidade da aplicaçºao. Este capítulo descreve as diferentes estratégias de teste implementadas e os resultados obtidos.
+A validação e testes da aplicação foram realizados através de múltiplas abordagens, garantindo uma cobertura de testes  da funcionalidade como da usabilidade da aplicação. Este capítulo descreve as diferentes estratégias de teste implementadas e os resultados obtidos.
 
 \section{Testes de Acessibilidade}
 
@@ -275,7 +275,7 @@ A acessibilidade foi uma preocupação no desenvolvimento da aplicação, e para
 
 O Lighthouse, desenvolvido pela Google, é uma ferramenta open source que corre diretamente no Chrome DevTools ou como \gls{cli}. Permite auditar uma página web em várias categorias, nomeadamente Performance, SEO, Best Practices e, claro, Accessibility. A secção de acessibilidade do Lighthouse verifica, por exemplo, se os elementos têm contrastes suficientes, se os formulários estão corretamente identificadas com atributos aria-label, se há títulos estruturados (h1, h2, etc.) numa hierarquia lógica e se os elementos interativos (como botões e links) são acessíveis por teclado. O Lighthouse fornece uma pontuação de 0 a 100 e destaca problemas comuns com sugestões de como resolver.
 
-Esta ferramenta Lighthouse, apesar de não ser tão detalhada como a Axe, sinalizou alguns problemas, como a falta de compressão \gls{gzip} e alguns erros de acessibilidade e \gls{seo}. Estes problemas foram resolvidos (fazendo alterações na configuração do servidor Nginx e no código da aplicaçãos), e a ferramenta Lighthouse passou a dar uma pontuação melhor nos vários critérios que avalia.
+Esta ferramenta Lighthouse, apesar de não ser tão detalhada como a Axe, sinalizou alguns problemas, como a falta de compressão \gls{gzip} e alguns erros de acessibilidade e \gls{seo}. Estes problemas foram resolvidos (fazendo alterações na configuração do servidor Nginx e no código da aplicação), e a ferramenta Lighthouse passou a dar uma pontuação melhor nos vários critérios que avalia.
 
 \begin{figure}[H]
 \centering
@@ -349,7 +349,7 @@ Scenario: Creating an account
 
 Os restantes cenários Gherkin foram incluídos no apêndice \ref{ch:cenariosGherkin}.
 
-Apesar desta amostra não ser muito representativa, foi possivel encontrar bugs na aplicação, como por exemplo, a falta de alguns dados em alguns gráficos, e algums gráficos náo serem coerentes com a informação que estavam a mostrar. Estes bugs foram corrigidos assim que foram reportados pelos testadores.
+Apesar desta amostra não ser muito representativa, foi possivel encontrar bugs na aplicação, como por exemplo, a falta de alguns dados em alguns gráficos, e alguns gráficos náo serem coerentes com a informação que estavam a mostrar. Estes bugs foram corrigidos assim que foram reportados pelos testadores.
 
 TODO: Falta falar sobre a análise dos resultados dos testes manuais.
 
@@ -434,7 +434,7 @@ Adicionalmente, seria interessante introduzir funcionalidades de colaboração e
 
 Por fim, um caminho a explorar passa pela integração direta com a plataforma \textit{Marketplace Simulations}, de onde os dados são originalmente extraídos. Uma abordagem possível seria o desenvolvimento de extensões de navegador (para \textit{Chrome}, \textit{Firefox} ou \textit{Edge}) que permitam importar automaticamente os dados para o nosso sistema, eliminando etapas manuais do processo de upload.
 
-De forma geral, estas propostas de melhoria mostram que o projeto pode continuar a evoluir significativamente, servindo como base para novas investigações ou aplicaç
+De forma geral, estas propostas de melhoria mostram que o projeto pode continuar a evoluir significativamente, servindo como base para novas investigações ou aplicações.
 
 
 

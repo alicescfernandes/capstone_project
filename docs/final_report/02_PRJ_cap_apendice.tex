@@ -135,7 +135,7 @@ A figura~\ref{fig:umlCasosUtilizacao} apresenta o diagrama UML de casos de utili
 \begin{itemize}
     \item \textbf{Criar e gerir \textit{quarters}} — Permite ao utilizador criar unidades lógicas que agrupam os ficheiros por trimestre. Cada \textit{quarter} é identificado por um UUID e guardado na base de dados.
     \item \textbf{Carregar e apagar ficheiros} — Os utilizadores podem carregar ficheiros XLSX para o sistema, que são automaticamente processados. Também podem remover ficheiros já existentes. Esta operação interage com a base de dados e com o sistema de ficheiros.
-    \item \textbf{Normalizar dados} (\textit{include}) — Subprocesso chamado sempre que é feito o carregamento de um ficheiro. Este módulo transforma os dados em formato normalizado (por exemplo, convertendo para CSV, limpando colunas inúteis e ajustando nomes). Comunica diretamente com a base de dados e com o sistema de ficheiros.
+    \item \textbf{Normalizar dados} (\textit{include}) — Sub-processo chamado sempre que é feito o carregamento de um ficheiro. Este módulo transforma os dados em formato normalizado (por exemplo, convertendo para CSV, limpando colunas inúteis e ajustando nomes). Comunica diretamente com a base de dados e com o sistema de ficheiros.
     \item \textbf{Visualizar gráficos} — Permite ao utilizador consultar representações gráficas dos dados processados, com suporte a filtros e navegação entre trimestres. Os dados são extraídos dos ficheiros normalizados e da base de dados.
     \item \textbf{Iniciar e terminar sessão} — Processo de autenticação e gestão de sessão do utilizador. Este caso inclui o uso do módulo de \textbf{Gestão de Utilizadores}.
     \item \textbf{Criar conta} — Permite a criação de um novo utilizador no sistema, também incluindo a \textbf{Gestão de Utilizadores}.
@@ -267,7 +267,7 @@ Scenario: Uploading Q2 files
     Background:  
 	Given that I have an account
 	And I am logged in on the application
-	And I have uplodaded files to the platform
+	And I have uploaded files to the platform
  
 Scenario: Removing a file
 	When I navigate to the "Uploads" page  
