@@ -12,6 +12,13 @@
 \label{ch:tabRequisitos}
 
 \section{Requisitos Funcionais}
+
+\begin{itemize}
+\item \textbf{Visíveis} — São funções obrigatórias que devem estar presentes e ser visíveis para o utilizador. Representam ações diretamente acessíveis ou observáveis na interface da aplicação.
+
+\item \textbf{Invisíveis} — Também obrigatórias, mas não visíveis para o utilizador final. Estas funções dizem respeito a comportamentos internos do sistema, como validações, persistência de dados ou processamento em segundo plano.
+\end{itemize}
+
 Os requisitos estão ordenados de acordo com a sua prioridade.
 
 \begin{table}[h!]
@@ -72,6 +79,14 @@ R4.2 & Aplicar filtros & Visível \\
 \end{table}
 
 \section{Requisitos Não-Funcionais}
+Os atributos do sistema, também designados por requisitos não funcionais, representam as características que o sistema deve exibir durante a sua utilização. Tal como os requisitos funcionais, estes devem ser organizados em categorias distintas, de forma a clarificar o seu impacto e obrigatoriedade no desenvolvimento da aplicação. As principais categorias consideradas são as seguintes:
+
+\begin{itemize}
+\item \textbf{Obrigatórios} — O sistema deve cumprir estes requisitos. Estão geralmente associados a restrições técnicas ou de contexto, como desempenho, segurança, compatibilidade entre plataformas ou integridade dos dados.
+
+\item \textbf{Desejáveis} — São requisitos que, embora não sejam críticos para o funcionamento do sistema, representam funcionalidades adicionais ou melhorias que poderão ser implementadas numa fase posterior. O sistema deve estar preparado para os acomodar, caso se decida avançar com a sua implementação.
+\end{itemize}
+
 Os requisitos estão ordenados de acordo com a sua prioridade.
 \begin{table}[h!]
     \centering
@@ -107,27 +122,18 @@ Os requisitos estão ordenados de acordo com a sua prioridade.
 \label{fig:umlCasosUtilizacao}
 \end{figure}
 
-\section{Casos de Utilização}
-
 A figura~\ref{fig:umlCasosUtilizacao} apresenta o diagrama UML de casos de utilização da aplicação desenvolvida. Este diagrama ilustra as principais interações entre o utilizador e o sistema, bem como a forma como diferentes componentes externos — nomeadamente a base de dados e o sistema de ficheiros — participam nas operações principais da plataforma.
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.9\textwidth]{img/usecase_uml.png}
-    \caption{Diagrama de Casos de Utilização do sistema}
-    \label{fig:usecase}
-\end{figure}
 
 \subsection*{Atores}
 \begin{itemize}
     \item \textbf{Utilizador} — É o ator principal, responsável por interagir com o sistema. Pode criar conta, iniciar sessão, carregar ficheiros, visualizar gráficos, entre outras ações.
-    \item \textbf{DB (Base de Dados)} — Responsável por armazenar e recuperar dados estruturados, incluindo utilizadores, trimestres, ficheiros processados e metainformação associada.
-    \item \textbf{Sistema de Ficheiros} — Componente externo responsável pelo armazenamento físico dos ficheiros carregados e transformados (por exemplo, os CSV resultantes da normalização dos ficheiros Excel).
+    \item \textbf{DB (Base de Dados)} — Responsável por armazenar dados estruturados, incluindo utilizadores, trimestres, ficheiros processados e metadados associada.
+    \item \textbf{Sistema de Ficheiros} — Componente externo responsável pelo armazenamento físico dos ficheiros carregados e transformados (como por exemplo os ficheiros Excel carregados).
 \end{itemize}
 
 \subsection*{Casos de Utilização}
 \begin{itemize}
-    \item \textbf{Criar e gerir quarters} — Permite ao utilizador criar unidades lógicas que agrupam os ficheiros por trimestre. Cada quarter é identificado por um UUID e guardado na base de dados.
+    \item \textbf{Criar e gerir \textit{quarters}} — Permite ao utilizador criar unidades lógicas que agrupam os ficheiros por trimestre. Cada \textit{quarter} é identificado por um UUID e guardado na base de dados.
     \item \textbf{Carregar e apagar ficheiros} — Os utilizadores podem carregar ficheiros XLSX para o sistema, que são automaticamente processados. Também podem remover ficheiros já existentes. Esta operação interage com a base de dados e com o sistema de ficheiros.
     \item \textbf{Normalizar dados} (\textit{include}) — Subprocesso chamado sempre que é feito o carregamento de um ficheiro. Este módulo transforma os dados em formato normalizado (por exemplo, convertendo para CSV, limpando colunas inúteis e ajustando nomes). Comunica diretamente com a base de dados e com o sistema de ficheiros.
     \item \textbf{Visualizar gráficos} — Permite ao utilizador consultar representações gráficas dos dados processados, com suporte a filtros e navegação entre trimestres. Os dados são extraídos dos ficheiros normalizados e da base de dados.
@@ -173,6 +179,22 @@ Mapa (Geo)                     & Suportado & Não Suportado \\
 \label{tab:charts}
 \end{table}
 
+
+\chapter{Pipelines ETL}
+\label{ch:etl}
+
+Uma \textit{pipeline} \gls{etl} é um processo utilizado em sistemas de tratamento e integração de dados, com o objetivo de mover dados de uma ou mais fontes para um destino, geralmente uma base de dados ou um sistema de análise. O nome \gls{etl} representa as três etapas principais:
+
+\begin{itemize}
+  \item \textbf{Extract (Extração)}: consiste em recolher os dados de múltiplas fontes de informação, que podem incluir bases de dados relacionais, APIs externas, sensores, entre outros. Esta fase preocupa-se com a capacidade de ler dados e de confirmar que são possiveis de extrair.
+  
+  \item \textbf{Transform (Transformação)}: nesta etapa os dados extraídos são processados e convertidos num formato mais adequado ao destino. Isso pode incluir tarefas como limpeza de dados (remoção de valores nulos ou duplicados), normalização, agregações, mudanças de tipo, ou cálculos. É nesta fase em que se garante a consistência da informação.
+
+  \item \textbf{Load (Carregamento)}: por fim, os dados transformados são inseridos no sistema de destino, normalmente um \textit{data warehouse},  O carregamento é feito dependendo dos requisitos do sistema de destino
+
+\end{itemize}
+
+As \textit{pipelines} \gls{etl} são muito utilizadas em contextos onde há necessidade de consolidar dados de várias origens, permitindo análises mais completas. São fundamentais em áreas como \textit{business intelligence}, ciência de dados e integração de sistemas.
 
 \chapter{Cenários Gherkin}
 \label{ch:cenariosGherkin}
@@ -261,3 +283,4 @@ Scenario: Removing a quarter
 	When I click on the "Delete" button
 	Then I should see all of the files from that section removed 
 \end{verbatim}
+
