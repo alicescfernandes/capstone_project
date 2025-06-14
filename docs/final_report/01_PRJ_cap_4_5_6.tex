@@ -386,9 +386,9 @@ Foi pedido a cinco testadores independentes para executarem estes testes manualm
     \item Operações com dados (carregar e apagar ficheiros, visualização de gráficos)
 \end{itemize}
 
-Cada cenário foi documentado usando a sintaxe Gherkin, permitindo uma clara compreensão dos pré-requisitos, ações e resultados esperados, como exemplificado abaixo. Os restantes cenarios Gherkin irão ser incluidos em anexo.
+Cada cenário foi documentado usando a sintaxe Gherkin, como exemplificado abaixo. Os restantes cenários Gherkin foram incluídos no apêndice \ref{ch:cenariosGherkin}.
 
-\begin{verbatim}
+\begin{lstlisting}[language=Gherkin, caption={Excerto do código Gherkin do cenário de teste para a criação de uma conta}]
 Scenario: Creating an account
 	Given I access the page 
 	And I don't have an account or logged in
@@ -401,9 +401,7 @@ Scenario: Creating an account
 	When I fill that form
 	And I click "Save"
 	Then I should be redirected to the "Login" page
-\end{verbatim}
-
-Os restantes cenários Gherkin foram incluídos no apêndice \ref{ch:cenariosGherkin}.
+\end{lstlisting}
 
 Apesar desta amostra não ser muito representativa, foi possivel encontrar bugs na aplicação, como por exemplo, a falta de alguns dados em alguns gráficos, e alguns gráficos náo serem coerentes com a informação que estavam a mostrar. Estes bugs foram corrigidos assim que foram reportados pelos testadores.
 
