@@ -414,36 +414,15 @@ TODO: Falta falar sobre a análise dos resultados dos testes manuais.
 A compatibilidade com diferentes \textit{browsers} foi testada utilizando a plataforma BrowserStack, que permitiu testar a aplicação em múltiplos ambientes. Os testes foram realizados nas versões mais recentes dos principais \textit{browsers}:
 
 \begin{itemize}
-    \item Google Chrome (versões 90+)
-    \item Mozilla Firefox (versões 88+)
-    \item Microsoft Edge (versões 90+)
-    \item Safari (versões 14+)
+    \item Google Chrome (versões acima da 90)
+    \item Mozilla Firefox (versões acima da 88)
+    \item Microsoft Edge (versões acima da 90)
+    \item Safari (versões acima da 18)
 \end{itemize}
 
-A aplicação demonstrou compatibilidade com os \textit{browsers} testados, com exceção do Internet Explorer 11, que não é suportado devido a limitações técnicas e à baixa utilização atual deste navegador.
+A aplicação é compatível com os \textit{browsers} testados, nas versões em que validámos o seu funcionamento.
 
-Os testes de compatibilidade incluíram:
-\begin{itemize}
-    \item Renderização correta de todos os componentes
-    \item Funcionalidade completa de todos os recursos
-    \item Comportamento consistente em diferentes resoluções
-    \item Suporte a recursos modernos do JavaScript
-\end{itemize}
-
-\section{Conclusões dos Testes}
-
-Os resultados dos diferentes tipos de testes realizados permitiram identificar e corrigir várias questões antes do lançamento da aplicação. As principais conclusões foram:
-
-\begin{itemize}
-    \item Alta pontuação em acessibilidade, demonstrando o compromisso com a inclusão digital
-    \item Boa performance geral, com tempos de resposta adequados
-    \item Compatibilidade robusta com \textit{browsers} modernos
-    \item Interface intuitiva e fácil de usar, conforme validado pelos testes manuais
-\end{itemize}
-
-Estas validações confirmaram que a aplicação atende aos requisitos estabelecidos no capítulo \ref{ch:modeloProposto}, particularmente em relação aos fundamentos técnicos descritos na secção \ref{sec:fundamentos}.
-
-%%________________________________________________________________________
+%%_______________________________________________________________________
 \chapter{Conclusões e Trabalho Futuro}
 \label{ch:conclusoesTrabalhoFuturo}
 %%________________________________________________________________________
@@ -488,6 +467,6 @@ Adicionalmente, seria interessante introduzir funcionalidades de colaboração e
 
 \subsection{Integração com Outras Plataformas}
 
-Por fim, um caminho a explorar passa pela integração direta com a plataforma \textit{Marketplace Simulations}, de onde os dados são originalmente extraídos. Uma abordagem possível seria o desenvolvimento de extensões de navegador (para \textit{Chrome}, \textit{Firefox} ou \textit{Edge}) que permitam importar automaticamente os dados para o nosso sistema, eliminando etapas manuais do processo de upload.
+Por fim, um caminho a explorar passa pela integração direta com a plataforma \textit{Marketplace Simulations}, de onde os dados são originalmente extraídos. Uma abordagem possível seria o desenvolvimento de extensões de \textit{browser} (para \textit{Chrome}, \textit{Firefox} ou \textit{Edge}) que permitam importar automaticamente os dados para o nosso sistema, eliminando etapas manuais do processo de upload.
 
 De forma geral, estas propostas de melhoria mostram que o projeto pode continuar a evoluir significativamente, servindo como base para novas investigações ou aplicações.
