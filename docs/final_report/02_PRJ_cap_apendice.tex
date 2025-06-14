@@ -96,7 +96,7 @@ Os requisitos estão ordenados de acordo com a sua prioridade.
     \hline
     Usabilidade & Detalhe - Interface intuitiva & Obrigatório \\
     Usabilidade & Detalhe - Carregamento de gráficos em sem bloquear o utilizador (lazy load) & Obrigatório \\
-    Usabilidade & Detalhe - Suporte para múltiplos browsers & Obrigatório \\
+    Usabilidade & Detalhe - Suporte para múltiplos \textit{browsers} & Obrigatório \\
     Segurança & Detalhe - Autenticação e Contas & Obrigatório \\
     Segurança & Fronteira - Cada utilizador só pode aceder aos seus dados & Obrigatório \\
     Segurança & Detalhe - Garantir que o sistema só permite ficheiros com formato previsto & Obrigatório \\
@@ -133,7 +133,7 @@ A figura~\ref{fig:umlCasosUtilizacao} apresenta o diagrama UML de casos de utili
 
 \subsection*{Casos de Utilização}
 \begin{itemize}
-    \item \textbf{Criar e gerir \textit{quarters}} — Permite ao utilizador criar unidades lógicas que agrupam os ficheiros por trimestre. Cada \textit{quarter} é identificado por um UUID e guardado na base de dados.
+    \item \textbf{Criar e gerir \textit{quarters}} — Permite ao utilizador criar unidades lógicas que agrupam os ficheiros por trimestre. Cada \textit{quarter} é identificado por um \gls{uuid} e guardado na base de dados.
     \item \textbf{Carregar e apagar ficheiros} — Os utilizadores podem carregar ficheiros XLSX para o sistema, que são automaticamente processados. Também podem remover ficheiros já existentes. Esta operação interage com a base de dados e com o sistema de ficheiros.
     \item \textbf{Normalizar dados} (\textit{include}) — Sub-processo chamado sempre que é feito o carregamento de um ficheiro. Este módulo transforma os dados em formato normalizado (por exemplo, convertendo para CSV, limpando colunas inúteis e ajustando nomes). Comunica diretamente com a base de dados e com o sistema de ficheiros.
     \item \textbf{Visualizar gráficos} — Permite ao utilizador consultar representações gráficas dos dados processados, com suporte a filtros e navegação entre trimestres. Os dados são extraídos dos ficheiros normalizados e da base de dados.
@@ -147,12 +147,12 @@ Este diagrama permite compreender de forma clara as funcionalidades principais d
 \chapter{Classificação das folhas \gls{xlsx}}
 
 
-\chapter{Comparação de gráficos suportados pelo Plotly e Chart.js}
+\chapter{Comparação de gráficos suportados pelo \textit{Plotly} e Chart.js}
 \label{ch:charts}
 
 \begin{table}[H]
 \centering
-\caption{Comparação de tipos de gráficos suportados por Plotly.js e Chart.js}
+\caption{Comparação de tipos de gráficos suportados por \textit{Plotly}.js e Chart.js}
 \begin{tabular}{|l|c|c|}
 \hline
 \textbf{Tipo de Gráfico} & \textbf{Plotly.js} & \textbf{Chart.js} \\

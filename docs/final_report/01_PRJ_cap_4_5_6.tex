@@ -19,18 +19,17 @@ Neste capítulo iremos descrever de forma detalhada como foi feita a transição
 
 Começamos por abordar o processo de análise e classificação dos dados, uma vez que a estrutura e qualidade da informação recebida tiveram um impacto direto na forma como os dados seriam processados, armazenados e, mais tarde, visualizados. A seguir, exploramos a construção do pipeline de transformação, a lógica de organização dos ficheiros e o modo como garantimos que cada carregamento fosse tratado de forma automática. Por fim, explicamos as decisões que nos levaram à escolha de representações gráficas específicas, assim como os mecanismos que permitem ao utilizador interagir com os dados.
 
-\section{Análise dos dados}
+\section{Análise e Transformação dos dados}
 
-O processo de análise começou após a reunião inicial comm os orientadores do projeto, onde recebemos os ficheiros com que iamos trabalhar. Tratar este ficheiros implicou várias fases de análise, onde delineamos estratégias para conseguir extrair dados e possiveis gráficos. Antes de falarmos das várias fases, teremos só de estabelecer que tipos de gráficos são os indicados para as informações que queremos mostrar.
+O processo de análise começou após a reunião inicial com os orientadores do projeto, onde recebemos os ficheiros com que iamos trabalhar. Tratar este ficheiros implicou várias fases de análise, onde começamos a pensar em estratégias para conseguir extrair dados e possiveis gráficos, e tornar este processo modular e automatizado.
 
-\subsection{Análise inicial da informação}
+\subsection{Análise inicial dos dados}
 \label{sec:analiseInicial}
 
-Após termos recebido os dados, fizemos uma primeira análise com o objetivo de perceber a informação recebida e os próximos passos a tomar.
+Após termos recebido os dados, fizemos uma primeira análise com o objetivo de perceber a informação recebida e os próximos passos a tomar. No total, recebemos 30 ficheiros \gls{xlsx} que foram exportados da plataforma, correspondentes às diferentes secções da plataforma de simulação, com vários indicadores como segmentos de mercado, características de produto, vendas, entre outros. Cada ficheiro pode conter várias folhas de cálculo, que no total são 103 folhas de cálculo, organizadas por marcas, cidades entre outros marcadores.
 
-No total, recebemos 30 ficheiros \gls{xlsx} que foram exportados da plataforma, correspondentes às diferentes secções da plataforma de simulação, com vários indicadores como segmentos de mercado, características de produto, vendas, entre outros. Cada ficheiro pode conter várias folhas de cálculo, que no total são 103 folhas de cálculo, organizadas por marcas, cidades entre outros marcadores.
+Durante esta análise, percebemos que:
 
-Durante esta análise preliminar, verificámos que:
 \begin{itemize}
     \item Os nomes dos ficheiros e das folhas variam, mas seguem uma estrutura relativamente consistente;
     \item Alguns ficheiros apresentam estruturas de dados semelhantes, mas com diferenças no nível de detalhe ou na organização das colunas e linhas;
@@ -42,32 +41,32 @@ Com base nesta primeira análise, concluímos que seria necessário:
 \begin{itemize}
     \item Fazer uma normalização da informação recebida para garantir uma utilização consistente da aplicação;
     \item Separar os vários ficheiros possiveis em grupos, de forma a identificar dados em comum que pudéssemos aplicar \textit{templates} de gráfico;
-    \item Guardar os dados extraídos num formato mais prático, e que permita uma filtragem dinâmica da informação carregada (de forma a facilitar a visualização dos dados)-
-    \item Em algumas séries de dados, identificamos colunas que se podiam remover devido a serem redundantes, ou por representarem informação que já é representada por outras colunas (como por exemplo colunas de valores totais ou outras discutidas com os orientadores);
+    \item Guardar os dados extraídos num formato mais prático, e que permita uma filtragem dinâmica da informação carregada (de forma a facilitar a visualização dos dados).
+    \item Em algumas séries de dados, identificamos linhas e colunas que se podiam remover devido a serem redundantes, ou por representarem informação que já é representada na mesma folha (como por exemplo colunas de valores totais, linhas que repetiam as marcas, ou outras discutidas com os orientadores);
 \end{itemize}
 
-Esta análise inicial permitiu-nos estabelecer as fases seguintes em relação ao tratamento que iremos dar aos vários ficheiros possiveis. Para isso, decidimos classificar a informação em várias categorias, e aplicar tipos de gráficos especificos a cada categoria, tendo assim \textit{templates} que podemos aplicar programaticamente. 
+Esta primeira análise serviu essencialmente para estruturar o modo como iríamos tratar os diferentes ficheiros que os utilizadores podem submeter, ou seja, deu-nos uma base para sistematizar como iriamos transformar a informação de forma lógica.
 
-\subsection{Classificação da informação}
+Com isso em mente, optámos por agrupar a informação em várias categorias, com base na natureza e estrutura dos dados de cada folha de cálculo. A cada uma dessas categorias passámos então a associar um tipo de gráfico específico, o que nos permitiu criar uma espécie de conjunto de templates reutilizáveis. Esta abordagem facilita bastante o processo, porque conseguimos aplicar esses templates de forma programática, sem precisar de decisões manuais ficheiro a ficheiro.
 
-A análise inicial dos ficheiros fornecidos permitiu-nos perceber que, apesar da diversidade dos mesmos,  existiam padrões consistentes na estrutura. Com base nisso, tomámos a decisão de agrupar os ficheiros em \textit{buckets} ou categorias lógicas. Cada um desses grupos ficou associado a um \textit{template} gráfico específico, o que nos permite não só uniformizar a apresentação dos dados, como também automatizar o processo de transformação e visualização a partir dos ficheiros.
+\subsection{Classificação dos dados}
 
-Os grupos definidos foram os seguintes: \textbf{simples}, \textbf{agrupado}, \textbf{balanços}, \textbf{quartis}, \textbf{setores} e \textbf{análise específica}. Vamos então descrever o significado de cada grupo e identificar o que é comum entre os gráficos pertencentes a cada um deles.
+A análise inicial dos ficheiros fornecidos permitiu-nos perceber que, apesar da informação ser diferente,  existiam padrões na forma como estava estruturados. Com base nisso, tomámos a decisão de agrupar os ficheiros em \textit{buckets} ou categorias. Cada um desses grupos ficou associado a um \textit{template} gráfico específico, o que nos permite não só uniformizar a apresentação dos dados, como também automatizar o processo de transformação e visualização a partir dos ficheiros.
 
-O grupo \textbf{simples} inclui ficheiros cuja estrutura é mais direta, geralmente com apenas duas colunas: uma coluna que representa uma categoria (como por exemplo empresas ou segmentos de mercado) e uma coluna numérica (como por exemplo vendas ou lucros). Nestes casos, optámos por gráficos de barras, uma vez que o objetivo principal é comparar rapidamente valores individuais entre categorias. Nos ficheiros que avaliamos, não encontramos séries temporais, pelo que não justificou gráficos de linhas. Também nesta categoria, alguns dados eram séries mais específicas (como dados relativos a médias e medianas) mas mantinham a mesma estrutura de dados, pelo que foram classificados como \textbf{simples} mas utilizaram gráficos diferentes como gráficos de diagramas e quartis e gráficos de setores (também conhecidos como \textit{pie charts}).
+Os grupos definidos foram os seguintes: \textbf{simples}, \textbf{duplo}, \textbf{balanços}, \textbf{setores} e \textbf{análise específica}. Vamos então descrever o significado de cada grupo e identificar o que é comum entre os gráficos pertencentes a cada um deles.
 
-O grupo \textbf{duplo} refere-se a ficheiros onde existem múltiplas séries de dados associadas à mesma categoria. Ou seja, para cada categoria, existem vários valores (ou várias séries) que precisam de ser representados lado a lado. Para estes casos, a escolha que fizemos foi apresentar gráficos de barras agrupadas, permitindo uma comparação direta entre diferentes séries de dados para a mesma categoria, e permite visualizar todos os dados relacionados com essa categoria.
+O grupo \textbf{simples} inclui ficheiros em que a estrutura é mais direta, geralmente com apenas duas colunas: uma coluna que representa uma categoria (como por exemplo empresas ou segmentos de mercado) e uma coluna numérica. Nestes casos, optámos por gráficos de barras, uma vez que o objetivo principal é comparar rapidamente valores individuais entre categorias. Nos ficheiros que avaliamos, não encontramos séries temporais, pelo que não justificou gráficos de linhas. Também nesta categoria, alguns dados eram séries mais específicas (como dados relativos a médias e medianas) mas mantinham a mesma estrutura de dados, pelo que foram classificados como \textbf{simples} mas utilizaram gráficos diferentes como gráficos de diagramas e quartis e gráficos de setores (também conhecidos como \textit{pie charts}).
 
-O grupo \textbf{balanços} abrange ficheiros associados a balanços financeiros ou variações de stock, onde faz sentido representar aumentos e diminuições de valores ao longo de um processo ou período. Para estes ficheiros, o \textit{template} selecionado foi o gráfico de cascata (ou um gráfico \textit{financial waterfall}), dado que este tipo de visualização representa as várias componentes do valor total.
+O grupo \textbf{duplo} refere-se a ficheiros onde existem múltiplas séries de dados associadas à mesma categoria. Ou seja, para cada categoria, existem vários valores (ou várias séries) que precisam de ser representados lado a lado. Para estes casos, a escolha que fizemos foi apresentar gráficos de barras agrupadas e barras empilhadas, permitindo uma comparação direta entre diferentes séries de dados para a mesma categoria, e permite visualizar todos os dados relacionados com essa categoria.
 
-No grupo \textbf{quartis}, classificámos ficheiros onde os dados contem minimos, máximos e médias. Aqui, optámos por representar a informação através de gráficos de quartis, que são uteis para mostrar a mediana, a dispersão e possíveis valores \textit{outliers}. Para este tipo de gráfico, tentámos sempre fazer com que a leitura do mesmo seja o mais fácil possível.
+O grupo \textbf{balanços} abrange ficheiros associados a séries de dados financeiros, onde faz sentido representar aumentos e diminuições de valores ao longo de um processo ou período. Para estes ficheiros, o \textit{template} selecionado foi o gráfico de cascata (ou um gráfico \textit{financial waterfall}), dado que este tipo de visualização representa as várias componentes do valor total numa forma fácil de perceber.
 
-O grupo \textbf{setores} inclui ficheiros onde a segmentação do mercado ou da performance está organizada por setores económicos ou geográficos. Nestes casos, faz sentido usar gráficos de setores (também conhecidos como \textit{pie charts}),  dependendo da necessidade de comparar proporções entre segmentos.
+O grupo \textbf{setores} inclui ficheiros onde a informação está agrupada em em duas e três colunas (como por exemplo dados por empresa, marca e cidade). Nestes casos, faz sentido usar gráficos de setores e barras agrupadas,  dependendo da necessidade de comparar proporções entre segmentos.
 
 Finalmente, o grupo de \textbf{análise específica} são ficheiros que não se encaixam diretamente nos formatos anteriores, como análises mais detalhadas por cidade, por segmento ou quando os dados incluem várias unidades na mesma folha (percentagens com euros). Para estes casos, o processo passou por simplificar a informação de modo a encaixar num dos grupos acima ou excecionalmente aplicar um novo tipo de gráfico, e a análise foi feita manualmente para cada caso. Para casos em que a não era possível aplicar um \textit{template} de gráfico, não foi possivel simplificar a informação e não encontrámos uma representação gráfica que fosse fácil de interpretar, optámos por não aplicar nenhum gráfico, e apenas apenas mostrar uma tabela interativa com os dados onde o utilizador podia filtrar os dados por diferentes colunas.
 
-
 No final, dos 30 ficheiros recebidos, a classificação foi a seguinte:
+
 \begin{figure}[h]
     \centering
     \includegraphics[width=\textwidth]{./img/stats1}
@@ -81,22 +80,19 @@ Em termos de representações utilizadas, a distribuição é a seguinte:
  \caption{Classificação dos ficheiros - contagem final de representações utilizadas}
  \end{figure}
 
-\section{Processamento dos dados}
+\subsection{Transformação dos dados}
 
-Após a análise inicial e classificação dos dados, foi necessário desenvolver um \textit{pipeline} de processamento que permitisse normalizar e transformar os dados dos ficheiros em um formato mais adequado para visualização e para guardar na base de dados. Este processo foi desenvolvido com recurso a biblioteca Pandas (Python), que oferece métodos para manipulação e transformação de dados. Esta \textit{pipeline} funciona de forma assincrona, e é chamada pelo \textit{backend} quando um ficheiro é carregado, de forma a não bloquear a interface do utilizador.
+Com a classificação de dados feita, foi necessário desenvolver um \textit{pipeline} de processamento que permitisse normalizar e transformar os dados dos ficheiros em um formato mais adequado para visualização e para guardar na base de dados. Este processo foi desenvolvido com recurso a biblioteca Pandas (Python), que oferece métodos para manipulação e transformação de dados. Esta \textit{pipeline} funciona de forma assincrona, e é chamada pelo \textit{backend} quando um ficheiro é carregado, de forma a não bloquear a interface do utilizador.
 
-\subsection{\textit{Pipeline} de transformação dos dados}
+A \textit{pipeline} de processamento foi dividida em duas fases, cada uma com um objetivo específico na transformação dos dados.
 
-O \textit{pipeline} de processamento foi dividido em várias fases, cada uma com um objetivo específico na transformação dos dados:
+\subsection{Extração e Normalização Inicial}
 
-\subsubsection{Extracção e Normalização Inicial}
-
-Nesta fase, os dados são extraídos dos ficheiros Excel e normalizados para um formato consistente:
-
-TODO: Talvez um gráfico para explicar esta pipeline em vez de texto
+Nesta fase, os dados são extraídos dos ficheiros \gls{xlsx} e normalizados para um formato consistente:
 
 \begin{itemize}
     \item Extração do título do gráfico a partir da primeira linha de cada folha
+    \item Identificação de cada folha por num nome único (derivado do nome da folha de cálculo), para que possamos identificar os dados de forma única na aplicação (ou seja, um \textit{slug} que mapeia exclusivamente a uma série de dados). Este passo é importante para garantir que cada série de dados é tratada de forma única e consistente, e para conseguirmos manter uma configuração para cada série de dados.
     \item Normalização dos cabeçalhos das colunas (remoção de quebras de linha, espaços extras)
     \item Remoção de colunas baseadas na análise feita na secção \ref{sec:analiseInicial}
     \item Normalização dos dados nas células (remoção de quebras de linha, espaços duplos)
@@ -104,29 +100,32 @@ TODO: Talvez um gráfico para explicar esta pipeline em vez de texto
     \item Normalização de valores numéricos com precisão configurável
     \item Manutenção da ordem original das colunas para preservar a estrutura dos dados. A biblioteca Pandas automaticamente ordena as colunas, pelo que é necessário manter a ordem original das colunas para preservar a estrutura dos dados.
     \item Transformação de dados marcados como "X" em formato binário (0/1) para indicar presença/ausência de valores
+    \item Normalização de valores decimais num valor escolhido pelo utilizador (com o valor por omissão a 9)
 \end{itemize}
 
-\subsubsection{Processamento Específico por Tipo}
+\subsection{Processamento Específico por Tipo}
+
 Após a normalização inicial, os dados passam por transformações específicas baseadas no seu tipo, e no tipo de gráfico que pretendemos representar:
+
 \begin{itemize}
     \item Aplicação de transformações específicas baseadas no tipo de gráfico identificado (financeiro, percentagens, valores relativos entre outros)
     \item Processamento para balanços financeiros, incluindo cálculos de percentagens e valores relativos de outros valores (aplicar somas e subtrações como descrito na folha de cálculo)
-    \item Normalização de valores monetários e percentagens com base num valor escolhido pelo utilizador (com o valor por omissão a 9)
+    \item Transformação dos dados para conseguir representar categorias e a relações entre elas (como por exemplo a relação entre marcas e segmentos de mercado e cidades)
     \item Para folhas que continham multiplos \textit{quarters}, optámos por escolher o \textit{quarter} para o qual a folha foi carregada, sendo que essa configuração pode ser trocada em código.
 \end{itemize}
 
-
-De forma a tornar modular toda a lógica de normalização de dados, decidimos criar configurações na aplicação que mapeiam ficheiros a gráficos e as suas transformações e outras configurações associadas a colunas que são usadas para representar os dados. Esta configuração não é guardada na base de dados, e só pode ser editada em código, porque os dados extraidos, para serem mostrados, precisam de ser processados de forma especifica de modo a que consigam ser representados, e a sua visualização foi pensada para ser um gráfico especifico, pelo que não era possivel suportar várias representações para a mesma série de dados. Após os dados serem processados, já não é possivel alterar a visualização dos dados, porque o processamento adapta a informação que recebe para a visualização pretendida.
+De forma a tornar modular toda a lógica de normalização de dados, decidimos criar configurações na aplicação que mapeiam ficheiros a gráficos e as suas transformações e outras configurações associadas a colunas que são usadas para representar os dados, sendo que cada série de dados é identificada unicamente pelo seu \textit{slug}. Esta configuração não é guardada na base de dados, e só pode ser editada em código, porque os dados extraidos, para serem mostrados, precisam de ser processados de forma especifica de modo a que consigam ser representados, e a sua visualização foi pensada para ser um gráfico especifico, pelo que não era possivel suportar várias representações para a mesma série de dados. Após os dados serem processados, já não é possivel alterar a visualização dos dados, porque o processamento adapta a informação que recebe para a visualização pretendida.
 
 \subsection{Conversão e Armazenamento em Base de Dados}
+\label{sec:armazenamentoDados}
 
-Após o processamento dos dados ser feito, os mesmos são guardados como \gls{json} num campo especifico JSONField da base de dados que decidimos utilizar, PostgreSQL. Estes dados guardados tentam ser os mais próximos ao dados mostrados ao utilizador, mas sem perder informação quando contem várias séries.
+Após o processamento dos dados ser feito, os mesmos são guardados como \gls{json} num campo especifico \textit{JSONField} da base de dados que decidimos utilizar, PostgreSQL. Estes dados guardados tentam ser os mais próximos ao dados mostrados ao utilizador, mas sem perder informação quando contem várias séries.
 
-Para garantir a consistência dos dados e evitar conflitos de ficheiros com o mesmo nome a serem carregados para o mesmo quarter, foi implementado um mecanismo que permite marcar ficheiros como processados/ não processados e como correntes ou não. Quando um utilizador carrega um ficheiro, este é marcado como processado e como corrente, e os dados são guardados na base de dados. Quando um utilizador carrega um novo ficheiro com o mesmo nome, este é marcado como não processado e como não corrente, e os dados são substituídos pelos novos dados. Em nenhum momento é apagado versões anteriores dos dados nem os ficheiros originais que foram carregados.
+Para garantir a consistência dos dados e evitar conflitos de ficheiros com o mesmo nome a serem carregados para o mesmo \textit{quarter}, foi implementado um mecanismo que permite marcar ficheiros como processados / não processados e como correntes / não correntes. Quando um utilizador carrega um ficheiro, este é marcado como processado e como corrente, e os dados são guardados na base de dados. Quando um utilizador carrega um novo ficheiro com o mesmo nome, o novo é marcado como corrente, e o antigo é marcado como não corrente. Em nenhum momento é apagado versões anteriores dos dados nem os ficheiros originais que foram carregados. A aplicação tem depois um mecanismo em que só considera ficheiros marcados como correntes para serem mostrados ao utilizador.
 
 Isto permite recuperar versões anteriores dos dados quando o utilizador apaga um ficheiro ou quando existe algum erro no processamento, uma vez que os dados resultantes só são marcados como correntes quando são extraidos e processados com sucessos.
 
-Este sistema de processamento permitiu transformar os dados brutos dos ficheiros Excel em um formato estruturado e normalizado, facilitando a visualização e análise dos dados através da aplicação web. A modularidade do \textit{pipeline} também permitiu adicionar passos de normalização conforme necessário, mantendo a consistência dos dados processados.
+Este sistema de processamento permitiu transformar os dados ficheiros \gls{xlsx} em um formato estruturado e normalizado, facilitando a visualização e análise dos dados através da aplicação web. A modularidade da \textit{pipeline} também permitiu adicionar passos de normalização conforme necessário, mantendo a consistência dos dados processados.
 
 No final, obtemos dados que são práticos de representar, próximos ao formato final que pretendemos mostrar ao utilizador, e que podem ser facilmente utilizados pela aplicação web para mostrar os gráficos.
 
@@ -144,7 +143,7 @@ No final, obtemos dados que são práticos de representar, próximos ao formato 
 
 \section{Desenvolvimento da Aplicação Web}
 
-Esta secção foca-se na estrutura e funcionamento da aplicação web, tanto o backend em Django como a interface construída com HTML, WebComponents e Flowbite.
+Esta secção foca-se na estrutura e funcionamento da aplicação web, tanto o \textit{backend} em Django como a interface construída com \gls{html}, \textit{WebComponents} e Flowbite.
 
 \subsection{Arquitetura da aplicação (Backend)}
 
@@ -161,19 +160,19 @@ TODO: Incluir aqui um diagrama de classes com os modelos de dados e as relaçõe
     \begin{itemize}
         \item Um número único por utilizador
         \item Uma precisão configurável para valores numéricos (por omissão 9 casas decimais)
-        \item Um UUID único para identificação
+        \item Um \gls{uuid} único para identificação
         \item Relação com o utilizador que o criou
     \end{itemize}
 
     \item \textbf{ExcelFile:} Representa um ficheiro Excel carregado para um \textit{quarter} específico:
     \begin{itemize}
-        \item Armazena o ficheiro físico em pastas organizadas por UUID
+        \item Armazena o ficheiro físico em pastas organizadas por \gls{uuid}
         \item Mantém o estado de processamento (processado/não processado)
         \item Guarda metadados como a secção do ficheiro
         \item Relaciona-se com o \textit{quarter} e o utilizador
     \end{itemize}
 
-    \item \textbf{CSVData:} Armazena os dados processados de cada folha do Excel:
+    \item \textbf{ChartData:} Armazena os dados processados de cada folha do Excel:
     \begin{itemize}
         \item Guarda os dados em formato \gls{json}
         \item Mantém a ordem original das colunas
@@ -181,6 +180,8 @@ TODO: Incluir aqui um diagrama de classes com os modelos de dados e as relaçõe
         \item Relaciona-se com o ficheiro Excel de origem e o utilizador
     \end{itemize}
 \end{itemize}
+
+A utilização de identificadores \gls{uuid} foi importante uma vez que, para além de identificar unicamente cada instancia da entidade, faz com que não seja possivel aceder aos dados só a aumentar o identificador, como se fosse o caso se o identificador fosse um número inteiro sequencial. O Django já disponibiliza uma chave primária em cada modelo por omissão, que é um número sequencial inteiro.
 
 \subsubsection{Gestão de Utilizadores}
 
@@ -192,52 +193,105 @@ Os utilizadores podem criar conta na aplicação, sendo que podem criar conta pa
 
 \subsubsection{Gestão de Ficheiros e Processamento de dados}
 
-Para conseguirmos manter vários ficheiros em disco, tivemos de pensar num mecanismo capaz de manter ficheiros organizados. Para isso, desenvolvemos um sistema que garante que os dados carregados pelos utilizadores não só ficam protegidos e organizados. Em vez de depender apenas do nome do ficheiro (o que podia facilmente gerar conflitos ou sobreposições), o sistema cria automaticamente uma pasta associada a um UUID, o que garante que cada ficheiro fica isolado do resto. Isto evita situações em que dois ficheiros com nomes iguais se sobrepõem e, ao mesmo tempo, facilita bastante a estruturação interna por quarter, utilizador, ou qualquer outra lógica que venha a ser implementada. Assim que o ficheiro é carregado, o processamento é iniciado, sem depender de passos manuais , ou seja, o utilizador só precisa de fazer o upload e o resto é tratado pelo sistema.
+Para conseguirmos manter vários ficheiros em disco, tivemos de pensar num mecanismo capaz de manter ficheiros organizados. Para isso, desenvolvemos um mecanismo que garante que os dados carregados pelos utilizadores ficam organizados em pastas isoladas. Em vez de depender apenas do nome do ficheiro (o que podia facilmente gerar conflitos ou sobreposições de nomes), a aplicação cria automaticamente uma pasta associada a um \gls{uuid}, o que garante que cada ficheiro fica isolado do resto. Isto evita situações em que dois ficheiros com nomes iguais se sobrepõem e, ao mesmo tempo, facilita bastante a estruturação interna por \gls{quarter}. Assim que o ficheiro é carregado, o processamento é iniciado, sem depender de passos manuais , ou seja, o utilizador só precisa de fazer o \textit{upload} e o resto é tratado pela aplicação.
 
-Para além disso, o sistema guarda registos de todos os ficheiros carregados. Quando se carrega um novo ficheiro para substituir outro com o mesmo nome ou que resulta nos mesmos dados, o sistema não apaga o anterior. Em vez disso, marca-o como não atual, processa o novo, atualiza os dados relevantes na base de dados, e mantém o anterior guardado. Esta versão antiga pode ser usada mais tarde, caso seja necessário recuperar informação, validar alterações ou simplesmente reverter um erro. Não foi uma funcionalidade pensada para ser exposta diretamente ao utilizador, e não faz parte do uso normal, mas surgiu como consequência da arquitetura escolhida (ficheiros correntes e não correntes).
+Para além disso, a aplicação guarda registos de todos os ficheiros carregados. Quando se carrega um novo ficheiro para substituir outro com o mesmo nome ou que resulta nos mesmos dados, a aplicação não apaga o anterior, como já foi descrito no capítulo (\cf, capítulo \ref{sec:armazenamentoDados}). Esta versão antiga pode ser usada mais tarde, caso seja necessário recuperar informação, validar alterações, ou aplicar novamente a normalização dos dados. Esta funcionalidade não foi uma funcionalidade pensada para ser exposta diretamente ao utilizador, e não faz parte do uso normal, mas surgiu como consequência da arquitetura escolhida (ficheiros correntes e não correntes).
 
 \subsubsection{Endpoints para comunicação com o frontend}
 
-A aplicação expõe uma série de endpoints \textit{rest} que permitem a interação com o frontend. Estes endpoints são organizados de forma lógica, com rotas específicas para diferentes funcionalidades. A API inclui endpoints para gestão de \textit{quarters} (\texttt{/api/\textit{quarters}/}) e visualização de gráficos (\texttt{/api/chart/})  O endpoint para visualização de gráficos é o mais importante, e é o que é utilizado para mostrar os gráficos na aplicação web, e permite uma série de parâmetros para filtrar os dados e mostrar gráficos de diferentes tipos. 
+A aplicação expõe um conjunto de \textit{endpoints} \textit{rest} que permitem a interação com o frontend. Estes \textit{endpoints} são organizados de forma lógica, com rotas específicas para diferentes funcionalidades:
 
-Quando a aplicação carrega, não mostra logo todos os gráficos, mas sim um \textit{skeleton} que depois é substituido pelos gráficos, permitindo uma melhor experiência do utilizador. Esse carregamento é feito de forma assincrona, por Javascript, e utiliza o endpoint para visualização de gráficos para obter a configuração final de um gráfico especifico a ser mostrado. A configuração retornada é especifica para a biblioteca Plotly, que depois, juntamente com o restante código Javascript, consegue mostrar o gráfico e aplicar filtros com base nos parâmetros passados.
+\begin{itemize}
+    \item \texttt{quarters/new/}: Endpoint para criação de um novo \textit{quarter}.
+    \item \texttt{quarters/edit/<uuid:uuid>/}: Permite editar os detalhes de um \textit{quarter} já existente, identificado pelo seu \gls{uuid}.
+    \item \texttt{quarters/delete/<uuid:uuid>/}: Endpoint para apagar um \textit{quarter} específico.
+    \item \texttt{quarters/}: Endpoint para listar todos os \textit{quarters} do utilizador.
+    \item \texttt{quarters/files/delete/<uuid:uuid>/}: Endpoint para remover um ficheiro associado a um \textit{quarter}, usando o \gls{uuid} do ficheiro.
+  \end{itemize}
+  
+A API inclui \textit{endpoints} para gestão de \textit{quarters} (\texttt{/api/\textit{quarters}/}) e visualização de gráficos (\texttt{/api/chart/})  O \textit{endpoint} para visualização de gráficos (\texttt{api/chart/}) é o mais importante, e é o que é utilizado para mostrar os gráficos na aplicação web, e permite uma série de parâmetros para filtrar os dados e mostrar gráficos de diferentes tipos. Estes endpoints são usados com recurso a pedidos HTTP (utilizando \texttt{fetch}) e também como páginas que aceitam parâmetros por \gls{url} (como por exemplo em formulários através do atributo \textttt{action}).
 
-A comunicação com o backend é feita através de chamadas assíncronas aos \textit{endpoints} desenvolvidos, passando parâmetros como o \textit{quarter} selecionado e os filtros ativos. O backend devolve a estrutura necessária para renderização com Plotly, assegurando que cada gráfico é gerado com os dados e configurações corretas.
+\begin{lstlisting}[language=\gls{html}, caption={Excerto do código \gls{html} do formulário de edição de \textit{quarter}}]
+    <form method="post" action="/quarters/edit/b12fdf1f-8ce3-4050-a28f-07e444e15042/" id="edit-quarter-form" class="upload-form-wrapper" enctype="multipart/form-data">
+      {% csrf_token %}
+      <div class="flex justify-end">
+        <button type="submit" class="upload-modal-submit-btn">Save</button>
+      </div>
+    </form>
+    \end{lstlisting}
+
+Quando a aplicação carrega, não mostra logo todos os gráficos, mas sim um \textit{skeleton} que depois é substituido pelo gráfico, permitindo uma melhor experiência do utilizador. Esse carregamento é feito de forma assincrona, por Javascript, e utiliza o \textit{endpoint} para visualização de gráficos para obter a configuração final de um gráfico especifico a ser mostrado. A configuração retornada é especifica para a biblioteca \textit{Plotly}, que depois, juntamente com o restante código Javascript, consegue mostrar o gráfico e aplicar filtros com base nos parâmetros passados.
+
+A comunicação com o \textit{backend} é feita através de chamadas assíncronas aos \textit{endpoints} desenvolvidos, passando parâmetros como o \textit{quarter} selecionado e os filtros ativos. O \textit{backend} devolve a estrutura necessária para renderização com \textit{Plotly}, assegurando que cada gráfico é gerado com os dados e configurações corretas.
 
 \subsection{Interface Gráfica (Frontend)}
 
-A interface da aplicação foi desenhada com foco na usabilidade e consistência visual, através da utilização de tecnologias modernas como WebComponents e através de um design system, Flowbite. O objetivo era garantir uma experiência responsiva, adequada para desktop e que suportasse minimamente dispositivos móveis, sem comprometer a performance nem a clareza na apresentação dos dados.
+A interface da aplicação foi desenhada com foco na usabilidade e consistência visual, através da utilização de tecnologias modernas como \textit{WebComponents} e através de um \textit{design system}, Flowbite. O objetivo era garantir uma experiência responsiva, adequada para desktop e que suportasse minimamente dispositivos móveis, sem comprometer a performance nem a clareza na apresentação dos dados.
 
-\subsubsection{Design System com Flowbite}
+\subsubsection{Layout e Linguagem visual}
 
-A escolha do Flowbite, assente sobre Tailwind CSS, permitiu acelerar o desenvolvimento com componentes reutilizáveis e visualmente consistentes. Esta abordagem simplificou a criação de elementos como modais, formulários, botões entre outros elementos, garantindo uma interface limpa e padronizada. A navegação é feita através de uma barra lateral com todas as secções disponiveis, enquanto modais são usados para operações críticas como confirmações e carregamento de ficheiros. A coerência visual é reforçada por tipografia, cores e espaçamentos, permitindo aos utilizadores focarem-se na análise sem distrações.
+Um design system é uma biblioteca que oferece um conjunto de componentes reutilizáveis que podem ser usados em interfaces visuais. A escolha do Flowbite, que utiliza internamente a biblioteca Tailwind CSS, acelerou o desenvolvimento e simplificou a criação da interface visual, e de elementos como modais, formulários e botões. A coerência visual é reforçada por tipografia, cores e espaçamentos que já vem definidos por omissão na biblioteca.
+
+A navegação é feita através de uma barra lateral, que mostra os gráficos disponíveis, enquanto modais são usados para operações críticas como confirmações e carregamento de ficheiros. Outras páginas são disponibilizadas numa barra de navegação no topo da página, que permite os utilizadores aceder à pagina de carregamento de ficheiros. Para o desenvolvimento do \gls{css} foi utilizada a linguagem SCSS, que permite desenvolver estilos de forma mais rápida e mais organizada, que depois é transpilada (através de um \textit{build system} como o ESBuild\cite{esbuild}) para \gls{css} normal.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{./img/res_1920}
+ \caption{Interface visual da aplicação}
+ \end{figure}
+
+
+ Quando não existe gráficos a mostrar, é mostrada ao utilizador uma mensagem que indica que não existe ficheiros carregados, com uma hiperligação a redirecionar para a página de carregamento de ficheiros.
 
 \subsubsection{WebComponents}
 
-A camada de visualização de dados é composta por componentes Web personalizados, cada um encapsulando a lógica de um tipo específico de gráfico. Esta abordagem modular garante isolamento entre componentes, facilita a reutilização e simplifica a manutenção do código Javascript. Na prática, a especificação WebComponents\cite{webcomponents} permite criar os nossos nós DOM, e estende as interfaces DOM já existentes. Esta funcionalidade permite criar componentes que se comportam como elementos HTML, e que podem ser utilizados como tal, e que também podem receber estilos e outras propriedades e atributos e é suportada já pelos os browsers mais usados (como pode ser consultado no site Can I Use\cite{caniuse} que é um site que consegue consultar o suporte de uma funcionalidade em diferentes browsers).
+A camada de visualização de dados é composta por componentes Web, cada um encapsulando toda a sua a lógica, incluindo integrações com as bibliotecas \textit{Plotly} e \textit{Datatables} . Esta abordagem garante isolamento entre componentes, facilita a reutilização e simplifica a manutenção do código Javascript. 
+
+A especificação \textit{WebComponents}\cite{webcomponents} permite criar os nossos nós \gls{dom}, e estende as interfaces \gls{dom} já existentes. Esta funcionalidade permite criar componentes que se comportam como elementos \gls{html}, e que podem ser utilizados como tal, e que também podem receber estilos e outras propriedades e atributos e é suportada já pelos os \textit{browsers} mais usados (como pode ser consultado no site \textit{Can I Use}\cite{caniuse} que é um site que indica o suporte de uma funcionalidade em diferentes \textit{browsers}).
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth]{./img/caniuse}
- \caption{Suporte de WebComponents em navegadores}
+ \caption{Tabela de suporte - \textit{WebComponents}}
  \end{figure}
 
-
-Na nossa aplicação, os WebComponents são usados como elementos HTML normais, que recebem apenas o gráfico que é para mostrar. Ao carregar, fazem uma chamada a um \textit{endpoint} do backend, que retorna a configuração do gráfico, e que é utilizada para mostrar o gráfico.
+Na nossa aplicação, os \textit{WebComponents} são usados como elementos \gls{html} normais, que recebem apenas o gráfico que é para mostrar. Ao carregar, fazem uma chamada a um \textit{endpoint} do \textit{backend}, que retorna a configuração do gráfico, que é utilizada para mostrar o gráfico.
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth]{./img/webc}
- \caption{Utilização de WebComponents na aplicação}
+ \caption{Utilização de \textit{WebComponents} na aplicação}
  \end{figure}
 
-A comunicação com o backend é feita através de chamadas assíncronas aos \textit{endpoints} desenvolvidos, passando parâmetros como o \textit{quarter} selecionado e os filtros ativos. O backend devolve a estrutura necessária para renderização com Plotly, assegurando que cada gráfico é gerado com os dados e configurações corretas. Os gráficos são carregados de forma progressiva, com um \textit{skeleton} que é substituido pelo gráfico quando os dados estão prontos, e apenas são mostrados quando entram dentro do \textit{viewport} do utilizador (\textit{lazy load}). O \textit{lazy load} permite que os servidor não fique sobre-carregado com pedidos, e que no lado do cliente, a memória utilizada seja minimizada visto que não são carregados todos os gráficos de uma vez.	
+A comunicação com o \textit{backend} é feita através de chamadas assíncronas aos \textit{endpoints} desenvolvidos, passando parâmetros como o \textit{quarter} selecionado e os filtros ativos. O \textit{backend} devolve a configuração do gráfico para renderização com \textit{Plotly}, assegurando que cada gráfico é gerado com os dados e configurações corretas. A biblioteca \textit{Plotly} suporta uma configuração declarativa, ou seja, apenas precisamos de retornar um objeto estático, e através dessa configuração, a biblioteca consegue criar a visualização
 
-As bibliotecas Plotly e Datatables foram integradas diretamente com os WebComponents\cite{webcomponents}, fazendo com que o WebComponent consiga mostrar gráficos e tabelas de forma encapsulada. Esta integração permite também que o carregamento seja feito de forma progressiva em cada gráfico é inicialmente substituído por um \textit{skeleton} (uma representação visual com um \textit{spinner} e com a largura e altura aproximada de um gráfico) que desaparece quando os dados ficam disponíveis. A ideia deste \textit{skeleton} é que o utilizador veja que o gráfico está a ser carregado, e que não cause um grande deslocamento do gráfico na interface quando os dados estão prontos.
+\begin{lstlisting}[language=Javascript, caption={Excerto de uma configuração para um gráfico com a utilização da biblioteca \textit{Plotly}}]
+  var trace1 = {
+    x: ['giraffes', 'orangutans', 'monkeys'],
+    y: [20, 14, 23],
+    name: 'SF Zoo',
+    type: 'bar'
+  };
+  
+  var trace2 = {
+    x: ['giraffes', 'orangutans', 'monkeys'],
+    y: [12, 18, 29],
+    name: 'LA Zoo',  
+    type: 'bar'
+  };
+  
+  var data = [trace1, trace2];
+  var layout = {barmode: 'stack'};
+  Plotly.newPlot('myDiv', data, layout);
+\end{lstlisting}
+
+Os gráficos são carregados de forma progressiva (\textit{lazy load}). Apenas são mostrados quando o nó entra dentro do \textit{viewport} do utilizador. O \textit{lazy load} permite que os servidor não fique sobre-carregado com pedidos, e que no lado do cliente, a memória utilizada seja minimizada visto que não são carregados todos os gráficos de uma vez.	
+
+As bibliotecas \textit{Plotly} e \textit{Datatables} foram integradas diretamente com os \textit{WebComponents}\cite{webcomponents}, fazendo com que o WebComponent consiga mostrar gráficos e tabelas de forma encapsulada. Esta integração permite que, quando o carregamento de um gráfico é iniciado, que seja apresentado  um \textit{skeleton} (uma representação visual com um \textit{spinner} e com a largura e altura aproximada de um gráfico) que é trocada pelo o gráfico em si quando os dados ficam disponíveis. A ideia deste \textit{skeleton} é que o utilizador veja que o gráfico está a ser carregado, e que não cause um grande deslocamento do gráfico na interface (\textit{layout shifting}) quando os dados estão prontos.
 
 \subsubsection{Responsividade em dispositivos móveis}
 
-Toda a interface foi pensada para ser utilizada em computadores devido à quantidade de gráficos que são apresentados. A interface adapta-se bem a dispositivos moveis, mas devido ao espaço disponivel, não é possível garantir uma boa experiencia de utilização em dispositivos moveis. A aplicação tem, essencialmente, 2 \textit{media queries}. Uma \textit{media query} que até aos 1023px que inclui telemóveis, tablets e ecrãs pequenos, e uma \textit{media query} a partir dos 1024px que inclui computadores e ecrãs maiores.
+Toda a interface foi pensada para ser utilizada em computadores devido à quantidade de gráficos que são apresentados. A interface adapta-se bem a dispositivos moveis, mas devido ao espaço disponivel, não é possível garantir uma boa experiencia de utilização em dispositivos moveis. A aplicação tem, essencialmente, duas \textit{media queries}. Uma \textit{media query} que até aos 1023px que inclui telemóveis, tablets e ecrãs pequenos, e uma \textit{media query} a partir dos 1024px que inclui computadores e ecrãs maiores.
 
 \begin{figure}[H]
     \centering
@@ -252,15 +306,17 @@ Toda a interface foi pensada para ser utilizada em computadores devido à quanti
  \caption{Media query a partir dos 1024px}
 \end{figure}
 
-Estes \textit{media queries} são muito utilizados para adaptar a interface aos diferentes tamanhos de ecrã, garantindo uma boa experiência de utilização em todos os dispositivos, sendo que não tivemos de fazer código explicitamente para a aplicação se adaptar para dispositivos móveis. Os filtros dinâmicos permitem ajustar os gráficos em tempo real, com \textit{feedback} visual imediato não sendo necessário recarregar a página. No momento em que o filtro troca, é feito um pedido a API de gráficos que retorna um novo conjunto de dados para mostrar, com a configuração do gráfico atualizada.
+Estes \textit{media queries} são as mais comuns, garantindo uma boa experiência de utilização em todos os ecrãs, sendo que não tivemos de fazer código explicitamente para a aplicação se adaptar para dispositivos móveis. Os filtros permitem alterar os gráficos em tempo real, com \textit{feedback} visual imediato não sendo necessário recarregar a página. No momento em que o filtro troca, é feito um pedido a API de gráficos que retorna um novo conjunto de dados para mostrar, com a configuração do gráfico atualizada.
 
 \subsubsection{Carregamento de ficheiros}
 
 A organização dos dados foi pensada para refletir a lógica do projeto Marketplace Simulations. Cada utilizador pode criar múltiplos \textit{quarters} no momento em que carrega um ficheiro. Estes \textit{quarters} funcionam como buckets isolados onde são armazenados os ficheiros carregados. A navegação entre \textit{quarters} é facilitada por setas laterais em cada gráfico apresentado. A criação e remoção de \textit{quarters}, bem como o carregamento de ficheiros, é acompanhada por feedback visual no momento da ação.
 
-Para verificar se os ficheiros são do tipo correto, decidimos validar através do \textit{MIME type}, que é um identificador padronizado utilizado para descrever o tipo de conteúdo de um ficheiro. Os \textit{MIME types} seguem o formato \texttt{tipo/subtipo}, como por exemplo \texttt{text/csv} para ficheiros CSV ou \texttt{application/vnd.openxmlformats-officedocument.spreadsheetml.sheet} para ficheiros Excel no formato \texttt{.xlsx}. Esta abordagem permite garantir que os ficheiros carregados correspondem realmente ao formato esperado, independentemente da extensão do nome do ficheiro, que pode ser facilmente manipulada. Ao inspecionar o \textit{MIME type} real do conteúdo, conseguimos rejeitar ficheiros inválidos ou maliciosos de forma mais robusta. No contexto deste projeto, esta verificação revelou-se essencial, uma vez que apenas ficheiros \texttt{.xlsx} válidos devem ser processados. Assim, a validação por \textit{MIME type} contribui tanto para a segurança como para a integridade do sistema.
+Para verificar se os ficheiros são do tipo correto, decidimos validar através do \textit{MIME type}, que é um identificador  utilizado para descrever o tipo de conteúdo de um ficheiro. Os \textit{MIME types} seguem o formato \texttt{tipo/subtipo}, como por exemplo \texttt{text/csv} para ficheiros CSV ou \texttt{application/vnd.openxmlformats-officedocument.spreadsheetml.sheet} para ficheiros Excel no formato \texttt{.xlsx}. Esta abordagem permite garantir que os ficheiros carregados correspondem realmente ao formato esperado, independentemente da extensão do nome do ficheiro que pode ser facilmente manipulada. 
 
-Durante o carregamento, a interface valida se os ficheiros são do tipo correto. Apenas ficheiros dos mime type \texttt{application/vnd.openxmlformats-officedocument.spreadsheetml.sheet} e \texttt{application/vnd.ms-excel} são permitidos. Quando um ficheiro com o mesmo nome é enviado, este não sobrescreve o anterior,  mas é marcado os ficheiros antigos como não correntes. Uma outra funcionalidade é a resiliencia a ficheiros maliciosos. No nosso caso, a biblioteca Pandas não permite a execução de código, pelo que não é possivel executar código malicioso que seja incluido nos ficheiros. 
+Ao validar o \textit{MIME type} do ficheiro, conseguimos rejeitar ficheiros com o tipo errado. No contexto deste projeto, esta verificação era essencial, uma vez que apenas ficheiros \texttt{.xlsx} válidos devem ser processados. Assim, a validação por \textit{MIME type} contribui tanto para a segurança como para a integridade da aplicação.
+
+Durante o carregamento, a interface valida se os ficheiros são do tipo correto. Apenas ficheiros dos mime type \texttt{application/vnd.openxmlformats-officedocument.spreadsheetml.sheet} e \texttt{application/vnd.ms-excel} são permitidos.
 
 %%________________________________________________________________________
 \chapter{Validação e Testes}
@@ -321,7 +377,7 @@ Desta forma, procurámos alinhar a aplicação com boas práticas de desenvolvim
 
 \section{Testes Manuais}
 
-Para complementar os testes automatizados, foi desenvolvido um conjunto abrangente de testes manuais utilizando a linguagem Gherkin para descrever os cenários de teste. Gherkin é uma linguagem estruturada, mas legível por humanos, que permite descrever comportamentos esperados do sistema em forma de cenários do tipo Dado-Quando-Então. Esta abordagem facilita a comunicação entre equipas técnicas e não técnicas, garantindo que todos os intervenientes compreendam os objetivos de cada teste.
+Para complementar os testes das ferramentas acima, foi desenvolvido um conjunto abrangente de testes manuais utilizando a linguagem Gherkin para descrever os cenários de teste. Gherkin é uma linguagem estruturada, mas legível por humanos, que permite descrever comportamentos esperados do sistema em forma de cenários do tipo Dado-Quando-Então. Esta abordagem facilita a comunicação entre equipas técnicas e não técnicas, garantindo que todos os intervenientes compreendam os objetivos de cada teste.
 
 Foi pedido a cinco testadores independentes para executarem estes testes manualmente, com base nos cenários escritos em Gherkin, e no final preencherem um formulário com os resultados de cada execução, incluindo observações e eventuais desvios face ao comportamento esperado. Os cenários de teste foram organizados em duas categorias principais:
 
@@ -355,7 +411,7 @@ TODO: Falta falar sobre a análise dos resultados dos testes manuais.
 
 \section{Compatibilidade com Navegadores}
 
-A compatibilidade com diferentes navegadores foi testada utilizando a plataforma BrowserStack, que permitiu testar a aplicação em múltiplos ambientes. Os testes foram realizados nas versões mais recentes dos principais navegadores:
+A compatibilidade com diferentes \textit{browsers} foi testada utilizando a plataforma BrowserStack, que permitiu testar a aplicação em múltiplos ambientes. Os testes foram realizados nas versões mais recentes dos principais \textit{browsers}:
 
 \begin{itemize}
     \item Google Chrome (versões 90+)
@@ -364,7 +420,7 @@ A compatibilidade com diferentes navegadores foi testada utilizando a plataforma
     \item Safari (versões 14+)
 \end{itemize}
 
-A aplicação demonstrou compatibilidade com os navegadores testados, com exceção do Internet Explorer 11, que não é suportado devido a limitações técnicas e à baixa utilização atual deste navegador.
+A aplicação demonstrou compatibilidade com os \textit{browsers} testados, com exceção do Internet Explorer 11, que não é suportado devido a limitações técnicas e à baixa utilização atual deste navegador.
 
 Os testes de compatibilidade incluíram:
 \begin{itemize}
@@ -381,7 +437,7 @@ Os resultados dos diferentes tipos de testes realizados permitiram identificar e
 \begin{itemize}
     \item Alta pontuação em acessibilidade, demonstrando o compromisso com a inclusão digital
     \item Boa performance geral, com tempos de resposta adequados
-    \item Compatibilidade robusta com navegadores modernos
+    \item Compatibilidade robusta com \textit{browsers} modernos
     \item Interface intuitiva e fácil de usar, conforme validado pelos testes manuais
 \end{itemize}
 
@@ -398,9 +454,9 @@ O desenvolvimento deste projeto culminou numa aplicação web funcional que resp
 
 Um dos pontos fortes deste projeto foi a implementação de um sistema automático para gerir ficheiros e transformar dados em gráficos. Esta funcionalidade, de os utilizadores poderem carregar ficheiros diretamente exportados do simulador e, a partir daí, obterem gráficos interativos, sem qualquer necessidade de formatação manual representa uma melhoria relação ao processo anterior, que era manual, demorado e propenso a erros. 
 
-A decisão de usar Django como base para o backend revelou-se acertada. Além de facilitar a autenticação e gestão de utilizadores, a  biblioteca permitiu implementar uma boa arquitetura, com separação entre as camadas frontend e backend. A autenticação integrada, associada ao isolamento de dados por utilizador, garantiu uma camada extra de segurança sem complicar a lógica da aplicação. A API REST que foi construída permitiu uma comunicação fluida entre as várias partes do sistema, suportando atualizações dinâmicas dos gráficos sem impacto na performance.
+A decisão de usar Django como base para o \textit{backend} revelou-se acertada. Além de facilitar a autenticação e gestão de utilizadores, a  biblioteca permitiu implementar uma boa arquitetura, com separação entre as camadas frontend e \textit{backend}. A autenticação integrada, associada ao isolamento de dados por utilizador, garantiu uma camada extra de segurança sem complicar a lógica da aplicação. A API REST que foi construída permitiu uma comunicação fluida entre as várias partes do sistema, suportando atualizações dinâmicas dos gráficos sem impacto na performance.
 
-No lado do frontend, optou-se por uma abordagem prática, usando bibliotecas para garantir a responsabilidade e usabilidade. A biblioteca Plotly foi fundamental para criar gráficos interativos que, além de apelativos, ajudam os estudantes a interpretar os dados.
+No lado do frontend, optou-se por uma abordagem prática, usando bibliotecas para garantir a responsabilidade e usabilidade. A biblioteca \textit{Plotly} foi fundamental para criar gráficos interativos que, além de apelativos, ajudam os estudantes a interpretar os dados.
 
 Durante o desenvolvimento surgiram alguns desafios técnicos. Um dos principais foi lidar com a diversidade estrutural dos ficheiros. Alguns traziam folhas com formatação irregular, nomes de colunas inconsistentes ou dados dificeis de perceber. Isso obrigou à criação de uma pipeline de normalização robusto e reutilizável que é uma componente essencial para garantir que os dados fossem processados corretamente e de forma previsível. Apesar da solução atual funcionar bem no contexto do projeto, poderá ser necessário alterar no futuro caso os ficheiros evoluam ou incluam novos tipos de dados. Outro ponto que pode ser melhorado é a interface de gestão de \textit{quarters}, que embora funcional, ainda exige alguma familiaridade com o conceito por parte do utilizador.
 

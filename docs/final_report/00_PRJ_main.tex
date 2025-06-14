@@ -78,7 +78,7 @@
 
 %% para usar listagens de código
 \usepackage{listings}
-
+\usepackage{xcolor} % Para cores nos blocos, opcional mas útil
 %% para escrita "formal" de algoritmos
 \usepackage{algorithm}
 
@@ -140,6 +140,24 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Begin Document
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\lstset{
+  basicstyle=\ttfamily\small,
+  breaklines=true,
+  breakatwhitespace=false,
+  frame=single,
+  numbers=left,
+  numberstyle=\tiny,
+  stepnumber=1,
+  numbersep=5pt,
+  tabsize=2,
+  showstringspaces=false,
+  columns=fullflexible,
+  keepspaces=true,
+  backgroundcolor=\color{gray!10},
+  captionpos=b
+}
+
 \begin{document}
 
 \include{./acronimos}

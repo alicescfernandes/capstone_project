@@ -94,7 +94,7 @@ Em suma, no nosso projeto, identificamos os seguintes requisitos, ordenados por 
 Alguns requisitos não funcionais foram igualmente críticos para garantir a estabilidade e usabilidade do sistema. Os requisitos identificados foram os seguintes:
 
 \begin{itemize}
-    \item \textbf{Usabilidade:} a aplicação deve ser intuitiva, suportar múltiplos browsers e permitir o carregamento progressivo de gráficos sem bloquear a interface visual (\textit{lazy load}).
+    \item \textbf{Usabilidade:} a aplicação deve ser intuitiva, suportar múltiplos \textit{browsers} e permitir o carregamento progressivo de gráficos sem bloquear a interface visual (\textit{lazy load}).
     
     \item \textbf{Segurança:} o sistema deve permitir os utilizadores criar contas e assegurar que cada utilizador ou grupo apenas consegue aceder aos seus próprios dados. Deve também assegurar que só permite carregar ficheiros com o formato previsto.
     
@@ -124,7 +124,7 @@ Com base nos requisitos funcionais e não funcionais identificados na secção a
     O utilizador escolhe um \textit{quarter} e carrega ficheiros exportados da plataforma de simulação. O sistema valida a extensão, processa os ficheiros, aplica a pipeline de normalização para cada folha do Excel. Os dados serão associados ao \textit{quarter} de onde foram criados. Este caso é central no sistema e concretiza os requisitos de Carregamento, normalização dos dados, e compatibilidade com os ficheiros da plataforma Marketplace Simulations.
 
     \item \textbf{Eliminação de ficheiros: } \\
-    O utilizador pode eliminar ficheiros previamente carregados. O sistema remove as referências no backend, marca os ficheiros antigos como inativos e evita que continuem a ser usados na geração dos gráfico. Este caso garante a gestão de dados pelo utilizador e reforça o princípio de manter apenas uma versão ativa por ficheiro.
+    O utilizador pode eliminar ficheiros previamente carregados. O sistema remove as referências no \textit{backend}, marca os ficheiros antigos como inativos e evita que continuem a ser usados na geração dos gráfico. Este caso garante a gestão de dados pelo utilizador e reforça o princípio de manter apenas uma versão ativa por ficheiro.
     
     \item \textbf{Visualização de gráficos: } \\
     Após carregar os ficheiros, o utilizador pode aceder a gráficos criados a partir dos dados normalizados. Os gráficos são interativos, e o utilizador pode aplicar filtros (por exemplo, selecionar o país ou o \textit{quarter} atual) para ajustar a visualização. Apenas os ficheiros mais recentes são utilizados para construir os gráficos. Este caso corresponde ao requisito de visualizações interativas e integra a lógica de isolamento de dados, performance e usabilidade.
