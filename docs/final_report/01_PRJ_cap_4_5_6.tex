@@ -151,9 +151,17 @@ A aplicação web foi desenvolvida utilizando o framework Django como já descri
 
 \subsubsection{Modelos de Dados}
 
-A aplicação utiliza três modelos principais para gerir os dados, cada um com um papel específico na gestão e organização da informação. Estes modelos formam a base da aplicação, permitindo uma estrutura clara e organizada dos dados.
+A aplicação utiliza três modelos principais para gerir os dados, cada um com um papel específico na gestão e organização da informação. Estes modelos formam a base da aplicação, permitindo uma estrutura clara e organizada dos dados. Como o Django utiliza o \gls{orm} para gerir as relações entre os modelos, cada classe representa também um modelo na base de dados, que é apresentado na figura \ref{fig:er-diagram}.
 
-TODO: Incluir aqui um diagrama de classes com os modelos de dados e as relações entre eles.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{./img/er-diagram.png}
+ \caption{Diagrama de entidade-relação da aplicação}
+ \label{fig:er-diagram}
+ \end{figure}
+
+
+O nosso modelo de dados é composto por três modelos principais: \textit{Quarter}, \textit{ExcelFile} e \textit{ChartData}, cada um com um papel específico no contexto da aplicação.
 
 \begin{itemize}
     \item \textbf{Quarter:} Representa um trimestre específico para um utilizador. Cada \textit{quarter} tem:
@@ -170,13 +178,14 @@ TODO: Incluir aqui um diagrama de classes com os modelos de dados e as relaçõe
         \item Mantém o estado de processamento (processado/não processado)
         \item Guarda metadados como a secção do ficheiro
         \item Relaciona-se com o \textit{quarter} e o utilizador
+        \item Controla qual versão dos dados está ativa (corrente ou não)
     \end{itemize}
 
     \item \textbf{ChartData:} Armazena os dados processados de cada folha do Excel:
     \begin{itemize}
         \item Guarda os dados em formato \gls{json}
         \item Mantém a ordem original das colunas
-        \item Controla qual versão dos dados está ativa
+        \item Guarda metadados como o nome da folha e o \textit{slug} para identificar os dados unicamente
         \item Relaciona-se com o ficheiro Excel de origem e o utilizador
     \end{itemize}
 \end{itemize}
