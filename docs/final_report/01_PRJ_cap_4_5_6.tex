@@ -69,14 +69,14 @@ No final, dos 30 ficheiros recebidos, a classificação foi a seguinte:
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=\textwidth]{./img/stats1}
+    \includegraphics[max width=\textwidth]{./img/stats1}
  \caption{Classificação dos ficheiros - contagem final dos grupos}
  \end{figure}
 
 Em termos de representações utilizadas, a distribuição é a seguinte:
 \begin{figure}[h]
     \centering
-    \includegraphics[width=\textwidth]{./img/stats2}
+    \includegraphics[max width=\textwidth]{./img/stats2}
  \caption{Classificação dos ficheiros - contagem final de representações utilizadas}
  \end{figure}
 
@@ -131,13 +131,13 @@ No final, obtemos dados que são práticos de representar, próximos ao formato 
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=\textwidth]{./img/before}
+\includegraphics[max width=\textwidth]{./img/before}
 \caption{Excerto de uma folha de cálculo recebida}
 \end{figure}
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=\textwidth]{./img/after}
+\includegraphics[max width=\textwidth]{./img/after}
 \caption{Gráfico extraido da mesma folha acima com filtro aplicado para o Quarter 5}
 \end{figure}
 
@@ -155,7 +155,7 @@ A aplicação utiliza três modelos principais para gerir os dados, cada um com 
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=\textwidth]{./img/er-diagram.png}
+    \includegraphics[max width=\textwidth]{./img/er-diagram.png}
  \caption{Diagrama de entidade-relação da aplicação}
  \label{fig:er-diagram}
  \end{figure}
@@ -243,14 +243,7 @@ Um design system é uma biblioteca que oferece um conjunto de componentes reutil
 
 A navegação é feita através de uma barra lateral, que mostra os gráficos disponíveis, enquanto modais são usados para operações críticas como confirmações e carregamento de ficheiros. Outras páginas são disponibilizadas numa barra de navegação no topo da página, que permite os utilizadores aceder à pagina de carregamento de ficheiros. Para o desenvolvimento do \gls{css} foi utilizada a linguagem SCSS, que permite desenvolver estilos de forma mais rápida e mais organizada, que depois é transpilada (através de um \textit{build system} como o ESBuild\cite{esbuild}) para \gls{css} normal.
 
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=\textwidth]{./img/res_1920}
- \caption{Interface visual da aplicação}
- \end{figure}
-
-
- Quando não existe gráficos a mostrar, é mostrada ao utilizador uma mensagem que indica que não existe ficheiros carregados, com uma hiperligação a redirecionar para a página de carregamento de ficheiros.
+Quando não existe gráficos a mostrar, é mostrada ao utilizador uma mensagem que indica que não existe ficheiros carregados, com uma hiperligação a redirecionar para a página de carregamento de ficheiros.
 
 \subsubsection{WebComponents}
 
@@ -260,7 +253,7 @@ A especificação \textit{WebComponents}\cite{webcomponents} permite criar os no
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=\textwidth]{./img/caniuse}
+    \includegraphics[max width=\textwidth]{./img/caniuse}
  \caption{Tabela de suporte - \textit{WebComponents}}
  \end{figure}
 
@@ -268,11 +261,20 @@ Na nossa aplicação, os \textit{WebComponents} são usados como elementos \gls{
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=\textwidth]{./img/webc}
+    \includegraphics[max width=\textwidth]{./img/webc}
  \caption{Utilização de \textit{WebComponents} na aplicação}
  \end{figure}
 
-A comunicação com o \textit{backend} é feita através de chamadas assíncronas aos \textit{endpoints} desenvolvidos, passando parâmetros como o \textit{quarter} selecionado e os filtros ativos. O \textit{backend} devolve a configuração do gráfico para renderização com \textit{Plotly}, assegurando que cada gráfico é gerado com os dados e configurações corretas. A biblioteca \textit{Plotly} suporta uma configuração declarativa, ou seja, apenas precisamos de retornar um objeto estático, e através dessa configuração, a biblioteca consegue criar a visualização
+A comunicação com o \textit{backend} é feita através de chamadas assíncronas aos \textit{endpoints} desenvolvidos, passando parâmetros como o \textit{quarter} selecionado e os filtros ativos. O \textit{backend} devolve a configuração do gráfico para renderização com \textit{Plotly}, assegurando que cada gráfico é gerado com os dados e configurações corretas, como pode ser observado no diagrama de sequência \ref{fig:sequence}.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[max width=\textwidth]{./img/sequence}
+ \caption{Diagrama de sequência da comunicação com o \textit{backend}}
+ \label{fig:sequence}
+\end{figure}
+
+A biblioteca \textit{Plotly} suporta uma configuração declarativa, ou seja, apenas precisamos de retornar um objeto estático, e através dessa configuração, a biblioteca consegue criar a visualização
 
 \begin{lstlisting}[language=Javascript, caption={Excerto de uma configuração para um gráfico com a utilização da biblioteca \textit{Plotly}}]
   var trace1 = {
@@ -304,14 +306,13 @@ Toda a interface foi pensada para ser utilizada em computadores devido à quanti
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=\textwidth]{./img/res_1023}
+    \includegraphics[max max width=\textwidth]{./img/res_1023}
  \caption{Media query até 1023px}
 \end{figure}
 
-
 \begin{figure}[H]
     \centering
-    \includegraphics[width=\textwidth]{./img/res_1920}
+    \includegraphics[max max width=\textwidth]{./img/res_1920}
  \caption{Media query a partir dos 1024px}
 \end{figure}
 
@@ -321,11 +322,11 @@ Estes \textit{media queries} são as mais comuns, garantindo uma boa experiênci
 
 A organização dos dados foi pensada para refletir a lógica do projeto Marketplace Simulations. Cada utilizador pode criar múltiplos \textit{quarters} no momento em que carrega um ficheiro. Estes \textit{quarters} funcionam como buckets isolados onde são armazenados os ficheiros carregados. A navegação entre \textit{quarters} é facilitada por setas laterais em cada gráfico apresentado. A criação e remoção de \textit{quarters}, bem como o carregamento de ficheiros, é acompanhada por feedback visual no momento da ação.
 
-Para verificar se os ficheiros são do tipo correto, decidimos validar através do \textit{MIME type}, que é um identificador  utilizado para descrever o tipo de conteúdo de um ficheiro. Os \textit{MIME types} seguem o formato \texttt{tipo/subtipo}, como por exemplo \texttt{text/csv} para ficheiros CSV ou \texttt{application/vnd.openxmlformats-officedocument.spreadsheetml.sheet} para ficheiros Excel no formato \texttt{.xlsx}. Esta abordagem permite garantir que os ficheiros carregados correspondem realmente ao formato esperado, independentemente da extensão do nome do ficheiro que pode ser facilmente manipulada. 
+Para verificar se os ficheiros são do tipo correto, decidimos validar através do \textit{MIME type}, que é um identificador  utilizado para descrever o tipo de conteúdo de um ficheiro. Os \textit{MIME types} seguem o formato \texttt{tipo/subtipo}, como por exemplo \texttt{text/csv} para ficheiros CSV ou \texttt{application/\allowbreak vnd\allowbreak.open\allowbreak xmlV formats-\allowbreak officedocument.\allowbreak spreadsheetml.\allowbreak sheet} para ficheiros Excel no formato \texttt{.xlsx}. Esta abordagem permite garantir que os ficheiros carregados correspondem realmente ao formato esperado, independentemente da extensão do nome do ficheiro que pode ser facilmente manipulada. 
 
 Ao validar o \textit{MIME type} do ficheiro, conseguimos rejeitar ficheiros com o tipo errado. No contexto deste projeto, esta verificação era essencial, uma vez que apenas ficheiros \texttt{.xlsx} válidos devem ser processados. Assim, a validação por \textit{MIME type} contribui tanto para a segurança como para a integridade da aplicação.
 
-Durante o carregamento, a interface valida se os ficheiros são do tipo correto. Apenas ficheiros dos mime type \texttt{application/vnd.openxmlformats-officedocument.spreadsheetml.sheet} e \texttt{application/vnd.ms-excel} são permitidos.
+Durante o carregamento, a interface valida se os ficheiros são do tipo correto. Apenas ficheiros dos mime type \texttt{application/vnd\allowbreak.openxmlformats\allowbreak officedocument\allowbreak.spreadsheetml\allowbreak.sheet} e \texttt{application/vnd.ms\allowbreak excel} são permitidos.
 
 %%________________________________________________________________________
 \chapter{Validação e Testes}
@@ -344,13 +345,14 @@ Esta ferramenta Lighthouse, apesar de não ser tão detalhada como a Axe, sinali
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=\textwidth]{./img/lh_before}
+\includegraphics[max width=\textwidth]{./img/lh_before}
 \caption{Testes de acessibilidade com a ferramenta Lighthouse}
 \end{figure}
 
+TODO: Adicionar imagem do Lighthouse após as correções.
 \begin{figure}[H]
 \centering
-\includegraphics[width=\textwidth]{./img/lh_after}
+\includegraphics[max width=\textwidth]{./img/lh_before}
 \caption{Testes de acessibilidade com a ferramenta Lighthouse após as correções}
 \end{figure}
 
@@ -360,7 +362,7 @@ Nos primeiros testes feitos com a ferramenta Axe, as ferramentas sinalizaram alg
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=\textwidth]{./img/axe}
+    \includegraphics[max width=\textwidth]{./img/axe}
     \caption{Testes de acessibilidade com a ferramenta Axe}
     \end{figure}
 
@@ -369,7 +371,7 @@ Após resolver os problemas indicados pela ferramenta Axe, conseguimos então me
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=\textwidth]{./img/axe_after}
+\includegraphics[max width=\textwidth]{./img/axe_after}
 \caption{Testes de acessibilidade com a ferramenta Axe após as correções}
 \end{figure}
 
