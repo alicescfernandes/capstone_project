@@ -157,16 +157,12 @@
   captionpos=b
 }
 
-\setlength{\parskip}{0.5em}
 
 \usepackage{titlesec}
 
-\titlespacing*{\subsubsection}
-  {0pt}{10pt plus 2pt minus 2pt}{5pt plus 2pt minus 2pt}
-
 \begin{document}
 
-\include{./acronimos}
+\setlength{\parskip}{0.5em}
 
 % para que a numeracao de listings seja global
 % (e não no contexto de cada capitulo!)
@@ -174,6 +170,9 @@
 %% incluir a capa
 \frontmatter
 \fazerCapa
+
+\include{./acronimos}
+
 %% incluir o resumo e abstract
 %% caso pretenda, incluir os agradecimentos e a dedicatória
 %%________________________________________________________________________
