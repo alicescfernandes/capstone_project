@@ -78,15 +78,15 @@ class ExcelFile(models.Model):
                 columns = processed_data_frame.columns.tolist()
                 data_json = convert_df_to_json(processed_data_frame, precision=self.quarter.float_precision)
                 
-                # Check for other CSV's and mark them as not active
-                CSVData.objects.filter(
+                # Check for other Chart Data's and mark them as not active
+                ChartData.objects.filter(
                     quarter_file__quarter=self.quarter,
                     sheet_name_slug=sheet_slug,
                     is_current=True,
                     user=self.user
                 ).update(is_current=False)
 
-                CSVData.objects.create(
+                ChartData.objects.create(
                     quarter_file=self,
                     sheet_name_pretty=sheet_title,
                     sheet_name_slug=sheet_slug,
@@ -103,18 +103,18 @@ class ExcelFile(models.Model):
         except Exception as e:
             print(f"Erro a processar {xlsx_path}: {e}")
 
-    # When deleting a file, if a bunch of "active" csv's originated from said file are the most up to date, 
+    # When deleting a file, if a bunch of "active" chart_data's originated from said file are the most up to date, 
     # then we need to update the active ones so that the user can still see something
     def delete(self, *args, **kwargs):
-            related_csvs = list(self.csvs.filter(user=self.user))
+            related_chart_data = list(self.chart_data.filter(user=self.user))
             quarter = self.quarter
             excel_file_id = self.id
 
-            # Build a set of slugs where the current CSV is going to be deleted
+            # Build a set of slugs where the current chart_data is going to be deleted
             current_slugs = {
-                csv.sheet_name_slug
-                for csv in related_csvs
-                if csv.is_current
+                chart_data.sheet_name_slug
+                for chart_data in related_chart_data
+                if chart_data.is_current
             }
 
 
@@ -122,9 +122,9 @@ class ExcelFile(models.Model):
                 super().delete(*args, **kwargs)
 
                 for slug in current_slugs:
-                    # Get the most recent CSVData (by upload date) for this slug in this quarter
+                    # Get the most recent ChartData (by upload date) for this slug in this quarter
                     recent_csv = (
-                        CSVData.objects
+                        ChartData.objects
                         .filter(
                             quarter_file__quarter=quarter,
                             sheet_name_slug=slug
@@ -138,9 +138,9 @@ class ExcelFile(models.Model):
                         recent_csv.is_current = True
                         recent_csv.save(update_fields=['is_current'])
 
-class CSVData(models.Model):
+class ChartData(models.Model):
     uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
-    quarter_file = models.ForeignKey("ExcelFile", on_delete=models.CASCADE, related_name="csvs")
+    quarter_file = models.ForeignKey("ExcelFile", on_delete=models.CASCADE, related_name="chart_data")
     
     # Sheet name (derived from she actual sheet title) is a more human-like string, that removes some text.
     sheet_name_pretty = models.CharField(max_length=255)

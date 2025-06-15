@@ -4,15 +4,15 @@ BALANCE_SHEET_CONFIG = {
     "Brand Revenues":         {"type": "relative", "sign":  1},
     "Rebates":                {"type": "relative", "sign": -1},
     "Cost of Goods Sold":     {"type": "relative", "sign": -1},
-    "Gross Profit":           {"ignore": True},
+    "Gross Profit":           {"ignore": True}, # This is a total, profit
     "Brand Design":           {"type": "relative", "sign": -1},
     "Ad Design":              {"type": "relative", "sign": -1},
     "Brand Advertising":      {"type": "relative", "sign": -1},
     "Point of Purchase Display": {"type": "relative", "sign": -1},
-    "Expenses":               {"ignore": True},
+    "Expenses":               {"ignore": True}, # This is a total, based on the other expenses
     "Brand Profit":           {"type": "total",    "sign":  1},
-    "Profit per Unit":        {"ignore": True},
-    "% from Brand Revenues":  {'type': 'percentage', "reference": "Brand Revenues"},
+    "% from Brand Revenues":  {'type': 'percentage', "reference": "Brand Profit"},
+    "Profit per Unit":        {"type": "absolute",    "sign":  1}, # graph doesnt support multiple series on the same data
     
     # Regional Profitability
     "Sales Revenue":         {"type": "relative", "sign":  1},
@@ -213,7 +213,7 @@ def process_income_statement(df,quarter):
 
     # validate
     if latest_quarter is None:
-        raise ValueError("Nenhuma coluna de trimestre encontrada no ficheiro CSV.")
+        raise ValueError("Nenhuma coluna de trimestre encontrada no ficheiro chart_data.")
 
     df = df[["Report Item", latest_quarter]].dropna()
     df[latest_quarter] = df[latest_quarter].astype(str).str.replace(",", "").astype(float)

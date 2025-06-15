@@ -7,7 +7,7 @@ from django.contrib.auth import logout
 from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
-from .models import Quarter, ExcelFile, CSVData
+from .models import Quarter, ExcelFile, ChartData
 from .utils.chart_classification import CHART_CLASSIFICATION_KEYS, CHART_CLASSIFICATION
 from django.utils.text import slugify
 
@@ -44,8 +44,8 @@ def home(request):
             "chart_slugs": []
         })
 
-    latest_csvs = (
-        CSVData.objects
+    latest_chart_data = (
+        ChartData.objects
         .filter(user=request.user, is_current=True)
         .select_related('quarter_file__quarter')
         .order_by('sheet_name_slug', '-quarter_file__quarter__number')
@@ -55,20 +55,20 @@ def home(request):
     all_charts = []
     charts_by_section = {}
 
-    for csv in latest_csvs:
-        chart_slug = csv.sheet_name_slug
+    for chart_data in latest_chart_data:
+        chart_slug = chart_data.sheet_name_slug
         if chart_slug in seen_chart_slugs or chart_slug not in CHART_CLASSIFICATION_KEYS:
             continue
 
         seen_chart_slugs.add(chart_slug)
 
-        section_title = csv.quarter_file.section_name or "All"
+        section_title = chart_data.quarter_file.section_name or "All"
         section_slug = slugify(section_title)
 
         chart_info = {
             "slug": chart_slug,
-            "title": csv.sheet_name_pretty,
-            "quarter_number": csv.quarter_file.quarter.number,
+            "title": chart_data.sheet_name_pretty,
+            "quarter_number": chart_data.quarter_file.quarter.number,
             "type": CHART_CLASSIFICATION[chart_slug]["type"]
         }
 
