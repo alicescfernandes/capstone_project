@@ -129,11 +129,6 @@ def manage_quarters(request):
         },
     )
 
-    return render(request, 'pages/manage_quarters.html', {
-        'form': form,
-        'quarters': quarters,
-    })
-
 @login_required
 def delete_quarter(request, uuid):
     quarter = get_object_or_404(Quarter, uuid=uuid, user=request.user)

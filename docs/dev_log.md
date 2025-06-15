@@ -15,6 +15,7 @@ _Stuff that is not important and just nice haves_
 - [ ] Add alert when there is still Excel files in processing
 - [ ] Default unknown excel files to tables. This is alot of work since that the Pandas is set for specific structure.
 - [ ] Change the errors and messages from the charts into a light grey with string type of message
+- [ ] Dark mode would be nice i guess but would also require alot of JS code for the charts
 
 ## TODO
 

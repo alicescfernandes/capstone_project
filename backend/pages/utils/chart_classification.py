@@ -564,7 +564,7 @@ COLUMNS_TO_REMOVE = [
     "Point of Purchase Display",
     "Total Sales People",
     "Total",
-    "Importance of further improvements", #TODO: on API get the slug, and if the column is this, then return a whole different dataset
+    "Importance of further improvements",
     "Units Produced",
     "Brand Advertised",
     "Sales Offices Percent [%]",

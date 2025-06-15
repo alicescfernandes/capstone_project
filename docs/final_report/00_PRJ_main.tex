@@ -1,25 +1,25 @@
 %%________________________________________________________________________
 %% LEIM | PROJETO
 %% 2022 / 2013 / 2012
-%% Modelo para relatÃ³rio
-%% v04: alteraÃ§Ã£o ADEETC para DEETC; outros ajustes
-%% v03: correÃ§Ã£o de gralhas
-%% v02: inclui anexo sobre utilizaÃ§Ã£o sistema controlo de versÃµes
+%% Modelo para relatório
+%% v04: alteração ADEETC para DEETC; outros ajustes
+%% v03: correção de gralhas
+%% v02: inclui anexo sobre utilização sistema controlo de versões
 %% v01: original
-%% PTS / MAR.2022 / MAI.2013 / 23.MAI.2012 (construÃ­do)
+%% PTS / MAR.2022 / MAI.2013 / 23.MAI.2012 (construído)
 %%________________________________________________________________________
 %%
 %%
-%% Ã‰ importante ver o essencial do LaTeX antes de usar este template.
+%% É importante ver o essencial do LaTeX antes de usar este template.
 %% um bom "ponto de partida": http://en.wikibooks.org/wiki/LaTeX/
 %%
 %%________________________________________________________________________
-%% Para alterar o TÃ­tulo, Nome dos Autores e Nome dos Orientadores fazer:
+%% Para alterar o Título, Nome dos Autores e Nome dos Orientadores fazer:
 %% - abrir o ficheiro "00_PRJ_padrao.sty"
 %% - procurar "Nome do aluno" e alterar
-%% - procurar "nÃºmero" e alterar; deixar os parÃªntesis
+%% - procurar "número" e alterar; deixar os parêntesis
 %% - procurar "Nome do orientador" e alterar
-%% - procurar "[Doutor]" e atirar os parÃªntesis rectos ou eliminar tudo
+%% - procurar "[Doutor]" e atirar os parêntesis rectos ou eliminar tudo
 %%
 %% Caso precise de adicionar um novo aluno, ou orientador, deve:
 %% - selecionar toda a linha (com "Nome do aluno" ou "Nome do orientador")
@@ -32,7 +32,7 @@
 
 
 
-%% o documento Ã© definido do tipo "book" em a4, font 12pt
+%% o documento é definido do tipo "book" em a4, font 12pt
 \documentclass[a4paper,12pt]{book}
 
 \usepackage[acronym, nomain]{glossaries}
@@ -49,52 +49,52 @@
 \usepackage[export]{adjustbox}% 'export' allows adjustbox keys in \includegraphics
 
 %% para usar caracteres acentuados
-\usepackage[utf8]{inputenc} % no Unix (com codificaÃ§Ã£o UTF-8)
-%% \usepackage[latin1]{inputenc} % no Windows (com codificaÃ§Ã£o ISO-8859-1, ou ISO-8859-15)
+\usepackage[utf8]{inputenc} % no Unix (com codificação UTF-8)
+%% \usepackage[latin1]{inputenc} % no Windows (com codificação ISO-8859-1, ou ISO-8859-15)
 
-% para aspectos de hifenizaÃ§Ã£o (do PortuguÃªs)
+% para aspectos de hifenização (do Português)
 \usepackage[portuguese]{babel}
 
-%% para incluir imagens e tratar de modo adequado endereÃ§os url
+%% para incluir imagens e tratar de modo adequado endereços url
 \usepackage{graphicx,url}
 
 %% para usar \begin{comment} ... \end{comment}
 \usepackage{verbatim}
 
-%% para usar o sÃ­mbolo do euro
+%% para usar o símbolo do euro
 %usepackage{eurosym}
 
 %% para juntar multiplas linhas em tabelas
 \usepackage{multirow}
 
-%% para usar sÃ­mbolos matemÃ¡ticos
+%% para usar símbolos matemáticos
 \usepackage[centertags]{amsmath}
 
 %% para usar \mathds{...}
 \usepackage{dsfont}
 
-%% para formataÃ§Ã£o (e.g. espaÃ§amento) de Tabelas
+%% para formatação (e.g. espaçamento) de Tabelas
 \usepackage{tabls}
 
-%% para usar listagens de cÃ³digo
+%% para usar listagens de código
 \usepackage{listings}
-
+\usepackage{xcolor} % Para cores nos blocos, opcional mas útil
 %% para escrita "formal" de algoritmos
 \usepackage{algorithm}
 
 %% Para que a numeracao de listings seja global
-%% (e nao no contexto de cada capitulo!)
+%% (e não no contexto de cada capitulo!)
 \usepackage{chngcntr}
 
-% para usar um estilo diferente na identificaÃ§Ã£o de "CapÃ­tulo"
+% para usar um estilo diferente na identificação de "Capítulo"
 %Sonny, Lenny(x), Glenn, Conny, Rejne, Bjarne
 %\usepackage[Lenny]{fncychap}
-% Para ter no "heading" o nome do capÃ­tulo e da secÃ§Ã£o
+% Para ter no "heading" o nome do capítulo e da secção
 \usepackage{fancyhdr}
 
 
 
-% para usar hiperligaÃ§Ãµes (especialmente relevante para o Ã­ndice)
+% para usar hiperligações (especialmente relevante para o índice)
 \usepackage[hidelinks]{hyperref}
 %\hypersetup{linktocpage}
 %\hypersetup{
@@ -113,9 +113,9 @@
 
 
 %%________________________________________________________________________
-% mudar alguns nomes fixos para PortuguÃªs
+% mudar alguns nomes fixos para Português
 %%________________________________________________________________________
-% renomear "Listing" para "CÃ³digo"
+% renomear "Listing" para "Código"
 \renewcommand{\lstlistingname}{Código}
 \addto\captionsportuges{
     \renewcommand{\contentsname}{Apêndice}}
@@ -135,35 +135,60 @@
 }
 %%________________________________________________________________________
 
-\include{./acronimos}
 
 %%________________________________________________________________________
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Begin Document
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\lstset{
+  basicstyle=\ttfamily\small,
+  breaklines=true,
+  breakatwhitespace=false,
+  frame=single,
+  numbers=left,
+  numberstyle=\tiny,
+  stepnumber=1,
+  numbersep=5pt,
+  tabsize=2,
+  showstringspaces=false,
+  columns=fullflexible,
+  keepspaces=true,
+  captionpos=b
+}
+
+\setlength{\parskip}{0.5em}
+
+\usepackage{titlesec}
+
+\titlespacing*{\subsubsection}
+  {0pt}{10pt plus 2pt minus 2pt}{5pt plus 2pt minus 2pt}
+
 \begin{document}
+
+\include{./acronimos}
+
 % para que a numeracao de listings seja global
-% (e nao no contexto de cada capitulo!)
+% (e não no contexto de cada capitulo!)
 \counterwithout{lstlisting}{chapter}
 %% incluir a capa
 \frontmatter
 \fazerCapa
 %% incluir o resumo e abstract
-%% caso pretenda, incluir os agradecimentos e a dedicatÃ³ria
-\frontmatter
+%% caso pretenda, incluir os agradecimentos e a dedicatória
 %%________________________________________________________________________
-%% comentar o que nÃ£o interessar
+%% comentar o que não interessar
 \include{./00a_PRJ_resumo_abstract}
 \include{./00b_PRJ_agradecimentos}
 \include{./00c_PRJ_dedicatoria}
 %%________________________________________________________________________
 
-%% incluir a lista de conteÃºdos (Ã­ndice, tabelas e figuras)
-%comentar se quiser alterar o espaÃ§amento entre linhas
+%% incluir a lista de conteúdos (índice, tabelas e figuras)
+%comentar se quiser alterar o espaçamento entre linhas
 \setlinespacing{1.15}
 \myTableOfContents
 %%________________________________________________________________________
-%% comentar o que nÃ£o interessar
+%% comentar o que não interessar
 
 \myListOfTables
 \myListOfFigures
@@ -178,10 +203,10 @@
 \mainmatter
 \myPageStyle
 
-%% cada um dos CapÃ­tulos
+%% cada um dos Capítulos
 %% (aqui separados em dois ficheiros)
 %%________________________________________________________________________
-%% comentar o que nÃ£o interessar (ou incluir outros ficheiros)
+%% comentar o que não interessar (ou incluir outros ficheiros)
 \input{./01_PRJ_cap_1_2_3.tex}
 \input{./01_PRJ_cap_4_5_6.tex}
 %%________________________________________________________________________

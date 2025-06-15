@@ -13,29 +13,81 @@
 
 \section{Requisitos Funcionais}
 
+\begin{itemize}
+\item \textbf{Visíveis} — São funções obrigatórias que devem estar presentes e ser visíveis para o utilizador. Representam ações diretamente acessíveis ou observáveis na interface da aplicação.
+
+\item \textbf{Invisíveis} — Também obrigatórias, mas não visíveis para o utilizador final. Estas funções dizem respeito a comportamentos internos do sistema, como validações, persistência de dados ou processamento em segundo plano.
+\end{itemize}
+
+Os requisitos estão ordenados de acordo com a sua prioridade.
+
 \begin{table}[h!]
 \centering
-\begin{tabular}{|l|p{7cm}|l|l|}
+\begin{tabular}{|l|p{7cm}|l|}
 \hline
-\textbf{Requisito} & \textbf{Função} & \textbf{Categoria} & \textbf{Agrupamento} \\
+\textbf{Requisito} & \textbf{Função} & \textbf{Categoria} \\
 \hline
-R1.1 & Permitir criação de conta - utilizador único & Visível & Autenticação \\
-R1.2 & Permitir login & Visível & Autenticação \\
-R2.1 & Permitir upload de ficheiros (estritamente do formato .xlsx) & Visível & Gestão de Ficheiros \\
-R2.2 & Associar ficheiros carregados a trimestres & Invisível & Gestão de Ficheiros \\
-R3.1 & Permitir eliminação de ficheiros carregados & Visível & Gestão de Trimestres \\
-R3.2 & Permitir criação de trimestres identificados por 'Quarter N' & Visível & Gestão de Trimestres \\
-R3.3 & Listar todos os trimestres do grupo & Visível & Gestão de Trimestres \\
-R4.1 & Visualizar gráficos & Visível & Visualização de Dados \\
-R4.2 & Aplicar filtros & Visível & Visualização de Dados \\
+R1.1 & Permitir criação de conta - utilizador único & Visível \\
+R1.2 & Permitir login & Visível \\
 \hline
 \end{tabular}
-\caption{Tabela de Requisitos Funcionais}
-\label{tab:requisitosFuncionais}
+\caption{Requisitos de Autenticação}
+\label{tab:requisitosAutenticacao}
+\end{table}
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{|l|p{7cm}|l|}
+\hline
+\textbf{Requisito} & \textbf{Função} & \textbf{Categoria} \\
+\hline
+R2.1 & Permitir upload de ficheiros (estritamente do formato .xlsx) & Visível \\
+R2.2 & Associar ficheiros carregados a trimestres & Invisível \\
+\hline
+\end{tabular}
+\caption{Requisitos de Gestão de Ficheiros}
+\label{tab:requisitosFicheiros}
+\end{table}
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{|l|p{7cm}|l|}
+\hline
+\textbf{Requisito} & \textbf{Função} & \textbf{Categoria} \\
+\hline
+R3.1 & Permitir eliminação de ficheiros carregados & Visível \\
+R3.2 & Permitir criação de trimestres identificados por 'Quarter N' & Visível \\
+R3.3 & Listar todos os trimestres do grupo & Visível \\
+\hline
+\end{tabular}
+\caption{Requisitos de Gestão de Trimestres}
+\label{tab:requisitosTrimestres}
+\end{table}
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{|l|p{7cm}|l|}
+\hline
+\textbf{Requisito} & \textbf{Função} & \textbf{Categoria} \\
+\hline
+R4.1 & Visualizar gráficos & Visível \\
+R4.2 & Aplicar filtros & Visível \\
+\hline
+\end{tabular}
+\caption{Requisitos de Visualização de Dados}
+\label{tab:requisitosVisualizacao}
 \end{table}
 
 \section{Requisitos Não-Funcionais}
+Os atributos do sistema, também designados por requisitos não funcionais, representam as características que o sistema deve exibir durante a sua utilização. Tal como os requisitos funcionais, estes devem ser organizados em categorias distintas, de forma a clarificar o seu impacto e obrigatoriedade no desenvolvimento da aplicação. As principais categorias consideradas são as seguintes:
 
+\begin{itemize}
+\item \textbf{Obrigatórios} — O sistema deve cumprir estes requisitos. Estão geralmente associados a restrições técnicas ou de contexto, como desempenho, segurança, compatibilidade entre plataformas ou integridade dos dados.
+
+\item \textbf{Desejáveis} — São requisitos que, embora não sejam críticos para o funcionamento do sistema, representam funcionalidades adicionais ou melhorias que poderão ser implementadas numa fase posterior. O sistema deve estar preparado para os acomodar, caso se decida avançar com a sua implementação.
+\end{itemize}
+
+Os requisitos estão ordenados de acordo com a sua prioridade.
 \begin{table}[h!]
     \centering
     \begin{tabular}{|l|p{7cm}|l|}
@@ -44,7 +96,7 @@ R4.2 & Aplicar filtros & Visível & Visualização de Dados \\
     \hline
     Usabilidade & Detalhe - Interface intuitiva & Obrigatório \\
     Usabilidade & Detalhe - Carregamento de gráficos em sem bloquear o utilizador (lazy load) & Obrigatório \\
-    Usabilidade & Detalhe - Suporte para múltiplos browsers & Obrigatório \\
+    Usabilidade & Detalhe - Suporte para múltiplos \textit{browsers} & Obrigatório \\
     Segurança & Detalhe - Autenticação e Contas & Obrigatório \\
     Segurança & Fronteira - Cada utilizador só pode aceder aos seus dados & Obrigatório \\
     Segurança & Detalhe - Garantir que o sistema só permite ficheiros com formato previsto & Obrigatório \\
@@ -65,22 +117,42 @@ R4.2 & Aplicar filtros & Visível & Visualização de Dados \\
 
 \begin{figure}[h]
 \centering
-\includegraphics[width=14cm]{./img/usecase_uml}
+\includegraphics[max width=\textwidth]{./img/usecase_uml}
 \caption{\gls{uml} dos Casos de Utilização}
 \label{fig:umlCasosUtilizacao}
 \end{figure}
-\textbf{ Falta a matriz de prioridade dos casos de utilização}
 
+A figura~\ref{fig:umlCasosUtilizacao} apresenta o diagrama UML de casos de utilização da aplicação desenvolvida. Este diagrama ilustra as principais interações entre o utilizador e o sistema, bem como a forma como diferentes componentes externos — nomeadamente a base de dados e o sistema de ficheiros — participam nas operações principais da plataforma.
+
+\subsection*{Atores}
+\begin{itemize}
+    \item \textbf{Utilizador} — É o ator principal, responsável por interagir com o sistema. Pode criar conta, iniciar sessão, carregar ficheiros, visualizar gráficos, entre outras ações.
+    \item \textbf{DB (Base de Dados)} — Responsável por armazenar dados estruturados, incluindo utilizadores, trimestres, ficheiros processados e metadados associada.
+    \item \textbf{Sistema de Ficheiros} — Componente externo responsável pelo armazenamento físico dos ficheiros carregados e transformados (como por exemplo os ficheiros Excel carregados).
+\end{itemize}
+
+\subsection*{Casos de Utilização}
+\begin{itemize}
+    \item \textbf{Criar e gerir \textit{quarters}} — Permite ao utilizador criar unidades lógicas que agrupam os ficheiros por trimestre. Cada \textit{quarter} é identificado por um \gls{uuid} e guardado na base de dados.
+    \item \textbf{Carregar e apagar ficheiros} — Os utilizadores podem carregar ficheiros XLSX para o sistema, que são automaticamente processados. Também podem remover ficheiros já existentes. Esta operação interage com a base de dados e com o sistema de ficheiros.
+    \item \textbf{Normalizar dados} (\textit{include}) — Sub-processo chamado sempre que é feito o carregamento de um ficheiro. Este módulo transforma os dados em formato normalizado (por exemplo, convertendo para CSV, limpando colunas inúteis e ajustando nomes). Comunica diretamente com a base de dados e com o sistema de ficheiros.
+    \item \textbf{Visualizar gráficos} — Permite ao utilizador consultar representações gráficas dos dados processados, com suporte a filtros e navegação entre trimestres. Os dados são extraídos dos ficheiros normalizados e da base de dados.
+    \item \textbf{Iniciar e terminar sessão} — Processo de autenticação e gestão de sessão do utilizador. Este caso inclui o uso do módulo de \textbf{Gestão de Utilizadores}.
+    \item \textbf{Criar conta} — Permite a criação de um novo utilizador no sistema, também incluindo a \textbf{Gestão de Utilizadores}.
+    \item \textbf{Gestão de Utilizadores} (\textit{include}) — Caso comum que trata a criação, verificação e autenticação de contas de utilizador. Serve de base a outros casos como iniciar sessão ou registar conta.
+\end{itemize}
+
+Este diagrama permite compreender de forma clara as funcionalidades principais da plataforma e a separação de responsabilidades entre os diferentes componentes do sistema.
 
 \chapter{Classificação das folhas \gls{xlsx}}
 
 
-\chapter{Comparação de gráficos suportados pelo Plotly e Chart.js}
+\chapter{Comparação de gráficos suportados pelo \textit{Plotly} e Chart.js}
 \label{ch:charts}
 
 \begin{table}[H]
 \centering
-\caption{Comparação de tipos de gráficos suportados por Plotly.js e Chart.js}
+\caption{Comparação de tipos de gráficos suportados por \textit{Plotly}.js e Chart.js}
 \begin{tabular}{|l|c|c|}
 \hline
 \textbf{Tipo de Gráfico} & \textbf{Plotly.js} & \textbf{Chart.js} \\
@@ -106,3 +178,123 @@ Mapa (Geo)                     & Suportado & Não Suportado \\
 \end{tabular}
 \label{tab:charts}
 \end{table}
+
+
+\chapter{Pipelines ETL}
+\label{ch:etl}
+
+Uma \textit{pipeline} \gls{etl} é um processo utilizado em sistemas de tratamento e integração de dados, com o objetivo de mover dados de uma ou mais fontes para um destino, geralmente uma base de dados ou um sistema de análise. O nome \gls{etl} representa as três etapas principais:
+
+\begin{itemize}
+  \item \textbf{Extract (Extração)}: consiste em recolher os dados de múltiplas fontes de informação, que podem incluir bases de dados relacionais, APIs externas, sensores, entre outros. Esta fase preocupa-se com a capacidade de ler dados e de confirmar que são possiveis de extrair.
+  
+  \item \textbf{Transform (Transformação)}: nesta etapa os dados extraídos são processados e convertidos num formato mais adequado ao destino. Isso pode incluir tarefas como limpeza de dados (remoção de valores nulos ou duplicados), normalização, agregações, mudanças de tipo, ou cálculos. É nesta fase em que se garante a consistência da informação.
+
+  \item \textbf{Load (Carregamento)}: por fim, os dados transformados são inseridos no sistema de destino, normalmente um \textit{data warehouse},  O carregamento é feito dependendo dos requisitos do sistema de destino
+
+\end{itemize}
+
+As \textit{pipelines} \gls{etl} são muito utilizadas em contextos onde há necessidade de consolidar dados de várias origens, permitindo análises mais completas. São fundamentais em áreas como \textit{business intelligence}, ciência de dados e integração de sistemas.
+
+\chapter{Controlo de Versões e GitHub}
+
+O controlo de versões é uma componente essencial em qualquer projeto de desenvolvimento de software, uma vez que permite acompanhar de forma sistemática todas as alterações ao código, colaborar entre vários programadores e garantir a integridade e consistência do código ao longo do tempo.
+
+No contexto deste projeto, o controlo de versões revelou-se particularmente importante para organizar a implementação da plataforma, bem como para permitir uma evolução controlada e iterativa da aplicação, com ciclos de desenvolvimento, testes e correção de erros bem definidos.
+
+Para responder a estas necessidades, foi escolhido o sistema de controlo de versões \textit{Git}, uma ferramenta amplamente utilizada no setor, sendo uma das mais antigas e mais bem suportadas. O \textit{Git} permite criar \textit{branches} de forma simples, o que facilita o desenvolvimento em paralelo de novas funcionalidades sem interferir com a versão principal da aplicação.
+
+Durante o desenvolvimento da plataforma, esta capacidade de criar \textit{branches} foi útil para testar funcionalidades específicas como o processamento assíncrono dos ficheiros, o sistema de autenticação ou o carregamento e normalização automática dos dados. Cada conjunto de funcionalidades foram desenvolvidas de forma isolada, permitindo testes controlados e evitando conflitos no código principal.
+
+Além do \textit{Git}, foi utilizado o \textit{GitHub} como interface principal para alojar o repositório do projeto e gerir a colaboração. O \textit{GitHub} é uma plataforma web que facilita a revisão de código, a gestão de \textit{pull requests} e o acompanhamento de tarefas e problemas. A integração com \textit{Git} é direta, o que permitiu manter o desenvolvimento organizado e acessível a partir de qualquer dispositivo ou ambiente de trabalho.
+
+Após cada \textit{merge} no \textit{GitHub} é corrido um \textit{workflow} que automaticamente atualiza a versão do código que corre dentro da \gls{vps} que usamos para fazer o correr a aplicação (o nosso ambiente de produção) durante o desenvolvimento. Este \textit{workflow} liga-se por \gls{ssh} ao servidor, puxa a última versão do \textit{branch} principal, e re-inicia os \textit{containers} da aplicação, aplicando as alterações aos modelos de dados e aos ficheiros estáticos.
+
+\chapter{Cenários Gherkin}
+\label{ch:cenariosGherkin}
+
+\begin{verbatim}
+Scenario: Creating an account
+    Given I access the page 
+    And I don't have an account or logged in
+    Then I should see the "Create Account" link
+    When I click the "Create Account" link
+    Then I should be redirected to the "Create Account" form
+    And I should see the username field
+    And I should see the password filed
+    And I should see the confirm password field
+    When I fill that form
+    And I click "Save"
+    Then I should be redirected to the "Login" page
+\end{verbatim}
+
+
+
+\begin{verbatim}
+Background:
+	Given that I have an account
+
+Scenario: Login on the app
+	When access the website
+	And I am not logged in
+	Then I should see the Login page
+	And I should see the username field
+	And I should see the password filed
+	When I fill that form with my login details
+	And I click "Save"
+	Then I should be redirected to the "Home" page
+\end{verbatim}
+    
+\begin{verbatim}
+Background:
+	Given that I have an account
+	And I am logged in on the application
+
+Scenario: Uploading Q1 files
+	When I access the "Uploads" page  
+	And I click on "Upload files" button 
+	Then the upload modal appears 
+	When i click on the upload files box
+	And I upload all files from Q1 folder
+	And I click "Save"
+	Then I should see the files that i just uploaded on the page
+	When I navigate to the "Home" page
+	Then I should see charts. 
+	And I should be able to zoom on the chart
+	
+Scenario: Uploading Q2 files
+	When I access the "Uploads" page  
+	And I click on "Upload files" button 
+	Then the upload modal appears 
+	When i click on the upload files box
+	And I upload all files from Q2 folder
+	And I confirm that the "Quarter Number" has the value of "2".
+	And I click "Save"
+	Then I should see the files that i just uploaded on the page
+	When I navigate to the "Home" page
+	Then I should see charts
+	And on the "Customer  Needs" chart, i should be able to navigate to Q1.
+	And I should be able to zoom on the chart
+\end{verbatim}
+
+\begin{verbatim}
+    Background:  
+	Given that I have an account
+	And I am logged in on the application
+	And I have uploaded files to the platform
+ 
+Scenario: Removing a file
+	When I navigate to the "Uploads" page  
+	Then I should see the files that i already uploaded
+	When I click on X button on the file "Customer Needs"
+	Then the file is removed from the quarter
+	And I should not see charts from that file
+	
+Scenario: Removing a quarter
+	When I navigate to the "Uploads" page  
+	Then I should see the files that i already uploaded
+	And I should see a "Delete" button.
+	When I click on the "Delete" button
+	Then I should see all of the files from that section removed 
+\end{verbatim}
+

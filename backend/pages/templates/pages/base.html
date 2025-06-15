@@ -6,6 +6,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Interactive app to visualize data from Marketplace Simulations">
     <title>
       {% block title %}
         Dashboard
@@ -26,11 +27,8 @@
       {% include 'pages/navigation.html' %}
     {% endif %}
 
-    <main class="container base-container {% block main_classes %}
-
-      {% endblock %}">
+    <main class="container base-container {% block main_classes %}{% endblock %}">
       {% block content %}
-
       {% endblock %}
     </main>
 

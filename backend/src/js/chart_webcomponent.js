@@ -4,7 +4,7 @@ class PlotlyChart extends HTMLElement {
     constructor() {
         super();
         this.initState();
-        this.id = `chart_${this.state.chartSlug}`;
+        this.chart_id = `chart_${this.state.chartSlug}`;
     }
 
     initState() {
@@ -68,13 +68,13 @@ class PlotlyChart extends HTMLElement {
         const hasOptions = Array.isArray(this.state.options) && this.state.options.length > 1;
 
         this.innerHTML = `
-            <div id="${this.id}">
+            <div id="${this.chart_id}">
                 <div class="chart-header">
-                    <h5 class="chart-title"></h5>
+                    <h3 class="chart-title"></h3>
                     <div class="chart-quarter-navigation"></div>
                 </div>
                 ${this.renderZoomOverlay()}
-                ${hasOptions ? `<p>Filter By: <select class="chart-filter"></select></p>` : ''}
+                ${hasOptions ? `<p>Filter By: <select aria-label="Filter ${this.state.title} Chart" class="chart-filter"></select></p>` : ''}
                 <div class="chart-container" style="width:100%;height:400px;">
                 ${this.renderSpinner()}
                 </div>
@@ -107,13 +107,14 @@ class PlotlyChart extends HTMLElement {
         });
     }
     renderQuarterNavigation() {
-        const container = this.querySelector(`#${this.id} .chart-quarter-navigation`);
-        const { quarter } = this.state;
+        const container = this.querySelector(`#${this.chart_id} .chart-quarter-navigation`);
+        const { quarter, title } = this.state;
 
+        
         container.innerHTML = `
-            <button class="chart-quarter-nav-btn chart-zoom-btn"><svg class="w-6 h-6 " aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 4H4m0 0v4m0-4 5 5m7-5h4m0 0v4m0-4-5 5M8 20H4m0 0v-4m0 4 5-5m7 5h4m0 0v-4m0 4-5-5"/></svg></button>
-            <button ${!quarter?.prev ? 'disabled' : ''} class="prev-quarter chart-quarter-nav-btn"><svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M5 12l4-4m-4 4 4 4"/></svg></button>
-            <button ${!quarter?.next ? 'disabled' : ''} class="next-quarter chart-quarter-nav-btn"><svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 12H5m14 0-4 4m4-4-4-4"/></svg></button>`;
+            <button aria-label="Zoom ${title} Chart" class="chart-quarter-nav-btn chart-zoom-btn"><svg class="w-6 h-6 " aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 4H4m0 0v4m0-4 5 5m7-5h4m0 0v4m0-4-5 5M8 20H4m0 0v-4m0 4 5-5m7 5h4m0 0v-4m0 4-5-5"/></svg></button>
+            <button aria-label="Navigate to Q${quarter?.prev}" ${!quarter?.prev ? 'disabled' : ''} class="prev-quarter chart-quarter-nav-btn"><svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M5 12l4-4m-4 4 4 4"/></svg></button>
+            <button aria-label="Navigate to Q${quarter?.next}" ${!quarter?.next ? 'disabled' : ''} class="next-quarter chart-quarter-nav-btn"><svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 12H5m14 0-4 4m4-4-4-4"/></svg></button>`;
     }
 
     renderZoomOverlay() {
@@ -159,7 +160,7 @@ class PlotlyChart extends HTMLElement {
     }
 
     renderOptions() {
-        const select = this.querySelector(`#${this.id} .chart-filter`);
+        const select = this.querySelector(`#${this.chart_id} .chart-filter`);
         if (!select) return;
 
         const { options, selectedOption } = this.state;
@@ -167,13 +168,13 @@ class PlotlyChart extends HTMLElement {
     }
 
     setupEvents() {
-        this.querySelector(`#${this.id} .chart-filter`)?.addEventListener('change', (e) => {
+        this.querySelector(`#${this.chart_id} .chart-filter`)?.addEventListener('change', (e) => {
             this.setState({ selectedOption: e.target.value });
             this.fetchData();
         });
 
-        this.querySelector(`#${this.id} .prev-quarter`)?.addEventListener('click', () => this.handleQuarterChange('prev'));
-        this.querySelector(`#${this.id} .next-quarter`)?.addEventListener('click', () => this.handleQuarterChange('next'));
+        this.querySelector(`#${this.chart_id} .prev-quarter`)?.addEventListener('click', () => this.handleQuarterChange('prev'));
+        this.querySelector(`#${this.chart_id} .next-quarter`)?.addEventListener('click', () => this.handleQuarterChange('next'));
     }
 
     handleQuarterChange(direction) {
@@ -188,9 +189,9 @@ class PlotlyChart extends HTMLElement {
 
         const { title, chart_config, quarter } = this.state;
         const { traces, layout } = chart_config;
-        const container = this.querySelector(`#${this.id} .chart-container`);
+        const container = this.querySelector(`#${this.chart_id} .chart-container`);
 
-        this.querySelector(`#${this.id} .chart-title`).textContent = `${title} - Q${quarter.current}`;
+        this.querySelector(`#${this.chart_id} .chart-title`).textContent = `${title} - Q${quarter.current}`;
 
         if (!traces.length) {
             container.innerHTML = this.renderEmptyState();
@@ -203,10 +204,10 @@ class PlotlyChart extends HTMLElement {
 
 
         // Zoom logic - needs traces for it to work
-        const zoomBtn = this.querySelector(`#${this.id} .chart-zoom-btn`);
-        const zoomOverlay = this.querySelector(`#${this.id} .chart-zoom-overlay`);
-        const zoomContent = this.querySelector(`#${this.id} .chart-zoom-container`);
-        const closeZoom = this.querySelector(`#${this.id} .chart-zoom-close`);
+        const zoomBtn = this.querySelector(`#${this.chart_id} .chart-zoom-btn`);
+        const zoomOverlay = this.querySelector(`#${this.chart_id} .chart-zoom-overlay`);
+        const zoomContent = this.querySelector(`#${this.chart_id} .chart-zoom-container`);
+        const closeZoom = this.querySelector(`#${this.chart_id} .chart-zoom-close`);
 
         zoomBtn?.addEventListener("click", () => {
             zoomOverlay.style.display = "flex";

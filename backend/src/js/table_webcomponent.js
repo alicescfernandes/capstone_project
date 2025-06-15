@@ -3,7 +3,7 @@ class DataTableComponent extends HTMLElement {
     constructor() {
         super();
         this.initState();
-        this.id = `table_${this.state.chartSlug}`;
+        this.chart_id = `table_${this.state.chartSlug}`;
         this.table = null;
         this.zoomTable = null;
     }
@@ -114,9 +114,9 @@ class DataTableComponent extends HTMLElement {
         }
 
         const newHTML = `
-            <div id="${this.id}">
+            <div id="${this.chart_id}">
                 <div class="chart-header">
-                    <h5 class="chart-title">${this.state.title} - Q${this.state.quarter.current}</h5>
+                    <h3 class="chart-title">${this.state.title} - Q${this.state.quarter.current}</h3>
                     <div class="chart-quarter-navigation">${this.renderQuarterNavigation()}</div>
                 </div>
                 ${this.renderZoomOverlay()}
@@ -132,12 +132,12 @@ class DataTableComponent extends HTMLElement {
     }
 
     renderQuarterNavigation() {
-        const { quarter } = this.state;
+        const { quarter, title } = this.state;
 
         return `
-            <button class="chart-quarter-nav-btn chart-zoom-btn"><svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 4H4m0 0v4m0-4 5 5m7-5h4m0 0v4m0-4-5 5M8 20H4m0 0v-4m0 4 5-5m7 5h4m0 0v-4m0 4-5-5"/></svg></button>
-            <button ${!quarter?.prev ? 'disabled' : ''} class="prev-quarter chart-quarter-nav-btn"><svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M5 12l4-4m-4 4 4 4"/></svg></button>
-            <button ${!quarter?.next ? 'disabled' : ''} class="next-quarter chart-quarter-nav-btn"><svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 12H5m14 0-4 4m4-4-4-4"/></svg></button>`;
+            <button aria-label="Zoom ${title} Chart" class="chart-quarter-nav-btn chart-zoom-btn"><svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 4H4m0 0v4m0-4 5 5m7-5h4m0 0v4m0-4-5 5M8 20H4m0 0v-4m0 4 5-5m7 5h4m0 0v-4m0 4-5-5"/></svg></button>
+            <button aria-label="Navigate to Q${quarter?.prev}" ${!quarter?.prev ? 'disabled' : ''} class="prev-quarter chart-quarter-nav-btn"><svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M5 12l4-4m-4 4 4 4"/></svg></button>
+            <button aria-label="Navigate to Q${quarter?.next}" ${!quarter?.next ? 'disabled' : ''} class="next-quarter chart-quarter-nav-btn"><svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 12H5m14 0-4 4m4-4-4-4"/></svg></button>`;
     }
 
     renderZoomOverlay() {
@@ -185,7 +185,7 @@ class DataTableComponent extends HTMLElement {
         await this.waitForDataTables();
 
         // Check if the table element exists
-        const tableElement = this.querySelector(`#${this.id} table`);
+        const tableElement = this.querySelector(`#${this.chart_id} table`);
         if (!tableElement) {
             return;
         }
@@ -195,7 +195,7 @@ class DataTableComponent extends HTMLElement {
             return;
         }
 
-        this.table = new DataTable(`#${this.id} table`, {
+        this.table = new DataTable(`#${this.chart_id} table`, {
             data: this.state.data,
             columns: this.state.columns,
             ...this.state.dataTableSettings
@@ -204,14 +204,14 @@ class DataTableComponent extends HTMLElement {
 
     setupEvents() {
         // Quarter navigation events
-        this.querySelector(`#${this.id} .prev-quarter`)?.addEventListener('click', () => this.handleQuarterChange('prev'));
-        this.querySelector(`#${this.id} .next-quarter`)?.addEventListener('click', () => this.handleQuarterChange('next'));
+        this.querySelector(`#${this.chart_id} .prev-quarter`)?.addEventListener('click', () => this.handleQuarterChange('prev'));
+        this.querySelector(`#${this.chart_id} .next-quarter`)?.addEventListener('click', () => this.handleQuarterChange('next'));
 
         // Zoom functionality - Wait for next tick to ensure DOM is updated
-        const zoomBtn = this.querySelector(`#${this.id} .chart-zoom-btn`);
-        const zoomOverlay = this.querySelector(`#${this.id} .chart-zoom-overlay`);
-        const zoomContent = this.querySelector(`#${this.id} .chart-zoom-container`);
-        const closeZoom = this.querySelector(`#${this.id} .chart-zoom-close`);
+        const zoomBtn = this.querySelector(`#${this.chart_id} .chart-zoom-btn`);
+        const zoomOverlay = this.querySelector(`#${this.chart_id} .chart-zoom-overlay`);
+        const zoomContent = this.querySelector(`#${this.chart_id} .chart-zoom-container`);
+        const closeZoom = this.querySelector(`#${this.chart_id} .chart-zoom-close`);
 
         // Datatable uses jQuery so its easier to write logic for datatable with jQuery
         const showAllTextFilter = (node) => {
