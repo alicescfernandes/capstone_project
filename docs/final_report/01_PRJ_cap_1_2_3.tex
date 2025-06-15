@@ -4,7 +4,7 @@
 %% Modelo para relatório
 %% v04: alteração ADEETC para DEETC; outros ajustes
 %% v03: correção de gralhas
-%% v02: inclui anexo sobre utilização sistema controlo de versões
+%% v02: inclui anexo sobre utilizaçãa aplicação controlo de versões
 %% v01: original
 %% PTS / MAR.2022 / MAI.2013 / 23.MAI.2012 (construído)
 %%________________________________________________________________________
@@ -21,23 +21,23 @@ Neste contexto, a análise eficiente de dados torna-se essencial para a tomada d
 
 \section{Motivação}
 
-O presente projeto surgiu da necessidade  entre os alunos do \gls{iscal} que utilizam o simulador \textit{Marketplace Simulations - International Corporate Management}, que é um simulador de negócios internacionais e que iremos descrever no capítulo (\cf, capítulo \ref{sec:marketplace}), onde os alunos se agrupam em empresas e simulam a criação de um negócio num mercado internacional. Embora a plataforma apresente toda a informação necessária à tomada de decisões na simulação, esses dados estão divididos em múltiplas secções e apresentados em tabelas, com poucas funcionalidades de visualização. Esta limitação obriga os alunos a alternar entre páginas, copiar dados manualmente e criar folhas de cálculo externas, comprometendo a eficiência e a análise da informação.
+O presente projeto surgiu da necessidade  entre os alunos do \gls{iscal} que utilizam o simulador \textit{Marketplace Simulations - International Corporate Management}, que é um simulador de negócios internacionais e que iremos descrever no capítulo (cf. capítulo~\ref{sec:marketplace}), onde os alunos se agrupam em empresas e simulam a criação de um negócio num mercado internacional. Embora a plataforma apresente toda a informação necessária à tomada de decisões na simulação, esses dados estão divididos em múltiplas secções e apresentados em tabelas, com poucas funcionalidades de visualização. Esta limitação obriga os alunos a alternar entre páginas, copiar dados manualmente e criar folhas de cálculo externas, comprometendo a eficiência e a análise da informação.
 
 \section{Objetivos}
 
-Como tal, a aplicação proposta neste relatório pretende ajudar nesse sentido, oferecendo uma interface que permite aos utilizadores carregar dados retirados da plataforma de simulação e tornar esses ficheiros em visualizações que podem ser consultadas e manipuladas. A aplicação permitirá aos utilizadores:
+A aplicação proposta neste relatório pretende ajudar nesse sentido, oferecendo uma interface que permite aos utilizadores carregar dados retirados da plataforma de simulação e tornar esses ficheiros em visualizações que podem ser consultadas e manipuladas. A aplicação permitirá aos utilizadores:
 
 \begin{itemize}
-    \item Criar uma conta na plataforma que permita persistir a informação carregada.
-    \item Carregar ficheiros exportados da plataforma de simulação;
-    \item Visualizar os dados em gráficos interativos;
-    \item Conseguir ter uma experiência de utilização intuitiva e fácil;
+    \item Criar uma conta na plataforma que suporte a persistência da informação carregada.
+    \item Carregar ficheiros exportados da plataforma de simulação.
+    \item Visualizar os dados em gráficos interativos.
+    \item Conseguir ter uma experiência de utilização intuitiva e fácil.
 \end{itemize}
 
-Do ponto de vista técnico, queremos que a aplicação adote uma arquitetura fácil de manter e que vá de encontro à utilização da plataforma, dando importância aos seguintes itens:
+Pretende-se também que a aplicação adote uma arquitetura simples de manter e que utilize os mesmos conceitos que a plataforma de simulação, dando importância aos seguintes itens:
 
 \begin{itemize}
-    \item A normalização e transformação automática de dados provenientes de fontes externas;
+    \item A normalização e transformação automática de dados carregados.
     \item A facilidade na gestão de ficheiros, com o objetivo de oferecer uma interface fácil para os utilizadores finais.
     \item Organizar a informação por utilizador, garantindo que o utilizador apenas consegue consultar a informação carregada.
     \item Adotar um modelo de funcionamento semelhante à plataforma de simulação, de modo a tornar a experiência de utilização mais intuitiva e garantido que a nossa aplicação tenha fronteiras claras de utilização.
@@ -50,11 +50,11 @@ Ao longo deste relatório, serão apresentadas as decisões tomadas, bem como os
 \label{ch:trabalhoRelacionado}
 %%________________________________________________________________________
 
-O presente projeto insere-se num contexto mais geral de ferramentas pedagógicas e de \gls{sad}, ainda que neste caso concreto, em ambientes simulados no ensino superior. No âmbito do \gls{iscal}, a utilização da plataforma \textit{Marketplace Simulations} permite aos estudantes desenvolver competências práticas em ambientes virtuais de negócios, simulando o funcionamento de mercados reais. A necessidade de suporte digital à análise e simulação motivou o desenvolvimento de outras ferramentas auxiliares, com destaque para um projeto também realizado em parceria com o \gls{iscal}, focado em simulações parciais de modelos económicos.
+O presente projeto insere-se num contexto mais geral de ferramentas pedagógicas e de \gls{sad}, ainda que neste caso concreto, em ambientes simulados no ensino superior. No âmbito do \gls{iscal}, a utilização da plataforma \textit{Marketplace Simulations} \cite{MarketplaceSim_2025} permite aos estudantes desenvolver competências práticas em ambientes virtuais de negócios, simulando o funcionamento de mercados reais. A necessidade de suporte digital à análise e simulação motivou o desenvolvimento de outras ferramentas auxiliares, com destaque para um projeto também realizado em parceria com o \gls{iscal}, focado em simulações parciais de modelos económicos.
 
 Esse projeto, embora partilhe uma motivação semelhante, segue uma abordagem diferente. Em particular, a aplicação referida acima permite simular cenários específicos com base em \textit{inputs} manuais, o que pode ser útil para quando se procura prever resultados com foco muito concreto (por exemplo, simular o impacto de uma única variável nos resultados). A nossa plataforma foca-se numa outra vertente, em que pretende ser uma ferramenta para auxiliar o ensino de forma prática.
 
-O nosso projeto assume então o uso de dados extraídos diretamente da plataforma de simulação, e a valorização da experiência do utilizador na apresentação de dados. Não será uma plataforma de simulação, mas sim uma ferramenta para auxiliar o ensino de forma prática.
+O projeto assume então o uso de dados extraídos diretamente da plataforma de simulação, e a valorização da experiência do utilizador na apresentação de dados. Não será uma plataforma de simulação, mas sim uma ferramenta para auxiliar o ensino de forma prática.
 
 %%________________________________________________________________________
 \chapter{Modelo Proposto}
@@ -63,9 +63,9 @@ O nosso projeto assume então o uso de dados extraídos diretamente da plataform
 
 Neste capítulo descrevemos o modelo que serviu de base à implementação da aplicação, com foco na forma como os dados são organizados, processados e apresentados ao utilizador. A estrutura proposta resulta diretamente das necessidades identificadas durante a análise dos ficheiros obtidos da plataforma de simulação, bem como dos requisitos definidos com os orientadores do projeto.
 
-O modelo tem como objetivo garantir que a aplicação que pretendemos desenvolver corresponde as necessidades identificadas. Para isso, foram definidos vários componentes principais, incluindo a forma como os ficheiros são organizados por trimestre, as transformações aplicadas aos dados entre outras decisões que foram tomadas durante o desenvolvimento do projeto.
+O modelo tem como objetivo garantir que a aplicação desenvolvida corresponde as necessidades identificadas. Para isso, foram definidos vários componentes principais, incluindo a forma como os ficheiros são organizados por trimestre, as transformações aplicadas aos dados entre outras decisões que foram tomadas durante o desenvolvimento do projeto.
 
-Nos próximos parágrafos vamos então detalhar cada uma das partes do modelo proposto, estabelecendo também os requisitos funcionais e não funcionais que foram definidos para o sistema.
+Nos próximos parágrafos vamos então detalhar cada uma das partes do modelo proposto, estabelecendo também os requisitos funcionais e não funcionais que foram definidos para a aplicação.
 
 %%________________________________________________________________________
 \section{Requisitos}
@@ -74,84 +74,98 @@ Nos próximos parágrafos vamos então detalhar cada uma das partes do modelo pr
 
 \subsubsection{Requisitos funcionais}
 
-Os requisitos funcionais descrevem as funcionalidades específicas que a aplicação deve oferecer para atender às necessidades dos utilizadores. No contexto deste projeto, definem as ações que o sistema deve ser capaz de executar. De
+Os requisitos funcionais descrevem as funcionalidades específicas que a aplicação deve oferecer para atender às necessidades dos utilizadores. No contexto deste projeto, definem as ações que a aplicação deve ser capaz de executar.
 
-Em suma, no nosso projeto, identificamos os seguintes requisitos, ordenados por prioridade. Os tabelas de requisitos por inteiro, incluindo algumas definições adicionais, estão incluidas em apêndice (\cf, capítulo \ref{ch:tabRequisitos}).
+Em suma, para o projeto, identificamos os seguintes requisitos, ordenados por prioridade. Os tabelas de requisitos por inteiro, incluindo algumas definições adicionais, estão incluidas em apêndice (\cf, apêndice \ref{ch:tabRequisitos}).
 
 \begin{itemize}
     \item \textbf{Visualização de dados:} os utilizadores devem poder visualizar gráficos interativos baseados nos dados carregados, com a possibilidade de aplicar filtros como país ou \textit{quarter} selecionado.
 
-    \item \textbf{Gestão de ficheiros:} os utilizadores devem poder carregar ficheiros, associá-los a \textit{quarters} e eliminá-los quando necessário. O sistema valida os formatos e garante que apenas ficheiros válidos são processados.
+    \item \textbf{Gestão de ficheiros:} os utilizadores devem poder carregar ficheiros, associá-los a \textit{quarters} e eliminá-los quando necessário. a aplicação valida os formatos e garante que apenas ficheiros válidos são processados.
     
     \item \textbf{Gestão de \textit{quarters}:} cada utilizador pode criar períodos identificados como \textit{Quarter N}, para organizar os ficheiros carregados. Tem também de ser possível visualizar a lista de \textit{quarters} disponíveis.
 
-    \item \textbf{Autenticação:} o sistema deve permitir a criação de contas e o login por parte dos utilizadores, garantindo que cada um acede apenas aos seus próprios dados.
+    \item \textbf{Autenticação:} a aplicação deve permitir a criação de contas e o \textit{login} por parte dos utilizadores, garantindo que cada um acede apenas aos seus próprios dados.
+
+    \item \textbf{Normalização de dados:} os dados extraídos dos ficheiros devem ser automaticamente normalizados para garantir consistência e compatibilidade com a aplicação de visualização.
     
 \end{itemize}
 
 \subsubsection{Requisitos não funcionais}
 
-Alguns requisitos não funcionais foram igualmente críticos para garantir a estabilidade e usabilidade do sistema. Os requisitos identificados foram os seguintes:
+Alguns requisitos não funcionais foram igualmente críticos para garantir a estabilidade e a capacidade de interação da aplicação. Os requisitos identificados foram os seguintes:
 
 \begin{itemize}
     \item \textbf{Usabilidade:} a aplicação deve ser intuitiva, suportar múltiplos \textit{browsers} e permitir o carregamento progressivo de gráficos sem bloquear a interface visual (\textit{lazy load}).
-    
-    \item \textbf{Segurança:} o sistema deve permitir os utilizadores criar contas e assegurar que cada utilizador ou grupo apenas consegue aceder aos seus próprios dados. Deve também assegurar que só permite carregar ficheiros com o formato previsto.
     
     \item \textbf{Performance:} a aplicação deve ser capaz de suportar múltiplos utilizadores em simultâneo sem degradação significativa, mantendo uma resposta rápida às interações.
     
     \item \textbf{Acessibilidade:} a aplicação \textit{web} deve ser acessível por teclado e compatível com leitores de ecrã (\textit{screen-reader friendly}).
 
-    \item \textbf{Normalização de dados:} os dados extraídos dos ficheiros devem ser automaticamente normalizados para garantir consistência e compatibilidade com o sistema de visualização.
-
 \end{itemize}
 
 \section{Casos de Utilização}
+\label{ch:casosUtilizacao}
 
-Com base nos requisitos funcionais e não funcionais identificados na secção anterior, foram definidos os casos de utilização que iremos suportar. O diagramas correspondente, encontram-se no (\cf, capítulo \ref{ch:casosUtilizacao}) juntamente com uma descrição das várias entidades, mas em resumo, os casos de utilização são os que se seguem:
+Com base nos requisitos funcionais e não funcionais identificados na secção anterior, foram definidos os casos de utilização que iremos suportar. A figura~\ref{fig:umlCasosUtilizacao} apresenta o diagrama UML de casos de utilização da aplicação desenvolvida. Este diagrama ilustra as principais interações entre o utilizador e a aplicação, bem como a forma como diferentes componentes externos, nomeadamente a base de dados e a aplicação de ficheiros, participam nas operações principais da plataforma.
 
-\begin{enumerate}
-    \item \textbf{Registo de utilizador: } \\
-    O utilizador acede à plataforma pela primeira vez e opta por criar uma conta. O sistema solicita os dados de autenticação e valida se o utilizador já existe. Caso não exista, a conta é criada e o utilizador é autenticado automaticamente. Este caso responde ao requisito funcional de autenticação e está alinhado com os requisitos não funcionais de segurança.
-    
-    \item \textbf{Autenticação do utilizador: } \\
-    Ao entrar na aplicação, o utilizador introduz o seu username e password. O sistema valida o login com base nos dados guardados e, se for bem-sucedido, redireciona o utilizador para a página principal. Relaciona-se com os requisitos de segurança e experiência de utilizador.
-    
-    \item \textbf{Criação de um \textit{quarter}: } \\
-    O utilizador, já autenticado, pode criar um novo \textit{quarter}, identificando-o por um número. O sistema garante que esse número é único para o utilizador. Este caso de utilização reflete o requisito funcional de organização por textit{\textit{quarters}}, e está diretamente ligado à estrutura de dados definida no modelo.
-    
-    \item \textbf{Carregamento de ficheiros: } \\
-    O utilizador escolhe um \textit{quarter} e carrega ficheiros exportados da plataforma de simulação. O sistema valida a extensão, processa os ficheiros, aplica a pipeline de normalização para cada folha do Excel. Os dados serão associados ao \textit{quarter} de onde foram criados. Este caso é central no sistema e concretiza os requisitos de Carregamento, normalização dos dados, e compatibilidade com os ficheiros da plataforma Marketplace Simulations.
+\begin{figure}[h]
+\centering
+\includegraphics[max width=\textwidth]{./img/usecase_uml}
+\caption{\gls{uml} dos Casos de Utilização}
+\label{fig:umlCasosUtilizacao}
+\end{figure}
 
-    \item \textbf{Eliminação de ficheiros: } \\
-    O utilizador pode eliminar ficheiros previamente carregados. O sistema remove as referências no \textit{backend}, marca os ficheiros antigos como inativos e evita que continuem a ser usados na geração dos gráfico. Este caso garante a gestão de dados pelo utilizador e reforça o princípio de manter apenas uma versão ativa por ficheiro.
-    
-    \item \textbf{Visualização de gráficos: } \\
-    Após carregar os ficheiros, o utilizador pode aceder a gráficos criados a partir dos dados normalizados. Os gráficos são interativos, e o utilizador pode aplicar filtros (por exemplo, selecionar o país ou o \textit{quarter} atual) para ajustar a visualização. Apenas os ficheiros mais recentes são utilizados para construir os gráficos. Este caso corresponde ao requisito de visualizações interativas e integra a lógica de isolamento de dados, performance e usabilidade.
-    
-\end{enumerate}
+\subsection{Atores}
+\begin{itemize}
+    \item \textbf{Utilizador} É o ator principal, responsável por interagir com a aplicação. Pode criar conta, iniciar sessão, carregar ficheiros, visualizar gráficos, entre outras ações.
+    \item \textbf{DB (Base de Dados)} Responsável por armazenar dados estruturados, incluindo utilizadores, trimestres, ficheiros processados e metadados associada.
+    \item \textbf{Sistema de Ficheiros} Componente externo responsável pelo armazenamento físico dos ficheiros carregados e transformados (como por exemplo os ficheiros Excel carregados).
+\end{itemize}
 
-Em suma, queremos que a aplicação seja capaz de ser utilizada de acordo com o diagrama \ref{fig:flowchart}.
+\subsection{Casos de Utilização}
+\begin{itemize}
+    \item \textbf{Criar e gerir \textit{quarters}}
+    Permite ao utilizador, após autenticação, criar \textit{quarters}. Cada \textit{quarter} é identificado por um número (único por utilizador) e guardado na base de dados, sendo associado a um \gls{uuid} para efeitos internos.
 
-\begin{figure}[H]
-    \centering
-    \includegraphics[max width=\textwidth]{./img/flowchart.png}
- \caption{Diagrama de fluxo da aplicação}
- \label{fig:flowchart}
- \end{figure}
+    \item \textbf{Carregar ficheiros} O utilizador seleciona um \textit{quarter} e carrega ficheiros exportados da plataforma de simulação. a aplicação valida os ficheiros, extrai e processa cada folha de cálculo e aplica a \textit{pipeline} de normalização. Os dados normalizados são armazenados e associados ao \textit{quarter} correspondente.
+
+    \item \textbf{Eliminar ficheiros} Permite ao utilizador remover ficheiros previamente carregados. a aplicação atualiza os registos no backend, marca os dados antigos como inativos e evita que sejam considerados nos gráficos, garantindo que apenas uma versão está ativa por ficheiro.
+
+    \item \textbf{Normalizar dados} (\textit{include}) Sub-processo automático executado durante o carregamento de ficheiros. Converte os dados para um formato estruturado (por exemplo, CSV), elimina colunas irrelevantes, ajusta nomes e assegura consistência. Comunica com a base de dados e a aplicação de ficheiros.
+
+    \item \textbf{Consultar gráficos} Após o carregamento dos ficheiros, o utilizador pode consultar gráficos com base nos dados normalizados. A aplicação permite aplicar filtros, navegar entre \textit{quarters} e visualizar apenas os dados mais recentes, garantindo performance e clareza.
+
+    \item \textbf{Criar conta} Permite o registo de novos utilizadores. A aplicação valida os dados inseridos, verifica se o utilizador já existe e cria a conta, autenticando automaticamente o utilizador após sucesso.
+
+    \item \textbf{Permitir \textit{login} de utilizador} O utilizador introduz credenciais válidas (\textit{username} e \textit{password}) e, caso sejam corretas, é autenticado e redirecionado para a interface principal. Este processo inclui a gestão da sessão.
+
+\end{itemize}
+
+% Em suma, queremos que a aplicação seja capaz de ser utilizada de acordo com o diagrama \ref{fig:flowchart}.
+
+% \begin{figure}[H]
+%     \centering
+%     \includegraphics[max width=\textwidth]{./img/flowchart.png}
+%  \caption{Diagrama de fluxo da aplicação}
+%  \label{fig:flowchart}
+%  \end{figure}
 
 %%________________________________________________________________________
 \section{Fundamentos}
 \label{sec:fundamentos}
 
-Neste capitulo iremos só descrever as bases nas quais fundamentamos o nosso projeto, e algumas noções necessárias para conseguir contextualizar as decisões tomadas, visto que a plataforma \textit{Marketplace Simulations} \cite{MarketplaceSim_2025} não é de código aberto e não é fácil perceber para que serve.
+Neste capitulo iremos descrever as bases nas quais fundamentamos o projeto, e algumas noções necessárias para conseguir contextualizar as decisões tomadas.
 
-\subsection{\textit{Marketplace Simulations} \cite{MarketplaceSim_2025}}
+\subsection{\textit{Marketplace Simulations}}
 \label{sec:marketplace}
 
 A \textit{Marketplace Simulations} \cite{MarketplaceSim_2025} é uma empresa que desenvolve plataformas de simulação para fins educativos, ou seja, ferramentas que colocam os estudantes numa espécie de jogo onde cada equipa gere a sua própria empresa e compete com os colegas em cenários simulados. Acabam então por funcionar como laboratórios virtuais que podem ser usados no ensino superior, onde os alunos aplicam os conceitos aprendidos numa experiência em contexto educativo.
 
-No caso concreto do nosso projeto, a aplicação em questão chama-se \textit{International Corporate Management} (referida doravante como plataforma de simulação) \cite{MarketplaceSim_2025}, e é utilizado tipicamente no último semestre, na cadeira Projeto de Simulação em Negócios Internacionais da Licenciatura de Comércio e Negócios Internacionais \cite{FUC_ISCAL_2025}, que tem a interface apresentada na figura \ref{fig:marketplace1}.
+No caso concreto do projeto, a aplicação em questão chama-se \textit{International Corporate Management} (referida doravante como plataforma de simulação), e é utilizado tipicamente no último semestre, na cadeira Projeto de Simulação em Negócios Internacionais da Licenciatura de Comércio e Negócios Internacionais \cite{FUC_ISCAL_2025}, que tem a interface apresentada na figura \ref{fig:marketplace1}.
+
+Esta plataforma em particular apresenta outros desafios, não é de código aberto pelo que não dá para perceber os seus algoritmos internos e só no contexto da unidade curricular é que se percebe o seu propósito, tornando dificil explicar o seu funcionamento fora do contexto da unidade curricular.
+
 
 \begin{figure}[h]
     \centering
@@ -162,11 +176,18 @@ No caso concreto do nosso projeto, a aplicação em questão chama-se \textit{In
 
 Nesta plataforma, cada grupo de alunos representa uma empresa que tem de atuar num mercado internacional, tomando decisões sobre o posicionamento de produto, investimento, preços, distribuição, entre outras opções. Essas decisões são processadas pela plataforma, que simula o comportamento do mercado com base num algoritmo interno. 
 
-A cadência da simulação é dada por \textit{\textit{quarters}}, que representam uma semana simulada. No final de cada \textit{quarter}, os alunos recebem os dados com os resultados das decisões anteriores, o que obriga a uma análise comparativa constante entre períodos. É este ciclo (decidir, analisar, ajustar, repetir) que dá sentido à simulação e aproxima o exercício a uma situação real.
+A evolução temporal da simulação é dada por \textit{quarters}, que representam uma semana simulada. No final de cada \textit{quarter}, os alunos recebem os dados com os resultados das decisões anteriores, o que obriga a uma análise comparativa constante entre períodos. É este ciclo (decidir, analisar, ajustar, repetir) que dá sentido à simulação e aproxima o exercício a uma situação real.
+
+A simulação está dividida em secções, cada uma representando uma área distinta do negócio gerido pelos alunos. Estas secções agrupam métricas, decisões ou outras informações relacionadas com aspetos específicos da empresa simulada, como por exemplo a procura por segmento, o desempenho financeiro, a perceção da marca ou a eficácia da força de vendas.
+
+Cada secção representa também uma área onde os alunos têm de tomar decisões. As decisões variam consoante o tipo de secção, como por exemplo, na secção \textit{Customer Needs}, os alunos devem decidir que segmentos pretendem servir e com que marcas. Estas decisões são submetidas em cada ronda, influenciando os resultados seguintes, que por sua vez geram novos dados para análise.
+
+A plataforma \textit{Marketplace Simulations – International Corporate Management} permite exportar os dados de cada secção em ficheiros Excel, sendo que cada ficheiro (ou folha dentro de um ficheiro) está associado a uma destas áreas. Exemplos comuns de secções incluem: \textit{Customer Needs}, \textit{Segment Demand}, \textit{Balanced Scorecard}, \textit{Sales Force Report}, entre outras.
+
 
 Para a análise, os alunos têm à disposição os dados, na plataforma, nas várias secções disponiveis que na sua maioria são apresentados em tabelas, o que faz com que os alunos saltem entre secções, ou tenham de fazer gráficos à mão ou em último caso, extrair a informação da plataforma, não sendo então prático analisar a informação só pela plataforma de simulação.
 
-\subsection{Sistemas de apoio à decisão}
+\subsection{Sistemas de apoio à decisão - TODO: Incluir no trabalho relacionado}
 \label{sec:sad}
 
 Um \gls{sad} é uma aplicação, ou um conjunto de aplicações, concebida para auxiliar utilizadores na tomada de decisões mais informadas e fundamentadas. Ao contrário de sistemas automatizados que tomam decisões de forma autónoma, um \gls{sad} funciona como uma ferramenta que mostra aos utilizadores os dados e análises necessárias para que estes possam avaliar alternativas, prever resultados e escolher a melhor ação possível.
@@ -177,23 +198,62 @@ Estes sistemas são particularmente úteis em contextos onde há grande complexi
 
 É importante reforçar que o \gls{sad} não substitui o elemento humano. Em vez disso, potencia a capacidade do utilizador de interpretar a informação disponível e tomar decisões com base em evidência, reduzindo o risco de erro e aumentando a confiança no processo de decisão.
 
-\subsection{Backend e Frontend}
+\subsection{Pipelines \gls{etl}}
+\label{ch:etl}
 
-O projeto desenvolvido segue uma arquitetura de aplicações web, dividida em duas grandes camadas: \textit{backend} e \textit{frontend}.
+Uma \textit{pipeline} \gls{etl} é um processo utilizado em sistemas de tratamento e integração de dados, com o objetivo de mover dados de uma ou mais fontes para um destino, geralmente uma base de dados ou um sistema de análise. O nome \gls{etl} representa as três etapas principais:
 
-O \textit{backend} corresponde à ``parte invisível" da aplicação, é o lado do servidor, responsável por tratar os dados, executar lógica de negócio e responder aos pedidos feitos pelos utilizadores. No contexto deste projeto, o \textit{backend} é responsável por funcionalidades como o carregamento de ficheiros, processamento e normalização dos dados, autenticação e a disponibilização desses dados através de uma \gls{api}.
+\begin{itemize}
+  \item \textbf{Extract (Extração)}: consiste em recolher os dados de múltiplas fontes de informação, que podem incluir bases de dados relacionais, APIs externas, sensores, entre outros. Esta fase preocupa-se com a capacidade de ler dados e de confirmar que são possiveis de extrair.
+  
+  \item \textbf{Transform (Transformação)}: nesta etapa os dados extraídos são processados e convertidos num formato mais adequado ao destino. Isso pode incluir tarefas como limpeza de dados (remoção de valores nulos ou duplicados), normalização, agregações, mudanças de tipo, ou cálculos. É nesta fase em que se garante a consistência da informação.
 
-O \textit{frontend}, por outro lado, é a ``parte visível" da aplicação, é o que o utilizador vê e com o que interage diretamente no \textit{browser}. Inclui os formulários, gráficos e outros elementos visuais criados a partir dos dados processados.
+  \item \textbf{Load (Carregamento)}: por fim, os dados transformados são inseridos na aplicação de destino, normalmente um \textit{data warehouse},  O carregamento é feito dependendo dos requisitos da aplicação de destino
 
-Esta separação entre \textit{backend} e \textit{frontend} facilita a manutenção do sistema e permite que ambas as partes evoluam de forma independente, podendo até ser substituídas sem necessidade de reescrever o sistema completo. As tecnologias utilizadas para o desenvolvimento serão descritas no capítulo \ref{sec:tec}.
+\end{itemize}
+
+As \textit{pipelines} \gls{etl} são muito utilizadas em contextos onde há necessidade de consolidar dados de várias origens, permitindo análises mais completas. São fundamentais em áreas como \textit{business intelligence}, ciência de dados e integração de sistemas.
+
+
+\subsection{\textit{Backend} e \textit{Frontend}}
+
+O projeto desenvolvido segue uma arquitetura de aplicações \textit{web}, dividida em duas grandes camadas: \textit{backend} e \textit{frontend}.
+
+\textbf{Backend}
+
+\begin{itemize}
+    \item Corresponde à ``parte invisível'' da aplicação, ou seja, o lado do servidor.
+    \item Responsável por tratar os dados, executar lógica de negócio e responder aos pedidos feitos pelos utilizadores.
+    \item No contexto deste projeto, o \textit{backend} é responsável por:
+    \begin{itemize}
+        \item carregamento de ficheiros;
+        \item processamento e normalização dos dados;
+        \item autenticação;
+        \item disponibilização dos dados através de uma \gls{api}.
+    \end{itemize}
+\end{itemize}
+
+\textbf{Frontend}
+
+\begin{itemize}
+    \item Corresponde à ``parte visível'' da aplicação, ou seja, aquilo que o utilizador vê e com que interage diretamente no \textit{browser}.
+    \item Inclui:
+    \begin{itemize}
+        \item os formulários;
+        \item os gráficos;
+        \item e outros elementos visuais criados a partir dos dados processados.
+    \end{itemize}
+\end{itemize}
+
+Esta separação entre \textit{backend} e \textit{frontend} facilita a manutenção da aplicação e permite que ambas as partes evoluam de forma independente, podendo até ser substituídas sem necessidade de reescrever a aplicação completo. As tecnologias utilizadas para o desenvolvimento serão descritas no capítulo \ref{sec:tec}.
 
 \subsection{Tipos de gráficos}
 
-Durante a análise que fizemos foram estudados diferentes tipos de visualizações que podiam ser aplicadas, de acordo com os dados que tinhamos disponíveis. Cada tipo de visualização foi escolhido com base na sua capacidade de representar visualmente os dados e a sua facilidade de interpretação. Durante o projeto, consideramos os seguintes tipos de visualizações:
+Durante a análise efetuamos foram estudados diferentes tipos de visualizações que podiam ser aplicadas, de acordo com os dados que tinhamos disponíveis. Cada tipo de visualização foi escolhido com base na sua capacidade de representar visualmente os dados e a sua facilidade de interpretação. Durante o projeto, consideramos os seguintes tipos de visualizações:
 
 \textbf{Gráfico de Barras (Bar Chart):}
 
-Este tipo de visualização foi utilizado para comparar valores entre diferentes categorias, como marcas, cidades ou segmentos de mercado. A disposição visual das barras permite uma leitura rápida das diferenças de desempenho entre categorias, sendo útil para dados que não são temporais. Foram usadas variantes como barras empilhadas e barras agrupadas, dependendo da granularidade pretendida.
+Este tipo de visualização foi utilizado para comparar valores entre diferentes categorias, como marcas, cidades ou segmentos de mercado. A disposição visual das barras permite uma leitura rápida das diferenças de desempenho entre categorias, sendo útil para dados que não são temporais. Foram usadas variantes como barras agrupadas, dependendo se havia necessidade de comparar valores entre categorias.
 
 \begin{figure}[H]
 \centering
@@ -206,13 +266,6 @@ Este tipo de visualização foi utilizado para comparar valores entre diferentes
 \centering
 \includegraphics[max width=12cm, keepaspectratio]{./img/agrupada}
 \caption{Exemplo de gráfico de barras agrupadas}
-\end{figure}
-\noindent
-
-\begin{figure}[H]
-\centering
-\includegraphics[max width=12cm, keepaspectratio]{./img/empilhada}
-\caption{Exemplo de gráfico de barras empilhadas}
 \end{figure}
 \noindent
 
@@ -260,11 +313,11 @@ Os diagramas de Sankey são utilizados para representar fluxos entre diferentes 
 \end{figure}
 \noindent
 
-Outros tipos de gráficos relevantes para o projeto, mas que não foram utilizados foram:
+Outros tipos de gráficos relevantes para o projeto, mas que não foram utilizados são:
 
 \textbf{Gráfico de Linhas (Line Chart):}  
 
-Escolhido para representar séries temporais, como a evolução de uma variável ao longo do tempo. As linhas permitem identificar tendências e variações. No nosso projeto, não tivemos necessidade de usar este tipo uma vez que nenhum dos dados recebidos era relativos a séries temporais, pelo que a sua utilização não era intuitiva para os utilizadores nem resultava numa visualização que fizesse sentido para os dados recebidos.
+Escolhido para representar séries temporais, como a evolução de uma variável ao longo do tempo. As linhas permitem identificar tendências e variações. No projeto, não tivemos necessidade de usar este tipo uma vez que nenhum dos dados recebidos era relativos a séries temporais, pelo que a sua utilização não era intuitiva para os utilizadores nem resultava numa visualização que fizesse sentido para os dados recebidos.
 
 \textbf{Gráfico de Radar (Radar Chart):}  
 
@@ -272,15 +325,17 @@ Utilizado para comparar múltiplas variáveis em relação a um valor comum, com
 
 \textbf{Gráfico de Dispersão (Scatter Plot):}
 
-Os gráficos de dispersão foram considerados para representar relações entre duas variáveis. Cada ponto no gráfico representa uma observação individual, permitindo identificar padrões de correlação (positiva, negativa ou inexistente) entre variáveis. No nosso caso, consideramos utilizar um tipo especifico de gráfico de dispersão (gráfico de dispersão num mapa) mas a leitura tornou-se confusa, uma vez que era pouco legivel para alunos, e não considerava localizações ficticias, e algumas localizações eram em continentes diferentes, fazendo com que a leitura fosse difícil.
+Os gráficos de dispersão foram considerados para representar relações entre duas variáveis. Cada ponto no gráfico representa uma observação individual, permitindo identificar padrões de correlação (positiva, negativa ou inexistente) entre variáveis. No nosso caso, consideramos utilizar um tipo especifico de gráfico de dispersão (gráfico de dispersão num mapa) mas a leitura tornou-se confusa, uma vez que era pouco legivel para alunos, e não considerava localizações ficticias, fazendo com que a leitura fosse difícil, como pode ser visto na figura  \label{fig:scatter-map}, que é um gráfico do tipo \textit{scatter map} feito com dados importados de uma folha de cálculo, em que os pontos estão muito dispersos, num mapa que contem várias referencias a cidades, e sem representação do valor numérico associado (aparece um ponto azul).
 
 \begin{figure}[H]
     \centering
     \includegraphics[max width=12cm, keepaspectratio]{./img/scatter_map}
     \caption{Exemplo de gráfico de dispersão num mapa}
+    \label{fig:scatter-map}
 \end{figure}
 \noindent
 
+A imagem acima não apresenta uma boa leitura, pelo que optámos por não incluir este gráfico nas nossas representações.
 
 \end{itemize}
 
@@ -293,23 +348,23 @@ A escolha dos tipos de gráficos teve como objetivo manter a clareza e facilidad
 
 O projeto proposto pretende então ajudar nesse sentido, de conseguir transformar dados desta plataforma em algo mais fácil e rápido de analisar. Tendo o contexto da plataforma, iremos então descrever duas abordagens que considerámos.
 
-\subsection{Web Scraping}
+\subsection{\textit{Web \textit{scraping}}}
 
-A primeira abordagem que consideramos foi a hipótese de automatizar a extração dos dados diretamente da plataforma do Marketplace Simulations, através de técnicas de \textit{web scraping}. A ideia parecia interessante numa fase inicial, já que permitiria reduzir a dependência do utilizador no processo de exportação  dos dados. No entanto, rapidamente percebemos que esta abordagem trazia vários desafios que, na prática, a tornavam pouco viável, ou mesmo arriscada.
+A primeira abordagem que consideramos foi a hipótese de automatizar a extração dos dados diretamente da plataforma do Marketplace Simulations, através de técnicas de \textit{web} \textit{scraping}. A ideia parecia interessante numa fase inicial, já que permitiria reduzir a dependência do utilizador no processo de exportação  dos dados. No entanto, rapidamente percebemos que esta abordagem trazia vários desafios que, na prática, a tornavam pouco viável, ou mesmo arriscada.
 
-Primeiro, cada conta na plataforma está associada a um grupo de alunos, ou seja, é uma conta ativa e única, usada diretamente durante a simulação. Isto significa que qualquer processo automático que iniciasse sessão, mesmo que fosse só para leitura, poderia de forma acidental interagir com a interface e acabar por alterar alguma opção, o que poderia comprometer a avaliação dos alunos porque podia afetar a sua avaliação final. Além disso, como o acesso à plataforma é feito por licenças pagas, não existe qualquer possibilidade de criar uma conta de serviço ou utilizador apenas para leitura. Ou seja, qualquer tentativa de scraping teria de reutilizar credenciais reais, o que levanta não só questões de segurança, mas também (possivelmente) legais, uma vez que a plataforma pode não permitir o scraping.
+Primeiro, cada conta na plataforma está associada a um grupo de alunos, ou seja, é uma conta ativa e única, usada diretamente durante a simulação. Isto significa que qualquer processo automático que iniciasse sessão, mesmo que fosse só para leitura, poderia de forma acidental interagir com a interface e acabar por alterar alguma opção, o que poderia comprometer a avaliação dos alunos porque podia afetar a sua avaliação final. Além disso, como o acesso à plataforma é feito por licenças pagas, não existe qualquer possibilidade de criar uma conta de serviço ou utilizador apenas para leitura. Ou seja, qualquer tentativa de \textit{web} \textit{scraping} teria de reutilizar credenciais reais, o que levanta não só questões de segurança, mas também (possivelmente) legais, uma vez que a plataforma pode não permitir o \textit{web} \textit{scraping}.
 
-Outro fator que influenciou a nossa decisão foi o próprio risco técnico do scraping: plataformas deste tipo estão muitas vezes protegidas com mecanismos contra automação (como por exemplo ecrãs CAPTCHA), e não conhecendo em detalhe a aplicação, poderíamos facilmente encontrar esse tipo de proteções, que são difíceis de automatizar.
+Outro fator que influenciou a nossa decisão foi o próprio risco técnico do \textit{web} \textit{scraping} uma vez que plataformas deste tipo estão muitas vezes protegidas com mecanismos contra automação (como por exemplo ecrãs CAPTCHA), e não conhecendo em detalhe a aplicação, poderíamos facilmente encontrar esse tipo de proteções, que são difíceis de automatizar.
 
 Pelos motivos acima, optámos por não seguir esta abordagem. Em vez disso, definimos como parte da utilização da nossa aplicação que os próprios alunos devem exportar dados a partir da plataforma de simulação e carregar para a nossa aplicação. Esta solução, embora mais manual, garante segurança, respeita a integridade das contas dos utilizadores, e evita problemas legais ou técnicos com a aplicação de simulação.
 
 \subsection{Exportação e carregamento manual de ficheiros}
 
-A abordagem que acabamos por usar foi os alunos exportam manualmente os dados diretamente da plataforma de simulação e carregarem esses ficheiros na nossa plataforma. A partir daí, o sistema processa e normaliza os dados recebidos, e mostra gráficos com base nesses dados. Esta abordagem, apesar de requerer uma ação manual do lado do utilizador, é mais segura que a alternativa de web scraping, pelos os motivos apresentados acima. Deste modo, garantimos um equilíbrio entre usabilidade, segurança e fiabilidade do sistema. Acabamos então por criar um \gls{sad} (\cf, capítulo \ref{sec:sad}) que permita os estudantes tomarem melhores decisões.
+A abordagem que acabamos por usar foi os alunos exportam manualmente os dados diretamente da plataforma de simulação e carregarem esses ficheiros na nossa plataforma. A partir daí, a aplicação processa e normaliza os dados recebidos, e mostra gráficos com base nesses dados. Esta abordagem, apesar de requerer uma ação manual do lado do utilizador, é mais segura que a alternativa de \textit{web} \textit{web} \textit{scraping}, pelos os motivos apresentados acima. Deste modo, garantimos um equilíbrio entre usabilidade, segurança e fiabilidade da aplicação. Acabamos então por criar um \gls{sad} (\cf, capítulo \ref{sec:sad}) que permita os estudantes tomarem melhores decisões.
 
 Com esse objetivo, procurámos que a nossa aplicação refletisse a estrutura da própria simulação. Como tal, os dados são organizados por \textit{quarters}, como acontece na plataforma de simulação e permitir o carregamento dos dados exportados. Estes ficheiros são depois processados o que nos permite trabalhar com dados mais consistentes. 
 
-Esta estrutura base implica a existência de três entidades principais na nossa aplicação (que iremos descrever nos capítulos seguintes) e cuja interação define  o funcionamento do sistema.
+Esta estrutura base implica a existência de três entidades principais na nossa aplicação (que iremos descrever nos capítulos seguintes) e cuja interação define  o funcionamento da aplicação.
 
 \subsubsection{\textit{Quarters}}
 
@@ -321,53 +376,69 @@ A desvantagem é que requer \textit{input} do utilizador para que seja criado ou
 
 Os ficheiros são inicialmente carregados no formato \gls{xlsx} (que é o formato que a plataforma de simulação exporta), contendo uma ou várias folhas de cálculo. Cada folha é tratada como uma fonte de dados individual e é de onde são extraidos os dados. O ficheiro \gls{xlsx} é guardado como referência, mas não é diretamente utilizado para visualização, ficando apenas como artefacto interno da aplicação. O modelo proposto não prevê que uma folha de cálculo origine multiplos gráficos.
 
-O processamento que é aplicado é uma \textit{pipeline} de transformação de dados (conhecido na industria como \gls{etl}), que limpa os dados e aplica regras para que os gráficos possam ser mostrados de forma consistente. Os dados resultantes desta transformação estão associados ao ficheiro \gls{xlsx} original, sendo até possivel voltar a processar ficheiros de forma a recriar informação (esta funcionalidade não é disponibilizada aos utilizadores finais e não foi desenvolvida de forma explícita).
+O processamento que é aplicado é uma \textit{pipeline} de transformação de dados (conhecido na industria como \gls{etl} (\cf, capítulo \ref{ch:etl})), que aplica regras para que os gráficos possam ser mostrados de forma consistente. Os dados resultantes desta transformação estão associados ao ficheiro \gls{xlsx} original, sendo até possivel voltar a processar ficheiros de forma a recriar informação (esta funcionalidade não é disponibilizada aos utilizadores finais e não foi desenvolvida de forma explícita).
 
 A plataforma garante que só existe uma versão ativa de cada ficheiro. Caso o utilizador carregue novamente um ficheiro com o mesmo nome, o anterior será marcado como não ativo, evitando duplicações e garantindo que os gráficos usam apenas dados mais recentes, e em caso de remoção, garante que conseguimos reverter para a versão anterior.
 
 \subsubsection{\textit{Pipeline} de Transformação de Dados}
 
-Para conseguirmos então garantir uma experiência de utilização consistente, desenvolvemos uma \textit{pipeline} transformação de dados. O objetivo é garantir que os ficheiros carregados, que muitas vezes contêm nomes de colunas inconsistentes, quebras de linha, espaços em excesso ou colunas irrelevantes, sejam adaptados para serem visualizados, e que o processamento seja deterministico.
+Para conseguirmos então garantir uma experiência de utilização consistente, desenvolvemos uma \textit{pipeline} transformação de dados, semelhante a uma \textit{pipeline} \gls{etl} (\cf, capítulo \ref{ch:etl}), ainda que neste projeto tenha sido desenvolvido com uma escala mais pequena, e com recurso a bibliotecas de processamento de dados. 
+
+O objetivo é garantir que os ficheiros carregados, que muitas vezes contêm nomes de colunas inconsistentes, quebras de linha, espaços em excesso ou colunas irrelevantes, sejam adaptados para serem visualizados, e que o processamento seja deterministico.
 
 Como podemos receber muitos ficheiros, a variabilidade entre os dados recebidos é muito alta, pelo que alguns dados passam por mais do que uma fase de transformação. Esta decisão foi tomada com base numa análise manual, em que identificámos possíveis fontes de dados que precisam de mais do que uma fase de transformação. As várias fases de transformação alteram os dados de modo a facilitar a representação visual dos mesmos e é um passo essencial no projeto, porque garante que a aplicação trabalha com formatos e regras conhecidas, e remove a variabilidade dos ficheiros importados. Para proteger a aplicação, decidimos apenas mostrar os dados que foram extraidos de ficheiros conhecidos, de modo a garantir a consistencia dos dados mostrados.
 
 As fases de transformação irão ser descritas em mais detalhe nos capítulos seguintes, uma vez que a implementação destas pipeline estão relacionadas à tecnologia escolhida, mas o desenvolvimento desta \textit{pipeline} é um fator diferenciador deste projeto, uma vez que tem de lidar com dados que não estão estruturados de forma a facilitar representações visuais. 
 
-Este processo de transformação é semelhante aos processos \gls{etl} (\cf, capítulo \ref{ch:etl}) ainda que neste projeto tenha sido desenvolvido com uma escala mais pequena, e com recurso a bibliotecas de processamento de dados.
-
 \subsubsection{Utilizadores}
 
 A plataforma foi projetada para funcionar com utilizadores. Cada utilizador tem a sua conta, e pode criar \textit{quarters}, carregar ou alterar ficheiros, e ver aos gráficos gerados a partir desses ficheiros.
 
-Apesar da plataforma não suportar explicitamente equipas ou grupos, assume-se que alunos do mesmo grupo podem carregar ficheiros semelhantes, mas o sistema trata-os como ficheiros diferentes. Assim, evita-se a complexidade adicional de gerir permissões ou partilha de dados entre contas. Também se assume que as contas podem ser criadas ao nível do grupo, pelo que para a plataforma, é indiferente se a conta é individual ou partilhada entre membros desse grupo.
+Apesar da plataforma não suportar explicitamente equipas ou grupos, assume-se que alunos do mesmo grupo podem carregar ficheiros semelhantes, mas a aplicação trata-os como ficheiros diferentes. Assim, evita-se a complexidade adicional de gerir permissões ou partilha de dados entre contas. 
+
+Também se assume que as contas podem ser criadas ao nível do grupo, pelo que para a plataforma, é indiferente se a conta é individual ou partilhada entre membros desse grupo.
 
 Cada utilizador tem acesso apenas aos seus próprios dados, garantindo o isolamento da informação. Esta separação é feita a nível da base de dados, através da associação de cada entidade ao utilizador que criou.
 
-No futuro, pode ser considerada a funcionalidade de desativação automática de contas (por exemplo, após o final do semestre), mas para já o modelo é simples e robusto: conta individual, dados isolados, e controlo completo sobre os próprios uploads.
+No futuro, pode ser considerada a funcionalidade de desativação automática de contas (por exemplo, após o final do semestre), mas para já o modelo é simples, conta individual, dados isolados, e controlo completo sobre os próprios \textit{uploads}.
 
 No próximo capitulo iremos então descrever as escolhas tomadas de forma a concretizar este modelo.
 
-\section{Arquitetura Tecnológica}
+\section{Arquitetura e Tecnologias Adotadas}
 \label{sec:tec}
 
 \begin{figure}[h]
 \centering
 \includegraphics[max width=\textwidth]{./img/arch}
-\caption{Arquitetura do sistema}
+\caption{Arquitetura da aplicação}
 \label{fig:arquitectura}
 \end{figure}
 
-A arquitetura final do sistema pode ser observada na Figura~\ref{fig:arquitectura}. Esta segue o modelo cliente-servidor, onde os utilizadores interagem com a aplicação através de um \textit{browser}. A definição da arquitetura, a seleção das tecnologias e a organização dos dados foram guiadas por critérios de fiabilidade, simplicidade de manutenção e possibilidade de evolução futura.  Nas seguintes secções especificamos que tecnologias escolhemos e que funções desempenham no sistema.
+A arquitetura final da aplicação pode ser observada na Figura~\ref{fig:arquitectura}. Esta segue o modelo cliente-servidor, onde os utilizadores interagem com a aplicação através de um \textit{browser}. A definição da arquitetura, a seleção das tecnologias e a organização dos dados foram guiadas por critérios de fiabilidade, simplicidade de manutenção e possibilidade de evolução futura.  Nas seguintes secções especificamos que tecnologias escolhemos e que funções desempenham na aplicação.
 
 \subsection{Django}
 
-Para o desenvolvimento do \textit{backend} da aplicação, optámos por usar a biblioteca \textit{Django}. A escolha deveu-se ao facto de o \textit{Django} ser uma biblioteca madura, com uma arquitetura conhecida e uma comunidade grande.
+Para o desenvolvimento do \textit{backend} da aplicação, optámos por usar a \textit{framework} \textit{Django}. A escolha deveu-se ao facto de o \textit{Django} ser uma \textit{framework} muito usada, com uma arquitetura conhecida e uma comunidade grande.
 
-Uma das principais vantagens do \textit{Django} é o facto de seguir o padrão de arquitetura \gls{mvc}, o que facilita bastante a organização do sistema e a separação de responsabilidades. Para além disso, o \textit{Django} oferece um \gls{orm} integrado, que permite interagir com bases de dados de forma mais intuitiva, sem necessidade de escrever \gls{sql} manualmente, e evitando algumas das falhas de segurança. Outra vantagem é a gestão de utilizadores e sessões já estar incluida, facilitando assim o desenvolvimento e facilitando desenvolvimento das funcionalidades específicas da aplicação.
+Uma das principais vantagens do \textit{Django} é o facto de seguir o padrão de arquitetura \gls{mvc}, o que facilita bastante a organização da aplicação e a separação de responsabilidades. No entanto, o \textit{Django} utiliza uma variante própria deste padrão, conhecida como \gls{mtv} onde:
 
-Outro fator que consideramos positivo foi a integração  com outras bibliotecas Python, como o \textit{Pandas}, que usamos para o processamento de dados. Esta compatibilidade torna o desenvolvimento mais rápido, reduzindo a quantidade de trabalho necessário de ligar diferentes tecnologias.
+\begin{itemize}
+    \item o \textit{Model} representa a camada de dados e corresponde ao modelo do domínio;
 
-Em alternativa, podiamos ter escolhido bibliotecas como \textit{Flask} ou \textit{FastAPI}. Apesar de \textit{FastAPI} ser mais recente e mais rápido para \texit{API}s \gls{rest}, o nosso sistema, focado na transformação de dados e visualização, não necessitava de uma abordagem completamente assíncrona e não funciona totalmente com \texit{API}s \gls{rest}. Já o \textit{Flask}, apesar de ser mais leve, implicaria uma maior responsabilidade na definição de toda a arquitetura e gestão de utilizadores, e que aumentava a complexidade do projeto.
+    \item o \textit{Template} representa a camada de apresentação (interface com o utilizador);
+
+    \item a \textit{View}, em \textit{Django}, atua como o controlador que processa a lógica da aplicação e interage com os modelos e os templates.
+\end{itemize}
+
+Apesar da diferença de nomes, esta arquitetura cumpre os mesmos princípios do padrão \gls{mvc} tradicional \cite{fitzgerald2007web,djangodocs}, promovendo uma clara separação de preocupações, o que facilita o desenvolvimento, testes e manutenção da aplicação.
+
+Para além disso, o \textit{Django} oferece um \gls{orm} integrado, que permite interagir com bases de dados de forma mais intuitiva, sem necessidade de escrever \gls{sql} manualmente. Este ORM permite mapear modelos Python em tabelas relacionais e suporta operações como filtros, agregações e relações entre tabelas \cite{djangodocs}, ao mesmo tempo que previne falhas comuns de segurança como \textit{SQL injection} através do uso de consultas parametrizadas \cite{kumar2016security}.
+
+Outra vantagem é a gestão de utilizadores, permissões e sessões já estar incluída de forma nativa no \textit{framework}, facilitando a autenticação, autorização e persistência de sessões de utilizador \cite{djangodocs}. Isto permite ao programador focar-se no desenvolvimento das funcionalidades específicas da aplicação sem ter de construir esse suporte de raiz.
+
+Outro fator que consideramos positivo foi a integração com outras bibliotecas Python, como o \textit{Pandas}, que usamos para o processamento de dados. Esta compatibilidade torna o desenvolvimento mais rápido e flexível, reduzindo o esforço necessário para ligar diferentes tecnologias. O ecossistema Python é particularmente forte no tratamento de dados, e o Django, sendo escrito em Python, tira partido disso de forma direta \cite{vanrossum2001python}.
+
+Em alternativa, podiamos ter escolhido bibliotecas como \textit{Flask} ou \textit{FastAPI}. Apesar de \textit{FastAPI} ser mais recente e mais rápido para \texit{API} \gls{rest} \cite{tiangolo2018fastapi}, o nossa aplicação, focado na transformação de dados e visualização, não necessitava de uma abordagem completamente assíncrona e não funciona totalmente com \texit{API}s \gls{rest}. Já o \textit{Flask}, apesar de ser mais leve, implicaria uma maior responsabilidade na definição de toda a arquitetura e gestão de utilizadores, e que aumentava a complexidade do projeto \cite{grinberg2018flask}.
 
 Relativamente a outras opções como \textit{WordPress}, excluímos essa hipótese. O \textit{WordPress}, ainda que muito prática de servir de suporte para sites de conteúdo como blogues ou sites de noticias, não é adequado para projetos que exigem controlo total sobre a estrutura dos dados, processamento no \textit{backend} e não integra bem com as outras tecnologias escolhidas.
 
@@ -375,7 +446,7 @@ Relativamente a outras opções como \textit{WordPress}, excluímos essa hipóte
 
 Para o processamento de dados, a biblioteca que decidimos usar foi o \textit{Pandas}. Esta escolha foi motivada pelo facto de ser muito utilizada em projetos de engenharia de dados, e por ser escrita em \texit{Python}.
 
-O \textit{Pandas} permite ler e transformar ficheiros Excel com facilidade. A sua sintaxe e as funcionalidades para operações como normalização, filtragem, agrupamento ou ordenação tornaram-na adequada para as tarefas necessárias neste projeto.  Outra vantagem mais é a capacidade de converter os dados diretamente para formatos como \gls{json}, o que facilitou a sua integração com o resto do sistema.
+O \textit{Pandas} permite ler e transformar ficheiros Excel com facilidade. A sua sintaxe e as funcionalidades para operações como normalização, filtragem, agrupamento ou ordenação tornaram-na adequada para as tarefas necessárias neste projeto.  Outra vantagem mais é a capacidade de converter os dados diretamente para formatos como \gls{json}, o que facilitou a sua integração com o resto da aplicação.
 
 Apesar destas vantagens, o \textit{Pandas} não é a melhor opção se considerarmos \textit{datasets} muito grandes, uma vez que funciona inteiramente em memória. Em contextos com maiores volumes de dados, poderiam ser consideradas bibliotecas como \textit{Dask} ou \textit{Polars} por terem capacidades de paralelismo para lidar com um maior conjunto de dados (acabam por ser mais adequadas para \textit{BigData}). No entanto, para os objetivos e escala deste projeto, o \textit{Pandas} é a escolha mais equilibrada considerando o scope do projeto que desenvolvemos.
 
@@ -385,30 +456,32 @@ Para mostrar os gráficos da aplicação, optámos por utilizar o \textit{Plotly
 
 Além disso, a biblioteca oferece suporte a uma grande variedade de gráficos, desde os mais comuns (barras, linhas, circulares) até formatos mais especializados (como gráficos de cascata ou mapas de calor), o que foi importante para explorar os vários tipos de visualização que estavamos a considerar usar. Em comparação, bibliotecas como \textit{Chart.js}, embora sejam mais leves, limitam-se a um conjunto reduzido de gráficos e oferecem menos controlo sobre detalhes de visualização. Por este motivo, \textit{Plotly} era a solução mais adequada para a flexibilidade e diversidade de visualizações que queriamos. Uma lista completa das diferencas pode ser consultada no (\cf, capítulo \ref{ch:charts}).
 
-A versão \textit{Python} desta biblioteca foi também importante no desenvolvimento dos gráficos, uma vez que nos permitiu explorar os dados de forma independente do sistema (fora da aplicação) de modo escolher que tipo de gráfico seria o mais adequado aos dados que estavamos a analisar e que transformações eram necessárias para obter os gráficos escolhidos. Este processo de exploração permitiu-nos perceber o que era possível fazer, e com a ajuda dos orientadores, definir estratégias alternativas para os conjuntos de informação que queríamos mostrar.
+A versão \textit{Python} desta biblioteca foi também importante no desenvolvimento dos gráficos, uma vez que nos permitiu explorar os dados de forma independente da aplicação (fora da aplicação) de modo escolher que tipo de gráfico seria o mais adequado aos dados que estavamos a analisar e que transformações eram necessárias para obter os gráficos escolhidos. Este processo de exploração permitiu-nos perceber o que era possível fazer, e com a ajuda dos orientadores, definir estratégias alternativas para os conjuntos de informação que queríamos mostrar.
 
-\subsection{WebComponents}
+\subsection{\textit{WebComponents}}
 
-No \textit{frontend}, decidimos utilizar \textit{\cite{webcomponents}}, sem recorrer a \textit{frameworks} como \textit{React} ou \textit{Vue}. Esta decisão teve como base a necessidade de criar uma interface leve, e garantir que a aplicação reage aos inputs do utilizador. 
+No \textit{frontend}, decidimos utilizar \textit{WebComponents} \cite{webcomponents}, sem recorrer a \textit{frameworks} como \textit{React} ou \textit{Vue}. Esta decisão teve como base a necessidade de criar uma interface leve, e garantir que a aplicação reage aos \textit{inputs} do utilizador. 
 
-Os \textit{\cite{webcomponents}} são uma especificação nativa dos \textit{browsers}, que permite definir componentes reutilizáveis com encapsulamento de estilo e comportamento. Ao evitarmos dependências pesadas como o \textit{React}, conseguimos reduzir a complexidade técnica da aplicação, mantendo ao mesmo tempo a flexibilidade e capacidade de reutilização dos componentes desenvolvidos.
+Os \textit{WebComponents} \cite{webcomponents} são uma especificação nativa dos \textit{browsers}, que permite definir componentes reutilizáveis com encapsulamento de estilo e comportamento. Ao evitarmos dependências pesadas como o \textit{React}, conseguimos reduzir a complexidade técnica da aplicação, mantendo ao mesmo tempo a flexibilidade e capacidade de reutilização dos componentes desenvolvidos.
 
-Apesar de \textit{React} ser uma framework muito utilizada para aplicações \textit{web},  com um ecossistema já muito maduro e uma comunidade grande, considerámos que para este projeto, a sua introdução seria um excesso em termos de dependências e complexidade. A alternativa escolhida proporcionou uma solução mais leve e mais fácil de manter. Outra razão que nos levou a esta escolha foi o facto do \textit{Django} já trazer consigo as funcionalidades de autenticação, pelo que se a aplicação web fosse escrita totalmente em \textit{React}, teriamos de usar o \textit{Django} apenas como uma \textit{API REST}, e utilizar métodos alternativos de autenticação como \textit{OAuth2}.
+Apesar de \textit{React} ser uma framework muito utilizada para aplicações \textit{web},  com um ecossistema já muito maduro e uma comunidade grande, considerámos que para este projeto, a sua introdução seria um excesso em termos de dependências e complexidade. A alternativa escolhida proporcionou uma solução mais leve e mais fácil de manter. Outra razão que nos levou a esta escolha foi o facto do \textit{Django} já trazer consigo as funcionalidades de autenticação, pelo que se a aplicação \textit{web} fosse escrita totalmente em \textit{React}, teriamos de usar o \textit{Django} apenas como uma \gls{API} \gls{REST}, e utilizar métodos alternativos de autenticação como \textit{OAuth2}.
 
-\subsection{PostgreSQL}
+\subsection{\textit{PostgreSQL}}
 
-Para a persistência de dados, utilizámos o sistema de gestão de bases de dados \textit{PostgreSQL}, uma das soluções open-source mais completas e robustas disponíveis atualmente. Inicialmente foi considerada a utilização de \textit{SQLite} por simplicidade durante o desenvolvimento, mas rapidamente a necessidade de maior escalabilidade e de suporte a funcionalidades como campos \gls{json}, levou à adoção do \textit{PostgreSQL}.
+Para a persistência de dados, utilizámos a aplicação de gestão de bases de dados \textit{PostgreSQL}, uma das soluções \textit{open-source} mais completas e robustas disponíveis atualmente. Inicialmente foi considerada a utilização de \textit{SQLite} por simplicidade durante o desenvolvimento, mas rapidamente a necessidade de maior escalabilidade e de suporte a funcionalidades como campos \gls{json}, levou à adoção do \textit{PostgreSQL}.
 
 \textit{PostgreSQL} oferece um bom desempenho, suporte a operações complexas e é compatível com o \gls{orm} do \textit{Django}, o que permitiu tirar partido do modelo relacional sem abdicar da produtividade no desenvolvimento. Comparado com outras alternativas como \texit{MySQL}, o \textit{PostgreSQL} distingue-se pelo seu suporte avançado a tipos de dados (\gls{json}, \texit{arrays}, \textit{enums}), entre outras funcionalidades.
 
 
 \subsection{Docker}
 
-O \textit{Docker} foi utilizado neste projeto como solução de virtualização, tanto para desenvolvimento como para ambientes de produção. A principal vantagem da sua adoção prende-se com a criação de ambientes consistentes e isolados, garantindo que a aplicação corre da mesma forma em diferentes máquinas, sem conflitos de dependências ou configurações, e consistentemente em vários sistemas operativos. Existem vários \textit{runtimes} compativeis com \textit{Docker}, e devido ao modelo de negócio da empresa (que adotou um modelo pago), optámos por usar o \textit{Rancher} (uma aplicação com uma \gls{api} compatível com \textit{Docker}) para o desenvolvimento, e o \textit{Docker Engine} para ambientes de produção.
+O \textit{Docker} foi utilizado neste projeto como solução de virtualização, tanto para desenvolvimento como para ambientes de produção. A principal vantagem da sua adoção prende-se com a criação de ambientes consistentes e isolados, garantindo que a aplicação corre da mesma forma em diferentes máquinas, sem conflitos de dependências ou configurações, e consistentemente em vários sistemas operativos. 
 
-Durante o desenvolvimento, o \textit{Docker} facilitou a orquestração dos serviços necessários (como a aplicação Django, a base de dados PostgreSQL e o servidor \gls{http} Nginx configurado como \textit{reverse proxy}), utilizando ficheiros \texttt{Dockerfile} e \texttt{docker-compose.yml}. Isto permitiu montar rapidamente o ambiente completo da aplicação, sem necessidade de instalações manuais por parte dos programadores.
+Existem vários \textit{runtimes} compativeis com \textit{Docker}, e devido ao modelo de negócio da empresa \textit{Docker} (que adotou um modelo pago), optámos por usar o \textit{Rancher} (uma aplicação com uma \gls{api} compatível com \textit{Docker}) para o desenvolvimento, e o \textit{Docker Engine} para ambientes de produção.
 
-Para produção, o \textit{Docker} permite recriar um ambiente de produção sempre com a mesma configuração e gerir os vários serviços que a aplicação utiliza, o que facilita o processo de \textit{deploy}, e escalabilidade futura. Esta abordagem garante que o código testado é exatamente o que será executado em produção, reduzindo erros e aumentando a estabilidade do sistema.
+Durante o desenvolvimento, o \textit{Docker} facilitou a orquestração dos serviços necessários (a aplicação Django, a base de dados, e o servidor \gls{http} Nginx configurado como \textit{reverse proxy}), utilizando ficheiros \texttt{Dockerfile} e \texttt{docker-compose.yml}. Isto permitiu montar rapidamente o ambiente completo da aplicação, sem necessidade de instalações manuais por parte dos programadores.
+
+Para produção, o \textit{Docker} permite recriar um ambiente de produção sempre com a mesma configuração e gerir os vários serviços que a aplicação utiliza, o que facilita o processo de \textit{deploy}, e escalabilidade futura. Esta abordagem garante que o código testado é exatamente o que será executado em produção, reduzindo erros e aumentando a estabilidade da aplicação.
 
 O \textit{Docker} foi também utilizado durante o desenvolvimento deste relatório, porque permitiu-nos ter um ambiente \textit{LaTex} configurado com todas as extensões apenas com um único comando no terminal sem instalar aplicações.
 
@@ -418,11 +491,11 @@ O \textit{Docker} foi também utilizado durante o desenvolvimento deste relatór
 Além das tecnologias centrais utilizadas no projeto, foi também fundamental a utilização de um conjunto de ferramentas de suporte que facilitaram o trabalho, a organização e o desenvolvimento do projeto. As principais ferramentas utilizadas foram:
 
 \begin{itemize}
-    \item \textbf{Git \cite{git} e Github \cite{github}}: Para assegurar o controlo de versões, foi utilizado o sistema Git, em conjunto com a plataforma Github. Esta combinação permitiu não só manter um histórico  das alterações feitas, mas também garantir a colaboração e a integridade do desenvolvimento ao longo do tempo.
+    \item \textbf{Git \cite{git} e Github \cite{github}}: Para assegurar o controlo de versões, foi utilizado a aplicação Git, em conjunto com a plataforma Github. Esta combinação permitiu não só manter um histórico  das alterações feitas, mas também garantir a colaboração e a integridade do desenvolvimento ao longo do tempo.
 
-    \item \textbf{Notion \cite{notion}}: A gestão de tarefas e a organização de trabalho foram centralizadas na plataforma Notion. Esta ferramenta é prática de fácil de usar, e para planear as tarefas, definir prioridades, acompanhar o progresso das diferentes fases do projeto. É também uma ferramenta muito fácil de usar, e que permite também tirar notas durante o desenvolvimento, que foram importantes para o desenvolvimento do relatório.
+    \item \textbf{Notion \cite{notion}}: A gestão de tarefas e a organização de trabalho foram centralizadas na plataforma \textit{Notion}. Esta ferramenta é prática de fácil de usar, e para planear as tarefas, definir prioridades, acompanhar o progresso das diferentes fases do projeto. É também uma ferramenta muito fácil de usar, e que permite também tirar notas durante o desenvolvimento, que foram importantes para o desenvolvimento do relatório.
 
     \item \textbf{\gls{vscode}\cite{vscode}}: Como editor, foi utilizado o editor \gls{vscode}. Através da instalação de extensões, foi possível adaptar o \gls{vscode} às necessidades do projeto, melhorando a experiência de programação.
 \end{itemize}
 
-Estas ferramentas, utilizadas de forma consistente, desempenharam um papel decisivo na execução do projeto, não só do ponto de vista técnico, mas também no que respeita à organização e planeamento do mesmo.
+Estas ferramentas, utilizadas de forma consistente, desempenharam um papel importantes na execução do projeto, não só do ponto de vista técnico, mas também no que respeita à organização e planeamento do mesmo.

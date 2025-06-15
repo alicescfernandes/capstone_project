@@ -125,9 +125,9 @@ Para garantir a consistência dos dados e evitar conflitos de ficheiros com o me
 
 Isto permite recuperar versões anteriores dos dados quando o utilizador apaga um ficheiro ou quando existe algum erro no processamento, uma vez que os dados resultantes só são marcados como correntes quando são extraidos e processados com sucessos.
 
-Este sistema de processamento permitiu transformar os dados ficheiros \gls{xlsx} em um formato estruturado e normalizado, facilitando a visualização e análise dos dados através da aplicação web. A modularidade da \textit{pipeline} também permitiu adicionar passos de normalização conforme necessário, mantendo a consistência dos dados processados.
+Este sistema de processamento permitiu transformar os dados ficheiros \gls{xlsx} em um formato estruturado e normalizado, facilitando a visualização e análise dos dados através da aplicação \textit{web}. A modularidade da \textit{pipeline} também permitiu adicionar passos de normalização conforme necessário, mantendo a consistência dos dados processados.
 
-No final, obtemos dados que são práticos de representar, próximos ao formato final que pretendemos mostrar ao utilizador, e que podem ser facilmente utilizados pela aplicação web para mostrar os gráficos.
+No final, obtemos dados que são práticos de representar, próximos ao formato final que pretendemos mostrar ao utilizador, e que podem ser facilmente utilizados pela aplicação \textit{web} para mostrar os gráficos.
 
 \begin{figure}[H]
 \centering
@@ -141,13 +141,13 @@ No final, obtemos dados que são práticos de representar, próximos ao formato 
 \caption{Gráfico extraido da mesma folha acima com filtro aplicado para o Quarter 5}
 \end{figure}
 
-\section{Desenvolvimento da Aplicação Web}
+\section{Desenvolvimento da Aplicação \textit{web}}
 
-Esta secção foca-se na estrutura e funcionamento da aplicação web, tanto o \textit{backend} em Django como a interface construída com \gls{html}, \textit{WebComponents} e Flowbite.
+Esta secção foca-se na estrutura e funcionamento da aplicação \textit{web}, tanto o \textit{backend} em Django como a interface construída com \gls{html}, \textit{WebComponents} e Flowbite.
 
 \subsection{Arquitetura da aplicação (Backend)}
 
-A aplicação web foi desenvolvida utilizando o framework Django como já descrito na secção \ref{sec:fundamentos}. A arquitetura foi desenhada para garantir o isolamento dos dados por utilizador e uma gestão dos ficheiros e dados processados.
+A aplicação \textit{web} foi desenvolvida utilizando o framework Django como já descrito na secção \ref{sec:fundamentos}. A arquitetura foi desenhada para garantir o isolamento dos dados por utilizador e uma gestão dos ficheiros e dados processados.
 
 \subsubsection{Modelos de Dados}
 
@@ -218,7 +218,7 @@ A aplicação expõe um conjunto de \textit{endpoints} \textit{rest} que permite
     \item \texttt{quarters/files/delete/<uuid:uuid>/}: Endpoint para remover um ficheiro associado a um \textit{quarter}, usando o \gls{uuid} do ficheiro.
   \end{itemize}
   
-A API inclui \textit{endpoints} para gestão de \textit{quarters} (\texttt{/api/\textit{quarters}/}) e visualização de gráficos (\texttt{/api/chart/})  O \textit{endpoint} para visualização de gráficos (\texttt{api/chart/}) é o mais importante, e é o que é utilizado para mostrar os gráficos na aplicação web, e permite uma série de parâmetros para filtrar os dados e mostrar gráficos de diferentes tipos. Estes endpoints são usados com recurso a pedidos HTTP (utilizando \texttt{fetch}) e também como páginas que aceitam parâmetros por \gls{url} (como por exemplo em formulários através do atributo \textttt{action}).
+A API inclui \textit{endpoints} para gestão de \textit{quarters} (\texttt{/api/\textit{quarters}/}) e visualização de gráficos (\texttt{/api/chart/})  O \textit{endpoint} para visualização de gráficos (\texttt{api/chart/}) é o mais importante, e é o que é utilizado para mostrar os gráficos na aplicação \textit{web}, e permite uma série de parâmetros para filtrar os dados e mostrar gráficos de diferentes tipos. Estes endpoints são usados com recurso a pedidos HTTP (utilizando \texttt{fetch}) e também como páginas que aceitam parâmetros por \gls{url} (como por exemplo em formulários através do atributo \textttt{action}).
 
 \begin{lstlisting}[language=\gls{html}, caption={Excerto do código \gls{html} do formulário de edição de \textit{quarter}}]
     <form method="post" action="/quarters/edit/b12fdf1f-8ce3-4050-a28f-07e444e15042/" id="edit-quarter-form" class="upload-form-wrapper" enctype="multipart/form-data">
@@ -247,7 +247,7 @@ Quando não existe gráficos a mostrar, é mostrada ao utilizador uma mensagem q
 
 \subsubsection{WebComponents}
 
-A camada de visualização de dados é composta por componentes Web, cada um encapsulando toda a sua a lógica, incluindo integrações com as bibliotecas \textit{Plotly} e \textit{Datatables} . Esta abordagem garante isolamento entre componentes, facilita a reutilização e simplifica a manutenção do código Javascript. 
+A camada de visualização de dados é composta por componentes \textit{web}, cada um encapsulando toda a sua a lógica, incluindo integrações com as bibliotecas \textit{Plotly} e \textit{Datatables} . Esta abordagem garante isolamento entre componentes, facilita a reutilização e simplifica a manutenção do código Javascript. 
 
 A especificação \textit{WebComponents}\cite{webcomponents} permite criar os nossos nós \gls{dom}, e estende as interfaces \gls{dom} já existentes. Esta funcionalidade permite criar componentes que se comportam como elementos \gls{html}, e que podem ser utilizados como tal, e que também podem receber estilos e outras propriedades e atributos e é suportada já pelos os \textit{browsers} mais usados (como pode ser consultado no site \textit{Can I Use}\cite{caniuse} que é um site que indica o suporte de uma funcionalidade em diferentes \textit{browsers}).
 
@@ -298,7 +298,7 @@ A biblioteca \textit{Plotly} suporta uma configuração declarativa, ou seja, ap
 
 Os gráficos são carregados de forma progressiva (\textit{lazy load}). Apenas são mostrados quando o nó entra dentro do \textit{viewport} do utilizador. O \textit{lazy load} permite que os servidor não fique sobre-carregado com pedidos, e que no lado do cliente, a memória utilizada seja minimizada visto que não são carregados todos os gráficos de uma vez.	
 
-As bibliotecas \textit{Plotly} e \textit{Datatables} foram integradas diretamente com os \textit{WebComponents}\cite{webcomponents}, fazendo com que o WebComponent consiga mostrar gráficos e tabelas de forma encapsulada. Esta integração permite que, quando o carregamento de um gráfico é iniciado, que seja apresentado  um \textit{skeleton} (uma representação visual com um \textit{spinner} e com a largura e altura aproximada de um gráfico) que é trocada pelo o gráfico em si quando os dados ficam disponíveis. A ideia deste \textit{skeleton} é que o utilizador veja que o gráfico está a ser carregado, e que não cause um grande deslocamento do gráfico na interface (\textit{layout shifting}) quando os dados estão prontos.
+As bibliotecas \textit{Plotly} e \textit{Datatables} foram integradas diretamente com os \textit{WebComponents}\cite{webcomponents}, fazendo com que o \textit{web}Component consiga mostrar gráficos e tabelas de forma encapsulada. Esta integração permite que, quando o carregamento de um gráfico é iniciado, que seja apresentado  um \textit{skeleton} (uma representação visual com um \textit{spinner} e com a largura e altura aproximada de um gráfico) que é trocada pelo o gráfico em si quando os dados ficam disponíveis. A ideia deste \textit{skeleton} é que o utilizador veja que o gráfico está a ser carregado, e que não cause um grande deslocamento do gráfico na interface (\textit{layout shifting}) quando os dados estão prontos.
 
 \subsubsection{Responsividade em dispositivos móveis}
 
@@ -337,9 +337,9 @@ A validação e testes da aplicação foram realizados através de múltiplas ab
 
 \section{Testes de Acessibilidade}
 
-A acessibilidade foi uma preocupação no desenvolvimento da aplicação, e para isso foram seguidas as diretrizes \gls{wcag} 2.1, que definem critérios técnicos para tornar os conteúdos web mais acessíveis a todos os utilizadores, incluindo pessoas com deficiências visuais, motoras, auditivas, cognitivas ou neurológicas. Para garantir a conformidade com estas diretrizes, recorremos a uma abordagem prática combinada de testes automáticos e validação manual. Entre as ferramentas utilizadas destacam-se duas principais: o Lighthouse e o Axe.
+A acessibilidade foi uma preocupação no desenvolvimento da aplicação, e para isso foram seguidas as diretrizes \gls{wcag} 2.1, que definem critérios técnicos para tornar os conteúdos \textit{web} mais acessíveis a todos os utilizadores, incluindo pessoas com deficiências visuais, motoras, auditivas, cognitivas ou neurológicas. Para garantir a conformidade com estas diretrizes, recorremos a uma abordagem prática combinada de testes automáticos e validação manual. Entre as ferramentas utilizadas destacam-se duas principais: o Lighthouse e o Axe.
 
-O Lighthouse, desenvolvido pela Google, é uma ferramenta open source que corre diretamente no Chrome DevTools ou como \gls{cli}. Permite auditar uma página web em várias categorias, nomeadamente Performance, SEO, Best Practices e, claro, Accessibility. A secção de acessibilidade do Lighthouse verifica, por exemplo, se os elementos têm contrastes suficientes, se os formulários estão corretamente identificadas com atributos aria-label, se há títulos estruturados (h1, h2, etc.) numa hierarquia lógica e se os elementos interativos (como botões e links) são acessíveis por teclado. O Lighthouse fornece uma pontuação de 0 a 100 e destaca problemas comuns com sugestões de como resolver.
+O Lighthouse, desenvolvido pela Google, é uma ferramenta open source que corre diretamente no Chrome DevTools ou como \gls{cli}. Permite auditar uma página \textit{web} em várias categorias, nomeadamente Performance, SEO, Best Practices e, claro, Accessibility. A secção de acessibilidade do Lighthouse verifica, por exemplo, se os elementos têm contrastes suficientes, se os formulários estão corretamente identificadas com atributos aria-label, se há títulos estruturados (h1, h2, etc.) numa hierarquia lógica e se os elementos interativos (como botões e links) são acessíveis por teclado. O Lighthouse fornece uma pontuação de 0 a 100 e destaca problemas comuns com sugestões de como resolver.
 
 Esta ferramenta Lighthouse, apesar de não ser tão detalhada como a Axe, sinalizou alguns problemas, como a falta de compressão \gls{gzip} e alguns erros de acessibilidade e \gls{seo}. Estes problemas foram resolvidos (fazendo alterações na configuração do servidor Nginx e no código da aplicação), e a ferramenta Lighthouse passou a dar uma pontuação melhor nos vários critérios que avalia.
 
@@ -436,7 +436,7 @@ A aplicação é compatível com os \textit{browsers} testados, nas versões em 
 \label{ch:conclusoesTrabalhoFuturo}
 %%________________________________________________________________________
 
-O desenvolvimento deste projeto culminou numa aplicação web funcional que responde de forma direta e eficaz às necessidades dos estudantes do ISCAL no que diz respeito à análise dos dados exportados da plataforma Marketplace Simulations. Desde o início, o objetivo foi construir uma solução prática, que facilitasse a leitura e exploração da informação, e ao mesmo tempo fosse suficientemente robusta e escalável para crescer com os utilizadores e os dados.
+O desenvolvimento deste projeto culminou numa aplicação \textit{web} funcional que responde de forma direta e eficaz às necessidades dos estudantes do ISCAL no que diz respeito à análise dos dados exportados da plataforma Marketplace Simulations. Desde o início, o objetivo foi construir uma solução prática, que facilitasse a leitura e exploração da informação, e ao mesmo tempo fosse suficientemente robusta e escalável para crescer com os utilizadores e os dados.
 
 \section{Conclusões}
 
@@ -456,25 +456,25 @@ Em síntese, este projeto mostrou como a combinação de ferramentas modernas po
 
 Apesar de o sistema atual já cumprir os objetivos definidos inicialmente, foram identificadas diversas oportunidades de evolução e expansão que poderão ser exploradas em futuras iterações do projeto. Estas propostas estão organizadas em diferentes áreas de desenvolvimento.
 
-\subsection{Interface e Experiência do Utilizador}
+\textbf{Interface e Experiência do Utilizador}
 
 Uma das direções mais imediatas para evolução está ao nível da interface. Pretende-se alargar o leque de visualizações disponíveis, incluindo novos tipos de gráficos, como dispersões, histogramas ou até mapas interativos, sendo que é sempre importante ter em mente a experiencia de utilização. Para além disso, seria interessante permitir a criação de \textit{dashboards} personalizáveis, onde cada utilizador poderia compor visualizações de acordo com os seus objetivos, e até juntar vários tipos de dados na mesma visualização.
 
 Outro aspeto relevante prende-se com a configuração dinâmica dos gráficos. A ideia é deixar de apresentar visualizações estáticas e passar a oferecer ao utilizador a possibilidade de escolher, em tempo real, os tipos de gráfico, métricas e dimensões que pretende analisar. Esta abordagem aumentaria substancialmente a flexibilidade da ferramenta.
 
-\subsection{Análise de Dados e Otimização de Performance}
+\textbf{Análise de Dados e Otimização de Performance}
 
 Do ponto de vista analítico, uma evolução natural do sistema passa pela incorporação de técnicas de análise preditiva. A utilização de modelos de regressão ou algoritmos de aprendizagem automática simples poderá ajudar os estudantes a identificar padrões e antecipar tendências de mercado com base nos dados da simulação.
 
 Em paralelo, importa melhorar a eficiência do sistema no processamento de dados de maior volume. Será relevante avaliar o uso de bibliotecas como \texttt{Dask} ou \texttt{Polars}, que oferecem soluções otimizadas para manipulação de grandes \textit{datasets}, mantendo tempos de resposta aceitáveis e garantindo uma boa experiência de utilização.
 
-\subsection{Gestão de Utilizadores e Colaboração}
+\textbf{Gestão de Utilizadores e Colaboração}
 
 Ao nível da gestão da plataforma, propõe-se o reforço das funcionalidades de administração de utilizadores. Isto poderá incluir a criação de perfis diferenciados (por exemplo, administrador, editor, visualizador) e mecanismos de controlo de permissões.
 
 Adicionalmente, seria interessante introduzir funcionalidades de colaboração entre utilizadores, nomeadamente a partilha de visualizações e filtros de dados. Este tipo de funcionalidade é particularmente útil em contextos académicos, onde os trabalhos são frequentemente realizados em grupo ao longo do semestre.
 
-\subsection{Integração com Outras Plataformas}
+\textbf{Integração com Outras Plataformas}
 
 Por fim, um caminho a explorar passa pela integração direta com a plataforma \textit{Marketplace Simulations}, de onde os dados são originalmente extraídos. Uma abordagem possível seria o desenvolvimento de extensões de \textit{browser} (para \textit{Chrome}, \textit{Firefox} ou \textit{Edge}) que permitam importar automaticamente os dados para o nosso sistema, eliminando etapas manuais do processo de upload.
 
