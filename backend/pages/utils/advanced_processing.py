@@ -99,33 +99,6 @@ BALANCE_SHEET_CONFIG = {
     
 }
 
-def parse_cell_cashflow(label, value, column_name, df_col):
-    label = label.strip().lstrip("-+= ").strip()
-    if label not in BALANCE_SHEET_CONFIG or BALANCE_SHEET_CONFIG[label].get("ignore"):
-        return None
-
-    config = BALANCE_SHEET_CONFIG[label]
-    measure = config["type"]
-
-    if measure == "percentage":
-        ref_label = config["reference"]
-        ref_row = df_col[df_col["Report Item"].str.contains(ref_label, case=False, na=False)]
-        if not ref_row.empty:
-            ref_value = ref_row.iloc[0][column_name]
-            value = (int(value) / 100) * abs(ref_value)
-        else:
-            value = 0
-        measure = "absolute"
-    elif measure == "relative" or measure == "absolute":
-        sign = config["sign"]
-        value = sign * abs(value)
-
-    return {
-        "Column": column_name,
-        "Label": label,
-        "Measure": measure,
-        "Value": value
-    }
 
 def parse_cell_production(label, value, column_name):
     original_label = label.strip()
@@ -205,50 +178,10 @@ def process_balance_sheet(df,quarter):
     parsed_df = pd.DataFrame(parsed_rows)
     return parsed_df
 
-
-def process_income_statement(df,quarter):
-    # extract last quarter from sheet (sheets have all the quarters, but we are only interested on the last)
-    quarter_columns = [col for col in df.columns if col.startswith("Quarter")]
-    latest_quarter = quarter_columns[-1] if quarter_columns else None
-
-    # validate
-    if latest_quarter is None:
-        raise ValueError("Nenhuma coluna de trimestre encontrada no ficheiro chart_data.")
-
-    df = df[["Report Item", latest_quarter]].dropna()
-    df[latest_quarter] = df[latest_quarter].astype(str).str.replace(",", "").astype(float)
-
-
-    # parse sheets
-    parsed_rows = []
-    for _, row in df.iterrows():
-        parsed = parse_cell(row["Report Item"], row[latest_quarter], latest_quarter, df[["Report Item", latest_quarter]])
-
-        if parsed:
-            parsed_rows.append(parsed)
-
-    # Criar DataFrame
-    parsed_df = pd.DataFrame(parsed_rows)
-    return parsed_df
-
-
 def process_detailed_brand_demand(df,quarter):
     parsed_df = df.melt(id_vars=["Brand", "Company", "City"], var_name="Segment", value_name="Demand")
 
     return parsed_df
-
-# dropna is dropping all rows with nan values, and that is causing some rows to get removed
-def process_compensation(df,quarter):
-    last_two = df.tail(2)
-
-    # Merges last two lines so that we have a single column
-    merged = last_two.aggregate(lambda x: x.dropna().iloc[0] if x.dtype == object else x.sum())
-
-    parsed_df = df.iloc[:-2]
-
-    parsed_df = pd.concat([parsed_df, pd.DataFrame([merged])])
-    
-    return df
 
 def process_competitor_city(df,quarter):
     parsed_df = df.copy()

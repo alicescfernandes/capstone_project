@@ -1,4 +1,4 @@
-from .advanced_processing import process_balance_sheet, process_income_statement, process_detailed_brand_demand, process_compensation, process_competitor_city, process_production_costs, process_cashflow
+from .advanced_processing import process_balance_sheet, process_detailed_brand_demand, process_competitor_city, process_production_costs, process_cashflow
 
 CHART_CLASSIFICATION = {
     "industry-results-for": {
@@ -586,22 +586,12 @@ ADDITIONAL_PROCESSING_PIPELINE = {
     "channel-profitability-latam": [process_balance_sheet],
     "channel-profitability-europe": [process_balance_sheet],
     "channel-profitability-apac": [process_balance_sheet],
-    "income-statement": [process_income_statement],
+    "income-statement": [process_cashflow],
     "detailed-brand-demand-noram": [process_detailed_brand_demand],
     "detailed-brand-demand-mea": [process_detailed_brand_demand],
     "detailed-brand-demand-latam": [process_detailed_brand_demand],
     "detailed-brand-demand-europe": [process_detailed_brand_demand],
     "detailed-brand-demand-apac": [process_detailed_brand_demand],
-    # "competitors-compensation-for-sales-force-noram": [process_compensation],
-    # "competitors-compensation-for-sales-force-mea": [process_compensation],
-    # "competitors-compensation-for-sales-force-latam": [process_compensation],
-    # "competitors-compensation-for-sales-force-europe": [process_compensation],
-    # "competitors-compensation-for-sales-force-apac": [process_compensation],
-    # "competitors-compensation-for-production-workers-noram": [process_compensation],
-    # "competitors-compensation-for-production-workers-mea": [process_compensation],
-    # "competitors-compensation-for-production-workers-latam": [process_compensation],
-    # "competitors-compensation-for-production-workers-europe": [process_compensation],
-    # "competitors-compensation-for-production-workers-apac": [process_compensation],
     "competitors-in-city-noram": [process_competitor_city],
     "competitors-in-city-mea": [process_competitor_city],
     "competitors-in-city-latam": [process_competitor_city],
