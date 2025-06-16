@@ -7,12 +7,15 @@
 {% endblock %}
 
 {% block extra_head %}
-  <link rel="preload" href="{% static 'css/page_home.css' %}" as="style" crossorigin="anonymous">
-  <link rel="preload" href="https://cdn.datatables.net/v/dt/jq-3.7.0/dt-2.3.1/af-2.7.0/b-3.2.3/b-colvis-3.2.3/b-print-3.2.3/cr-2.1.1/cc-1.0.1/kt-2.12.1/r-3.0.4/rr-1.5.0/sl-3.0.1/datatables.min.css" as="style" crossorigin="anonymous">
+  
+  <link rel="preload" href="{% static 'css/page_home.css' %}" as="style" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'">
+  <link rel="preload" href="https://cdn.datatables.net/v/dt/jq-3.7.0/dt-2.3.1/af-2.7.0/b-3.2.3/b-colvis-3.2.3/b-print-3.2.3/cr-2.1.1/cc-1.0.1/kt-2.12.1/r-3.0.4/rr-1.5.0/sl-3.0.1/datatables.min.css" as="style" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'">
 
-  <link rel="stylesheet" href="{% static 'css/page_home.css' %}" />
-  <link href="https://cdn.datatables.net/v/dt/jq-3.7.0/dt-2.3.1/af-2.7.0/b-3.2.3/b-colvis-3.2.3/b-print-3.2.3/cr-2.1.1/cc-1.0.1/kt-2.12.1/r-3.0.4/rr-1.5.0/sl-3.0.1/datatables.min.css" rel="stylesheet" crossorigin="anonymous">
-    
+  <noscript>
+    <link rel="stylesheet" href="{% static 'css/page_home.css' %}">
+    <link rel="stylesheet" href="https://cdn.datatables.net/v/dt/jq-3.7.0/dt-2.3.1/af-2.7.0/b-3.2.3/b-colvis-3.2.3/b-print-3.2.3/cr-2.1.1/cc-1.0.1/kt-2.12.1/r-3.0.4/rr-1.5.0/sl-3.0.1/datatables.min.css">
+  </noscript>
+
   <script type="module" src="{% static 'js/chart_webcomponent.js' %}"></script>
   <script type="module" src="{% static 'js/table_webcomponent.js' %}"></script>
 

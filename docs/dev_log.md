@@ -19,6 +19,11 @@ _Stuff that is not important and just nice haves_
 
 ## TODO
 
+## 06/16/2025
+
+- [x] Dynamically load the datatables and plotly script
+- [x] Added custom generated plotly lib
+
 ## 06/12/2025
 
 - [x] Fixed two bugs on charts
