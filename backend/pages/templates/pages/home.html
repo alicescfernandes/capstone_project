@@ -12,10 +12,7 @@
 
   <link rel="stylesheet" href="{% static 'css/page_home.css' %}" />
   <link href="https://cdn.datatables.net/v/dt/jq-3.7.0/dt-2.3.1/af-2.7.0/b-3.2.3/b-colvis-3.2.3/b-print-3.2.3/cr-2.1.1/cc-1.0.1/kt-2.12.1/r-3.0.4/rr-1.5.0/sl-3.0.1/datatables.min.css" rel="stylesheet" crossorigin="anonymous">
-  
-  <script async src="{% static 'js/plotly.min.js' %}"></script>
-  <script async src="https://cdn.datatables.net/v/dt/jq-3.7.0/dt-2.3.1/af-2.7.0/b-3.2.3/b-colvis-3.2.3/b-print-3.2.3/cr-2.1.1/cc-1.0.1/kt-2.12.1/r-3.0.4/rr-1.5.0/sl-3.0.1/datatables.min.js" crossorigin="anonymous"></script>
-  
+    
   <script type="module" src="{% static 'js/chart_webcomponent.js' %}"></script>
   <script type="module" src="{% static 'js/table_webcomponent.js' %}"></script>
 
@@ -27,7 +24,11 @@
 
 
   {% if not empty %}
-    <!-- section -->
+  <script>
+    window.plotlyUrl = "{% static 'js/plotly.min.js' %}";
+    window.datatablesUrl = "https://cdn.datatables.net/v/dt/jq-3.7.0/dt-2.3.1/af-2.7.0/b-3.2.3/b-colvis-3.2.3/b-print-3.2.3/cr-2.1.1/cc-1.0.1/kt-2.12.1/r-3.0.4/rr-1.5.0/sl-3.0.1/datatables.min.js";
+  </script>
+  <!-- section -->
     <div class="container_home">
       <aside class="sections_column">
         <h2>Available Sections</h2>

@@ -1,6 +1,9 @@
 const API_BASE_URL = `${window.location.origin}/api/`;
 
 class PlotlyChart extends HTMLElement {
+    static isPlotlyLoaded = false;
+    static isPlotlyLoading = false;
+
     constructor() {
         super();
         this.initState();
@@ -91,21 +94,31 @@ class PlotlyChart extends HTMLElement {
     }
 
     waitForPlotly() {
-
-        if (window.Plotly) {
-            return Promise.resolve()
+        if (window.isPlotlyLoaded) {
+            return Promise.resolve();
         }
-        return new Promise((resolve) => {
-            const check = () => {
-                if (window.Plotly) {
-                    resolve();
-                } else {
-                    setTimeout(check, 500);
-                }
-            };
-            check();
+
+        if (window.isPlotlyLoading) {
+            return new Promise((resolve) => {
+                const checkLoaded = () => {
+                    if (window.isPlotlyLoaded) {
+                        resolve();
+                    } else {
+                        setTimeout(checkLoaded, 100);
+                    }
+                };
+                checkLoaded();
+            });
+        }
+
+        window.isPlotlyLoading = true;
+        return import(window.plotlyUrl).then(() => {
+            window.isPlotlyLoaded = true;
+            window.isPlotlyLoading = false;
+            return Promise.resolve();
         });
     }
+
     renderQuarterNavigation() {
         const container = this.querySelector(`#${this.chart_id} .chart-quarter-navigation`);
         const { quarter, title } = this.state;

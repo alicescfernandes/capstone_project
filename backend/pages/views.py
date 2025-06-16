@@ -7,9 +7,9 @@ from django.contrib.auth import logout
 from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
+from django.utils.text import slugify
 from .models import Quarter, ExcelFile, ChartData
 from .utils.chart_classification import CHART_CLASSIFICATION_KEYS, CHART_CLASSIFICATION
-from django.utils.text import slugify
 
 
 # Get the path to the xlsx directory
@@ -18,17 +18,17 @@ xlsx_dir = os.path.join(current_dir, 'xlsx')
 
 def is_valid_xlsx(file):
     if not file.name.endswith('.xlsx'):
-        raise ValidationError("Extensão inválida: apenas ficheiros .xlsx são permitidos.")
+        raise ValidationError("Invalid file extension: only .xlsx files are allowed.")
     
     if file.content_type != 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
-        raise ValidationError("Tipo MIME inválido para ficheiro .xlsx.")
+        raise ValidationError("Invalid MIME type: only .xlsx files are allowed.")
 
     try:
         file.seek(0)
         openpyxl.load_workbook(file)
         file.seek(0)
     except Exception as e:
-        raise ValidationError("Conteúdo inválido: o ficheiro não é um Excel válido.") from e
+        raise ValidationError("Invalid file content: the file is not a valid Excel file.") from e
     
 @login_required
 def home(request):

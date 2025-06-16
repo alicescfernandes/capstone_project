@@ -158,21 +158,27 @@ class DataTableComponent extends HTMLElement {
 
     waitForDataTables() {
         if (window.DataTable) {
-            // Disable all DataTables warnings
-            if (window.$.fn.dataTable) {
-                window.$.fn.dataTable.ext.errMode = 'none';
-            }   
             return Promise.resolve();
         }
-        return new Promise((resolve) => {
-            const check = () => {
-                if (window.DataTable) {
-                    resolve();
-                } else {
-                    setTimeout(check, 500);
-                }
-            };
-            check();
+
+        if (window.isDataTableLoading) {
+            return new Promise((resolve) => {
+                const checkLoaded = () => {
+                    if (window.isDataTableLoaded) {
+                        resolve();
+                    } else {
+                        setTimeout(checkLoaded, 100);
+                    }
+                };
+                checkLoaded();
+            });
+        }
+
+        window.isDataTableLoading = true;
+        return import(window.datatablesUrl).then(() => {
+            window.isDataTableLoaded = true;
+            window.isDataTableLoading = false;
+            return Promise.resolve();
         });
     }
 

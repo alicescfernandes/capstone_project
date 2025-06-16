@@ -341,7 +341,7 @@ A acessibilidade foi uma preocupação no desenvolvimento da aplicação, e para
 
 O Lighthouse, desenvolvido pela Google, é uma ferramenta open source que corre diretamente no Chrome DevTools ou como \gls{cli}. Permite auditar uma página \textit{web} em várias categorias, nomeadamente Performance, SEO, Best Practices e, claro, Accessibility. A secção de acessibilidade do Lighthouse verifica, por exemplo, se os elementos têm contrastes suficientes, se os formulários estão corretamente identificadas com atributos aria-label, se há títulos estruturados (h1, h2, etc.) numa hierarquia lógica e se os elementos interativos (como botões e links) são acessíveis por teclado. O Lighthouse fornece uma pontuação de 0 a 100 e destaca problemas comuns com sugestões de como resolver.
 
-Esta ferramenta Lighthouse, apesar de não ser tão detalhada como a Axe, sinalizou alguns problemas, como a falta de compressão \gls{gzip} e alguns erros de acessibilidade e \gls{seo}. Estes problemas foram resolvidos (fazendo alterações na configuração do servidor Nginx e no código da aplicação), e a ferramenta Lighthouse passou a dar uma pontuação melhor nos vários critérios que avalia.
+Esta ferramenta Lighthouse, apesar de não ser tão detalhada como a Axe, sinalizou alguns problemas, como a falta de compressão \gls{gzip} e alguns erros de acessibilidade e \gls{seo}. 
 
 \begin{figure}[H]
 \centering
@@ -349,10 +349,11 @@ Esta ferramenta Lighthouse, apesar de não ser tão detalhada como a Axe, sinali
 \caption{Testes de acessibilidade com a ferramenta Lighthouse}
 \end{figure}
 
-TODO: Adicionar imagem do Lighthouse após as correções.
+Estes problemas foram resolvidos (fazendo alterações na configuração do servidor Nginx e no código da aplicação), e a ferramenta Lighthouse passou a dar uma pontuação melhor nos vários critérios que avalia
+
 \begin{figure}[H]
 \centering
-\includegraphics[max width=\textwidth]{./img/lh_before}
+\includegraphics[max width=\textwidth]{./img/lh_after}
 \caption{Testes de acessibilidade com a ferramenta Lighthouse após as correções}
 \end{figure}
 

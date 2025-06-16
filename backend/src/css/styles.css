@@ -2,9 +2,6 @@
 @tailwind base;
 @tailwind utilities;
 @tailwind components;
-@import "flowbite/src/themes/default";
-@plugin "flowbite/plugin";
-@source "../../node_modules/flowbite";
 
 html {
     scroll-behavior: smooth;
