@@ -12,7 +12,7 @@ bibtex build/00_PRJ_main
 
 pdflatex --interaction=nonstopmode -output-directory=build 00_PRJ_main.tex
 pdflatex --interaction=nonstopmode -output-directory=build 00_PRJ_main.tex
-
+pdflatex --interaction=nonstopmode -output-directory=build 00_PRJ_main.tex > log.txt
 
 mv build/00_PRJ_main.pdf build/final_report.pdf
 

@@ -14,14 +14,14 @@
 \textbf{Requisitos Funcionais}
 
 \begin{itemize}
-\item \textbf{Visíveis} — São funções obrigatórias que devem estar presentes e ser visíveis para o utilizador. Representam ações diretamente acessíveis ou observáveis na interface da aplicação.
+\item \textbf{Visíveis}: São funções obrigatórias que devem estar presentes e ser visíveis para o utilizador. Representam ações diretamente acessíveis ou observáveis na interface da aplicação.
 
-\item \textbf{Invisíveis} — Também obrigatórias, mas não visíveis para o utilizador final. Estas funções dizem respeito a comportamentos internos do sistema, como validações, persistência de dados ou processamento em segundo plano.
+\item \textbf{Invisíveis}: Também obrigatórias, mas não visíveis para o utilizador final. Estas funções dizem respeito a comportamentos internos do sistema, como validações, persistência de dados ou processamento em segundo plano.
 \end{itemize}
 
 Os requisitos estão ordenados de acordo com a sua prioridade.
 
-\begin{table}[h!]
+\begin{table}[H]
 \centering
 \begin{tabular}{|l|p{7cm}|l|}
 \hline
@@ -35,13 +35,13 @@ R1.2 & Permitir login & Visível \\
 \label{tab:requisitosAutenticacao}
 \end{table}
 
-\begin{table}[h!]
+\begin{table}[H]
 \centering
 \begin{tabular}{|l|p{7cm}|l|}
 \hline
 \textbf{Requisito} & \textbf{Função} & \textbf{Categoria} \\
 \hline
-R2.1 & Permitir upload de ficheiros (estritamente do formato .xlsx) & Visível \\
+R2.1 & Permitir upload de ficheiros & Visível \\
 R2.2 & Associar ficheiros carregados a trimestres & Invisível \\
 \hline
 \end{tabular}
@@ -49,7 +49,7 @@ R2.2 & Associar ficheiros carregados a trimestres & Invisível \\
 \label{tab:requisitosFicheiros}
 \end{table}
 
-\begin{table}[h!]
+\begin{table}[H]
 \centering
 \begin{tabular}{|l|p{7cm}|l|}
 \hline
@@ -57,14 +57,14 @@ R2.2 & Associar ficheiros carregados a trimestres & Invisível \\
 \hline
 R3.1 & Permitir eliminação de ficheiros carregados & Visível \\
 R3.2 & Permitir criação de trimestres identificados por 'Quarter N' & Visível \\
-R3.3 & Listar todos os trimestres do grupo & Visível \\
+R3.3 & Listar todos os trimestres do utilizador & Visível \\
 \hline
 \end{tabular}
 \caption{Requisitos de Gestão de Trimestres}
 \label{tab:requisitosTrimestres}
 \end{table}
 
-\begin{table}[h!]
+\begin{table}[H]
 \centering
 \begin{tabular}{|l|p{7cm}|l|}
 \hline
@@ -79,16 +79,16 @@ R4.2 & Aplicar filtros & Visível \\
 \end{table}
 
 \textbf{Requisitos Não-Funcionais}
-Os atributos do sistema, também designados por requisitos não funcionais, representam as características que o sistema deve exibir durante a sua utilização. Tal como os requisitos funcionais, estes devem ser organizados em categorias distintas, de forma a clarificar o seu impacto e obrigatoriedade no desenvolvimento da aplicação. As principais categorias consideradas são as seguintes:
+Os atributos do sistema, também designados por requisitos não funcionais, representam as características que o sistema deve exibir durante a sua utilização. Tal como os requisitos funcionais, estes estão organizados em categorias distintas, de forma a informar sobre o seu impacto no desenvolvimento da aplicação. As principais categorias consideradas são as seguintes:
 
 \begin{itemize}
-\item \textbf{Obrigatórios} — O sistema deve cumprir estes requisitos. Estão geralmente associados a restrições técnicas ou de contexto, como desempenho, segurança, compatibilidade entre plataformas ou integridade dos dados.
+\item \textbf{Obrigatórios}: O sistema deve cumprir estes requisitos. Estão geralmente associados a restrições técnicas ou de contexto, como desempenho, segurança, compatibilidade entre plataformas ou integridade dos dados.
 
 \item \textbf{Desejáveis} — São requisitos que, embora não sejam críticos para o funcionamento do sistema, representam funcionalidades adicionais ou melhorias que poderão ser implementadas numa fase posterior. O sistema deve estar preparado para os acomodar, caso se decida avançar com a sua implementação.
 \end{itemize}
 
 Os requisitos estão ordenados de acordo com a sua prioridade.
-\begin{table}[h!]
+\begin{table}[H]
     \centering
     \begin{tabular}{|l|p{7cm}|l|}
     \hline
@@ -110,9 +110,6 @@ Os requisitos estão ordenados de acordo com a sua prioridade.
     \caption{Tabela de Requisitos Não Funcionais}
     \label{tab:requisitosNaofuncionais}
     \end{table}
-    
-\chapter{Classificação das folhas \gls{xlsx}}
-
 
 \chapter{Comparação de gráficos suportados pelo \textit{Plotly} e Chart.js}
 \label{ch:charts}
@@ -160,7 +157,7 @@ Além do \textit{Git}, foi utilizado o \textit{GitHub} como interface principal 
 
 Após cada \textit{merge} no \textit{GitHub} é corrido um \textit{workflow} que automaticamente atualiza a versão do código que corre dentro da \gls{vps} que usamos para fazer o correr a aplicação (o nosso ambiente de produção) durante o desenvolvimento. Este \textit{workflow} liga-se por \gls{ssh} ao servidor, puxa a última versão do \textit{branch} principal, e re-inicia os \textit{containers} da aplicação, aplicando as alterações aos modelos de dados e aos ficheiros estáticos.
 
-\chapter{Cenários Gherkin}
+\chapter{Cenários \textit{Gherkin}}
 \label{ch:cenariosGherkin}
 
 \begin{verbatim}

@@ -56,7 +56,7 @@ Esse projeto, embora partilhe uma motivação semelhante, segue uma abordagem di
 
 O projeto assume então o uso de dados extraídos diretamente da plataforma de simulação, e a valorização da experiência do utilizador na apresentação de dados. Não será uma plataforma de simulação, mas sim uma ferramenta para auxiliar o ensino de forma prática.
 
-\subsection{Sistemas de apoio à decisão}
+\textbf{Sistemas de apoio à decisão}
 \label{sec:sad}
 
 Um \gls{sad} é uma aplicação, ou um conjunto de aplicações, concebida para auxiliar utilizadores na tomada de decisões mais informadas e fundamentadas. Ao contrário de sistemas automatizados que tomam decisões de forma autónoma, um \gls{sad} funciona como uma ferramenta que mostra aos utilizadores os dados e análises necessárias para que estes possam avaliar alternativas, prever resultados e escolher a melhor ação possível.
@@ -109,7 +109,7 @@ Alguns requisitos não funcionais foram igualmente críticos para garantir a est
 \begin{itemize}
     \item \textbf{Usabilidade:} a aplicação deve ser intuitiva, suportar múltiplos \textit{browsers} e permitir o carregamento progressivo de gráficos sem bloquear a interface visual (\textit{lazy load}).
     
-    \item \textbf{Performance:} a aplicação deve ser capaz de suportar múltiplos utilizadores em simultâneo sem degradação significativa, mantendo uma resposta rápida às interações.
+    \item \textbf{Performance:} a aplicação deve ser capaz de suportar múltiplos utilizadores em simultâneo, mantendo uma resposta rápida às interações.
     
     \item \textbf{Acessibilidade:} a aplicação \textit{web} deve ser acessível por teclado e compatível com leitores de ecrã (\textit{screen-reader friendly}).
 
@@ -130,8 +130,8 @@ Com base nos requisitos funcionais e não funcionais identificados na secção a
 \subsection{Atores}
 \begin{itemize}
     \item \textbf{Utilizador} É o ator principal, responsável por interagir com a aplicação. Pode criar conta, iniciar sessão, carregar ficheiros, visualizar gráficos, entre outras ações.
-    \item \textbf{DB (Base de Dados)} Responsável por armazenar dados estruturados, incluindo utilizadores, trimestres, ficheiros processados e metadados associada.
-    \item \textbf{Sistema de Ficheiros} Componente externo responsável pelo armazenamento físico dos ficheiros carregados e transformados (como por exemplo os ficheiros Excel carregados).
+    \item \textbf{DB (Base de Dados)} Responsável por armazenar dados, incluindo utilizadores, trimestres, ficheiros processados e metadados associada.
+    \item \textbf{Sistema de Ficheiros} Componente responsável pelo armazenamento físico dos ficheiros carregados.
 \end{itemize}
 
 \subsection{Casos de Utilização}

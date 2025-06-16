@@ -376,31 +376,24 @@ Após resolver os problemas indicados pela ferramenta Axe, conseguimos então me
 \caption{Testes de acessibilidade com a ferramenta Axe após as correções}
 \end{figure}
 
-No nosso caso, ambas as ferramentas foram utilizadas de forma complementar: o Lighthouse ajudou-nos a identificar problemas mais genéricos e dar uma visão rápida do estado da acessibilidade da aplicação, enquanto o Axe foi essencial para validar critérios mais técnicos e detetar problemas complexos que o Lighthouse pode não cobrir. Os testes foram feitos tanto em páginas com dados carregados como em estados vazios, e procurámos garantir que todas as interações essenciais da plataforma,  como o Carregamento de ficheiros, usabilidade e navegação entre gráficos fossem utilizáveis por utilizadores com leitores de ecrã e navegação apenas por teclado.
+No nosso caso, ambas as ferramentas foram utilizadas para identificar problemas diferentes, o Lighthouse ajudou-nos a identificar problemas mais relativos a velocidade e performance e dar uma visão rápida do estado da acessibilidade da aplicação, enquanto o Axe validou critérios mais técnicos e detetou problemas complexos de acessibilidade. Os testes foram feitos tanto em páginas com dados carregados como em estados vazios, e procurámos garantir que todas as interações essenciais da plataforma,  como o Carregamento de ficheiros, usabilidade e navegação entre gráficos fossem utilizáveis por utilizadores com leitores de ecrã e navegação apenas por teclado.
 
-Desta forma, procurámos alinhar a aplicação com boas práticas de desenvolvimento inclusivo, respeitando não só normas técnicas mas também a responsabilidade social de criar interfaces acessíveis a todos, com foco nas seguintes funcionalidades:
-\begin{itemize}
-    \item Adição de textos alternativos para todos os elementos visuais
-    \item Garantia de contraste adequado entre texto e fundo
-    \item Implementação de navegação por teclado
-    \item Estruturação semântica de \gls{html}
-    \item Suporte a leitores de ecrã
-\end{itemize}
+Desta forma, procurámos alinhar a aplicação com boas práticas de desenvolvimento inclusivo, respeitando não só normas técnicas mas também a responsabilidade de criar interfaces acessíveis a todos.
 
 \section{Testes Manuais}
 
-Para complementar os testes das ferramentas acima, foi desenvolvido um conjunto abrangente de testes manuais utilizando a linguagem Gherkin para descrever os cenários de teste. Gherkin é uma linguagem estruturada, mas legível por humanos, que permite descrever comportamentos esperados do sistema em forma de cenários do tipo Dado-Quando-Então. Esta abordagem facilita a comunicação entre equipas técnicas e não técnicas, garantindo que todos os intervenientes compreendam os objetivos de cada teste.
+Para complementar os testes das ferramentas acima, foi desenvolvido um conjunto abrangente de testes manuais utilizando a linguagem \textit{Gherkin} para descrever os cenários de teste. \textit{Gherkin} é uma linguagem estruturada, mas legível por humanos, que permite descrever comportamentos esperados do sistema em forma de cenários do tipo Dado-Quando-Então. Esta abordagem facilita a comunicação entre equipas técnicas e não técnicas, garantindo que todos os intervenientes compreendam os objetivos de cada teste.
 
-Foi pedido a cinco testadores independentes para executarem estes testes manualmente, com base nos cenários escritos em Gherkin, e no final preencherem um formulário com os resultados de cada execução, incluindo observações e eventuais desvios face ao comportamento esperado. Os cenários de teste foram organizados em duas categorias principais:
+Foi pedido a cinco pessoas para executarem estes testes manualmente, com base nos cenários escritos em \textit{Gherkin}, e no final preencherem um formulário com os resultados de cada execução, incluindo observações e eventuais desvios face ao comportamento esperado. Os cenários de teste foram organizados em duas categorias principais:
 
 \begin{itemize}
     \item Fluxos de utilizador (criação de conta, login, navegação)
     \item Operações com dados (carregar e apagar ficheiros, visualização de gráficos)
 \end{itemize}
 
-Cada cenário foi documentado usando a sintaxe Gherkin, como exemplificado abaixo. Os restantes cenários Gherkin foram incluídos no apêndice \ref{ch:cenariosGherkin}.
+Cada cenário foi documentado usando a sintaxe \textit{Gherkin}, como exemplificado abaixo. Os restantes cenários \textit{Gherkin} foram incluídos no apêndice \ref{ch:cenariosGherkin}.
 
-\begin{lstlisting}[language=Gherkin, caption={Excerto do código Gherkin do cenário de teste para a criação de uma conta}]
+\begin{lstlisting}[language=Gherkin, caption={Excerto do código \textit{Gherkin} do cenário de teste para a criação de uma conta}]
 Scenario: Creating an account
 	Given I access the page 
 	And I don't have an account or logged in
@@ -415,9 +408,9 @@ Scenario: Creating an account
 	Then I should be redirected to the "Login" page
 \end{lstlisting}
 
-Apesar desta amostra não ser muito representativa, foi possivel encontrar bugs na aplicação, como por exemplo, a falta de alguns dados em alguns gráficos, e alguns gráficos náo serem coerentes com a informação que estavam a mostrar. Estes bugs foram corrigidos assim que foram reportados pelos testadores.
+Apesar desta amostra não ser muito representativa, foi possivel encontrar bugs na aplicação, como por exemplo, a falta de alguns dados em alguns gráficos, e alguns gráficos náo serem coerentes com a informação que estavam a mostrar. Estes bugs foram corrigidos assim que foram reportados pelas pessoas que testaram a aplicação.
 
-TODO: Falta falar sobre a análise dos resultados dos testes manuais.
+\textbf{TODO: Falta falar sobre a análise dos resultados dos testes manuais.}
 
 \section{Compatibilidade com Navegadores}
 
