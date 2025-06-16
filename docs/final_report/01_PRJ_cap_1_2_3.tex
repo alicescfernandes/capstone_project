@@ -247,85 +247,80 @@ Durante a análise efetuamos foram estudados diferentes tipos de visualizações
 
 Durante o desenvolvimento do projeto, foram considerados vários tipos de visualizações gráficas. Importa salientar que as imagens que acompanham esta secção foram retiradas diretamente da aplicação desenvolvida, já tendo em conta as limitações e as transformações realizadas nos dados. Estas transformações são discutidas mais a fundo no capítulo da análise inicial (ver capítulo \ref{sec:analiseInicial}).
 
-\textbf{Gráfico de Barras (Bar Chart):}
+\textbf{Gráfico de Barras (\textit{Bar Chart}):}
 
-Este tipo de visualização foi utilizado para comparar valores entre diferentes categorias, como marcas, cidades ou segmentos de mercado. A disposição visual das barras permite uma leitura rápida das diferenças de desempenho entre categorias, sendo útil para dados que não são temporais. Foram usadas variantes como barras agrupadas, dependendo se havia necessidade de comparar valores entre categorias.
+Este tipo de visualização foi utilizado para comparar valores entre diferentes categorias, como marcas, cidades ou segmentos de mercado. A disposição visual das barras permite uma leitura rápida das diferenças de desempenho entre categorias, sendo útil para dados que não são temporais. Foi também utilizado a variante barras agrupadas, dependendo se havia necessidade de comparar valores entre categorias.
+
 
 \begin{figure}[H]
 \centering
-\includegraphics[max width=12cm, keepaspectratio]{./img/barras1}
+\includegraphics[max width=10cm]{./img/barras1}
 \caption{Exemplo de gráfico de barras}
 \end{figure}
-\noindent
 
 \begin{figure}[H]
 \centering
-\includegraphics[max width=12cm, keepaspectratio]{./img/agrupada}
+\includegraphics[max width=10cm]{./img/agrupada}
 \caption{Exemplo de gráfico de barras agrupadas}
 \end{figure}
-\noindent
 
-\textbf{Gráfico de Sectores (Pie Chart):}  
+\textbf{Gráfico de Sectores (\textit{Pie Chart}):}  
 
 Utilizado para representar distribuições percentuais, como partições de dados por segmento. Este tipo é de gráfico é intuitivo para visualizar como uma totalidade se divide entre diferentes partes, sendo apropriado para dados onde se pretendia mostrar proporções relativas (como por exemplo dados categorizados por segmentos)
 
 \begin{figure}[H]
     \centering
-    \includegraphics[max width=12cm, keepaspectratio]{./img/pie}
+    \includegraphics[max width=10cm]{./img/pie}
     \caption{Exemplo de gráfico de sectores}
 \end{figure}
-\noindent
 
-\textbf{Gráfico Financeiro (Waterfall Chart):}  
+\textbf{Gráfico Financeiro (\textit{Waterfall Chart}):}  
 
 Utilizado especificamente para representar balanços financeiros, como valores acumulados de receitas e despesas. Permite também visualizar como diferentes contribuições individuais afetam um valor final, facilitando a análise de ganhos e perdas.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[max width=12cm, keepaspectratio]{./img/waterfall}
+    \includegraphics[max width=10cm]{./img/waterfall}
     \caption{Exemplo de gráfico financeiro}
 \end{figure}
-\noindent
 
-\textbf{Diagrama de Quartis (Box Plot):}
+\textbf{Diagrama de Quartis (\textit{Box Plot}):}
 
 Os diagramas de quartis foram utilizados para representar dados que eram distribuições com minimos e máximos, permitindo visualizar de forma prática a mediana, os quartis e valores extremos.  A interpretação deste tipo de visualização exige um conhecimento prévio de conceitos estatísticos como mediana e quartis, o que pode dificultar a leitura, mas que simplifica a representação dos dados.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[max width=12cm, keepaspectratio]{./img/box}
-    \caption{Exemplo de Diagramas de Quartis}
+    \includegraphics[max width=10cm]{./img/box}
+    \caption{Exemplo de diagrama de quartis}
 \end{figure}
-\noindent
 
-\textbf{Diagrama de Sankey (Sankey Diagram):}
+\textbf{Diagrama de Sankey (\textit{Sankey Diagram}):}
 
 Os diagramas de Sankey são utilizados para representar fluxos entre diferentes categorias, sublinhando a quantidade transferida de uma categoria para outra. Cada fluxo é representado por uma linha cuja largura é proporcional à quantidade movida, permitindo uma visualização intuitiva da importancia dos fluxos. Para evitar representações complexas, decidimos apenas recorrer a este tipo apenas quando os dados não poderiam ser representados de outra forma, ou tratados de forma a simplificar a representação.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[max width=12cm, keepaspectratio]{./img/skankey}
+    \includegraphics[max width=10cm]{./img/skankey}
     \caption{Exemplo de gráfico de Sankey}
 \end{figure}
-\noindent
 
 Outros tipos de gráficos relevantes para o projeto, mas que não foram utilizados são:
 
-\textbf{Gráfico de Linhas (Line Chart):}  
+\textbf{Gráfico de Linhas (\textit{Line Chart}):}  
 
 Escolhido para representar séries temporais, como a evolução de uma variável ao longo do tempo. As linhas permitem identificar tendências e variações. No projeto, não tivemos necessidade de usar este tipo uma vez que nenhum dos dados recebidos era relativos a séries temporais, pelo que a sua utilização não era intuitiva para os utilizadores nem resultava numa visualização que fizesse sentido para os dados recebidos.
 
-\textbf{Gráfico de Radar (Radar Chart):}  
+\textbf{Gráfico de Radar (\textit{Radar Chart}):}  
 
 Utilizado para comparar múltiplas variáveis em relação a um valor comum, como no caso da avaliação de diferentes necessidades dos clientes em simultâneo. Este tipo de gráfico permite identificar rapidamente pontos fortes e fracos em várias dimensões de análise. Apesar destas vantagens, nos dados que recebemos não conseguimos identificar utilizações onde este tipo de gráfico beneficiasse os utilizadores finais.
 
-\textbf{Gráfico de Dispersão (Scatter Plot):}
+\textbf{Gráfico de Dispersão (\textit{Scatter Plot}):}
 
 Os gráficos de dispersão foram considerados para representar relações entre duas variáveis. Cada ponto no gráfico representa uma observação individual, permitindo identificar padrões de correlação (positiva, negativa ou inexistente) entre variáveis. No nosso caso, consideramos utilizar um tipo especifico de gráfico de dispersão (gráfico de dispersão num mapa) mas a leitura tornou-se confusa, uma vez que era pouco legivel para alunos, e não considerava localizações ficticias, fazendo com que a leitura fosse difícil, como pode ser visto na figura  \label{fig:scatter-map}, que é um gráfico do tipo \textit{scatter map} feito com dados importados de uma folha de cálculo, em que os pontos estão muito dispersos, num mapa que contem várias referencias a cidades, e sem representação do valor numérico associado (aparece um ponto azul).
 
 \begin{figure}[H]
     \centering
-    \includegraphics[max width=12cm, keepaspectratio]{./img/scatter_map}
+    \includegraphics[max width=10cm]{./img/scatter_map}
     \caption{Exemplo de gráfico de dispersão num mapa}
     \label{fig:scatter-map}
 \end{figure}
