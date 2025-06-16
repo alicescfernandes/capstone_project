@@ -26,7 +26,7 @@ O processo de análise começou após a reunião inicial com os orientadores do 
 \subsection{Análise inicial dos dados}
 \label{sec:analiseInicial}
 
-Após termos recebido os dados, fizemos uma primeira análise com o objetivo de perceber a informação recebida e os próximos passos a tomar. No total, recebemos 30 ficheiros \gls{xlsx} que foram exportados da plataforma, correspondentes às diferentes secções da plataforma de simulação, com vários indicadores como segmentos de mercado, características de produto, vendas, entre outros. Cada ficheiro pode conter várias folhas de cálculo, que no total são 103 folhas de cálculo, organizadas por marcas, cidades entre outros marcadores.
+Após termos recebido os dados, fizemos uma primeira análise com o objetivo de perceber a informação recebida e os próximos passos a tomar. No total, recebemos 30 ficheiros \gls{xlsx} que foram exportados da plataforma, correspondentes às diferentes secções da plataforma de simulação, com vários indicadores como segmentos de mercado, características de produto, vendas, entre outros. Cada ficheiro pode conter várias folhas de cálculo, que no total são 101s folhas de cálculo, organizadas por marcas, cidades entre outros marcadores.
 
 Durante esta análise, percebemos que:
 
@@ -66,7 +66,16 @@ O grupo \textbf{balanços} abrange ficheiros associados a séries de dados finan
 
 O grupo \textbf{setores} inclui ficheiros onde a informação está agrupada em em duas e três colunas (como por exemplo dados por empresa, marca e cidade). Nestes casos, faz sentido usar gráficos de setores e barras agrupadas,  dependendo da necessidade de comparar proporções entre segmentos.
 
-Finalmente, o grupo de \textbf{análise específica} são ficheiros que não se encaixam diretamente nos formatos anteriores, como análises mais detalhadas por cidade, por segmento ou quando os dados incluem várias unidades na mesma folha (percentagens com euros). Para estes casos, o processo passou por simplificar a informação de modo a encaixar num dos grupos acima ou excecionalmente aplicar um novo tipo de gráfico, e a análise foi feita manualmente para cada caso. Para casos em que a não era possível aplicar um \textit{template} de gráfico, não foi possivel simplificar a informação e não encontrámos uma representação gráfica que fosse fácil de interpretar, optámos por não aplicar nenhum gráfico, e apenas apenas mostrar uma tabela interativa com os dados onde o utilizador podia filtrar os dados por diferentes colunas.
+Finalmente, o grupo de \textbf{análise específica} são ficheiros que não se encaixam diretamente nos formatos anteriores, como análises mais detalhadas por cidade, por segmento ou quando os dados incluem várias unidades na mesma folha (percentagens com euros). Para estes casos, o processo passou por simplificar a informação de modo a encaixar num dos grupos acima ou excecionalmente aplicar um novo tipo de gráfico, e a análise foi feita manualmente para cada caso. Na figura \ref{fig:before} é possivel ver um exemplo de um ficheiro que foi classificado como \textbf{análise específica}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[max width=\textwidth]{./img/before}
+\caption{Excerto de uma folha de cálculo recebida}
+\label{fig:before}
+\end{figure}
+
+Para casos em que a não era possível aplicar um \textit{template} de gráfico, não foi possivel simplificar a informação e não encontrámos uma representação gráfica que fosse fácil de interpretar, optámos por não aplicar nenhum gráfico, e apenas apenas mostrar uma tabela interativa com os dados onde o utilizador podia filtrar os dados por diferentes colunas.
 
 No final, dos 30 ficheiros recebidos, a classificação foi a seguinte:
 
@@ -134,14 +143,9 @@ No final, obtemos dados que são práticos de representar, próximos ao formato 
 
 \begin{figure}[H]
 \centering
-\includegraphics[max width=\textwidth]{./img/before}
-\caption{Excerto de uma folha de cálculo recebida}
-\end{figure}
-
-\begin{figure}[H]
-\centering
 \includegraphics[max width=\textwidth]{./img/after}
-\caption{Gráfico extraido da mesma folha acima com filtro aplicado para o Quarter 5}
+\caption{Gráfico extraido da figura \ref{fig:before} com filtro aplicado para o Quarter 5}
+\label{fig:after}
 \end{figure}
 
 \section{Desenvolvimento da Aplicação \textit{web}}
@@ -158,7 +162,7 @@ A aplicação utiliza três modelos principais para gerir os dados, cada um com 
 
 \begin{figure}[H]
     \centering
-    \includegraphics[max width=\textwidth]{./img/er-diagram.png}
+    \includegraphics[max width=10cm]{./img/er-diagram.png}
  \caption{Diagrama de entidade-relação da aplicação}
  \label{fig:er-diagram}
  \end{figure}
@@ -305,18 +309,20 @@ As bibliotecas \textit{Plotly} e \textit{Datatables} foram integradas diretament
 
 \subsubsection{Responsividade em dispositivos móveis}
 
-Toda a interface foi pensada para ser utilizada em computadores devido à quantidade de gráficos que são apresentados. A interface adapta-se bem a dispositivos moveis, mas devido ao espaço disponivel, não é possível garantir uma boa experiencia de utilização em dispositivos moveis. A aplicação tem, essencialmente, duas \textit{media queries}. Uma \textit{media query} que até aos 1023px que inclui telemóveis, tablets e ecrãs pequenos, e uma \textit{media query} a partir dos 1024px que inclui computadores e ecrãs maiores.
+Toda a interface foi pensada para ser utilizada em computadores devido à quantidade de gráficos que são apresentados. A interface adapta-se bem a dispositivos moveis, mas devido ao espaço disponivel, não é possível garantir uma boa experiencia de utilização em dispositivos moveis. A aplicação tem, essencialmente, duas \textit{media queries}. Uma \textit{media query} que até aos 1023px (figura \ref{fig:res_1023}) que inclui telemóveis, tablets e ecrãs pequenos, e uma \textit{media query} a partir dos 1024px que inclui computadores e ecrãs maiores (figura \ref{fig:res_1920}).
 
-\begin{figure}[H]
+\begin{figure}[htbp]
     \centering
-    \includegraphics[max max width=\textwidth]{./img/res_1023}
+    \includegraphics[max width=\textwidth]{./img/res_1023}
  \caption{Media query até 1023px}
+ \label{fig:res_1023}
 \end{figure}
 
-\begin{figure}[H]
+\begin{figure}[htbp]
     \centering
-    \includegraphics[max max width=\textwidth]{./img/res_1920}
+    \includegraphics[max width=\textwidth]{./img/res_1920}
  \caption{Media query a partir dos 1024px}
+ \label{fig:res_1920}
 \end{figure}
 
 Estes \textit{media queries} são as mais comuns, garantindo uma boa experiência de utilização em todos os ecrãs, sendo que não tivemos de fazer código explicitamente para a aplicação se adaptar para dispositivos móveis. Os filtros permitem alterar os gráficos em tempo real, com \textit{feedback} visual imediato não sendo necessário recarregar a página. No momento em que o filtro troca, é feito um pedido a API de gráficos que retorna um novo conjunto de dados para mostrar, com a configuração do gráfico atualizada.
@@ -348,7 +354,7 @@ Esta ferramenta Lighthouse, apesar de não ser tão detalhada como a Axe, sinali
 
 \begin{figure}[H]
 \centering
-\includegraphics[max width=\textwidth]{./img/lh_before}
+\includegraphics[max width=10cm]{./img/lh_before}
 \caption{Testes de acessibilidade com a ferramenta Lighthouse}
 \end{figure}
 
@@ -356,7 +362,7 @@ Estes problemas foram resolvidos (fazendo alterações na configuração do serv
 
 \begin{figure}[H]
 \centering
-\includegraphics[max width=\textwidth]{./img/lh_after}
+\includegraphics[max width=10cm]{./img/lh_after}
 \caption{Testes de acessibilidade com a ferramenta Lighthouse após as correções}
 \end{figure}
 
@@ -366,7 +372,7 @@ Nos primeiros testes feitos com a ferramenta Axe, as ferramentas sinalizaram alg
 
 \begin{figure}[H]
     \centering
-    \includegraphics[max width=\textwidth]{./img/axe}
+    \includegraphics[max width=10cm]{./img/axe}
     \caption{Testes de acessibilidade com a ferramenta Axe}
     \end{figure}
 
@@ -375,7 +381,7 @@ Após resolver os problemas indicados pela ferramenta Axe, conseguimos então me
 
 \begin{figure}[H]
 \centering
-\includegraphics[max width=\textwidth]{./img/axe_after}
+\includegraphics[max width=10cm]{./img/axe_after}
 \caption{Testes de acessibilidade com a ferramenta Axe após as correções}
 \end{figure}
 
