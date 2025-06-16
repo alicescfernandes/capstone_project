@@ -35,6 +35,7 @@ Durante esta análise, percebemos que:
     \item Alguns ficheiros apresentam estruturas de dados semelhantes, mas com diferenças no nível de detalhe ou na organização das colunas e linhas;
     \item Existiam ficheiros com dados que iriam precisar de mais transformação uma vez que representavam vários tipos de unidades (como por exemplo percentagens, valores monetários, valores relativos, etc) na mesma folha de cálculo;
     \item Dados com muito detalhe, e com várias colunas sem representação (células marcadas com "X", linhas com valores nulos e fundo amarelo).
+    \item Nenhuma das folhas de cálculo indica unidades (como por exemplo percentagens, euros, etc), o que significa que não é possivel assumir a unidade dos valores que estão a ser representados. Os ficheiros exportados são exportados exatamente como estão na plataforma de simulação, que não usa unidades numéricas.
 \end{itemize}
 
 Com base nesta primeira análise, concluímos que seria necessário:
@@ -44,6 +45,8 @@ Com base nesta primeira análise, concluímos que seria necessário:
     \item Guardar os dados extraídos num formato mais prático, e que permita uma filtragem dinâmica da informação carregada (de forma a facilitar a visualização dos dados).
     \item Em algumas séries de dados, identificamos linhas e colunas que se podiam remover devido a serem redundantes, ou por representarem informação que já é representada na mesma folha (como por exemplo colunas de valores totais, linhas que repetiam as marcas, ou outras discutidas com os orientadores);
 \end{itemize}
+
+Relativamente à falta de unidades, para manter a consistencia com a plataforma de simulação, optámos por não assumir nenhuma unidade para os valores que estão a ser representados, uma vez que não é possivel inferir a unidade dos valores a partir dos dados recebidos, a plataforma de simulação não usa unidades numéricas, e para não induzir os alunos em erro com a interpretação dos dados.
 
 Esta primeira análise serviu essencialmente para estruturar o modo como iríamos tratar os diferentes ficheiros que os utilizadores podem submeter, ou seja, deu-nos uma base para sistematizar como iriamos transformar a informação de forma lógica.
 

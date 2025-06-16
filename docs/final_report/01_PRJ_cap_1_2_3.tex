@@ -204,52 +204,48 @@ Para a análise, os alunos têm à disposição os dados, na plataforma, nas vá
 Uma \textit{pipeline} \gls{etl} é um processo utilizado em sistemas de tratamento e integração de dados, com o objetivo de mover dados de uma ou mais fontes para um destino, geralmente uma base de dados ou um sistema de análise. O nome \gls{etl} representa as três etapas principais:
 
 \begin{itemize}
-  \item \textbf{Extract (Extração)}: consiste em recolher os dados de múltiplas fontes de informação, que podem incluir bases de dados relacionais, APIs externas, sensores, entre outros. Esta fase preocupa-se com a capacidade de ler dados e de confirmar que são possiveis de extrair.
+  \item \textit{Extract} (Extrair): consiste em recolher os dados de múltiplas fontes de informação, que podem incluir bases de dados relacionais, APIs externas, sensores, entre outros. Esta fase preocupa-se com a capacidade de ler dados e de confirmar que são possiveis de extrair.
   
-  \item \textbf{Transform (Transformação)}: nesta etapa os dados extraídos são processados e convertidos num formato mais adequado ao destino. Isso pode incluir tarefas como limpeza de dados (remoção de valores nulos ou duplicados), normalização, agregações, mudanças de tipo, ou cálculos. É nesta fase em que se garante a consistência da informação.
+  \item \textit{Transform} (Transformar): nesta etapa os dados extraídos são processados e convertidos num formato mais adequado ao destino. Isso pode incluir tarefas como limpeza de dados (remoção de valores nulos ou duplicados), normalização, agregações, mudanças de tipo, ou cálculos. É nesta fase em que se garante a consistência da informação.
 
-  \item \textbf{Load (Carregamento)}: por fim, os dados transformados são inseridos na aplicação de destino, normalmente um \textit{data warehouse},  O carregamento é feito dependendo dos requisitos da aplicação de destino
+  \item \textit{Load} (Carregar): por fim, os dados transformados são inseridos na aplicação de destino, normalmente um \textit{data warehouse},  O carregamento é feito dependendo dos requisitos da aplicação de destino
 
 \end{itemize}
 
 As \textit{pipelines} \gls{etl} são muito utilizadas em contextos onde há necessidade de consolidar dados de várias origens, permitindo análises mais completas. São fundamentais em áreas como \textit{business intelligence}, ciência de dados e integração de sistemas.
 
 
-\subsection{\textit{Backend} e \textit{Frontend}}
+\subsection{Padrão Cliente-Servidor}
 
-O projeto desenvolvido segue uma arquitetura de aplicações \textit{web}, dividida em duas grandes camadas: \textit{backend} e \textit{frontend}.
+O projeto desenvolvido segue uma arquitetura de aplicações cliente-servidor, dividida em duas grandes camadas: \textit{backend} e \textit{frontend}.
 
-\textbf{Backend}
+\textbf{\textit{Backend}}
+
+O \textit{backend} corresponde a “parte invisível” da aplicação, ou seja, tudo o que acontece do lado do servidor. É a camada responsável por tratar os dados, executar a lógica de negócio e responder aos pedidos efetuados pelos utilizadores. No contexto específico deste projeto, o \textit{backend} é responsável por:
 
 \begin{itemize}
-    \item Corresponde à ``parte invisível'' da aplicação, ou seja, o lado do servidor.
-    \item Responsável por tratar os dados, executar lógica de negócio e responder aos pedidos feitos pelos utilizadores.
-    \item No contexto deste projeto, o \textit{backend} é responsável por:
-    \begin{itemize}
-        \item carregamento de ficheiros;
-        \item processamento e normalização dos dados;
-        \item autenticação;
-        \item disponibilização dos dados através de uma \gls{api}.
-    \end{itemize}
+    \item carregamento de ficheiros;
+    \item processamento e normalização dos dados;
+    \item autenticação e gestão de sessões;
+    \item disponibilização de uma \gls{api} para o \textit{frontend} que permita acesso aos dados.
 \end{itemize}
 
 \textbf{Frontend}
 
+O \textit{frontend} corresponde à ``parte visível'' da aplicação, ou seja, aquilo que o utilizador vê e com que interage diretamente no \textit{browser}. É a camada responsável por apresentar a informação de forma clara e permitir a interação com as funcionalidades disponibilizadas pela aplicação. No contexto deste projeto, o \textit{frontend} é responsável por:
 \begin{itemize}
-    \item Corresponde à ``parte visível'' da aplicação, ou seja, aquilo que o utilizador vê e com que interage diretamente no \textit{browser}.
-    \item Inclui:
-    \begin{itemize}
-        \item os formulários;
-        \item os gráficos;
-        \item e outros elementos visuais criados a partir dos dados processados.
-    \end{itemize}
+    \item os formulários, utilizados por exemplo para autenticação, criação de trimestres e envio de ficheiros;
+    \item os gráficos, que permitem visualizar de forma interativa os dados transformados e filtrados pelo \textit{backend};
+    \item e outros elementos visuais criados a partir dos dados processados, como tabelas, seletores de trimestre, mensagens de erro ou confirmação, entre outros.
 \end{itemize}
 
 Esta separação entre \textit{backend} e \textit{frontend} facilita a manutenção da aplicação e permite que ambas as partes evoluam de forma independente, podendo até ser substituídas sem necessidade de reescrever a aplicação completo. As tecnologias utilizadas para o desenvolvimento serão descritas no capítulo \ref{sec:tec}.
 
 \subsection{Tipos de gráficos}
 
-Durante a análise efetuamos foram estudados diferentes tipos de visualizações que podiam ser aplicadas, de acordo com os dados que tinhamos disponíveis. Cada tipo de visualização foi escolhido com base na sua capacidade de representar visualmente os dados e a sua facilidade de interpretação. Durante o projeto, consideramos os seguintes tipos de visualizações:
+Durante a análise efetuamos foram estudados diferentes tipos de visualizações que podiam ser aplicadas, de acordo com os dados que tinhamos disponíveis. Cada tipo de visualização foi escolhido com base na sua capacidade de representar visualmente os dados e a sua facilidade de interpretação. 
+
+Durante o desenvolvimento do projeto, foram considerados vários tipos de visualizações gráficas. Importa salientar que as imagens que acompanham esta secção foram retiradas diretamente da aplicação desenvolvida, já tendo em conta as limitações e as transformações realizadas nos dados. Estas transformações são discutidas mais a fundo no capítulo da análise inicial (ver capítulo \ref{sec:analiseInicial}).
 
 \textbf{Gráfico de Barras (Bar Chart):}
 
