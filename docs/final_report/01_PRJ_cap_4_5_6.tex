@@ -137,7 +137,7 @@ Para garantir a consistência dos dados e evitar conflitos de ficheiros com o me
 
 Isto permite recuperar versões anteriores dos dados quando o utilizador apaga um ficheiro ou quando existe algum erro no processamento, uma vez que os dados resultantes só são marcados como correntes quando são extraidos e processados com sucessos.
 
-Este sistema de processamento permitiu transformar os dados ficheiros \gls{xlsx} em um formato estruturado e normalizado, facilitando a visualização e análise dos dados através da aplicação \textit{web}. A modularidade da \textit{pipeline} também permitiu adicionar passos de normalização conforme necessário, mantendo a consistência dos dados processados.
+Este mecanismo de processamento permitiu transformar os dados ficheiros \gls{xlsx} em um formato estruturado e normalizado, facilitando a visualização e análise dos dados através da aplicação \textit{web}. A modularidade da \textit{pipeline} também permitiu adicionar passos de normalização conforme necessário, mantendo a consistência dos dados processados.
 
 No final, obtemos dados que são práticos de representar, próximos ao formato final que pretendemos mostrar ao utilizador, e que podem ser facilmente utilizados pela aplicação \textit{web} para mostrar os gráficos.
 
@@ -201,7 +201,7 @@ A utilização de identificadores \gls{uuid} foi importante uma vez que, para al
 
 \subsubsection{Gestão de Utilizadores}
 
-A aplicação utiliza o mecanismo de utilizadores que já vem incluido com o Django. Este sistema oferece uma camada de segurança, garantindo que apenas utilizadores autenticados possam aceder aos dados. A autenticação na aplicação é feita através de nome de utilizador e palavra-passe e as sessões são geridas pelo Django.
+A aplicação utiliza o mecanismo de utilizadores que já vem incluido com o Django. Este mecanismo oferece uma camada de segurança, garantindo que apenas utilizadores autenticados possam aceder aos dados. A autenticação na aplicação é feita através de nome de utilizador e palavra-passe e as sessões são geridas pelo Django.
 
 Para garantir a segurança dos dados, todas as rotas que requerem autenticação estão decoradas com \texttt{@login\_required}. Além disso, a aplicação isola dados dados por utilizador, garantindo que cada utilizador só pode aceder aos seus próprios. Este isolamento é implementado através de filtros nas pesquisas, que são aplicados automaticamente em todas as operações de leitura e escrita que são feitas.
 
@@ -391,7 +391,7 @@ Desta forma, procurámos alinhar a aplicação com boas práticas de desenvolvim
 
 \section{Testes Manuais}
 
-Para complementar os testes das ferramentas acima, foi desenvolvido um conjunto abrangente de testes manuais utilizando a linguagem \textit{Gherkin} para descrever os cenários de teste. \textit{Gherkin} é uma linguagem estruturada, mas legível por humanos, que permite descrever comportamentos esperados do sistema em forma de cenários do tipo Dado-Quando-Então. Esta abordagem facilita a comunicação entre equipas técnicas e não técnicas, garantindo que todos os intervenientes compreendam os objetivos de cada teste.
+Para complementar os testes das ferramentas acima, foi desenvolvido um conjunto abrangente de testes manuais utilizando a linguagem \textit{Gherkin} para descrever os cenários de teste. \textit{Gherkin} é uma linguagem estruturada, mas legível por humanos, que permite descrever comportamentos esperados da aplicação em forma de cenários do tipo Dado-Quando-Então. Esta abordagem facilita a comunicação entre equipas técnicas e não técnicas, garantindo que todos os intervenientes compreendam os objetivos de cada teste.
 
 Foi pedido a cinco pessoas para executarem estes testes manualmente, com base nos cenários escritos em \textit{Gherkin}, e no final preencherem um formulário com os resultados de cada execução, incluindo observações e eventuais desvios face ao comportamento esperado. Os cenários de teste foram organizados em duas categorias principais:
 
@@ -470,9 +470,9 @@ O desenvolvimento deste projeto culminou numa aplicação \textit{web} funcional
 
 \section{Conclusões}
 
-Um dos pontos fortes deste projeto foi a implementação de um sistema automático para gerir ficheiros e transformar dados em gráficos. Esta funcionalidade, de os utilizadores poderem carregar ficheiros diretamente exportados do simulador e, a partir daí, obterem gráficos interativos, sem qualquer necessidade de formatação manual representa uma melhoria relação ao processo anterior, que era manual, demorado e propenso a erros. 
+Um dos pontos fortes deste projeto foi a implementação de um mecanismo  para gerir ficheiros e transformar dados em gráficos. Esta funcionalidade, de os utilizadores poderem carregar ficheiros diretamente exportados do simulador e, a partir daí, obterem gráficos interativos, sem qualquer necessidade de formatação manual representa uma melhoria relação ao processo anterior, que era manual, demorado e propenso a erros. 
 
-A decisão de usar Django como base para o \textit{backend} revelou-se acertada. Além de facilitar a autenticação e gestão de utilizadores, a  biblioteca permitiu implementar uma boa arquitetura, com separação entre as camadas frontend e \textit{backend}. A autenticação integrada, associada ao isolamento de dados por utilizador, garantiu uma camada extra de segurança sem complicar a lógica da aplicação. A API REST que foi construída permitiu uma comunicação fluida entre as várias partes do sistema, suportando atualizações dinâmicas dos gráficos sem impacto na performance.
+A decisão de usar Django como base para o \textit{backend} revelou-se acertada. Além de facilitar a autenticação e gestão de utilizadores, a  biblioteca permitiu implementar uma boa arquitetura, com separação entre as camadas frontend e \textit{backend}. A autenticação integrada, associada ao isolamento de dados por utilizador, garantiu uma camada extra de segurança sem complicar a lógica da aplicação. A API REST que foi construída permitiu uma comunicação fluida entre as várias partes da aplicação, suportando atualizações dinâmicas dos gráficos sem impacto na performance.
 
 No lado do frontend, optou-se por uma abordagem prática, usando bibliotecas para garantir a responsabilidade e usabilidade. A biblioteca \textit{Plotly} foi fundamental para criar gráficos interativos que, além de apelativos, ajudam os estudantes a interpretar os dados.
 
@@ -484,7 +484,7 @@ Em síntese, este projeto mostrou como a combinação de ferramentas modernas po
 
 \section{Trabalho Futuro}
 
-Apesar de o sistema atual já cumprir os objetivos definidos inicialmente, foram identificadas diversas oportunidades de evolução e expansão que poderão ser exploradas em futuras iterações do projeto. Estas propostas estão organizadas em diferentes áreas de desenvolvimento.
+Apesar de a aplicação atual já cumprir os objetivos definidos inicialmente, foram identificadas diversas oportunidades de evolução e expansão que poderão ser exploradas em futuras iterações do projeto. Estas propostas estão organizadas em diferentes áreas de desenvolvimento.
 
 \textbf{Interface e Experiência do Utilizador}
 
@@ -494,9 +494,9 @@ Outro aspeto relevante prende-se com a configuração dinâmica dos gráficos. A
 
 \textbf{Análise de Dados e Otimização de Performance}
 
-Do ponto de vista analítico, uma evolução natural do sistema passa pela incorporação de técnicas de análise preditiva. A utilização de modelos de regressão ou algoritmos de aprendizagem automática simples poderá ajudar os estudantes a identificar padrões e antecipar tendências de mercado com base nos dados da simulação.
+Do ponto de vista analítico, uma evolução natural da aplicação passa pela incorporação de técnicas de análise preditiva. A utilização de modelos de regressão ou algoritmos de aprendizagem automática simples poderá ajudar os estudantes a identificar padrões e antecipar tendências de mercado com base nos dados da simulação.
 
-Em paralelo, importa melhorar a eficiência do sistema no processamento de dados de maior volume. Será relevante avaliar o uso de bibliotecas como \texttt{Dask} ou \texttt{Polars}, que oferecem soluções otimizadas para manipulação de grandes \textit{datasets}, mantendo tempos de resposta aceitáveis e garantindo uma boa experiência de utilização.
+Em paralelo, importa melhorar a eficiência da aplicação no processamento de dados de maior volume. Será relevante avaliar o uso de bibliotecas como \texttt{Dask} ou \texttt{Polars}, que oferecem soluções otimizadas para manipulação de grandes \textit{datasets}, mantendo tempos de resposta aceitáveis e garantindo uma boa experiência de utilização.
 
 \textbf{Gestão de Utilizadores e Colaboração}
 
@@ -506,6 +506,6 @@ Adicionalmente, seria interessante introduzir funcionalidades de colaboração e
 
 \textbf{Integração com Outras Plataformas}
 
-Por fim, um caminho a explorar passa pela integração direta com a plataforma \textit{Marketplace Simulations}, de onde os dados são originalmente extraídos. Uma abordagem possível seria o desenvolvimento de extensões de \textit{browser} (para \textit{Chrome}, \textit{Firefox} ou \textit{Edge}) que permitam importar automaticamente os dados para o nosso sistema, eliminando etapas manuais do processo de upload.
+Por fim, um caminho a explorar passa pela integração direta com a plataforma \textit{Marketplace Simulations}, de onde os dados são originalmente extraídos. Uma abordagem possível seria o desenvolvimento de extensões de \textit{browser} (para \textit{Chrome}, \textit{Firefox} ou \textit{Edge}) que permitam importar automaticamente os dados para a aplicação, eliminando etapas manuais do processo de upload.
 
 De forma geral, estas propostas de melhoria mostram que o projeto pode continuar a evoluir significativamente, servindo como base para novas investigações ou aplicações.

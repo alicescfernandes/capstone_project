@@ -79,12 +79,12 @@ R4.2 & Aplicar filtros & Visível \\
 \end{table}
 
 \textbf{Requisitos Não-Funcionais}
-Os atributos do sistema, também designados por requisitos não funcionais, representam as características que o sistema deve exibir durante a sua utilização. Tal como os requisitos funcionais, estes estão organizados em categorias distintas, de forma a informar sobre o seu impacto no desenvolvimento da aplicação. As principais categorias consideradas são as seguintes:
+Os atributos do sistema, também designados por requisitos não funcionais, representam as características que a aplicação deve exibir durante a sua utilização. Tal como os requisitos funcionais, estes estão organizados em categorias distintas, de forma a informar sobre o seu impacto no desenvolvimento da aplicação. As principais categorias consideradas são as seguintes:
 
 \begin{itemize}
-\item \textbf{Obrigatórios}: O sistema deve cumprir estes requisitos. Estão geralmente associados a restrições técnicas ou de contexto, como desempenho, segurança, compatibilidade entre plataformas ou integridade dos dados.
+\item \textbf{Obrigatórios}: a aplicação deve cumprir estes requisitos. Estão geralmente associados a restrições técnicas ou de contexto, como desempenho, segurança, compatibilidade entre plataformas ou integridade dos dados.
 
-\item \textbf{Desejáveis} — São requisitos que, embora não sejam críticos para o funcionamento do sistema, representam funcionalidades adicionais ou melhorias que poderão ser implementadas numa fase posterior. O sistema deve estar preparado para os acomodar, caso se decida avançar com a sua implementação.
+\item \textbf{Desejáveis} — São requisitos que, embora não sejam críticos para o funcionamento do sistema, representam funcionalidades adicionais ou melhorias que poderão ser implementadas numa fase posterior. a aplicação deve estar preparado para os acomodar, caso se decida avançar com a sua implementação.
 \end{itemize}
 
 Os requisitos estão ordenados de acordo com a sua prioridade.
@@ -99,7 +99,7 @@ Os requisitos estão ordenados de acordo com a sua prioridade.
     Usabilidade & Detalhe - Suporte para múltiplos \textit{browsers} & Obrigatório \\
     Segurança & Detalhe - Autenticação e Contas & Obrigatório \\
     Segurança & Fronteira - Cada utilizador só pode aceder aos seus dados & Obrigatório \\
-    Segurança & Detalhe - Garantir que o sistema só permite ficheiros com formato previsto & Obrigatório \\
+    Segurança & Detalhe - Garantir que a aplicação só permite ficheiros com formato previsto & Obrigatório \\
     Performance & Detalhe - Suporte para múltiplos utilizadores sem degradação significativa & Desejável \\
     Performance & Detalhe - Resposta rápida às interações do utilizador & Obrigatório \\
     Acessibilidade & Detalhe - Tem de ser navegável por teclado e screen-reader friendly & Obrigatório \\
@@ -149,9 +149,9 @@ O controlo de versões é uma componente essencial em qualquer projeto de desenv
 
 No contexto deste projeto, o controlo de versões revelou-se particularmente importante para organizar a implementação da plataforma, bem como para permitir uma evolução controlada e iterativa da aplicação, com ciclos de desenvolvimento, testes e correção de erros bem definidos.
 
-Para responder a estas necessidades, foi escolhido o sistema de controlo de versões \textit{Git}, uma ferramenta amplamente utilizada no setor, sendo uma das mais antigas e mais bem suportadas. O \textit{Git} permite criar \textit{branches} de forma simples, o que facilita o desenvolvimento em paralelo de novas funcionalidades sem interferir com a versão principal da aplicação.
+Para responder a estas necessidades, foi escolhido a aplicação de controlo de versões \textit{Git}, uma ferramenta amplamente utilizada no setor, sendo uma das mais antigas e mais bem suportadas. O \textit{Git} permite criar \textit{branches} de forma simples, o que facilita o desenvolvimento em paralelo de novas funcionalidades sem interferir com a versão principal da aplicação.
 
-Durante o desenvolvimento da plataforma, esta capacidade de criar \textit{branches} foi útil para testar funcionalidades específicas como o processamento assíncrono dos ficheiros, o sistema de autenticação ou o carregamento e normalização automática dos dados. Cada conjunto de funcionalidades foram desenvolvidas de forma isolada, permitindo testes controlados e evitando conflitos no código principal.
+Durante o desenvolvimento da plataforma, esta capacidade de criar \textit{branches} foi útil para testar funcionalidades específicas como o processamento assíncrono dos ficheiros, a aplicação de autenticação ou o carregamento e normalização automática dos dados. Cada conjunto de funcionalidades foram desenvolvidas de forma isolada, permitindo testes controlados e evitando conflitos no código principal.
 
 Além do \textit{Git}, foi utilizado o \textit{GitHub} como interface principal para alojar o repositório do projeto e gerir a colaboração. O \textit{GitHub} é uma plataforma \textit{web} que facilita a revisão de código, a gestão de \textit{pull requests} e o acompanhamento de tarefas e problemas. A integração com \textit{Git} é direta, o que permitiu manter o desenvolvimento organizado e acessível a partir de qualquer dispositivo ou ambiente de trabalho.
 
