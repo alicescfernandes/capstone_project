@@ -127,23 +127,23 @@ Com base nos requisitos funcionais e não funcionais identificados na secção~\
 \label{fig:umlCasosUtilizacao}
 \end{figure}
 
-\subsection{Atores}
+Na figura~\ref{fig:umlCasosUtilizacao} podemos ver os atores e os casos de utilização da aplicação, que são os seguintes:
 \begin{itemize}
     \item \textbf{Utilizador} É o ator principal, responsável por interagir com a aplicação. Pode criar conta, iniciar sessão, carregar ficheiros, visualizar gráficos, entre outras ações.
-    \item \textbf{Base de Dados (DB)} Responsável por armazenar, incluindo \textit{quarters}, ficheiros processados e metadados associados.
+    \item \textbf{Base de Dados (DB)} Responsável por armazenar dados dos ficheiros carregados e metadados associados, e os \textit{quarters} criados pelo utilizador.
     \item \textbf{Sistema de Ficheiros} Responsável pelo armazenamento físico dos ficheiros carregados.
 \end{itemize}
 
-\subsection{Casos de Utilização}
+
+Temos também definidos os seguintes casos de utilização, que descrevemos com algum detalhe:
 \begin{itemize}
-    \item \textbf{Criar e gerir \textit{quarters}}
-    Permite ao utilizador, após autenticação, criar \textit{quarters}. Cada \textit{quarter} é identificado por um número (único por utilizador) e guardado na base de dados, sendo associado a um \gls{uuid} para efeitos internos.
+    \item \textbf{Criar e gerir \textit{quarters}:} Permite ao utilizador, após autenticação, criar \textit{quarters}. Cada \textit{quarter} é identificado por um número (único por utilizador) e guardado na base de dados, sendo associado a um \gls{uuid} para efeitos internos.
 
     \item \textbf{Carregar ficheiros:} O utilizador seleciona um \textit{quarter} e carrega ficheiros exportados da plataforma de simulação. A aplicação valida os ficheiros, extrai e processa cada folha de cálculo e aplica a \textit{pipeline} de normalização. Os dados normalizados são armazenados e associados ao \textit{quarter} correspondente.
 
     \item \textbf{Eliminar ficheiros:} Permite ao utilizador remover ficheiros que foram carregados. A aplicação atualiza os registos no \textit{backend}, marca os dados antigos como não correntes e evita que sejam considerados nos gráficos, garantindo que apenas uma versão está ativa por ficheiro.
 
-    \item \textbf{Normalizar dados:} (\textit{include}) Sub-processo automático executado durante o carregamento de ficheiros. Converte os dados para um formato estruturado através de uma \textit{pipeline} de normalização. Comunica com a base de dados e a aplicação de ficheiros.
+    \item \textbf{Normalizar dados:} Sub-processo automático executado durante o carregamento de ficheiros. Converte os dados para um formato estruturado através de uma \textit{pipeline} de normalização. Comunica com a base de dados e a aplicação de ficheiros.
 
     \item \textbf{Consultar gráficos:} Após o carregamento dos ficheiros, o utilizador pode consultar gráficos com base nos ficheiros carregados. A aplicação permite aplicar filtros, navegar entre \textit{quarters} e ver gráficos.
 
