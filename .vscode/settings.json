@@ -6,6 +6,7 @@
         "Datatables",
         "DEETC",
         "Deque",
+        "Fivetran",
         "Flowbite",
         "ISCAL",
         "LEIM",
@@ -18,5 +19,13 @@
         "Sankey",
         "spreadsheetml",
         "Treemap"
+    ],
+    "spellright.language": [
+        "pt"
+    ],
+    "spellright.documentTypes": [
+        "markdown",
+        "latex",
+        "plaintext"
     ]
 }

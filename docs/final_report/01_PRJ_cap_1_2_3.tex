@@ -4,7 +4,7 @@
 %% Modelo para relatório
 %% v04: alteração ADEETC para DEETC; outros ajustes
 %% v03: correção de gralhas
-%% v02: inclui anexo sobre utilizaçãa aplicação controlo de versões
+%% v02: inclui anexo sobre utilização aplicação controlo de versões
 %% v01: original
 %% PTS / MAR.2022 / MAI.2013 / 23.MAI.2012 (construído)
 %%________________________________________________________________________
@@ -87,7 +87,7 @@ Nos próximos parágrafos vamos então detalhar cada uma das partes do modelo pr
 
 Os requisitos funcionais descrevem as funcionalidades específicas que a aplicação deve oferecer para atender às necessidades dos utilizadores. No contexto deste projeto, definem as ações que a aplicação deve ser capaz de executar.
 
-Em suma, para o projeto, identificamos os seguintes requisitos, ordenados por prioridade. Os tabelas de requisitos por inteiro, incluindo algumas definições adicionais, estão incluidas em apêndice (\cf, apêndice \ref{ch:tabRequisitos}).
+Em suma, para o projeto, identificamos os seguintes requisitos, ordenados por prioridade. Os tabelas de requisitos por inteiro, incluindo algumas definições adicionais, estão incluídas em apêndice (\cf, apêndice \ref{ch:tabRequisitos}).
 
 \begin{itemize}
     \item \textbf{Visualização de dados:} os utilizadores devem poder visualizar gráficos interativos baseados nos dados carregados, com a possibilidade de aplicar filtros como país ou \textit{quarter} selecionado.
@@ -141,7 +141,7 @@ Com base nos requisitos funcionais e não funcionais identificados na secção a
 
     \item \textbf{Carregar ficheiros} O utilizador seleciona um \textit{quarter} e carrega ficheiros exportados da plataforma de simulação. a aplicação valida os ficheiros, extrai e processa cada folha de cálculo e aplica a \textit{pipeline} de normalização. Os dados normalizados são armazenados e associados ao \textit{quarter} correspondente.
 
-    \item \textbf{Eliminar ficheiros} Permite ao utilizador remover ficheiros previamente carregados. a aplicação atualiza os registos no backend, marca os dados antigos como inativos e evita que sejam considerados nos gráficos, garantindo que apenas uma versão está ativa por ficheiro.
+    \item \textbf{Eliminar ficheiros} Permite ao utilizador remover ficheiros previamente carregados. a aplicação atualiza os registos no \textit{backend}, marca os dados antigos como inativos e evita que sejam considerados nos gráficos, garantindo que apenas uma versão está ativa por ficheiro.
 
     \item \textbf{Normalizar dados} (\textit{include}) Sub-processo automático executado durante o carregamento de ficheiros. Converte os dados para um formato estruturado (por exemplo, CSV), elimina colunas irrelevantes, ajusta nomes e assegura consistência. Comunica com a base de dados e a aplicação de ficheiros.
 
@@ -193,22 +193,21 @@ A simulação está dividida em secções, cada uma representando uma área dist
 
 Cada secção representa também uma área onde os alunos têm de tomar decisões. As decisões variam consoante o tipo de secção, como por exemplo, na secção \textit{Customer Needs}, os alunos devem decidir que segmentos pretendem servir e com que marcas. Estas decisões são submetidas em cada ronda, influenciando os resultados seguintes, que por sua vez geram novos dados para análise.
 
-A plataforma \textit{Marketplace Simulations – International Corporate Management} permite exportar os dados de cada secção em ficheiros Excel, sendo que cada ficheiro (ou folha dentro de um ficheiro) está associado a uma destas áreas. Exemplos comuns de secções incluem: \textit{Customer Needs}, \textit{Segment Demand}, \textit{Balanced Scorecard}, \textit{Sales Force Report}, entre outras.
-
+A plataforma \textit{International Corporate Management} permite exportar os dados de cada secção em ficheiros \textit{Excel}, sendo que cada ficheiro (ou folha dentro de um ficheiro) está associado a uma destas áreas. Exemplos comuns de secções incluem: \textit{Customer Needs}, \textit{Segment Demand}, \textit{Balanced Scorecard}, \textit{Sales Force Report}, entre outras.
 
 Para a análise, os alunos têm à disposição os dados, na plataforma, nas várias secções disponiveis que na sua maioria são apresentados em tabelas, o que faz com que os alunos saltem entre secções, ou tenham de fazer gráficos à mão ou em último caso, extrair a informação da plataforma, não sendo então prático analisar a informação só pela plataforma de simulação.
 
 \subsection{\textit{Pipelines Extract, Transform Load}}
 \label{ch:etl}
 
-Uma \textit{pipeline} \gls{etl} é um processo utilizado em sistemas de tratamento e integração de dados, com o objetivo de mover dados de uma ou mais fontes para um destino, geralmente uma base de dados ou uma aplicação de análise. O nome \gls{etl} representa as três etapas principais:
+Uma \textit{pipeline} \gls{etl} é um processo utilizado em sistemas de tratamento e integração de dados, com o objetivo de mover dados de uma ou mais fontes para um destino, geralmente uma base de dados ou produtos específicos para a análise de dados \cite{vassiliadis2009survey}. O nome \gls{etl} representa as três etapas principais:
 
 \begin{itemize}
-  \item \textit{Extract} (Extrair): consiste em recolher os dados de múltiplas fontes de informação, que podem incluir bases de dados relacionais, APIs externas, sensores, entre outros. Esta fase preocupa-se com a capacidade de ler dados e de confirmar que são possiveis de extrair.
+  \item \textit{Extract} (Extrair): consiste em recolher os dados de múltiplas fontes de informação, que podem incluir bases de dados relacionais, APIs externas, sensores, entre outros. Esta fase preocupa-se com a capacidade de ler dados e de confirmar que são possiveis de extrair.  Exemplos de ferramentas que podem ser utilizadas nesta fase incluem o \textit{Apache NiFi} \cite{apache_nifi}, \textit{Fivetran} \cite{fivetran}, \textit{Airbyte} \cite{airbyte} e o \textit{Google Cloud Dataflow} \cite{dataflow}.
   
-  \item \textit{Transform} (Transformar): nesta etapa os dados extraídos são processados e convertidos num formato mais adequado ao destino. Isso pode incluir tarefas como limpeza de dados (remoção de valores nulos ou duplicados), normalização, agregações, mudanças de tipo, ou cálculos. É nesta fase em que se garante a consistência da informação.
+  \item \textit{Transform} (Transformar): nesta etapa os dados extraídos são processados e convertidos num formato mais adequado ao destino. Isso pode incluir tarefas como limpeza de dados (remoção de valores nulos ou duplicados), normalização, agregações, mudanças de tipo, ou cálculos. É nesta fase em que se garante a consistência da informação. Ferramentas populares para transformação incluem o \textit{dbt (data build tool)} \cite{dbt}, o \textit{Apache Beam} \cite{apache_beam} (usado com \textit{Dataflow}) e o \textit{Apache Spark} \cite{apache_spark}.
 
-  \item \textit{Load} (Carregar): por fim, os dados transformados são inseridos na aplicação de destino, normalmente um \textit{data warehouse},  O carregamento é feito dependendo dos requisitos da aplicação de destino
+  \item \textit{Load} (Carregar): por fim, os dados transformados são inseridos na aplicação de destino, normalmente um \textit{data warehouse},  O carregamento é feito dependendo dos requisitos da aplicação de destino. Exemplos de produtos que podem ser utilizados como destino são bases de dados como \textit{BigQuery} \cite{bigquery}, \textit{Snowflake} \cite{snowflake}, \textit{Clickhouse} \cite{clickhouse}, entre outros.
 
 \end{itemize}
 
@@ -243,7 +242,7 @@ Esta separação entre \textit{backend} e \textit{frontend} facilita a manutenç
 
 \subsection{Tipos de gráficos}
 
-Durante a análise efetuamos foram estudados diferentes tipos de visualizações que podiam ser aplicadas, de acordo com os dados que tinhamos disponíveis. Cada tipo de visualização foi escolhido com base na sua capacidade de representar visualmente os dados e a sua facilidade de interpretação. 
+Durante a análise efetuamos foram estudados diferentes tipos de visualizações que podiam ser aplicadas, de acordo com os dados que tínhamos disponíveis. Cada tipo de visualização foi escolhido com base na sua capacidade de representar visualmente os dados e a sua facilidade de interpretação. 
 
 Durante o desenvolvimento do projeto, foram considerados vários tipos de visualizações gráficas. Importa salientar que as imagens que acompanham esta secção foram retiradas diretamente da aplicação desenvolvida, já tendo em conta as limitações e as transformações realizadas nos dados. Estas transformações são discutidas mais a fundo no capítulo da análise inicial (ver capítulo \ref{sec:analiseInicial}).
 
@@ -286,7 +285,7 @@ Utilizado especificamente para representar balanços financeiros, como valores a
 
 \textbf{Diagrama de Quartis (\textit{Box Plot}):}
 
-Os diagramas de quartis foram utilizados para representar dados que eram distribuições com minimos e máximos, permitindo visualizar de forma prática a mediana, os quartis e valores extremos.  A interpretação deste tipo de visualização exige um conhecimento prévio de conceitos estatísticos como mediana e quartis, o que pode dificultar a leitura, mas que simplifica a representação dos dados.
+Os diagramas de quartis foram utilizados para representar dados que eram distribuições com mínimos e máximos, permitindo visualizar de forma prática a mediana, os quartis e valores extremos.  A interpretação deste tipo de visualização exige um conhecimento prévio de conceitos estatísticos como mediana e quartis, o que pode dificultar a leitura, mas que simplifica a representação dos dados.
 
 \begin{figure}[H]
     \centering
@@ -296,12 +295,12 @@ Os diagramas de quartis foram utilizados para representar dados que eram distrib
 
 \textbf{Diagrama de Sankey (\textit{Sankey Diagram}):}
 
-Os diagramas de Sankey são utilizados para representar fluxos entre diferentes categorias, sublinhando a quantidade transferida de uma categoria para outra. Cada fluxo é representado por uma linha cuja largura é proporcional à quantidade movida, permitindo uma visualização intuitiva da importancia dos fluxos. Para evitar representações complexas, decidimos apenas recorrer a este tipo apenas quando os dados não poderiam ser representados de outra forma, ou tratados de forma a simplificar a representação.
+Os diagramas de \textit{Sankey} são utilizados para representar fluxos entre diferentes categorias, sublinhando a quantidade transferida de uma categoria para outra. Cada fluxo é representado por uma linha cuja largura é proporcional à quantidade movida, permitindo uma visualização intuitiva da importância dos fluxos. Para evitar representações complexas, decidimos apenas recorrer a este tipo apenas quando os dados não poderiam ser representados de outra forma, ou tratados de forma a simplificar a representação.
 
 \begin{figure}[H]
     \centering
     \includegraphics[max width=10cm]{./img/skankey}
-    \caption{Exemplo de gráfico de Sankey}
+    \caption{Exemplo de gráfico de \textit{Sankey}}
 \end{figure}
 
 Outros tipos de gráficos relevantes para o projeto, mas que não foram utilizados são:
@@ -316,7 +315,7 @@ Utilizado para comparar múltiplas variáveis em relação a um valor comum, com
 
 \textbf{Gráfico de Dispersão (\textit{Scatter Plot}):}
 
-Os gráficos de dispersão foram considerados para representar relações entre duas variáveis. Cada ponto no gráfico representa uma observação individual, permitindo identificar padrões de correlação (positiva, negativa ou inexistente) entre variáveis. No nosso caso, consideramos utilizar um tipo especifico de gráfico de dispersão (gráfico de dispersão num mapa) mas a leitura tornou-se confusa, uma vez que era pouco legivel para alunos, e não considerava localizações ficticias, fazendo com que a leitura fosse difícil, como pode ser visto na figura  \label{fig:scatter-map}, que é um gráfico do tipo \textit{scatter map} feito com dados importados de uma folha de cálculo, em que os pontos estão muito dispersos, num mapa que contem várias referencias a cidades, e sem representação do valor numérico associado (aparece um ponto azul).
+Os gráficos de dispersão foram considerados para representar relações entre duas variáveis. Cada ponto no gráfico representa uma observação individual, permitindo identificar padrões de correlação (positiva, negativa ou inexistente) entre variáveis. No nosso caso, consideramos utilizar um tipo específico de gráfico de dispersão (gráfico de dispersão num mapa) mas a leitura tornou-se confusa, uma vez que era pouco legível para alunos, e não considerava localizações fictícias, fazendo com que a leitura fosse difícil, como pode ser visto na figura  \ref{fig:scatter-map}, que é um gráfico do tipo \textit{scatter map} feito com dados importados de uma folha de cálculo, em que os pontos estão muito dispersos, num mapa que contém várias referências a cidades, e sem representação do valor numérico associado (aparece um ponto azul).
 
 \begin{figure}[H]
     \centering
@@ -359,15 +358,15 @@ Esta estrutura base implica a existência de três entidades principais na nossa
 
 \subsubsection{\textit{Quarters}}
 
-Os \textit{quarters} funcionam como \textit{buckets} para organizar os ficheiros carregados pelos utilizadores. Cada utilizador pode criar múltiplos \textit{quarters}, identificados de forma única por um número. O propósito em incluir este conceito é para que a aplicação consiga associar os dados extraidos dos ficheiros carregados ao \textit{quarter} correspondente sem depender de manipulações do nome do ficheiro carregado, e desde modo assegurar que a plataforma consegue identificar corretamente os \textit{quarters}. 
+Os \textit{quarters} funcionam como \textit{buckets} para organizar os ficheiros carregados pelos utilizadores. Cada utilizador pode criar múltiplos \textit{quarters}, identificados de forma única por um número. O propósito em incluir este conceito é para que a aplicação consiga associar os dados extraídos dos ficheiros carregados ao \textit{quarter} correspondente sem depender de manipulações do nome do ficheiro carregado, e desde modo assegurar que a plataforma consegue identificar corretamente os \textit{quarters}. 
 
-A desvantagem é que requer \textit{input} do utilizador para que seja criado ou atribuído o \textit{quarter} correto. De modo a facilitar a criação de \textit{quarters}, tentamos que experiência de utilização fosse centrada no carregamento de ficheiros, limitando os \textit{quarters} a um campo obrigatório no formulário de carregamento auto-preenchido, ou seja, tornando implicita a criação de \textit{quarters} no momento de carregamento de ficheiros.
+A desvantagem é que requer \textit{input} do utilizador para que seja criado ou atribuído o \textit{quarter} correto. De modo a facilitar a criação de \textit{quarters}, tentamos que experiência de utilização fosse centrada no carregamento de ficheiros, limitando os \textit{quarters} a um campo obrigatório no formulário de carregamento auto-preenchido, ou seja, tornando implícita a criação de \textit{quarters} no momento de carregamento de ficheiros.
 
 \subsubsection{Ficheiros}
 
-Os ficheiros são inicialmente carregados no formato \gls{xlsx} (que é o formato que a plataforma de simulação exporta), contendo uma ou várias folhas de cálculo. Cada folha é tratada como uma fonte de dados individual e é de onde são extraidos os dados. O ficheiro \gls{xlsx} é guardado como referência, mas não é diretamente utilizado para visualização, ficando apenas como artefacto interno da aplicação. O modelo proposto não prevê que uma folha de cálculo origine multiplos gráficos.
+Os ficheiros são inicialmente carregados no formato \gls{xlsx} (que é o formato que a plataforma de simulação exporta), contendo uma ou várias folhas de cálculo. Cada folha é tratada como uma fonte de dados individual e é de onde são extraídos os dados. O ficheiro \gls{xlsx} é guardado como referência, mas não é diretamente utilizado para visualização, ficando apenas como artefacto interno da aplicação. O modelo proposto não prevê que uma folha de cálculo origine múltiplos gráficos.
 
-O processamento que é aplicado é uma \textit{pipeline} de transformação de dados (conhecido na industria como \gls{etl} (\cf, capítulo \ref{ch:etl})), que aplica regras para que os gráficos possam ser mostrados de forma consistente. Os dados resultantes desta transformação estão associados ao ficheiro \gls{xlsx} original, sendo até possivel voltar a processar ficheiros de forma a recriar informação (esta funcionalidade não é disponibilizada aos utilizadores finais e não foi desenvolvida de forma explícita).
+O processamento que é aplicado é uma \textit{pipeline} de transformação de dados (conhecido na indústria como \gls{etl} (\cf, capítulo \ref{ch:etl})), que aplica regras para que os gráficos possam ser mostrados de forma consistente. Os dados resultantes desta transformação estão associados ao ficheiro \gls{xlsx} original, sendo até possível voltar a processar ficheiros de forma a recriar informação (esta funcionalidade não é disponibilizada aos utilizadores finais e não foi desenvolvida de forma explícita).
 
 A plataforma garante que só existe uma versão ativa de cada ficheiro. Caso o utilizador carregue novamente um ficheiro com o mesmo nome, o anterior será marcado como não ativo, evitando duplicações e garantindo que os gráficos usam apenas dados mais recentes, e em caso de remoção, garante que conseguimos reverter para a versão anterior.
 
@@ -375,7 +374,7 @@ A plataforma garante que só existe uma versão ativa de cada ficheiro. Caso o u
 
 Para conseguirmos então garantir uma experiência de utilização consistente, desenvolvemos uma \textit{pipeline} transformação de dados, semelhante a uma \textit{pipeline} \gls{etl} (\cf, capítulo \ref{ch:etl}), ainda que neste projeto tenha sido desenvolvido com uma escala mais pequena, e com recurso a bibliotecas de processamento de dados. 
 
-O objetivo é garantir que os ficheiros carregados, que muitas vezes contêm nomes de colunas inconsistentes, quebras de linha, espaços em excesso ou colunas irrelevantes, sejam adaptados para serem visualizados, e que o processamento seja deterministico.
+O objetivo é garantir que os ficheiros carregados, que muitas vezes contêm nomes de colunas inconsistentes, quebras de linha, espaços em excesso ou colunas irrelevantes, sejam adaptados para serem visualizados, e que o processamento seja determinístico.
 
 Como podemos receber muitos ficheiros, a variabilidade entre os dados recebidos é muito alta, pelo que alguns dados passam por mais do que uma fase de transformação. Esta decisão foi tomada com base numa análise manual, em que identificámos possíveis fontes de dados que precisam de mais do que uma fase de transformação. As várias fases de transformação alteram os dados de modo a facilitar a representação visual dos mesmos e é um passo essencial no projeto, porque garante que a aplicação trabalha com formatos e regras conhecidas, e remove a variabilidade dos ficheiros importados. Para proteger a aplicação, decidimos apenas mostrar os dados que foram extraidos de ficheiros conhecidos, de modo a garantir a consistencia dos dados mostrados.
 
@@ -411,43 +410,41 @@ A arquitetura final da aplicação pode ser observada na Figura~\ref{fig:arquite
 
 Para o desenvolvimento do \textit{backend} da aplicação, optámos por usar a \textit{framework} \textit{Django}. A escolha deveu-se ao facto de o \textit{Django} ser uma \textit{framework} muito usada, com uma arquitetura conhecida e uma comunidade grande.
 
-Uma das principais vantagens do \textit{Django} é o facto de seguir o padrão de arquitetura \gls{mvc}, o que facilita bastante a organização da aplicação e a separação de responsabilidades. No entanto, o \textit{Django} utiliza uma variante própria deste padrão, conhecida como \gls{mtv} onde:
+Uma das principais vantagens do \textit{Django} é o facto de seguir o padrão de arquitetura \gls{mvc}, o que facilita bastante a organização da aplicação e a separação de responsabilidades. No entanto, o \textit{Django} utiliza uma variante própria deste padrão, conhecida como \gls{mtv}\cite{djangodocs} onde:
 
 \begin{itemize}
     \item o \textit{Model} representa a camada de dados e corresponde ao modelo do domínio;
 
     \item o \textit{Template} representa a camada de apresentação (interface com o utilizador);
 
-    \item a \textit{View}, em \textit{Django}, atua como o controlador que processa a lógica da aplicação e interage com os modelos e os templates.
+    \item a \textit{View}, em \textit{Django}, atua como o controlador que processa a lógica da aplicação e interage com os modelos e os \textit{templates}.
 \end{itemize}
 
-Apesar da diferença de nomes, esta arquitetura cumpre os mesmos princípios do padrão \gls{mvc} tradicional \cite{fitzgerald2007web,djangodocs}, promovendo uma clara separação de preocupações, o que facilita o desenvolvimento, testes e manutenção da aplicação.
+Para além disso, o \textit{Django} oferece um \gls{orm} integrado, que permite interagir com bases de dados sem necessidade de escrever \gls{sql} manualmente. Este \gls{orm} mapeia modelos \textit{Python} na base de dados e suporta operações como filtros, agregações e relações entre tabelas \cite{djangodocs}, e ao mesmo tempo previne falhas de segurança como \textit{SQL injection} através do uso de consultas parametrizadas \cite{kumar2016security}.
 
-Para além disso, o \textit{Django} oferece um \gls{orm} integrado, que permite interagir com bases de dados de forma mais intuitiva, sem necessidade de escrever \gls{sql} manualmente. Este ORM permite mapear modelos Python em tabelas relacionais e suporta operações como filtros, agregações e relações entre tabelas \cite{djangodocs}, ao mesmo tempo que previne falhas comuns de segurança como \textit{SQL injection} através do uso de consultas parametrizadas \cite{kumar2016security}.
+Outra vantagem é a gestão de utilizadores, permissões e sessões já estar incluída de forma nativa no \textit{framework}, facilitando a gestão de utilizadores e sessões \cite{djangodocs}. Isto permite ao programador focar-se no desenvolvimento das funcionalidades específicas da aplicação sem ter de construir esse suporte de raiz.
 
-Outra vantagem é a gestão de utilizadores, permissões e sessões já estar incluída de forma nativa no \textit{framework}, facilitando a autenticação, autorização e persistência de sessões de utilizador \cite{djangodocs}. Isto permite ao programador focar-se no desenvolvimento das funcionalidades específicas da aplicação sem ter de construir esse suporte de raiz.
+Outro fator que consideramos positivo foi a integração com outras bibliotecas \textit{Python}, como o \textit{Pandas}, que usamos para o processamento de dados. Esta compatibilidade torna o desenvolvimento mais rápido e flexível, reduzindo o esforço necessário para ligar diferentes tecnologias.
 
-Outro fator que consideramos positivo foi a integração com outras bibliotecas Python, como o \textit{Pandas}, que usamos para o processamento de dados. Esta compatibilidade torna o desenvolvimento mais rápido e flexível, reduzindo o esforço necessário para ligar diferentes tecnologias. O ecossistema Python é particularmente forte no tratamento de dados, e o Django, sendo escrito em Python, tira partido disso de forma direta \cite{vanrossum2001python}.
+Em alternativa, podíamos ter escolhido bibliotecas como \textit{Flask} \cite{grinberg2018flask} ou \textit{FastAPI} \cite{tiangolo2018fastapi}. Apesar de \textit{FastAPI} ser mais recente e mais rápido para \texit{API} \gls{rest}, o nossa aplicação, focado na transformação de dados e visualização, não necessitava de uma abordagem completamente assíncrona e não funciona totalmente com \texit{API} \gls{rest}. Já o \textit{Flask}, apesar de ser mais leve, implicaria uma maior responsabilidade na definição de toda a arquitetura e gestão de utilizadores, e que aumentava a complexidade do projeto.
 
-Em alternativa, podiamos ter escolhido bibliotecas como \textit{Flask} ou \textit{FastAPI}. Apesar de \textit{FastAPI} ser mais recente e mais rápido para \texit{API} \gls{rest} \cite{tiangolo2018fastapi}, o nossa aplicação, focado na transformação de dados e visualização, não necessitava de uma abordagem completamente assíncrona e não funciona totalmente com \texit{API}s \gls{rest}. Já o \textit{Flask}, apesar de ser mais leve, implicaria uma maior responsabilidade na definição de toda a arquitetura e gestão de utilizadores, e que aumentava a complexidade do projeto \cite{grinberg2018flask}.
-
-Relativamente a outras opções como \textit{WordPress}, excluímos essa hipótese. O \textit{WordPress}, ainda que muito prática de servir de suporte para sites de conteúdo como blogues ou sites de noticias, não é adequado para projetos que exigem controlo total sobre a estrutura dos dados, processamento no \textit{backend} e não integra bem com as outras tecnologias escolhidas.
+Relativamente a outras opções como \textit{WordPress}, excluímos essa hipótese. O \textit{WordPress}, ainda que muito prática de servir de suporte para sites de conteúdo como blogues ou sites de notícias, não é adequado para projetos que exigem muito controlo sobre a estrutura dos dados e não integra bem com as outras tecnologias escolhidas.
 
 \subsection{Pandas}
 
 Para o processamento de dados, a biblioteca que decidimos usar foi o \textit{Pandas}. Esta escolha foi motivada pelo facto de ser muito utilizada em projetos de engenharia de dados, e por ser escrita em \texit{Python}.
 
-O \textit{Pandas} permite ler e transformar ficheiros Excel com facilidade. A sua sintaxe e as funcionalidades para operações como normalização, filtragem, agrupamento ou ordenação tornaram-na adequada para as tarefas necessárias neste projeto.  Outra vantagem mais é a capacidade de converter os dados diretamente para formatos como \gls{json}, o que facilitou a sua integração com o resto da aplicação.
+O \textit{Pandas} permite ler e transformar ficheiros \gls{xlsx} com facilidade. A sua sintaxe e as funcionalidades para operações como normalização, filtragem, agrupamento ou ordenação tornaram-na adequada para as tarefas necessárias neste projeto.  Outra vantagem mais é a capacidade de converter os dados para formatos como \gls{json}, o que facilitou a sua integração com o resto da aplicação.
 
-Apesar destas vantagens, o \textit{Pandas} não é a melhor opção se considerarmos \textit{datasets} muito grandes, uma vez que funciona inteiramente em memória. Em contextos com maiores volumes de dados, poderiam ser consideradas bibliotecas como \textit{Dask} ou \textit{Polars} por terem capacidades de paralelismo para lidar com um maior conjunto de dados (acabam por ser mais adequadas para \textit{BigData}). No entanto, para os objetivos e escala deste projeto, o \textit{Pandas} é a escolha mais equilibrada considerando o scope do projeto que desenvolvemos.
+Apesar destas vantagens, o \textit{Pandas} não é a melhor opção se considerarmos \textit{datasets} muito grandes, uma vez que funciona inteiramente em memória. Em contextos com maiores volumes de dados, poderiam ser consideradas bibliotecas como \textit{Dask} ou \textit{Polars} por terem capacidades de paralelismo para lidar com um maior conjunto de dados (acabam por ser mais adequadas para \textit{BigData}). No entanto, para os objetivos e escala deste projeto, o \textit{Pandas} é a escolha mais equilibrada considerando o \textit{scope} do projeto que desenvolvemos.
 
 \subsection{Plotly}
 
-Para mostrar os gráficos da aplicação, optámos por utilizar o \textit{Plotly}, que é uma biblioteca  que permite criar visualizações, e que está disponivel em várias linguagens como \texit{Python} e \texit{Javascript}. Esta escolha foi motivada pelo facto de o \textit{Plotly} suportar suportar uma \texit{API} declarativa, o que torna mais prática a integração com o \textit{frontend} e \textit{backend}, porque assim a configuração dos gráficos pode ser retornada pelo servidor, permitindo uma configuração mais estável e garantindo que todos os utilizadores vêm o mesmo tipo de gráfico. Internamente, o \textit{Plotly} utiliza uma outra biblioteca, \textit{D3.js}, que é uma biblioteca com capacidade de criar gráficos personalizados.
+Para mostrar os gráficos da aplicação, optámos por utilizar o \textit{Plotly}, que é uma biblioteca  que permite criar visualizações, e que está disponível em várias linguagens como \texit{Python} e \texit{Javascript}. Esta escolha foi motivada pelo facto de o \textit{Plotly} suportar suportar uma \texit{API} declarativa, o que torna mais prática a integração com o \textit{frontend} e \textit{backend}, porque assim a configuração dos gráficos pode ser retornada pelo servidor, permitindo uma configuração mais estável e garantindo que todos os utilizadores vêm o mesmo tipo de gráfico. Internamente, o \textit{Plotly} utiliza uma outra biblioteca, \textit{D3.js}, que é uma biblioteca com capacidade de criar gráficos personalizados.
 
-Além disso, a biblioteca oferece suporte a uma grande variedade de gráficos, desde os mais comuns (barras, linhas, circulares) até formatos mais especializados (como gráficos de cascata ou mapas de calor), o que foi importante para explorar os vários tipos de visualização que estavamos a considerar usar. Em comparação, bibliotecas como \textit{Chart.js}, embora sejam mais leves, limitam-se a um conjunto reduzido de gráficos e oferecem menos controlo sobre detalhes de visualização. Por este motivo, \textit{Plotly} era a solução mais adequada para a flexibilidade e diversidade de visualizações que queriamos. Uma lista completa das diferencas pode ser consultada no (\cf, capítulo \ref{ch:charts}).
+Além disso, a biblioteca oferece suporte a uma grande variedade de gráficos, desde os mais comuns (barras, linhas, circulares) até formatos mais especializados (como gráficos de cascata ou mapas de calor), o que foi importante para explorar os vários tipos de visualização que estávamos a considerar usar. Em comparação, bibliotecas como \textit{Chart.js}, embora sejam mais leves, limitam-se a um conjunto reduzido de gráficos e oferecem menos controlo sobre detalhes de visualização. Por este motivo, \textit{Plotly} era a solução mais adequada para a flexibilidade e diversidade de visualizações que queríamos. O \textit{Plotly} permite criar versões da biblioteca com gráficos específicos, reduzindo bastante o tamanho do ficheiro \textit{Javascript}. Uma lista completa das diferenças pode ser consultada no (\cf, capítulo \ref{ch:charts}).
 
-A versão \textit{Python} desta biblioteca foi também importante no desenvolvimento dos gráficos, uma vez que nos permitiu explorar os dados de forma independente da aplicação (fora da aplicação) de modo escolher que tipo de gráfico seria o mais adequado aos dados que estavamos a analisar e que transformações eram necessárias para obter os gráficos escolhidos. Este processo de exploração permitiu-nos perceber o que era possível fazer, e com a ajuda dos orientadores, definir estratégias alternativas para os conjuntos de informação que queríamos mostrar.
+A versão \textit{Python} desta biblioteca foi também importante no desenvolvimento dos gráficos, uma vez que nos permitiu explorar os dados de forma independente, fora da aplicação, de modo escolher que tipo de gráfico seria o mais adequado aos dados que estávamos a analisar e que transformações eram necessárias. Este processo de exploração permitiu-nos perceber o que era possível fazer, e com a ajuda dos orientadores, definir estratégias alternativas para os conjuntos de informação que queríamos mostrar.
 
 \subsection{\textit{WebComponents}}
 
@@ -455,11 +452,11 @@ No \textit{frontend}, decidimos utilizar \textit{WebComponents} \cite{webcompone
 
 Os \textit{WebComponents} \cite{webcomponents} são uma especificação nativa dos \textit{browsers}, que permite definir componentes reutilizáveis com encapsulamento de estilo e comportamento. Ao evitarmos dependências pesadas como o \textit{React}, conseguimos reduzir a complexidade técnica da aplicação, mantendo ao mesmo tempo a flexibilidade e capacidade de reutilização dos componentes desenvolvidos.
 
-Apesar de \textit{React} ser uma framework muito utilizada para aplicações \textit{web},  com um ecossistema já muito maduro e uma comunidade grande, considerámos que para este projeto, a sua introdução seria um excesso em termos de dependências e complexidade. A alternativa escolhida proporcionou uma solução mais leve e mais fácil de manter. Outra razão que nos levou a esta escolha foi o facto do \textit{Django} já trazer consigo as funcionalidades de autenticação, pelo que se a aplicação \textit{web} fosse escrita totalmente em \textit{React}, teriamos de usar o \textit{Django} apenas como uma \gls{API} \gls{REST}, e utilizar métodos alternativos de autenticação como \textit{OAuth2}.
+Apesar de \textit{React} ser uma biblioteca muito utilizada para aplicações \textit{web}, com um ecossistema já muito maduro e uma comunidade grande, considerámos que para este projeto, a sua introdução seria aumentar as dependências e complexidade. A alternativa escolhida é uma solução mais leve e mais fácil de manter. Outra razão que nos levou a esta escolha foi o facto do \textit{Django} já trazer consigo as funcionalidades de autenticação, pelo que se a aplicação \textit{web} fosse escrita totalmente em \textit{React}, teríamos de usar o \textit{Django} apenas como uma \gls{API} \gls{REST}, e utilizar métodos alternativos de autenticação como \textit{OAuth2}.
 
 \subsection{\textit{PostgreSQL}}
 
-Para a persistência de dados, utilizámos a aplicação de gestão de bases de dados \textit{PostgreSQL}, uma das soluções \textit{open-source} mais completas e robustas disponíveis atualmente. Inicialmente foi considerada a utilização de \textit{SQLite} por simplicidade durante o desenvolvimento, mas rapidamente a necessidade de maior escalabilidade e de suporte a funcionalidades como campos \gls{json}, levou à adoção do \textit{PostgreSQL}.
+Para a persistência de dados, utilizámos a aplicação de gestão de bases de dados \textit{PostgreSQL}, uma das soluções \textit{open-source} mais completas e robustas disponíveis atualmente. Inicialmente foi considerada a utilização de \textit{SQLite} por simplicidade durante o desenvolvimento, mas a necessidade de funcionalidades como campos \gls{json}, levou à adoção do \textit{PostgreSQL}.
 
 \textit{PostgreSQL} oferece um bom desempenho, suporte a operações complexas e é compatível com o \gls{orm} do \textit{Django}, o que permitiu tirar partido do modelo relacional sem abdicar da produtividade no desenvolvimento. Comparado com outras alternativas como \texit{MySQL}, o \textit{PostgreSQL} distingue-se pelo seu suporte avançado a tipos de dados (\gls{json}, \texit{arrays}, \textit{enums}), entre outras funcionalidades.
 
@@ -468,9 +465,9 @@ Para a persistência de dados, utilizámos a aplicação de gestão de bases de 
 
 O \textit{Docker} foi utilizado neste projeto como solução de virtualização, tanto para desenvolvimento como para ambientes de produção. A principal vantagem da sua adoção prende-se com a criação de ambientes consistentes e isolados, garantindo que a aplicação corre da mesma forma em diferentes máquinas, sem conflitos de dependências ou configurações, e consistentemente em vários sistemas operativos. 
 
-Existem vários \textit{runtimes} compativeis com \textit{Docker}, e devido ao modelo de negócio da empresa \textit{Docker} (que adotou um modelo pago), optámos por usar o \textit{Rancher} (uma aplicação com uma \gls{api} compatível com \textit{Docker}) para o desenvolvimento, e o \textit{Docker Engine} para ambientes de produção.
+Existem vários \textit{runtimes} compatíveis com \textit{Docker}, e devido ao modelo de negócio da empresa \textit{Docker} (que adotou um modelo pago), optámos por usar o \textit{Rancher} (uma aplicação com uma \gls{api} compatível com \textit{Docker}) para o desenvolvimento, e o \textit{Docker Engine} para ambientes de produção.
 
-Durante o desenvolvimento, o \textit{Docker} facilitou a orquestração dos serviços necessários (a aplicação Django, a base de dados, e o servidor \gls{http} Nginx configurado como \textit{reverse proxy}), utilizando ficheiros \texttt{Dockerfile} e \texttt{docker-compose.yml}. Isto permitiu montar rapidamente o ambiente completo da aplicação, sem necessidade de instalações manuais por parte dos programadores.
+Durante o desenvolvimento, o \textit{Docker} facilitou a orquestração dos serviços necessários (a aplicação \textit{Django}, a base de dados, e o servidor \gls{http} \textit{Nginx} configurado como \textit{reverse proxy}), utilizando ficheiros \texttt{Dockerfile} e \texttt{docker-compose.yml}. Isto permitiu montar rapidamente o ambiente completo da aplicação, sem necessidade de instalações manuais por parte dos programadores.
 
 Para produção, o \textit{Docker} permite recriar um ambiente de produção sempre com a mesma configuração e gerir os vários serviços que a aplicação utiliza, o que facilita o processo de \textit{deploy}, e escalabilidade futura. Esta abordagem garante que o código testado é exatamente o que será executado em produção, reduzindo erros e aumentando a estabilidade da aplicação.
 

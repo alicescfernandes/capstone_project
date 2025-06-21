@@ -14,7 +14,4 @@ pdflatex --interaction=nonstopmode -output-directory=build 00_PRJ_main.tex
 pdflatex --interaction=nonstopmode -output-directory=build 00_PRJ_main.tex
 pdflatex --interaction=nonstopmode -output-directory=build 00_PRJ_main.tex
 
-mv build/00_PRJ_main.pdf build/final_report.pdf
-
-# rm final_report.pdf
-# mv build/00_PRJ_main.pdf final_report.pdf
+mv build/00_PRJ_main.pdf final_report.pdf
