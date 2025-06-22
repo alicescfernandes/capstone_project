@@ -21,11 +21,11 @@ Neste contexto, a análise eficiente de dados torna-se essencial para a tomada d
 
 \section{Motivação}
 
-O presente projeto surgiu da necessidade  entre os alunos do \gls{iscal} que utilizam o simulador \textit{International Corporate Management} da empresa \textit{Marketplace Simulations}, que é um simulador de negócios internacionais e que iremos descrever no capítulo~\ref{sec:marketplace}, onde os alunos agrupam-se em empresas e simulam um negócio num mercado internacional. Embora a plataforma apresente toda a informação necessária à tomada de decisões na simulação, esses dados estão espalhados em múltiplas páginas e apresentados em tabelas, com poucas funcionalidades de visualização. Esta limitação obriga os alunos a alternar entre páginas, copiar dados manualmente ou criar folhas de cálculo externas, comprometendo a eficiência e a análise da informação.
+O presente projeto surgiu da necessidade dos alunos do \gls{iscal} que utilizam a plataforma \textit{International Corporate Management} da empresa \textit{Marketplace Simulations}, que é um simulador de negócios internacionais e que iremos descrever no capítulo~\ref{sec:marketplace}. Embora a plataforma apresente toda a informação necessária à tomada de decisões, esses dados estão espalhados em múltiplas páginas e apresentados em tabelas, com poucas funcionalidades de visualização. Esta limitação obriga os alunos a alternar entre páginas, copiar dados manualmente ou criar folhas de cálculo externas, comprometendo a eficiência e a análise da informação.
 
 \section{Objetivos}
 
-A aplicação proposta neste relatório pretende ajudar nesse sentido, disponibilizando uma interface que permite aos utilizadores carregar dados retirados da plataforma de simulação e tornar esses ficheiros em visualizações que podem ser consultadas e manipuladas. A aplicação permitirá aos utilizadores:
+A aplicação proposta neste relatório pretende ajudar nesse sentido, disponibilizando uma interface que permite aos utilizadores carregar dados retirados da plataforma de simulação e tornar esses ficheiros em visualizações que podem ser consultadas e manipuladas. A aplicação deve permitir aos utilizadores:
 
 \begin{itemize}
     \item Criar uma conta na plataforma que suporte a persistência da informação carregada.
@@ -43,14 +43,12 @@ Pretende-se também que a aplicação adote uma arquitetura simples de manter e 
     \item Adotar um modelo de funcionamento semelhante à plataforma de simulação, de modo a tornar a utilização mais fácil e garantir que a nossa aplicação tenha fronteiras claras de utilização.
 \end{itemize}
 
-Ao longo deste relatório, serão apresentadas as decisões tomadas, bem como os fundamentos que orientaram o desenvolvimento da aplicação proposta.
-
 %%________________________________________________________________________
 \chapter{Trabalho Relacionado}
 \label{ch:trabalhoRelacionado}
 %%________________________________________________________________________
 
-O presente projeto insere-se num contexto mais geral de ferramentas pedagógicas e de \gls{sad}, ainda que neste caso concreto, em ambientes simulados no ensino superior. No âmbito do \gls{iscal}, a utilização da plataforma \textit{Marketplace Simulations} \cite{MarketplaceSim_2025} permite aos estudantes desenvolver competências práticas em ambientes virtuais de negócios, simulando o funcionamento de mercados reais. A necessidade de suporte digital à análise e simulação motivou o desenvolvimento de outras ferramentas auxiliares, com destaque para um projeto também realizado em parceria com o \gls{iscal}, focado em simulações parciais de modelos económicos.
+O projeto que desenvolvemos insere-se num contexto mais geral de ferramentas pedagógicas e de \gls{sad}, ainda que neste caso concreto, em ambientes simulados no ensino superior. No âmbito do \gls{iscal}, a utilização da plataforma \textit{Marketplace Simulations} \cite{MarketplaceSim_2025} permite aos estudantes desenvolver competências práticas em ambientes virtuais de negócios, simulando o funcionamento de mercados reais. A necessidade de suporte à análise e simulação motivou o desenvolvimento de outras ferramentas auxiliares, com destaque para um projeto também realizado em parceria com o \gls{iscal}, focado em simulações de modelos económicos.
 
 Esse projeto, embora partilhe uma motivação semelhante, segue uma abordagem diferente. Em particular, a aplicação referida acima permite simular cenários específicos com base em \textit{inputs} manuais, o que pode ser útil para quando se procura prever resultados com foco muito concreto (por exemplo, simular o impacto de uma única variável nos resultados). A nossa plataforma foca-se numa outra vertente, em que pretende ser uma ferramenta para auxiliar o ensino de forma prática.
 
@@ -122,7 +120,7 @@ Com base nos requisitos funcionais e não funcionais identificados na secção~\
 
 \begin{figure}[h]
 \centering
-\includegraphics[max width=\textwidth]{./img/usecase_uml}
+\includegraphics[max width=12cm]{./img/usecase_uml}
 \caption{\gls{uml} dos Casos de Utilização}
 \label{fig:umlCasosUtilizacao}
 \end{figure}
@@ -149,7 +147,7 @@ Temos também definidos os seguintes casos de utilização, que descrevemos com 
 
     \item \textbf{Criar conta:} Permite o registo de novos utilizadores. A aplicação valida os dados inseridos, verifica se o utilizador já existe e cria a conta, autenticando automaticamente o utilizador após sucesso.
 
-    \item \textbf{Iniciar e Terminar sessão:} O utilizador introduz credenciais válidas (\textit{username} e \textit{password}) e, caso sejam corretas, é autenticado e redirecionado para a interface principal. Este processo inclui a gestão da sessão.
+    \item \textbf{Iniciar e Terminar sessão:} O utilizador introduz credenciais válidas (nome de utilizador e palavra-passe) e, caso sejam corretas, é autenticado e redirecionado para a interface principal. Este processo inclui a gestão da sessão.
 
 \end{itemize}
 
@@ -241,11 +239,11 @@ Importa salientar que as imagens que acompanham esta secção foram retiradas di
 Este tipo de visualização foi utilizado para comparar valores entre diferentes categorias, como marcas, cidades ou segmentos de mercado. A disposição visual das barras permite uma leitura rápida das diferenças de desempenho entre categorias, sendo útil para dados que não são temporais. Foi também utilizado a variante barras agrupadas, dependendo se havia necessidade de comparar valores entre categorias.
 
 
-\begin{figure}[H]
-\centering
-\includegraphics[max width=10cm]{./img/barras1}
-\caption{Exemplo de gráfico de barras}
-\end{figure}
+%% \begin{figure}[H]
+%% \centering
+%% \includegraphics[max width=10cm]{./img/barras1}
+%% \caption{Exemplo de gráfico de barras}
+%% \end{figure}
 
 \begin{figure}[H]
 \centering
@@ -408,7 +406,7 @@ Relativamente a outras opções como \textit{WordPress}, excluímos essa hipóte
 
 \subsection{Pandas}
 
-Para o processamento de dados, a biblioteca que decidimos usar foi o \textit{Pandas}. Esta escolha foi motivada pelo facto de ser muito utilizada em projetos de engenharia de dados, e por ser escrita em \texit{Python}.
+Para o processamento de dados, a biblioteca que decidimos usar foi o \textit{Pandas}. Esta escolha foi motivada pelo facto de ser muito utilizada em projetos de engenharia de dados, e por ser escrita em \textit{Python}.
 
 O \textit{Pandas} permite ler e transformar ficheiros \gls{xlsx}. A sintaxe e as funcionalidades disponibilizadas para operações como normalização, filtragem, agrupamento e ordenação tornaram esta biblioteca adequada às necessidades do projeto. Uma vantagem adicional é a capacidade de converter os dados para formatos como \gls{json}, o que facilitou a sua integração com o restante da aplicação.
 
@@ -416,7 +414,7 @@ Apesar destas vantagens, o \textit{Pandas} não é a melhor opção se considera
 
 \subsection{Plotly}
 
-Para mostrar os gráficos da aplicação, optámos por utilizar o \textit{Plotly}, que é uma biblioteca  que permite criar visualizações, e que está disponível em várias linguagens como \texit{Python} e \texit{Javascript}. Esta escolha foi motivada pelo facto de o \textit{Plotly} suportar suportar uma \texit{API} declarativa, o que torna mais prática a integração com o \textit{frontend} e \textit{backend}, porque assim a configuração dos gráficos pode ser retornada pelo servidor, permitindo uma configuração mais estável e garantindo que todos os utilizadores vêm o mesmo tipo de gráfico. Internamente, o \textit{Plotly} utiliza uma outra biblioteca, \textit{D3.js}, que é uma biblioteca com capacidade de criar gráficos personalizados.
+Para mostrar os gráficos da aplicação, optámos por utilizar o \textit{Plotly}, que é uma biblioteca  que permite criar visualizações, e que está disponível em várias linguagens como \textit{Python} e \textit{Javascript}. Esta escolha foi motivada pelo facto de o \textit{Plotly} suportar suportar uma \textit{API} declarativa, o que torna mais prática a integração com o \textit{frontend} e \textit{backend}, porque assim a configuração dos gráficos pode ser retornada pelo servidor, permitindo uma configuração mais estável e garantindo que todos os utilizadores vêm o mesmo tipo de gráfico. Internamente, o \textit{Plotly} utiliza uma outra biblioteca, \textit{D3.js}, que é uma biblioteca com capacidade de criar gráficos personalizados.
 
 Além disso, a biblioteca oferece suporte a uma grande variedade de gráficos, desde gráficos de barras até formatos mais especializados como mapas de calor, o que foi importante para explorar os vários tipos de visualização poderíamos usar. Em comparação, bibliotecas como \textit{Chart.js}, embora sejam mais leves, não oferecem a mesma flexibilidade e variedade de visualizações. Por este motivo, \textit{Plotly} era a solução mais adequada para a flexibilidade e diversidade de visualizações que queríamos. O \textit{Plotly} permite criar versões da biblioteca com gráficos específicos, reduzindo bastante o tamanho do ficheiro \textit{Javascript}. Uma lista completa das diferenças pode ser consultada no capítulo \ref{ch:charts}.
 
@@ -454,7 +452,7 @@ O \textit{Docker} foi também utilizado durante o desenvolvimento deste relatór
 Além das tecnologias centrais utilizadas no projeto, foi também fundamental a utilização de um conjunto de ferramentas de suporte que facilitaram o trabalho, a organização e o desenvolvimento do projeto. As principais ferramentas utilizadas foram:
 
 \begin{itemize}
-    \item \textbf{Git \cite{git} e Github \cite{github}}: Para assegurar o controlo de versões, foi utilizado a aplicação \texit{Git}, em conjunto com a plataforma \textit{Github}. Esta combinação permitiu não só manter um histórico das alterações feitas e reverter alterações que podiam ter introduzido defeitos na aplicação
+    \item \textbf{Git \cite{git} e Github \cite{github}}: Para assegurar o controlo de versões, foi utilizado a aplicação \textit{Git}, em conjunto com a plataforma \textit{Github}. Esta combinação permitiu não só manter um histórico das alterações feitas e reverter alterações que podiam ter introduzido defeitos na aplicação
 
     \item \textbf{Notion \cite{notion}}: A rganização do trabalho foi feita na plataforma \textit{Notion}. Esta aplicação é prática de fácil de usar e permitiu-nos para planear as tarefas e acompanhar o progresso das diferentes fases do projeto e também tirar notas durante o desenvolvimento, que foram importantes para o desenvolvimento do relatório.
 

@@ -15,16 +15,16 @@
 \label{ch:implementacaoDoModelo}
 %%________________________________________________________________________
 
-Este capítulo descreve como se passou do modelo conceptual para a implementação da aplicação. O desenvolvimento foi feito de forma iterativa, com testes e validações constantes com base nos objetivos do projeto e nos dados reais. Primeiro foi feita a análise e classificação dos dados, essencial para definir como seriam processados e visualizados. Depois, detalha-se a construção do pipeline de transformação e a lógica de organização e automação dos carregamentos de ficheiros. Por fim, são explicadas as decisões sobre os tipos de gráficos usados e as funcionalidades de interação com os dados, e como foram usadas as tecnologias escolhidas para criar a aplicação
+Este capítulo descreve como se passou do modelo conceptual para a implementação da aplicação. O desenvolvimento foi feito de forma iterativa, com testes e validações com base nos objetivos do projeto e nos dados recebidos. Primeiro foi feita a análise e classificação dos dados, que ajudou a definir como seriam processados e que gráficos íamos usar. Depois, vamos detalhar o desenvolvimento da \textit{pipeline} de transformação e a lógica de organização de ficheiros. Por fim, é explicado como as tecnologias escolhidas foram usadas para criar a aplicação.
 
 \section{Análise e Transformação dos dados}
 
-O processo de análise começou após a reunião inicial com os orientadores do projeto, onde recebemos os ficheiros que iriam ser trabalhados. Tratar estes ficheiros implicou várias fases de análise, onde começamos a pensar em estratégias para conseguir extrair dados e possíveis gráficos, e tornar este processo modular e automatizado.
+O processo de análise começou após a reunião inicial com os orientadores do projeto, onde recebemos os ficheiros que iriam ser trabalhados. Tratar estes ficheiros implicou várias fases de análise, onde começamos a pensar em estratégias para conseguir extrair dados e possíveis gráficos, e tornar este processo modular.
 
 \subsection{Análise inicial dos dados}
 \label{sec:analiseInicial}
 
-Após termos recebido os dados, fizemos uma primeira análise com o objetivo de perceber a informação recebida e os próximos passos a tomar. No total, recebemos 30 ficheiros \gls{xlsx} que foram exportados da plataforma, correspondentes às diferentes secções da plataforma de simulação, com vários indicadores como segmentos de mercado, características de produto, vendas, entre outros. Cada ficheiro pode conter várias folhas de cálculo, que no total são 101 folhas de cálculo, organizadas por marcas, cidades entre outros marcadores.
+Após termos recebido os dados, fizemos uma primeira análise com o objetivo de perceber a informação recebida. No total, recebemos 30 ficheiros \gls{xlsx} que foram exportados da plataforma, correspondentes às diferentes secções da plataforma de simulação. Cada ficheiro pode conter várias folhas de cálculo, e no total contámos 101 folhas de cálculo nos ficheiros que recebemos.
 
 Durante esta análise, percebemos que:
 
@@ -32,7 +32,7 @@ Durante esta análise, percebemos que:
     \item Os nomes dos ficheiros e das folhas variam, mas seguem uma estrutura relativamente consistente;
     \item Alguns ficheiros apresentam estruturas de dados semelhantes, mas com diferenças no nível de detalhe ou na organização das colunas e linhas;
     \item Existiam ficheiros com dados que iriam precisar de mais transformação uma vez que representavam vários tipos de unidades (como por exemplo percentagens, valores monetários, valores relativos, entre outros) na mesma folha de cálculo;
-    \item Dados com muito detalhe, e com várias colunas sem representação (células marcadas com "X", linhas com valores nulos e fundo amarelo).
+    \item Dados com muito detalhe, e com várias colunas sem representação (células marcadas com "X" ou com valores nulos e fundo amarelo).
     \item Nenhuma das folhas de cálculo indica unidades (como por exemplo percentagens, euros, entre outros), o que significa que não é possível assumir a unidade dos valores que estão a ser representados. Os ficheiros exportados são exportados exatamente como estão na plataforma de simulação, que não usa unidades numéricas.
 \end{itemize}
 
@@ -41,15 +41,13 @@ Com base nesta primeira análise, concluímos que seria necessário:
     \item Fazer uma normalização da informação recebida para garantir uma utilização consistente da aplicação;
     \item Separar os vários ficheiros possíveis em grupos, de forma a identificar dados em comum que pudéssemos aplicar \textit{templates} de gráfico;
     \item Guardar os dados extraídos num formato mais prático, e que permita uma filtragem dinâmica da informação carregada (de forma a facilitar a visualização dos dados).
-    \item Em algumas séries de dados, identificamos linhas e colunas que se podiam remover devido a serem redundantes, ou por representarem informação que já é representada na mesma folha (como por exemplo colunas de valores totais, linhas que repetiam as marcas, ou outras discutidas com os orientadores);
+    \item Em algumas séries de dados, identificamos linhas e colunas que se podiam remover devido a serem redundantes (ou por representarem informação que já é representada na mesma folha, como por exemplo colunas de valores totais, linhas que repetiam as marcas, ou outras discutidas com os orientadores);
     \item Relativamente à falta de unidades, para manter a consistência com a plataforma de simulação, optámos por não assumir nenhuma unidade para os valores que estão a ser representados, uma vez que não é possível inferir a unidade dos valores a partir dos dados recebidos, a plataforma de simulação não usa unidades numéricas, e para não induzir os alunos em erro com a interpretação dos dados.
 \end{itemize}
 
-Esta primeira análise ajudou-nos a perceber como estruturar o modo como iríamos tratar os diferentes ficheiros que os utilizadores podem carregar, ou seja, deu-nos uma base para sistematizar a transformação da informação de forma consistente. Com isso em mente, optámos por agrupar os dados em várias categorias, tendo por base a natureza e a estrutura de cada folha de cálculo.
+Esta primeira análise ajudou-nos a perceber como estruturar o modo como iríamos tratar os diferentes ficheiros que os utilizadores podem carregar, ou seja, deu-nos uma base para sistematizar a transformação da informação de forma consistente. Com isso em mente, optámos por agrupar os dados em várias categorias, tendo por base a estrutura de cada folha de cálculo.
 
 \subsection{Classificação dos dados}
-
-A cada categoria acima mencionada, associámos um tipo de gráfico específico, criando assim um conjunto de \textit{templates} que nos permite criar visualizações de forma programática.
 
 Os grupos definidos foram os seguintes: \textbf{simples}, \textbf{duplo}, \textbf{balanços}, \textbf{setores} e \textbf{análise específica}. Vamos então descrever o significado de cada grupo e identificar o que é comum entre os gráficos pertencentes a cada um deles.
 
@@ -87,9 +85,12 @@ Em termos de representações utilizadas, a distribuição é a seguinte:
  \caption{Classificação dos ficheiros - contagem final de representações utilizadas}
  \end{figure}
 
+
+A cada grupo acima mencionado, associámos um gráfico específico, criando assim um conjunto de \textit{templates} que nos permite criar visualizações de forma programática.
+
 \subsection{Transformação dos dados}
 
-Com a classificação de dados feita, foi necessário desenvolver uma \textit{pipeline} de processamento que permitisse normalizar e transformar os dados dos ficheiros para um formato mais adequado para visualização e para guardar na base de dados. Este processo foi desenvolvido com recurso a biblioteca \textit{Pandas}, que oferece métodos para manipulação e transformação de dados. Esta \textit{pipeline} funciona de forma assíncrona, e é chamada pelo \textit{backend} quando um ficheiro é carregado, de forma a não bloquear a interface do utilizador.
+Com a classificação de dados feita, foi necessário desenvolver uma \textit{pipeline} de processamento que permitisse normalizar e transformar os dados dos ficheiros para um formato mais fácil de representar e para guardar na base de dados. Este processo foi desenvolvido com recurso a biblioteca \textit{Pandas}, que oferece métodos para manipulação e transformação de dados. Esta \textit{pipeline} funciona de forma assíncrona, e é chamada pelo \textit{backend} quando um ficheiro é carregado, de forma a não bloquear a interface do utilizador.
 
 A \textit{pipeline} de processamento foi dividida em duas fases, cada uma com um objetivo específico na transformação dos dados.
 
@@ -99,7 +100,7 @@ Nesta fase, os dados são extraídos dos ficheiros carregados e normalizados par
 
 \begin{itemize}
     \item Extração do título do gráfico a partir da primeira linha de cada folha.
-    \item Extração e normalização (remover expressões como ``Q5'' do nome) da secção através do nome da folha de \gls{xlsx}.
+    \item Extração e normalização (remover expressões como ``Q5'' do nome) da secção através do nome da folha de cálculo.
     \item Identificação de cada folha por num nome único (derivado do nome da folha de cálculo), para que possamos identificar os dados de forma única na aplicação (ou seja, um \textit{slug} que mapeia exclusivamente a uma série de dados). Este passo é importante para garantir que cada série de dados é tratada de forma única e consistente, e para conseguirmos manter uma configuração para cada série de dados.
     \item Normalização dos cabeçalhos das colunas (remoção de quebras de linha, espaços extras).
     \item Remoção de colunas baseadas na análise feita na secção \ref{sec:analiseInicial}.
@@ -121,19 +122,22 @@ Após a normalização inicial, os dados passam por transformações específica
     \item Para folhas que continham múltiplos \textit{quarters}, optámos por escolher o \textit{quarter} para o qual a folha foi carregada, sendo que essa configuração pode ser trocada em código.
 \end{itemize}
 
-De forma a tornar modular toda a lógica de normalização de dados, decidimos criar configurações na aplicação que mapeiam ficheiros a gráficos e as suas transformações e outras configurações associadas a colunas que são usadas para representar os dados, sendo que cada série de dados é identificada unicamente pelo seu \textit{slug}. Esta configuração não é guardada na base de dados, e só pode ser editada em código, porque para os dados extraídos serem mostrados, precisam de ser processados de forma especifica de modo a que consigam ser representados, e a sua visualização foi pensada para ser um gráfico especifico, pelo que não era possível suportar várias representações para o mesmo conjunto de dados. Após os dados serem processados, já não é possível alterar a visualização dos dados, porque o processamento adapta a informação que recebe para a visualização pretendida.
-\subsection{Conversão e Armazenamento em Base de Dados}
+De forma a tornar modular toda a lógica de normalização de dados, decidimos criar configurações na aplicação que mapeiam ficheiros a gráficos e as suas transformações e outras configurações associadas a colunas que são usadas para representar os dados, sendo que cada série de dados é identificada unicamente pelo seu \textit{slug}. Esta configuração não é guardada na base de dados, e só pode ser editada em código, porque para os dados extraídos serem mostrados, precisam de ser processados de forma especifica de modo a que consigam ser representados, e a sua visualização foi pensada para ser um gráfico especifico, pelo que não era possível suportar várias representações para o mesmo conjunto de dados. 
+
+Após os dados serem processados, já não é possível alterar a visualização dos dados, porque o processamento adapta a informação que recebe para a visualização pretendida.
+
+\subsection{Conversão e Armazenamento dos dados}
 \label{sec:armazenamentoDados}
 
-Após o processamento dos dados ser feito, os mesmos são guardados como \gls{json} num campo especifico \textit{JSONField} da base de dados que decidimos utilizar, \textit{PostgreSQL}. Estes dados guardados tentam ser os mais próximos ao dados mostrados ao utilizador, mas sem perder informação quando contem várias séries.
+Após o processamento dos dados ser feito, os mesmos são guardados como \gls{json} num campo \textit{JSONField} da base de dados \textit{PostgreSQL}. Estes dados guardados tentam ser os mais próximos ao dados mostrados ao utilizador, mas sem perder informação quando contem várias séries dentro do mesmo conjunto de dados (como por exemplo dados de várias marcas).
 
-Para garantir a consistência dos dados e evitar conflitos de ficheiros com o mesmo nome a serem carregados para o mesmo \textit{quarter}, foi implementado um mecanismo que permite marcar ficheiros como processados / não processados e como correntes / não correntes. Quando um utilizador carrega um ficheiro, este é marcado como processado e como corrente, e os dados são guardados na base de dados. Quando um utilizador carrega um novo ficheiro com o mesmo nome, o novo é marcado como corrente, e o antigo é marcado como não corrente. Em nenhum momento é apagado versões anteriores dos dados nem os ficheiros originais que foram carregados. A aplicação tem depois um mecanismo em que só considera ficheiros marcados como correntes para serem mostrados ao utilizador.
+Para garantir a consistência dos dados e evitar conflitos de ficheiros com o mesmo nome a serem carregados para o mesmo \textit{quarter}, foi implementado um mecanismo que permite marcar ficheiros como processados e não processados e como correntes e não correntes. Quando um utilizador carrega um ficheiro, este é marcado como processado e como corrente, e os dados são guardados na base de dados. Quando um utilizador carrega um novo ficheiro com o mesmo nome, o novo é marcado como corrente, e o antigo é marcado como não corrente. Em nenhum momento são apagados os ficheiros nao correntes que estão guardados em disco. A aplicação tem um mecanismo em que só considera ficheiros marcados como correntes para serem mostrados ao utilizador.
 
-Isto permite recuperar versões anteriores dos dados quando o utilizador apaga um ficheiro ou quando existe algum erro no processamento, uma vez que os dados resultantes só são marcados como correntes quando são extraídos e processados com sucessos.
+Isto permite recuperar versões anteriores dos dados quando o utilizador apaga um ficheiro ou quando existe algum erro no processamento, uma vez que os dados resultantes só são marcados como correntes quando são extraídos e processados com sucessos. Esta funcionalidade não foi uma funcionalidade pensada para ser exposta diretamente ao utilizador, e não faz parte do uso normal, mas surgiu como consequência da arquitetura escolhida (ficheiros correntes e não correntes).
 
-Este mecanismo de processamento permitiu transformar os dados ficheiros \gls{xlsx} em um formato estruturado e normalizado, facilitando a visualização e análise dos dados através da aplicação \textit{web}. A modularidade da \textit{pipeline} também permitiu adicionar passos de normalização conforme necessário, mantendo a consistência dos dados processados.
+Este mecanismo de processamento permitiu transformar os dados extraídos dos ficheiros \gls{xlsx} em um formato estruturado e normalizado, facilitando a visualização e análise dos dados através da aplicação \textit{web}. A modularidade da \textit{pipeline} também permitiu adicionar passos de normalização conforme necessário.
 
-No final, obtemos dados que são práticos de representar, próximos ao formato final que pretendemos mostrar ao utilizador, e que podem ser facilmente utilizados pela aplicação \textit{web} para mostrar os gráficos.
+No final, obtemos dados que são práticos de representar, e que podem ser facilmente utilizados pela aplicação para mostrar os gráficos como é representado na figura \ref{fig:after}.
 
 \begin{figure}[H]
 \centering
@@ -144,15 +148,15 @@ No final, obtemos dados que são práticos de representar, próximos ao formato 
 
 \section{Desenvolvimento da Aplicação \textit{web}}
 
-Esta secção foca-se na estrutura e funcionamento da aplicação \textit{web}, tanto o \textit{backend} em \textit{Django} como a interface construída com \gls{html}, \textit{WebComponents} e \textit{Flowbite}.
+Esta secção foca-se na estrutura e funcionamento da aplicação \textit{web}, e como foi desenvolvemos as funcionalidades da aplicação.
 
 \subsection{Arquitetura do Servidor}
 
-A aplicação \textit{web} foi desenvolvida utilizando a \textit{framework} \textit{Django} como já descrito na secção \ref{sec:fundamentos}. A arquitetura foi desenhada para garantir o isolamento dos dados por utilizador e uma gestão dos ficheiros e dados processados.
+A aplicação \textit{web} foi desenvolvida utilizando a \textit{framework} \textit{Django} como já descrito na secção \ref{sec:fundamentos}. A arquitetura foi pensada para garantir o isolamento dos dados por utilizador e uma gestão dos ficheiros e dados processados.
 
 \subsubsection{Modelos de Dados}
 
-A aplicação utiliza três modelos principais para gerir os dados, cada um com um papel específico na gestão e organização da informação. Estes modelos são a base da aplicação, sendo que suportam todas as funcionalidades da interface gráfica. Como o \textit{Django} utiliza o \gls{orm} para gerir as relações entre os modelos, cada classe representa também um modelo na base de dados, que é apresentado na figura \ref{fig:er-diagram}. A classe \textit{User} é uma classe que já vem incluída com o \textit{Django}, e é utilizada para gerir os utilizadores e sessões da aplicação.
+A aplicação utiliza três modelos, cada um com um papel específico na gestão e organização da informação. Estes modelos são a base da aplicação, sendo que suportam todas as funcionalidades da interface gráfica. Como o \textit{Django} utiliza um \gls{orm}, cada classe definida nos modelos representa também uma tabela na base de dados, como ilustrado na Figura~\ref{fig:er-diagram}. A classe \textit{User} é uma classe que já vem incluída com o \textit{Django}, e é utilizada para gerir os utilizadores e sessões da aplicação.
 
 \begin{figure}[H]
     \centering
@@ -175,10 +179,10 @@ O nosso modelo de dados é composto por três modelos principais: \textit{Quarte
 \textbf{ExcelFile:} Representa um ficheiro \textit{Excel} carregado para um \textit{quarter} específico:
 \begin{itemize}
     \item Armazena o ficheiro físico em pastas organizadas por \gls{uuid}.
-    \item Mantém o estado de processamento (processado/não processado).
+    \item Mantém o estado de processamento (processado ou não processado).
     \item Guarda metadados como a secção do ficheiro.
     \item Relaciona-se com o \textit{quarter} e o utilizador.
-    \item Controla qual versão dos dados está ativa (corrente ou não).
+    \item Controla qual versão dos dados está ativa (corrente ou não corrente).
 \end{itemize}
 
 \textbf{ChartData:} Armazena os dados processados de cada folha do \textit{Excel}:
@@ -189,13 +193,13 @@ O nosso modelo de dados é composto por três modelos principais: \textit{Quarte
     \item Relaciona-se com o ficheiro \textit{Excel} de origem e o utilizador.
 \end{itemize}
 
-A utilização de identificadores \gls{uuid} foi importante uma vez que, para além de identificar unicamente cada instancia da entidade, faz com que não seja possível aceder aos dados só a aumentar o identificador, como se fosse o caso se o identificador fosse um número inteiro sequencial. O \textit{Django} já disponibiliza uma chave primária em cada modelo por omissão, que é um número sequencial inteiro.
+A utilização de identificadores \gls{uuid} foi importante uma vez que, para além de identificar unicamente cada instância da entidade, faz com que não seja possível aceder aos dados só a aumentar o identificador, como se fosse o caso se o identificador fosse um número inteiro sequencial. O \textit{Django} já disponibiliza uma chave primária em cada modelo por omissão, que é um número sequencial inteiro.
 
 \subsubsection{Gestão de Utilizadores}
 
-A aplicação utiliza o mecanismo de utilizadores que já vem incluído com o \textit{Django}. Este mecanismo oferece uma camada de segurança, garantindo que apenas utilizadores autenticados possam aceder aos dados. A autenticação na aplicação é feita através de nome de utilizador e palavra-passe e as sessões são geridas pelo \textit{Django}.
+A aplicação utiliza o mecanismo de utilizadores que já vem incluído com o \textit{Django}. Este mecanismo garante que apenas utilizadores autenticados possam aceder aos seus dados. A autenticação na aplicação é feita através de nome de utilizador e palavra-passe e as sessões são geridas pelo \textit{Django}.
 
-Para garantir a segurança dos dados, todas as rotas que requerem autenticação estão marcadas com o decorador \texttt{@login\_required}. Além disso, a aplicação isola dados dados por utilizador, garantindo que cada utilizador só possa ver os dados que carregou. Este isolamento é implementado nos modelos e pesquisas, que associa ou aplica um filtro com base no utilizador autenticado nas operações de leitura e escrita.
+Para garantir a segurança dos dados, todas as rotas que requerem autorização estão marcadas com o decorador \texttt{@login\_required}. Além disso, a aplicação isola dados dados por utilizador, garantindo que cada utilizador só possa ver os dados que carregou. Este isolamento é implementado nos modelos e pesquisas, que associa ou aplica um filtro com base no utilizador autenticado nas operações de leitura e escrita.
 
 Os utilizadores podem criar conta na aplicação, sendo que podem criar conta para si ou para um grupo de utilizadores. A aplicação não faz distinção entre uma conta para um utilizador ou para uma conta para múltiplos utilizadores.
 
@@ -203,29 +207,27 @@ Os utilizadores podem criar conta na aplicação, sendo que podem criar conta pa
 
 Para manter ficheiros carregados organizados, desenvolvemos um mecanismo que garante que os dados carregados pelos utilizadores ficam organizados em pastas. Em vez de depender apenas do nome do ficheiro (o que podia facilmente gerar conflitos ou sobreposições de nomes), a aplicação cria uma pasta com \gls{uuid} do \textit{quarter} onde foram carregados, o que garante que cada ficheiro fica junto aos ficheiros do mesmo \textit{quarter}. Para ficheiros com o mesmo nome, o \textit{Django} automaticamente acrescenta letras ao final do ficheiro de forma a garantir que o nome é único dentro de cada pasta.
 
-Assim que um ficheiro é carregado, o processamento é iniciado recorrendo a \textit{signals}, que são eventos que são lançados quando uma instancia do modelo é alterado ou criado.
+Assim que um ficheiro é carregado, o processamento é iniciado recorrendo a \textit{signals}, que são eventos que são lançados quando uma instância do modelo é alterado ou criado.
 
-Para além disso, a aplicação guarda registos de todos os ficheiros carregados. Quando se carrega um novo ficheiro que resulta nos mesmos dados, a aplicação não apaga o anterior, como já foi descrito no capítulo (\cf, capítulo \ref{sec:armazenamentoDados}). Esta versão antiga pode ser usada mais tarde, caso seja necessário recuperar informação, validar alterações, ou aplicar novamente a normalização dos dados. Esta funcionalidade não foi uma funcionalidade pensada para ser exposta diretamente ao utilizador, e não faz parte do uso normal, mas surgiu como consequência da arquitetura escolhida (ficheiros correntes e não correntes).
+Para além disso, a aplicação mantém um registo de todos os ficheiros carregados. Quando se carrega um novo ficheiro que resulta nos mesmos dados, a aplicação não apaga o anterior, como já foi descrito no capítulo~\ref{sec:armazenamentoDados}. 
 
 \subsubsection{\textit{Endpoints} para comunicação com o cliente}
 
-A aplicação expõe um conjunto de \textit{endpoints} \textit{rest} que permitem a interação com o \textit{frontend}. 
-
-Estes \textit{endpoints} são rotas específicas que permitem estender o cliente para executar algumas funcionalidades:
+A aplicação disponibiliza um conjunto de \textit{endpoints} \gls{rest} que viabilizam a interação com a interface gráfica. A comunicação com o \texit{backend} é efetuada através de chamadas assíncronas aos \textit{endpoints}, sendo possível passar parâmetros como o \textit{quarter} selecionado e um filtro escolhido pelo utilizador. Em resposta, o \texit{backend} devolve a estrutura de dados necessária para a renderização, assegurando que cada gráfico é gerado com os dados e configurações apropriados. Estes \textit{endpoints} são rotas específicas que a interface gráfica utiliza para algumas funcionalidades:
 
 \begin{itemize}
-    \item \texttt{quarters/new/}: \texit{Endpoint} para criação de um novo \textit{quarter}.
+    \item \texttt{quarters/new/}: Permite a criação de um novo \textit{quarter}.
     \item \texttt{quarters/edit/<uuid:uuid>/}: Permite editar os detalhes de um \textit{quarter} já existente, identificado pelo seu \gls{uuid}.
-    \item \texttt{quarters/delete/<uuid:uuid>/}: \textit{Endpoint} para apagar um \textit{quarter} específico.
-    \item \texttt{quarters/}: Endpoint para listar todos os \textit{quarters} do utilizador.
-    \item \texttt{quarters/files/delete/<uuid:uuid>/}: \textit{Endpoint} para remover um ficheiro associado a um \textit{quarter}, usando o \gls{uuid} do ficheiro.
-    \item \texttt{api/chart/}: \textit{Endpoint} que retorna os dados para os gráficos
+    \item \texttt{quarters/delete/<uuid:uuid>/}: Permite apagar um \textit{quarter} específico.
+    \item \texttt{quarters/}: Permite listar todos os \textit{quarters} do utilizador.
+    \item \texttt{quarters/files/delete/<uuid:uuid>/}: Permite remover um ficheiro associado a um \textit{quarter}, usando o \gls{uuid} do ficheiro.
+    \item \texttt{api/chart/}: Retorna os dados para os gráficos
   \end{itemize}
   
-  O \textit{endpoint} para visualização de gráficos é o mais importante, e é o que é utilizado para mostrar os gráficos na aplicação \textit{web}, e permite uma série de parâmetros para filtrar os dados e mostrar gráficos de diferentes tipos. Estes \textit{endpoints} são usados com recurso a pedidos HTTP (utilizando \texttt{fetch}) e também como páginas que aceitam parâmetros por \gls{url} (como por exemplo em formulários através do atributo \texttt{action}).
+O \textit{endpoint} para visualização de gráficos é o mais importante, uma vez que é utilizado para mostrar os gráficos na aplicação \textit{web}, e aceita parâmetros para filtrar e mostrar gráficos de diferentes tipos. Estes \textit{endpoints} são usados com recurso a pedidos \gls{http} (utilizando \texttt{fetch}) e também como páginas que aceitam parâmetros por \gls{url} (como por exemplo em formulários através do atributo \texttt{action}).
 
 
-\begin{lstlisting}[language=\gls{html}, caption={Excerto do código \gls{html} do formulário de edição de \textit{quarter}}]
+\begin{lstlisting}[language=HTML, caption={Excerto do código \gls{html} do formulário de edição de \textit{quarter} }]
     <form method="post" action="/quarters/edit/b12fdf1f-8ce3-4050-a28f-07e444e15042/" id="edit-quarter-form" class="upload-form-wrapper" enctype="multipart/form-data">
       {% csrf_token %}
       <div class="flex justify-end">
@@ -234,25 +236,23 @@ Estes \textit{endpoints} são rotas específicas que permitem estender o cliente
     </form>
     \end{lstlisting}
 
-Quando a aplicação carrega, não mostra logo todos os gráficos, mas sim um \textit{skeleton} que depois é substituído pelo gráfico, permitindo uma melhor experiência do utilizador. Esse carregamento é feito de forma assíncrona, por \textit{Javascript}, e utiliza o \textit{endpoint} para visualização de gráficos para obter a configuração final de um gráfico especifico a ser mostrado. A configuração retornada é especifica para a biblioteca \textit{Plotly}, que depois, juntamente com o restante código \textit{Javascript}, consegue mostrar o gráfico e aplicar filtros com base nos parâmetros passados.
-
-A comunicação com o \textit{backend} é feita através de chamadas assíncronas aos \textit{endpoints} desenvolvidos, passando parâmetros como o \textit{quarter} selecionado e os filtros ativos. O \textit{backend} devolve a estrutura necessária para renderização com \textit{Plotly}, assegurando que cada gráfico é gerado com os dados e configurações corretas.
+Quando a aplicação carrega, não mostra logo todos os gráficos, mas sim um \textit{skeleton} que depois é substituído pelo gráfico, melhorando a experiência do utilizador. Esse carregamento utiliza o \textit{endpoint} para visualização de gráficos para obter a configuração final de um gráfico especifico a ser mostrado. A configuração retornada é especifica para a biblioteca \textit{Plotly}, que depois, juntamente com o restante código \textit{Javascript}, consegue mostrar o gráfico e aplicar filtros com base nos parâmetros passados.
 
 \subsection{Interface Gráfica}
 
-A interface da aplicação foi desenhada com foco na usabilidade e consistência visual, através da utilização de tecnologias modernas como \textit{WebComponents} e através de um \textit{design system}, \textit{Flowbite}. O objetivo era garantir uma experiência responsiva, adequada para todos os ecrãs de computador e monitores e que suportasse minimamente dispositivos móveis, sem comprometer a performance nem a clareza na apresentação dos dados.
+A interface da aplicação foi desenhada com foco na consistência visual e na usabilidade, utilizando um \textit{design system}, \textit{Flowbite}. O objetivo é garantir uma aplicação responsiva, adequada para todos os ecrãs de computador e monitores e que suportasse minimamente dispositivos móveis, sem comprometer a performance nem a clareza na apresentação dos dados.
 
-\subsubsection{Layout e Linguagem visual}
+\subsubsection{\textit{Layout} e Linguagem visual}
 
-Um design system é uma biblioteca que oferece um conjunto de componentes reutilizáveis que podem ser usados em interfaces visuais. A escolha do \textit{Flowbite} acelerou o desenvolvimento e simplificou a criação da interface visual, e de elementos como modais, formulários e botões. A coerência visual é reforçada por tipografia, cores e espaçamentos que já vem definidos por omissão na biblioteca.
+Um \textit{design system} é uma biblioteca que oferece um conjunto de componentes reutilizáveis que podem ser usados em interfaces visuais. A escolha do \textit{Flowbite} acelerou o desenvolvimento e simplificou a criação da interface visual, e de elementos como modais, formulários e botões. 
 
-A navegação é feita através de uma barra lateral, que mostra os gráficos disponíveis, enquanto modais são usados para operações críticas como confirmações e carregamento de ficheiros. Outras páginas são disponibilizadas numa barra de navegação no topo da página, que permite os utilizadores aceder à pagina de carregamento de ficheiros. Para o desenvolvimento do \gls{css} foi utilizada a linguagem SCSS, que permite desenvolver estilos de forma mais rápida e mais organizada, que depois é transpilada (através de um \textit{build system} como o ESBuild\cite{esbuild}) para \gls{css} normal.
+A navegação principal é feita através de uma barra horizontal no topo da interface, que lista todas as páginas que se podem consultar e que permite os utilizadores aceder à pagina de carregamento de ficheiros. As modais são usados para operações carregamento de ficheiros. Para o desenvolvimento do \gls{css} foi utilizada a linguagem \gls{scss}, que permite desenvolver estilos de forma mais rápida e mais organizada, que depois é transpilada (através de um \textit{build system} como o \textit{ESBuild}\cite{esbuild}) para \gls{css} normal.
 
-Quando não existe gráficos a mostrar, é mostrada ao utilizador uma mensagem que indica que não existe ficheiros carregados, com uma hiperligação a redirecionar para a página de carregamento de ficheiros.
+Quando não existe gráficos a mostrar, é mostrada ao utilizador uma mensagem que indica que não existe ficheiros carregados, com uma hiperligação a redirecionar para a página de carregamento de ficheiros. Quando já existe gráficos a mostrar, é mostrada uma barra lateral com as secções e gráficos disponiveis, onde também é possível fazer uma pesquisa por texto de forma a encontrar uma secção ou gráfico específico.
 
 \subsubsection{WebComponents}
 
-A camada de visualização de dados é composta por componentes \textit{web}, cada um encapsulando toda a sua a lógica, incluindo integrações com as bibliotecas \textit{Plotly} e \textit{Datatables} . Esta abordagem garante isolamento entre componentes, facilita a reutilização e simplifica a manutenção do código \textit{Javascript}. 
+A camada de visualização de dados é composta por componentes \textit{web}, cada um encapsulando toda a sua a lógica, incluindo integrações com as bibliotecas \textit{Plotly} e \textit{Datatables} . Esta abordagem garante isolamento entre componentes e torna possível reutilizar o código \textit{Javascript} com diferentes tipos de gráficos. 
 
 A especificação \textit{WebComponents}\cite{webcomponents} permite criar os nossos nós \gls{dom}, e estende as interfaces \gls{dom} já existentes. Esta funcionalidade permite criar componentes que se comportam como elementos \gls{html}, e que podem ser utilizados como tal, e que também podem receber estilos e outras propriedades e atributos e é suportada já pelos os \textit{browsers} mais usados (como pode ser consultado no site \textit{Can I Use}\cite{caniuse} que é um site que indica o suporte de uma funcionalidade em diferentes \textit{browsers}).
 
@@ -294,11 +294,11 @@ A biblioteca \textit{Plotly} suporta uma configuração declarativa, ou seja, ap
   Plotly.newPlot('myDiv', data, layout);
 \end{lstlisting}
 
-Os gráficos são carregados de forma progressiva (\textit{lazy load}). Apenas são mostrados quando o nó entra dentro do \textit{viewport} do utilizador. O \textit{lazy load} permite que os servidor não fique sobre-carregado com pedidos, e que no lado do cliente, a memória utilizada seja minimizada visto que não são carregados todos os gráficos de uma vez.	
+Os gráficos são carregados de forma progressiva (\textit{lazy load}). Apenas são mostrados quando entra dentro do \textit{viewport} do \textit{browser} do utilizador. O \textit{lazy load} permite que os servidor não fique sobre-carregado com pedidos, e que no lado do cliente, a memória utilizada seja minimizada visto que não são carregados todos os gráficos de uma vez.	
 
-As bibliotecas \textit{Plotly} e \textit{Datatables} foram integradas com os \textit{WebComponents}\cite{webcomponents}, fazendo com que o \textit{WebComponent} consiga mostrar gráficos e tabelas de forma encapsulada. Esta integração permite que, quando o carregamento de um gráfico é iniciado, que seja apresentado  um \textit{skeleton} (uma representação visual com um \textit{spinner} e com a largura e altura aproximada de um gráfico) que é trocada pelo o gráfico em si quando os dados ficam disponíveis. A ideia deste \textit{skeleton} é que o utilizador veja que o gráfico está a ser carregado, e que não cause um grande deslocamento do gráfico na interface (\textit{layout shifting}) quando os dados estão prontos. 
+As bibliotecas \textit{Plotly} e \textit{Datatables} foram integradas com os \textit{WebComponents}\cite{webcomponents}, fazendo com que o \textit{WebComponent} consiga mostrar gráficos e tabelas de forma isolada. Esta integração permite que, quando o carregamento de um gráfico é iniciado, que seja apresentado  um \textit{skeleton} (uma representação visual com um \textit{spinner} e com a largura e altura aproximada de um gráfico) que é trocada pelo o gráfico em si quando os dados ficam disponíveis. A ideia deste \textit{skeleton} é que o utilizador veja que o gráfico está a ser carregado, e que não cause um grande deslocamento do gráfico na interface (\textit{layout shifting}) quando os dados estão prontos. 
 
-A navegação entre \textit{quarters} é facilitada por setas em cada gráfico apresentado. A criação e remoção de \textit{quarters}, bem como o carregamento de ficheiros, é acompanhada por feedback visual no momento da ação.
+A navegação entre \textit{quarters} é facilitada por setas em cada gráfico apresentado. A criação e remoção de \textit{quarters}, bem como o carregamento de ficheiros, é acompanhada por \textit{feedback} visual no momento da ação.
 
 \subsubsection{Responsividade em dispositivos móveis}
 
@@ -324,11 +324,10 @@ Estes \textit{media queries} são as mais comuns, garantindo uma boa experiênci
 
 A organização dos dados foi pensada para refletir a lógica do projeto Marketplace Simulations. Cada utilizador pode criar múltiplos \textit{quarters} no momento em que carrega um ficheiro.
 
-Para verificar se os ficheiros são do tipo correto, decidimos validar através do \textit{MIME type}, que é um identificador  utilizado para descrever o tipo de conteúdo de um ficheiro. Os \textit{MIME types} seguem o formato \texttt{tipo/subtipo}, como por exemplo \texttt{text/csv} para ficheiros CSV ou \texttt{application/\allowbreak vnd\allowbreak.open\allowbreak xmlV formats-\allowbreak officedocument.\allowbreak spreadsheetml.\allowbreak sheet} para ficheiros \textit{Excel} no formato \texttt{.xlsx}. Esta abordagem permite garantir que os ficheiros carregados correspondem realmente ao formato esperado, independentemente da extensão do nome do ficheiro que pode ser facilmente manipulada. 
+Para verificar se os ficheiros são do tipo correto, decidimos validar através do \textit{MIME type}, que é um identificador  utilizado para descrever o tipo de conteúdo de um ficheiro. Os \textit{MIME types} seguem o formato \texttt{tipo/subtipo}, como por exemplo \texttt{application/\allowbreak vnd\allowbreak.open\allowbreak xmlV formats-\allowbreak officedocument.\allowbreak spreadsheetml.\allowbreak sheet} para ficheiros \textit{Excel}. Esta abordagem permite garantir que os ficheiros carregados correspondem realmente ao formato esperado, independentemente da extensão do nome do ficheiro que pode ser facilmente manipulada. 
 
-Ao validar o \textit{MIME type} do ficheiro, conseguimos rejeitar ficheiros com o tipo errado. No contexto deste projeto, esta verificação era essencial, uma vez que apenas ficheiros \texttt{.xlsx} válidos devem ser processados. Assim, a validação por \textit{MIME type} contribui tanto para a segurança como para a integridade da aplicação.
+Ao validar o \textit{MIME type} do ficheiro, conseguimos rejeitar ficheiros com o tipo errado. No contexto deste projeto, esta verificação é importante, uma vez que apenas ficheiros \gls{xlsx} válidos devem ser processados. Durante o carregamento, a interface valida se os ficheiros são do tipo correto. Apenas ficheiros dos \textit{MIME type}  \texttt{application/vnd\allowbreak.openxmlformats\allowbreak officedocument\allowbreak.spreadsheetml\allowbreak.sheet} e \texttt{application/vnd.ms\allowbreak \textit{Excel}} são permitidos.  Assim, a validação por \textit{MIME type} contribui para a segurança e integridade da aplicação.
 
-Durante o carregamento, a interface valida se os ficheiros são do tipo correto. Apenas ficheiros dos \textit{MIME type}  \texttt{application/vnd\allowbreak.openxmlformats\allowbreak officedocument\allowbreak.spreadsheetml\allowbreak.sheet} e \texttt{application/vnd.ms\allowbreak \textit{Excel}} são permitidos.
 
 %%________________________________________________________________________
 \chapter{Validação e Testes}
@@ -378,22 +377,13 @@ Após resolver os problemas indicados pela ferramenta \textit{Axe}, conseguimos 
 \caption{Testes de acessibilidade com a ferramenta \textit{Axe} após as correções}
 \end{figure}
 
-No nosso caso, ambas as ferramentas foram utilizadas para identificar problemas diferentes, o \textit{Lighthouse} ajudou-nos a identificar problemas mais relativos a velocidade e performance e dar uma visão rápida do estado da acessibilidade da aplicação, enquanto o \textit{Axe} validou critérios mais técnicos e detetou problemas complexos de acessibilidade. Os testes foram feitos tanto em páginas com dados carregados como em estados vazios, e procurámos garantir que todas as interações essenciais da plataforma,  como o Carregamento de ficheiros, usabilidade e navegação entre gráficos fossem utilizáveis por utilizadores com leitores de ecrã e navegação apenas por teclado.
-
-Desta forma, procurámos alinhar a aplicação com boas práticas de desenvolvimento inclusivo, respeitando não só normas técnicas mas também a responsabilidade de criar interfaces acessíveis a todos.
+No nosso caso, ambas as ferramentas foram utilizadas para identificar problemas diferentes, o \textit{Lighthouse} ajudou-nos a identificar problemas mais relativos a velocidade e performance e dar uma visão rápida do estado da acessibilidade da aplicação, enquanto o \textit{Axe} validou critérios mais técnicos e detetou problemas complexos de acessibilidade. Os testes foram feitos tanto em páginas com dados carregados como em estados vazios, e procurámos garantir que todas as interações essenciais da plataforma fossem acessíveis para leitores de ecrã e através de navegação apenas por teclado. Desta forma, procurámos alinhar a aplicação com boas práticas de desenvolvimento inclusivo, respeitando não só normas técnicas mas também a responsabilidade de criar interfaces acessíveis a todos.
 
 \section{Testes Manuais}
 
 Para complementar os testes das ferramentas acima, foi desenvolvido um conjunto de testes manuais utilizando a linguagem \textit{Gherkin} para descrever os cenários de teste. \textit{Gherkin} é uma linguagem estruturada, mas legível por humanos, que permite descrever comportamentos esperados da aplicação em forma de cenários do tipo Dado-Quando-Então. Esta abordagem facilita a comunicação entre equipas de desenvolvimento e de testes, garantindo que todos compreendam os objetivos de cada teste.
 
-Foi pedido a cinco pessoas para executarem estes testes manualmente, com base nos cenários escritos, e no final preencherem um formulário com os resultados de cada execução, incluindo observações e eventuais desvios face ao comportamento esperado. Os cenários de teste foram organizados em duas categorias principais:
-
-\begin{itemize}
-    \item Fluxos de utilizador (criação de conta, login, navegação)
-    \item Operações com dados (carregar e apagar ficheiros, visualização de gráficos)
-\end{itemize}
-
-Cada cenário foi escrito como exemplificado abaixo. Os restantes cenários foram incluídos no apêndice \ref{ch:cenariosGherkin}.
+Foi pedido a cinco pessoas para executarem estes testes manualmente, com base nos cenários escritos, e no final preencherem um formulário com os resultados de cada execução, incluindo observações e eventuais desvios face ao comportamento esperado. Os cenários de teste desenvolvidos com base nos casos de utilização e requisitos da aplicação. Cada cenário foi escrito como exemplificado abaixo. Os restantes cenários foram incluídos no apêndice \ref{ch:cenariosGherkin}.
 
 \begin{lstlisting}[language=Gherkin, caption={Excerto do código \textit{Gherkin} do cenário de teste para a criação de uma conta}]
 Scenario: Creating an account
@@ -410,9 +400,9 @@ Scenario: Creating an account
 	Then I should be redirected to the "Login" page
 \end{lstlisting}
 
-Apesar desta amostra não ser muito representativa, foi possível encontrar bugs na aplicação, como por exemplo, a falta de alguns dados em alguns gráficos, e alguns gráficos não serem coerentes com a informação que estavam a mostrar. Estes bugs foram corrigidos assim que foram reportados pelas pessoas que testaram a aplicação.
+Apesar desta amostra não ser muito representativa, foi possível encontrar \textit{bugs} na aplicação, como por exemplo, a falta de alguns dados em alguns gráficos, e alguns gráficos não serem coerentes com a informação que estavam a mostrar. Estes \textit{bugs} foram corrigidos assim que foram reportados pelas pessoas que testaram a aplicação.
 
-Juntamente com os casos de teste, foi dado um formulário aos utilizadores para que pudessem partilhar comentários e classificar a experiencia de utilização da aplicação. Para cada cenário de teste que foi dado, foi pedido então que os utilizadores que respondessem as seguintes perguntas:
+Juntamente com os casos de teste, foi dado um formulário aos utilizadores para que pudessem partilhar comentários e classificar a experiencia de utilização da aplicação. Para cada cenário de teste que foi dado, foi pedido então que os utilizadores respondessem as seguintes perguntas:
 
 \begin{itemize}
     \item Consegui completar a tarefa (Sim / Não)
@@ -421,16 +411,9 @@ Juntamente com os casos de teste, foi dado um formulário aos utilizadores para 
     \item Comentários
 \end{itemize}
 
-Para todas as tarefas, os utilizadores reportaram que conseguiram completar e que não precisaram de ajuda, o que significa uma taxa de sucesso de 100\%.
 
-\begin{figure}[H]
-\centering
-\includegraphics[max width=\textwidth]{./img/form1}
-\caption{Captura de ecrã do formulário de testes manuais - Tarefa ``Criar conta''}
-\label{fig:form1}
-\end{figure}
 
-No geral, os utilizadores que testaram a aplicação não encontraram problemas significativos, e a aplicação foi considerada fácil de usar e intuitiva. Em todas as secções do formulário, os participantes atribuíram classificações elevadas à facilidade de uso, com uma média superior a 4.5 numa escala de 1 (difícil) a 5 (fácil). Estes resultados sugerem uma curva de aprendizagem baixa e uma interação fluida com a interface.
+No geral, os utilizadores que testaram a aplicação não encontraram problemas significativos, e a aplicação foi considerada fácil de usar e intuitiva. Em todas as secções do formulário, os participantes atribuíram classificações elevadas à facilidade de uso. Estes resultados sugerem uma curva de aprendizagem baixa e uma interação fluida com a interface.
 
 \begin{figure}[H]
 \centering
@@ -439,11 +422,11 @@ No geral, os utilizadores que testaram a aplicação não encontraram problemas 
 \label{fig:form2}
 \end{figure}
 
-Alguns comentários recolhidos destacam aspetos pontuais a melhorar, como a clareza de determinados rótulos e nomenclaturas utilizadas nos casos de testes, mas nenhum dos participantes reportou bloqueios ou frustrações relevantes durante o processo. Estes dados reforçam que a interface cumpre os princípios de usabilidade previstos, sendo funcional, acessível e compreensível por parte dos utilizadores.
+Alguns comentários recolhidos destacam aspetos pontuais a melhorar, como a clareza de alguns dos passos dos testes e nomenclaturas utilizadas nos casos de testes, mas nenhum dos participantes reportou bloqueios ou frustrações relevantes na aplicação. Estes dados reforçam que a interface cumpre os princípios de usabilidade, sendo funcional, acessível e compreensível por parte dos utilizadores.
 
 \section{Compatibilidade com Navegadores}
 
-A compatibilidade com diferentes \textit{browsers} foi testada utilizando a plataforma BrowserStack, que permitiu testar a aplicação em múltiplos ambientes. Os testes foram realizados nas versões mais recentes dos principais \textit{browsers}:
+A compatibilidade com diferentes \textit{browsers} foi testada utilizando a plataforma \textit{BrowserStack}, que é uma ferramenta que permite testar a aplicação em múltiplos ambientes. Os testes foram realizados nas versões mais recentes dos principais \textit{browsers}:
 
 \begin{itemize}
     \item Google Chrome (versões acima da 90)
@@ -452,22 +435,22 @@ A compatibilidade com diferentes \textit{browsers} foi testada utilizando a plat
     \item Safari (versões acima da 18)
 \end{itemize}
 
-A aplicação é compatível com os \textit{browsers} testados, nas versões em que validámos o seu funcionamento.
+A aplicação é compatível com os \textit{browsers} testados nas versões em que validámos o seu funcionamento.
 
 %%_______________________________________________________________________
 \chapter{Conclusões e Trabalho Futuro}
 \label{ch:conclusoesTrabalhoFuturo}
 %%________________________________________________________________________
 
-O desenvolvimento deste projeto culminou numa aplicação \textit{web} funcional que responde de forma direta e eficaz às necessidades dos estudantes do ISCAL no que diz respeito à análise dos dados exportados da plataforma de simulação. Desde o início, o objetivo foi construir uma solução prática, que facilitasse a leitura e exploração da informação, e ao mesmo tempo fosse suficientemente escalável para crescer com os utilizadores e os dados.
+O desenvolvimento deste projeto resultou numa aplicação que responde às necessidades dos estudantes do ISCAL. Desde o início, o objetivo foi construir uma solução prática, que facilitasse a leitura e exploração da informação, e ao mesmo tempo fosse escalável para crescer com os utilizadores e os dados.
 
 \section{Conclusões}
 
-Um dos pontos fortes deste projeto foi a implementação de um mecanismo  para gerir ficheiros e transformar dados em gráficos. Esta funcionalidade, de os utilizadores poderem carregar ficheiros diretamente exportados do simulador e, a partir daí, obterem gráficos, sem qualquer necessidade de formatação manual representa uma melhoria relação ao processo anterior, que era manual, demorado e propenso a erros. 
+Um dos pontos fortes deste projeto foi a implementação de um mecanismo para gerir ficheiros e transformar dados em gráficos. A funcionalidade de os utilizadores poderem carregar ficheiros diretamente exportados do simulador e, a partir daí, obterem gráficos, sem qualquer necessidade de formatação manual representa uma melhoria relação ao processo anterior, que era manual, demorado e propenso a erros. 
 
-A decisão de usar \textit{Django} como base para o \textit{backend} revelou-se acertada. Além de facilitar a autenticação e gestão de utilizadores, a  biblioteca permitiu implementar uma boa arquitetura, com separação entre as camadas \textit{frontend} e \textit{backend}. A autenticação integrada, associada ao isolamento de dados por utilizador, garantiu uma camada extra de segurança sem complicar a lógica da aplicação. Os \textit{endpoints} que foram desenvolvidos permitiram uma comunicação rápida entre as várias partes da aplicação, suportando atualizações dinâmicas dos gráficos sem impacto na performance.
+A decisão de usar \textit{Django} como base para o \textit{backend} revelou-se acertada. Além de facilitar a gestão de utilizadores, a \textit{framework} permitiu implementar arquitetura sólida, com separação entre as camadas \textit{frontend} e \textit{backend}. Os \textit{endpoints} que foram desenvolvidos permitiram uma comunicação rápida entre as várias partes da aplicação, suportando atualizações dinâmicas dos gráficos sem impacto na performance.
 
-No lado do \textit{frontend}, optou-se por uma abordagem prática, usando bibliotecas para garantir a responsabilidade e usabilidade. A biblioteca \textit{Plotly} foi importante para criar gráficos interativos que, além de apelativos, ajudam os estudantes a interpretar os dados.
+No lado do \textit{frontend}, optou-se por uma abordagem prática, usando bibliotecas para garantir a responsabilidade e usabilidade. A biblioteca \textit{Plotly} foi importante para criar gráficos interativos que ajudam os estudantes a interpretar os dados.
 
 Durante o desenvolvimento surgiram alguns desafios técnicos. Um dos principais foi lidar com os dados em cada um dos ficheiros. Alguns traziam folhas com formatação irregular, nomes de colunas inconsistentes ou dados difíceis de perceber. Essas dificuldades levaram-nos a investigar a fundo como alguns dos cálculos eram feitos, e perceber as relações entre as várias colunas, e pensar na melhor maneira de conseguir representar essa informação.
 
@@ -475,32 +458,32 @@ Apesar da solução atual funcionar bem no contexto do projeto, poderá ser nece
 
 Para além do lado técnico, este projeto foi também uma excelente oportunidade de crescimento pessoal. Antes de começar, não tinha experiência prática com \textit{Django} nem com bibliotecas como \textit{Pandas}, e o contacto com estas tecnologias acabou por ser interessante. 
 
-Em síntese, este projeto mostrou como a combinação de ferramentas modernas pode resultar numa solução com impacto na experiência de aprendizagem. A aplicação desenvolvida deixa aberta a porta para futuras melhorias e novos casos de uso. É uma base que pode ser facilmente estendida ou adaptada a outros contextos educacionais onde a análise de dados seja um desafio.
+Em suma, este projeto mostrou como a combinação de ferramentas pode resultar numa solução com impacto na experiência de aprendizagem. A aplicação desenvolvida deixa aberta a porta para melhorias futuras e novos casos de utilização. É uma base que pode ser estendida ou adaptada a outros contextos onde a análise de dados seja um desafio.
 
 \section{Trabalho Futuro}
 
-Apesar de a aplicação atual já cumprir os objetivos definidos inicialmente, foram identificadas diversas oportunidades de evolução e expansão que poderão ser exploradas em futuras iterações do projeto. Estas propostas estão organizadas em diferentes áreas de desenvolvimento.
+Apesar de a aplicação atual já cumprir os objetivos definidos inicialmente, identificamos oportunidades de expansão que poderão ser exploradas em futuras iterações do projeto. 
 
 \textbf{Interface e Experiência do Utilizador}
 
-Uma das direções mais imediatas para evolução está ao nível da interface. Pretende-se alargar a diversidade visualizações disponíveis, incluindo novos tipos de gráficos, como dispersões, histogramas ou até mapas interativos, sendo que é sempre importante ter em mente a experiencia de utilização. Para além disso, seria interessante permitir a criação de gráficos personalizáveis, onde cada utilizador poderia compor visualizações de acordo com os seus objetivos, e até juntar vários tipos de dados na mesma visualização.
+Uma das melhorias mais imediatas que podiam ser feitas é ao nível da interface. Pode-se alargar a diversidade de visualizações disponíveis, incluindo novos tipos de gráficos, sendo que é sempre importante ter em mente a experiencia de utilização. Para além disso, seria interessante permitir a criação de gráficos personalizáveis, onde cada utilizador poderia compor visualizações de acordo com os seus objetivos, e até juntar vários tipos de dados na mesma visualização.
 
-Outro aspeto relevante prende-se com a configuração dinâmica dos gráficos. A ideia é deixar de apresentar visualizações estáticas e passar a oferecer ao utilizador a possibilidade de escolher, em tempo real, os tipos de gráfico, métricas e dimensões que pretende analisar. Esta abordagem aumentaria substancialmente a flexibilidade da ferramenta.
+Outro aspeto relevante prende-se com a configuração dinâmica dos gráficos. A ideia é deixar de apresentar visualizações estáticas e passar a oferecer ao utilizador a possibilidade de escolher, em tempo real, os tipos de gráfico, métricas e dimensões que pretende analisar. Esta abordagem aumentaria a flexibilidade da ferramenta.
 
 \textbf{Análise de Dados e Otimização de Performance}
 
-Do ponto de vista analítico, uma evolução da aplicação passa pela incorporação de técnicas de análise preditiva. A utilização de modelos de regressão ou algoritmos de aprendizagem automática poderá ajudar os estudantes a identificar padrões e antecipar tendências de mercado com base nos dados da simulação.
+Uma outra abordagem que pode ser interessante passa pela incorporação de técnicas de análise preditiva. A utilização de modelos de regressão ou algoritmos de aprendizagem automática poderá ajudar os estudantes a identificar padrões e antecipar tendências de mercado com base nos dados da simulação.
 
-Em paralelo, importa melhorar a eficiência da aplicação no processamento de dados de maior volume. Será relevante avaliar o uso de bibliotecas com capacidade de tratar grandes quantidades de dado,  mantendo tempos de resposta aceitáveis e garantindo uma boa experiência de utilização.
+Em paralelo, podia-se melhorar a eficiência da aplicação no processamento de dados de maior volume. Seria relevante avaliar o uso de bibliotecas com capacidade de tratar grandes quantidades de dado,  mantendo tempos de resposta aceitáveis e garantindo uma boa experiência de utilização.
 
 \textbf{Gestão de Utilizadores e Colaboração}
 
-Ao nível da gestão da plataforma, pode-se reforçar as funcionalidades de administração de utilizadores. Isto poderá incluir a criação de perfis diferenciados (por exemplo, docente, grupo, estudante) e mecanismos de controlo de permissões.
+Ao nível da gestão da plataforma, podia-se reforçar as funcionalidades de administração de utilizadores. Isto poderia incluir a criação de perfis diferenciados (por exemplo, docente, grupo, estudante) e mecanismos de controlo de permissões.
 
 Adicionalmente, seria interessante introduzir funcionalidades de colaboração entre utilizadores, nomeadamente a partilha de visualizações e filtros de dados. Este tipo de funcionalidade é particularmente útil em contextos académicos, onde os trabalhos são frequentemente realizados em grupo ao longo do semestre.
 
 \textbf{Integração com \textit{Marketplace Simulations}}
 
-Por fim, um caminho a explorar passa pela integração direta com a plataforma \textit{Marketplace Simulations}, de onde os dados são originalmente extraídos. Uma abordagem possível seria o desenvolvimento de extensões de \textit{browser} (para \textit{Chrome}, \textit{Firefox} ou \textit{Edge}) que permitam importar automaticamente os dados para a aplicação, eliminando etapas manuais do processo de upload.
+Por fim, um caminho a explorar passa pela integração direta com a plataforma \textit{Marketplace Simulations}, de onde os dados são originalmente extraídos. Uma abordagem possível seria o desenvolvimento de extensões de \textit{browser} (para \textit{Chrome}, \textit{Firefox} ou \textit{Edge}) que permitam importar automaticamente os dados para a aplicação.
 
-De forma geral, estas propostas de melhoria mostram que o projeto pode continuar a evoluir significativamente, servindo como base para novas investigações ou aplicações.
+De forma geral, estas propostas de melhoria mostram que o projeto pode continuar a evoluir significativamente, servindo como base para iterações futuras.
