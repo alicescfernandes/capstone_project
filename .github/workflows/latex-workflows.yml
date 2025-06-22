@@ -5,7 +5,8 @@ on:
     branches:
       - "*"
     paths:
-      - '**.tex'
+      - 'docs/final_report/**'
+      - '.github/workflows/latex-workflows.yml'
 
 jobs:
   build-report:
