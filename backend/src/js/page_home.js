@@ -1,6 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-    console.log("hello")
     // Scroll to top functionality
     const scrollBtn = document.getElementById('scrollToTopBtn');
 
@@ -21,15 +20,13 @@ document.addEventListener("DOMContentLoaded", () => {
         const target = document.querySelector(`[data-section-id="${targetId}"]`);
 
         button.addEventListener('click', () => {
-            const isHidden = target.classList.toggle('hidden');
-            button.textContent = isHidden ? '+' : '-';
+            target.closest('.section-container').classList.toggle('expanded');
         });
     });
 
 
     const searchInput = document.getElementById('sectionSearch');
     const sectionContainers = document.querySelectorAll('.section-container');
-    let previousSearchStates = null;
 
     function highlightText(text, searchTerm) {
         if (!searchTerm) return text;
@@ -45,17 +42,6 @@ document.addEventListener("DOMContentLoaded", () => {
     //
     searchInput.addEventListener('input', function(e) {
         const searchTerm = e.target.value.toLowerCase();
-
-        // Store current states before applying search if this is a new search
-        if (searchTerm && !previousSearchStates) {
-            previousSearchStates = new Map();
-            sectionContainers.forEach(container => {
-                const subSections = container.querySelector('.sub-sections');
-                if (subSections) {
-                    previousSearchStates.set(container, subSections.classList.contains('hidden'));
-                }
-            });
-        }
 
         sectionContainers.forEach(container => {
             const sectionLink = container.querySelector('.section-item a');
@@ -98,25 +84,15 @@ document.addEventListener("DOMContentLoaded", () => {
                 container.style.display = '';
                 // If there's a search term, expand sections with matches
                 if (searchTerm && subSections) {
-                    subSections.classList.remove('hidden');
-                } else if (!searchTerm && subSections && previousSearchStates) {
-                    // Restore to state before search
-                    const wasHidden = previousSearchStates.get(container);
-                    if (wasHidden) {
-                        subSections.classList.add('hidden');
-                    } else {
-                        subSections.classList.remove('hidden');
-                    }
+                    subSections.closest('.section-container').classList.add('expanded');
+                } else if (!searchTerm && subSections) {
+                    subSections.closest('.section-container').classList.remove('expanded');
                 }
             } else {
                 container.style.display = 'none';
             }
         });
 
-        // Clear stored states when search is empty
-        if (!searchTerm) {
-            previousSearchStates = null;
-        }
     });
 });
 

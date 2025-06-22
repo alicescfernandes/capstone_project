@@ -45,8 +45,7 @@ export function openEditModal(button) {
         form.action = `/quarters/new/`;
     } else {
         form.action = `/quarters/edit/${uuid}/`;
-        // If editing existing quarter, fetch its current precision
-        fetch(`/api/quarters/${uuid}/`)
+        fetch(`/api/quarters?q=${number}`)
             .then(response => response.json())
             .then(data => {
                 if (data.float_precision) {

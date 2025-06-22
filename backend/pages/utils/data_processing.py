@@ -2,8 +2,8 @@ import pandas as pd
 import os
 import re
 from .chart_classification import COLUMNS_TO_REMOVE, ROWS_TO_REMOVE
-import inflection
 import numpy as np
+from inflection import parameterize, titleize
 
 def convert_df_to_json(df, precision):
     df_clean = df.copy()
@@ -12,11 +12,12 @@ def convert_df_to_json(df, precision):
     # Replace NaN with None (which becomes `null` in JSON)
     df_clean = df_clean.replace({np.nan: None})
 
-    try:
-        for col in df_clean.columns:
-            df_clean[col] = pd.to_numeric(df_clean[col], errors='ignore')
-    except:
-        pass
+    for col in df_clean.columns:
+        try:
+            df_clean[col] = pd.to_numeric(df_clean[col])
+        except Exception:
+            pass
+        
     # Round the floats to specified precision
     numeric_cols = df_clean.select_dtypes(include=['float']).columns
     df_clean[numeric_cols] = df_clean[numeric_cols].round(precision)
@@ -37,7 +38,7 @@ def extract_section_name(file_name):\
     name = re.sub(r'\s+', ' ', name).strip()
 
     # Transformar em sheet_title case
-    name = inflection.titleize(name)
+    name = titleize(name)
 
     return name
 
@@ -227,11 +228,8 @@ def run_pipeline_for_sheet(df_in, sheet_name):
     sheet_title_lowercase = sheet_title.lower()
 
     # changing the sheet name for regional so it doesn't clash with the local
-    if('regional' in sheet_title_lowercase):
-        sheet_slug = inflection.parameterize(sheet_title.lower())
-        
-    if('compensation' in sheet_title_lowercase):
-        sheet_slug = inflection.parameterize(sheet_title.lower())
+    if('regional' in sheet_title_lowercase or 'compensation' in sheet_title_lowercase or 'competitors-prices' in sheet_slug):
+        sheet_slug = parameterize(sheet_title.lower())
 
     return (df_clean,  sheet_slug, sheet_title)
 

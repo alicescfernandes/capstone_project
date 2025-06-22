@@ -76,7 +76,7 @@ class ExcelFile(models.Model):
                     processed_data_frame = df_processing
 
                 columns = processed_data_frame.columns.tolist()
-                data_json = convert_df_to_json(processed_data_frame, precision=self.quarter.float_precision)
+                data_json = convert_df_to_json(processed_data_frame, self.quarter.float_precision)
                 
                 # Check for other Chart Data's and mark them as not active
                 ChartData.objects.filter(

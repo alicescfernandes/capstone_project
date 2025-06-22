@@ -163,7 +163,7 @@ def get_double_chart(df, chart_meta,csv_sheet_name, filter):
         trace = {
             "x": x,
             "y": [row[col] for col in x],
-            "name": row[0],
+            "name":  row.iloc[0],
             "type": "bar"
         }
         traces.append(trace)

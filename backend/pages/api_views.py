@@ -24,7 +24,7 @@ class QuarterListAPIView(APIView):
         query_quarter = request.query_params.get("q", last_quarter.number)
 
         try:
-            quarter = Quarter.objects.get(number=int(query_quarter))
+            quarter = quarters.get(number=int(query_quarter))
         except Quarter.DoesNotExist:
             return Response({"error": "Quarter not found"}, status=404)
 
@@ -34,6 +34,7 @@ class QuarterListAPIView(APIView):
             "uuid": str(quarter.uuid),
             "isFirst": quarter.number == first_quarter.number,
             "isLast": quarter.number == last_quarter.number,
+            "float_precision": quarter.float_precision
         })
 
 # http://localhost:8000/api/chart/?slug=customer-needs-and-wants&q=1

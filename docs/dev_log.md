@@ -19,6 +19,13 @@ _Stuff that is not important and just nice haves_
 
 ## TODO
 
+## 06/22/2025
+- [x] Cleaned up  the code a little bit
+- [x] Changed the search to be mostly CSS based
+- [x] Removed the mongodb dependency
+- [x] Fixed the quarter api float precision bug
+- [x] Fixed some of the warnings that were displayed on the docker app
+
 ## 06/16/2025
 
 - [x] Dynamically load the datatables and plotly script

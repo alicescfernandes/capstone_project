@@ -298,3 +298,30 @@ h2 {
 .scroll-to-top-btn{
     @apply fixed bottom-6 right-6 z-50 bg-blue-600 hover:bg-blue-700 text-white p-3 rounded-full shadow-lg transition-opacity duration-300;
 }
+
+
+.sub-sections{
+    display: none;
+}
+
+.section-item-toggle-expand{
+    display: block;
+}
+
+.section-item-toggle-collapse{
+    display: none;
+}
+
+.expanded{
+    .sub-sections{
+        display: block;
+    }
+
+    .section-item-toggle-expand{
+        display: none;
+    }
+
+    .section-item-toggle-collapse{
+        display: block;
+    }
+}

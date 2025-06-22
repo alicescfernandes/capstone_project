@@ -58,10 +58,10 @@
                 {{ section.title }}
               </a>
 
-              <button title="Expand section to see included charts" type="button" data-toggle="section-{{ section.slug }}">+</button>
+              <button title="Expand section to see included charts" type="button" data-toggle="section-{{ section.slug }}"><span class="section-item-toggle-expand">+</span><span class="section-item-toggle-collapse">-</span></button>
             </div>
 
-            <ul data-section-id="section-{{ section.slug }}" class="sub-sections hidden">
+            <ul data-section-id="section-{{ section.slug }}" class="sub-sections">
               {% for chart in section.charts %}
               <li>
                 <a class="sub-section-item" href="?section={{ section.slug }}#chart_{{ chart.slug }}">{{ chart.title }}</a>
