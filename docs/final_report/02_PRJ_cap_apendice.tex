@@ -160,7 +160,9 @@ Após cada \textit{merge} é corrido um \textit{workflow} que automaticamente at
 \chapter{Cenários \textit{Gherkin}}
 \label{ch:cenariosGherkin}
 
-\begin{verbatim}
+Em seguida, apresentam-se os cenários \textit{Gherkin} que foram utilizados para testar a aplicação.
+
+\begin{lstlisting}[language=Gherkin]
 Scenario: Creating an account
     Given I access the page 
     And I don't have an account or logged in
@@ -173,11 +175,11 @@ Scenario: Creating an account
     When I fill that form
     And I click "Save"
     Then I should be redirected to the "Login" page
-\end{verbatim}
+\end{lstlisting}
 
 
 
-\begin{verbatim}
+\begin{lstlisting}[language=Gherkin]
 Background:
 	Given that I have an account
 
@@ -190,9 +192,9 @@ Scenario: Login on the app
 	When I fill that form with my login details
 	And I click "Save"
 	Then I should be redirected to the "Home" page
-\end{verbatim}
+\end{lstlisting}
     
-\begin{verbatim}
+\begin{lstlisting}[language=Gherkin]
 Background:
 	Given that I have an account
 	And I am logged in on the application
@@ -222,9 +224,9 @@ Scenario: Uploading Q2 files
 	Then I should see charts
 	And on the "Customer  Needs" chart, i should be able to navigate to Q1.
 	And I should be able to zoom on the chart
-\end{verbatim}
+\end{lstlisting}
 
-\begin{verbatim}
+\begin{lstlisting}[language=Gherkin]
     Background:  
 	Given that I have an account
 	And I am logged in on the application
@@ -243,5 +245,5 @@ Scenario: Removing a quarter
 	And I should see a "Delete" button.
 	When I click on the "Delete" button
 	Then I should see all of the files from that section removed 
-\end{verbatim}
+\end{lstlisting}
 

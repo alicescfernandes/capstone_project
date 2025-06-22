@@ -5,7 +5,14 @@ on:
     branches:
       - "*"
     paths:
-      - '**.tex'
+      - 'docs/final_report/**'
+      - '.github/workflows/latex-workflows.yml'
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: 'Branch to build'
+        required: true
+        default: 'main'
 
 jobs:
   build-report:
@@ -15,15 +22,37 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Pull Docker image
-        run: docker pull alicescfernandes/compiler_image:latest
+      - name: Cache Docker image
+        id: cache-docker-image
+        uses: actions/cache@v4
+        with:
+          path: compiler_image.tar
+          key: compiler-image-cache-v1
+
+      - name: Pull and save Docker image if not cached
+        if: steps.cache-docker-image.outputs.cache-hit != 'true'
+        run: |
+          docker pull alicescfernandes/compiler_image:latest
+          docker save alicescfernandes/compiler_image:latest -o compiler_image.tar
+
+      - name: Save Docker image cache
+        if: steps.cache-docker-image.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: compiler_image.tar
+          key: compiler-image-cache-v1
+
+      - name: Load Docker image from cache
+        if: steps.cache-docker-image.outputs.cache-hit == 'true'
+        run: |
+          docker load -i compiler_image.tar
 
       - name: Run LaTeX build script
         run: |
-          docker run --rm -v "${{ github.workspace }}/docs/final_report:/data" alicescfernandes/compiler_image:latest ./docker.sh runonly
+          docker run --rm -v "${{ github.workspace }}/docs/final_report:/data" alicescfernandes/compiler_image:latest
 
       - name: Upload compiled PDF
         uses: actions/upload-artifact@v4
         with:
           name: final-report
-          path: docs/final_report/build/final_report.pdf
+          path: docs/final_report/final_report.pdf
