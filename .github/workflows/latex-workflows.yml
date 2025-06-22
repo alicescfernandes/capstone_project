@@ -20,7 +20,7 @@ jobs:
 
       - name: Run LaTeX build script
         run: |
-          docker run --rm -v "${{ github.workspace }}/docs/final_report:/data" alicescfernandes/compiler_image:latest ls -la runonly
+          docker run --rm -v "${{ github.workspace }}/docs/final_report:/data" alicescfernandes/compiler_image:latest ls -la
 
       - name: Upload compiled PDF
         uses: actions/upload-artifact@v4
