@@ -7,6 +7,12 @@ on:
     paths:
       - 'docs/final_report/**'
       - '.github/workflows/latex-workflows.yml'
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: 'Branch to build'
+        required: true
+        default: 'main'
 
 jobs:
   build-report:
