@@ -47,7 +47,6 @@ jobs:
         run: |
           docker load -i compiler_image.tar
 
-
       - name: Run LaTeX build script
         run: |
           docker run --rm -v "${{ github.workspace }}/docs/final_report:/data" alicescfernandes/compiler_image:latest
