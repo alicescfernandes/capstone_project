@@ -20,6 +20,12 @@ _Stuff that is not important and just nice haves_
 ## TODO
 
 ## 06/22/2025
+
+- [x] Fixed scroll to chart on load
+- [x] Expand sections when deeplinking into a URL with sections
+
+## 06/21/2025 - 06/22/2025
+
 - [x] Cleaned up  the code a little bit
 - [x] Changed the search to be mostly CSS based
 - [x] Removed the mongodb dependency

@@ -47,7 +47,7 @@
         </div>
         </div>
         {% for section in toc_data %}
-          <div class="section-container">
+          <div class="section-container" data-section-id="section-{{ section.slug }}" >
             <div class="section-item">
               <a href="?section={{ section.slug }}"
                 class="hover:underline {% if section.slug == selected_section_slug %}
@@ -61,7 +61,7 @@
               <button title="Expand section to see included charts" type="button" data-toggle="section-{{ section.slug }}"><span class="section-item-toggle-expand">+</span><span class="section-item-toggle-collapse">-</span></button>
             </div>
 
-            <ul data-section-id="section-{{ section.slug }}" class="sub-sections">
+            <ul class="sub-sections">
               {% for chart in section.charts %}
               <li>
                 <a class="sub-section-item" href="?section={{ section.slug }}#chart_{{ chart.slug }}">{{ chart.title }}</a>

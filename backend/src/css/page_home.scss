@@ -68,8 +68,8 @@
 plotly-chart,data-table {
     @apply col-span-8 p-4 bg-white border border-gray-200 rounded-lg shadow-sm;
     min-height: 350px;
-    scroll-margin-top: 80px;
     overflow-x: auto;
+    scroll-margin-top: 80px;
 
     .spinner{
         &-container{

@@ -1,4 +1,22 @@
+window.addEventListener('load', () => {
+    const chartId = window.location.hash.replace('#', '');
+    if (chartId) {
+        const target = document.getElementById(chartId);
+        console.log( chartId, target);
+        target.scrollIntoView({ behavior: 'smooth' });
+    }
+});
+
 document.addEventListener("DOMContentLoaded", () => {
+
+    // Expand the section from the search
+    const searchParams = new URLSearchParams(window.location.search);
+    const sectionId = searchParams.get('section');
+    if (sectionId) {
+        const target = document.querySelector(`[data-section-id="section-${sectionId}"]`);
+        target.classList.add('expanded');
+    }
+
 
     // Scroll to top functionality
     const scrollBtn = document.getElementById('scrollToTopBtn');
@@ -8,7 +26,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     window.addEventListener('scroll', () => {
-        console.log(window.scrollY);
         if (window.scrollY > 500) {
             scrollBtn.classList.remove('hidden');
         } else {
@@ -20,7 +37,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const target = document.querySelector(`[data-section-id="${targetId}"]`);
 
         button.addEventListener('click', () => {
-            target.closest('.section-container').classList.toggle('expanded');
+            target.classList.toggle('expanded');
         });
     });
 

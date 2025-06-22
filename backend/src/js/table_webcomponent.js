@@ -3,7 +3,7 @@ class DataTableComponent extends HTMLElement {
     constructor() {
         super();
         this.initState();
-        this.chart_id = `table_${this.state.chartSlug}`;
+        this.id = `table_${this.state.chartSlug}`;
         this.table = null;
         this.zoomTable = null;
     }
@@ -114,13 +114,13 @@ class DataTableComponent extends HTMLElement {
         }
 
         const newHTML = `
-            <div id="${this.chart_id}">
+            <div class="chart-container">
                 <div class="chart-header">
                     <h3 class="chart-title">${this.state.title} - Q${this.state.quarter.current}</h3>
                     <div class="chart-quarter-navigation">${this.renderQuarterNavigation()}</div>
                 </div>
                 ${this.renderZoomOverlay()}
-                <div class="chart-container" style="width:100%;height:400px;">
+                <div class="table-container" style="width:100%;height:400px;">
                     <table class="display responsive nowrap" style="width:100%"></table>
                 </div>
             </div>`;
@@ -191,7 +191,7 @@ class DataTableComponent extends HTMLElement {
         await this.waitForDataTables();
 
         // Check if the table element exists
-        const tableElement = this.querySelector(`#${this.chart_id} table`);
+        const tableElement = this.querySelector(`table`);
         if (!tableElement) {
             return;
         }
@@ -201,7 +201,7 @@ class DataTableComponent extends HTMLElement {
             return;
         }
 
-        this.table = new DataTable(`#${this.chart_id} table`, {
+        this.table = new DataTable(`table`, {
             data: this.state.data,
             columns: this.state.columns,
             ...this.state.dataTableSettings
@@ -210,14 +210,14 @@ class DataTableComponent extends HTMLElement {
 
     setupEvents() {
         // Quarter navigation events
-        this.querySelector(`#${this.chart_id} .prev-quarter`)?.addEventListener('click', () => this.handleQuarterChange('prev'));
-        this.querySelector(`#${this.chart_id} .next-quarter`)?.addEventListener('click', () => this.handleQuarterChange('next'));
+        this.querySelector(`.prev-quarter`)?.addEventListener('click', () => this.handleQuarterChange('prev'));
+        this.querySelector(`.next-quarter`)?.addEventListener('click', () => this.handleQuarterChange('next'));
 
         // Zoom functionality - Wait for next tick to ensure DOM is updated
-        const zoomBtn = this.querySelector(`#${this.chart_id} .chart-zoom-btn`);
-        const zoomOverlay = this.querySelector(`#${this.chart_id} .chart-zoom-overlay`);
-        const zoomContent = this.querySelector(`#${this.chart_id} .chart-zoom-container`);
-        const closeZoom = this.querySelector(`#${this.chart_id} .chart-zoom-close`);
+        const zoomBtn = this.querySelector(`.chart-zoom-btn`);
+        const zoomOverlay = this.querySelector(`.chart-zoom-overlay`);
+        const zoomContent = this.querySelector(`.chart-zoom-container`);
+        const closeZoom = this.querySelector(`.chart-zoom-close`);
 
         // Datatable uses jQuery so its easier to write logic for datatable with jQuery
         const showAllTextFilter = (node) => {

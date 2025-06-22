@@ -7,7 +7,7 @@ class PlotlyChart extends HTMLElement {
     constructor() {
         super();
         this.initState();
-        this.chart_id = `chart_${this.state.chartSlug}`;
+        this.id = `chart_${this.state.chartSlug}`;
     }
 
     initState() {
@@ -71,14 +71,14 @@ class PlotlyChart extends HTMLElement {
         const hasOptions = Array.isArray(this.state.options) && this.state.options.length > 1;
 
         this.innerHTML = `
-            <div id="${this.chart_id}">
+            <div class="chart-container">
                 <div class="chart-header">
                     <h3 class="chart-title"></h3>
                     <div class="chart-quarter-navigation"></div>
                 </div>
                 ${this.renderZoomOverlay()}
                 ${hasOptions ? `<p>Filter By: <select aria-label="Filter ${this.state.title} Chart" class="chart-filter"></select></p>` : ''}
-                <div class="chart-container" style="width:100%;height:400px;">
+                <div class="plotly-container" style="width:100%;height:400px;">
                 ${this.renderSpinner()}
                 </div>
             </div>`;
@@ -120,7 +120,7 @@ class PlotlyChart extends HTMLElement {
     }
 
     renderQuarterNavigation() {
-        const container = this.querySelector(`#${this.chart_id} .chart-quarter-navigation`);
+        const container = this.querySelector(`.chart-quarter-navigation`);
         const { quarter, title } = this.state;
 
         
@@ -173,7 +173,7 @@ class PlotlyChart extends HTMLElement {
     }
 
     renderOptions() {
-        const select = this.querySelector(`#${this.chart_id} .chart-filter`);
+        const select = this.querySelector(`.chart-filter`);
         if (!select) return;
 
         const { options, selectedOption } = this.state;
@@ -181,13 +181,13 @@ class PlotlyChart extends HTMLElement {
     }
 
     setupEvents() {
-        this.querySelector(`#${this.chart_id} .chart-filter`)?.addEventListener('change', (e) => {
+        this.querySelector(`.chart-filter`)?.addEventListener('change', (e) => {
             this.setState({ selectedOption: e.target.value });
             this.fetchData();
         });
 
-        this.querySelector(`#${this.chart_id} .prev-quarter`)?.addEventListener('click', () => this.handleQuarterChange('prev'));
-        this.querySelector(`#${this.chart_id} .next-quarter`)?.addEventListener('click', () => this.handleQuarterChange('next'));
+        this.querySelector(`.prev-quarter`)?.addEventListener('click', () => this.handleQuarterChange('prev'));
+        this.querySelector(`.next-quarter`)?.addEventListener('click', () => this.handleQuarterChange('next'));
     }
 
     handleQuarterChange(direction) {
@@ -202,9 +202,9 @@ class PlotlyChart extends HTMLElement {
 
         const { title, chart_config, quarter } = this.state;
         const { traces, layout } = chart_config;
-        const container = this.querySelector(`#${this.chart_id} .chart-container`);
+        const container = this.querySelector(`.plotly-container`);
 
-        this.querySelector(`#${this.chart_id} .chart-title`).textContent = `${title} - Q${quarter.current}`;
+        this.querySelector(`.chart-title`).textContent = `${title} - Q${quarter.current}`;
 
         if (!traces.length) {
             container.innerHTML = this.renderEmptyState();
@@ -217,10 +217,10 @@ class PlotlyChart extends HTMLElement {
 
 
         // Zoom logic - needs traces for it to work
-        const zoomBtn = this.querySelector(`#${this.chart_id} .chart-zoom-btn`);
-        const zoomOverlay = this.querySelector(`#${this.chart_id} .chart-zoom-overlay`);
-        const zoomContent = this.querySelector(`#${this.chart_id} .chart-zoom-container`);
-        const closeZoom = this.querySelector(`#${this.chart_id} .chart-zoom-close`);
+        const zoomBtn = this.querySelector(`.chart-zoom-btn`);
+        const zoomOverlay = this.querySelector(`.chart-zoom-overlay`);
+        const zoomContent = this.querySelector(`.chart-zoom-container`);
+        const closeZoom = this.querySelector(`.chart-zoom-close`);
 
         zoomBtn?.addEventListener("click", () => {
             zoomOverlay.style.display = "flex";
