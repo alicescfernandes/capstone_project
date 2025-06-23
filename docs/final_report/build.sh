@@ -1,5 +1,4 @@
 # Save with LF line endings
-rm build -rf
 mkdir -p build
 
 cp XBib.bib build/
@@ -15,3 +14,4 @@ pdflatex --interaction=nonstopmode -output-directory=build 00_PRJ_main.tex
 pdflatex --interaction=nonstopmode -output-directory=build 00_PRJ_main.tex
 
 mv build/00_PRJ_main.pdf final_report.pdf
+rm -rf build
