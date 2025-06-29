@@ -29,19 +29,19 @@ Após termos recebido os dados, fizemos uma primeira análise com o objetivo de 
 Durante esta análise, percebemos que:
 
 \begin{itemize}
-    \item Os nomes dos ficheiros e das folhas variam, mas seguem uma estrutura relativamente consistente;
-    \item Alguns ficheiros apresentam estruturas de dados semelhantes, mas com diferenças no nível de detalhe ou na organização das colunas e linhas;
-    \item Existiam ficheiros com dados que iriam precisar de mais transformação uma vez que representavam vários tipos de unidades (como por exemplo percentagens, valores monetários, valores relativos, entre outros) na mesma folha de cálculo;
-    \item Dados com muito detalhe, e com várias colunas sem representação (células marcadas com "X" ou com valores nulos e fundo amarelo).
-    \item Nenhuma das folhas de cálculo indica unidades (como por exemplo percentagens, euros, entre outros), o que significa que não é possível assumir a unidade dos valores que estão a ser representados. Os ficheiros exportados são exportados exatamente como estão na plataforma de simulação, que não usa unidades numéricas.
+    \item Os nomes dos ficheiros e das folhas variam, mas seguem uma estrutura relativamente consistente.   
+    \item Alguns ficheiros apresentam estruturas de dados semelhantes, mas com diferenças no nível de detalhe ou na organização das colunas e linhas.   
+    \item Existiam ficheiros com dados que iriam precisar de mais transformação uma vez que representavam vários tipos de unidades (como por exemplo percentagens, valores monetários, valores relativos, entre outros) na mesma folha de cálculo.  
+    \item Dados com muito detalhe, e com várias colunas sem representação (células marcadas com "X" ou com valores nulos e fundo amarelo).  
+    \item Nenhuma das folhas de cálculo indica unidades (como por exemplo percentagens, euros, entre outros), o que significa que não é possível assumir a unidade dos valores que estão a ser representados. Os ficheiros exportados são exportados exatamente como estão na plataforma de simulação, que não usa unidades numéricas.  
 \end{itemize}
 
 Com base nesta primeira análise, concluímos que seria necessário:
 \begin{itemize}
-    \item Fazer uma normalização da informação recebida para garantir uma utilização consistente da aplicação;
-    \item Separar os vários ficheiros possíveis em grupos, de forma a identificar dados em comum que pudéssemos aplicar \textit{templates} de gráfico;
+    \item Fazer uma normalização da informação recebida para garantir uma utilização consistente da aplicação.
+    \item Separar os vários ficheiros possíveis em grupos, de forma a identificar dados em comum que pudéssemos aplicar \textit{templates} de gráfico.
     \item Guardar os dados extraídos num formato mais prático, e que permita uma filtragem dinâmica da informação carregada (de forma a facilitar a visualização dos dados).
-    \item Em algumas séries de dados, identificamos linhas e colunas que se podiam remover devido a serem redundantes (ou por representarem informação que já é representada na mesma folha, como por exemplo colunas de valores totais, linhas que repetiam as marcas, ou outras discutidas com os orientadores);
+    \item Em algumas séries de dados, identificamos linhas e colunas que se podiam remover devido a serem redundantes (ou por representarem informação que já é representada na mesma folha, como por exemplo colunas de valores totais, linhas que repetiam as marcas, ou outras discutidas com os orientadores).
     \item Relativamente à falta de unidades, para manter a consistência com a plataforma de simulação, optámos por não assumir nenhuma unidade para os valores que estão a ser representados, uma vez que não é possível inferir a unidade dos valores a partir dos dados recebidos, a plataforma de simulação não usa unidades numéricas, e para não induzir os alunos em erro com a interpretação dos dados.
 \end{itemize}
 
@@ -406,9 +406,9 @@ Apesar desta amostra não ser muito representativa, foi possível encontrar \tex
 Juntamente com os casos de teste, foi dado um formulário aos utilizadores para que pudessem partilhar comentários e classificar a experiencia de utilização da aplicação. Para cada cenário de teste que foi dado, foi pedido então que os utilizadores respondessem as seguintes perguntas:
 
 \begin{itemize}
-    \item Consegui completar a tarefa (Sim / Não)
-    \item Precisei de ajuda a completar a tarefa (Sim / Não)
-    \item Achei a interface intuitiva de utiliza (classificação de 1 a 5)
+    \item Consegui completar a tarefa (Sim / Não).
+    \item Precisei de ajuda a completar a tarefa (Sim / Não).
+    \item Achei a interface intuitiva de utiliza (classificação de 1 a 5).
     \item Comentários
 \end{itemize}
 
@@ -430,10 +430,10 @@ Alguns comentários recolhidos destacam aspetos pontuais a melhorar, como a clar
 A compatibilidade com diferentes \textit{browsers} foi testada utilizando a plataforma \textit{BrowserStack}, que é uma ferramenta que permite testar a aplicação em múltiplos ambientes. Os testes foram realizados nas versões mais recentes dos principais \textit{browsers}:
 
 \begin{itemize}
-    \item Google Chrome (versões acima da 90)
-    \item Mozilla Firefox (versões acima da 88)
-    \item Microsoft Edge (versões acima da 90)
-    \item Safari (versões acima da 18)
+    \item Google Chrome (versões acima da 90).
+    \item Mozilla Firefox (versões acima da 88).
+    \item Microsoft Edge (versões acima da 90).
+    \item Safari (versões acima da 18).
 \end{itemize}
 
 A aplicação é compatível com os \textit{browsers} testados nas versões em que validámos o seu funcionamento.
