@@ -338,11 +338,11 @@ A validação e testes da aplicação foram realizados através de múltiplas ab
 
 \section{Testes de Acessibilidade}
 
-A acessibilidade foi uma preocupação no desenvolvimento da aplicação, e para isso foram seguidas as diretrizes \gls{wcag} 2.1, que definem critérios técnicos para tornar os conteúdos \textit{web} mais acessíveis a todos os utilizadores. Para garantir a conformidade, recorremos a uma abordagem prática combinada de testes automáticos e validação manual. Entre as ferramentas utilizadas destacam-se duas principais: o \textit{Lighthouse} e o \textit{Axe}.
+A acessibilidade foi uma preocupação no desenvolvimento da aplicação, e para isso foram seguidas as diretrizes \gls{wcag} 2.1\cite{wcag21}, que definem critérios técnicos para tornar os conteúdos  \textit{web} mais acessíveis a todos os utilizadores. Para garantir a conformidade, recorremos a uma abordagem combinada de testes automáticos e validação manual. Entre as ferramentas utilizadas destacam-se duas principais: o \textit{Lighthouse} e o \textit{Axe}.
 
-O \textit{Lighthouse}, desenvolvido pela Google, é uma ferramenta \textit{open source} que é lançada a partir das ferramentas de desenvolvimento do Chrome ou como \gls{cli}. Permite avaliar uma página \textit{web} em várias categorias, como por exemplo Performance, Acessibilidade, entre outras. A secção de acessibilidade do \textit{Lighthouse} valida, por exemplo, se os elementos têm contrastes suficientes, se os formulários estão corretamente identificadas com atributos \textit{aria-label}, se os títulos estão estruturados numa hierarquia e se os elementos interativos são acessíveis por teclado. O \textit{Lighthouse} classifica numa pontuação de 0 a 100 e destaca problemas com sugestões de como resolver.
+O \textit{Lighthouse} \cite{lighthouse}, desenvolvido pela Google, é uma ferramenta \textit{open source} que é lançada a partir das ferramentas de desenvolvimento do Chrome ou como \gls{cli}. Permite avaliar uma página \textit{web} em várias categorias, como por exemplo Performance, Acessibilidade, entre outras. A secção de acessibilidade do \textit{Lighthouse} valida, por exemplo, se os elementos têm contrastes suficientes, se os formulários estão corretamente identificadas com atributos \textit{aria-label}, se os títulos estão estruturados numa hierarquia e se os elementos interativos são acessíveis por teclado. O \textit{Lighthouse} classifica numa pontuação de 0 a 100 e destaca problemas com sugestões de como resolver.
 
-Esta ferramenta sinalizou alguns problemas, como a falta de compressão \gls{gzip} e alguns erros de acessibilidade e \gls{seo}. 
+Esta ferramenta sinalizou alguns problemas, como a falta de compressão \gls{gzip} e alguns erros de acessibilidade e \gls{seo}.
 
 \begin{figure}[H]
 \centering
@@ -358,9 +358,10 @@ Estes problemas foram resolvidos (fazendo alterações na configuração do serv
 \caption{Testes de acessibilidade com a ferramenta \textit{Lighthouse} após as correções}
 \end{figure}
 
-Já o \textit{Axe}, da empresa Deque, é uma biblioteca de testes de acessibilidade, muito utilizada em ambientes profissionais. Pode ser usada como extensão de \textit{browser} ou integrada com ferramentas de testes automatizados. O \textit{Axe} avalia especificamente nos critérios definitos pela \gls{wcag} e reporta problemas como a ausência de nomes acessíveis, uso incorreto de \textit{landmarks} \gls{aria}, falhas de foco, ou elementos visuais sem representações textuais.
+Já o \textit{Axe}\cite{axe}, da empresa \textit{Deque}, é uma biblioteca de testes de acessibilidade, muito utilizada em ambientes profissionais. Pode ser usada como extensão de \textit{browser} ou integrada com ferramentas de testes automatizados. O \textit{Axe} avalia especificamente nos critérios definitos pela \gls{wcag} e reporta problemas como a ausência de nomes acessíveis, uso incorreto de \textit{landmarks} \gls{aria}, falhas de foco, ou elementos visuais sem representações textuais.
 
 Nos primeiros testes feitos com a ferramenta \textit{Axe}, as ferramentas sinalizaram alguns problemas relativos a acessibilidade, como a falta de textos alternativos para alguns elementos visuais, e os níveis dos títulos não estavam a ser usados de forma adequada.
+
 
 \begin{figure}[H]
     \centering
@@ -442,7 +443,7 @@ A aplicação é compatível com os \textit{browsers} testados nas versões em q
 \label{ch:conclusoesTrabalhoFuturo}
 %%________________________________________________________________________
 
-O desenvolvimento deste projeto resultou numa aplicação que responde às necessidades dos estudantes do ISCAL. Desde o início, o objetivo foi construir uma solução prática, que facilitasse a leitura e exploração da informação, e ao mesmo tempo fosse escalável para crescer com os utilizadores e os dados.
+O desenvolvimento deste projeto resultou numa aplicação que responde às necessidades dos estudantes do \gls{iscal}. Desde o início, o objetivo foi construir uma solução prática, que facilitasse a leitura e exploração da informação, e ao mesmo tempo fosse escalável para crescer com os utilizadores e os dados.
 
 \section{Conclusões}
 

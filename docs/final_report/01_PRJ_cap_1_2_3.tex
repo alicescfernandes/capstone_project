@@ -15,7 +15,7 @@
 \label{ch:introducao}
 %%________________________________________________________________________
 
-No contexto do ensino superior, tem-se dado cada vez mais importância à integração de ferramentas tecnológicas que tornem o processo de aprendizagem mais prático, como é o caso do simulador utilizado pelos alunos do \gls{iscal}. Esta ferramenta permite que os estudantes apliquem, de forma interativa, os conhecimentos adquiridos ao longo do curso, colocando-os em situações de tomada de decisão semelhantes às que enfrentariam num ambiente real. Deste modo, o simulador não só reforça os conteúdos teóricos, como também reforça o desenvolvimento das competências aprendidas. 
+No contexto do ensino superior, tem-se dado cada vez mais importância à integração de ferramentas tecnológicas que tornem o processo de aprendizagem mais prático, como é o caso do simulador utilizado pelos alunos do \gls{iscal}, \textit{International Corporate Management} \cite{MarketplaceSim_2025} (que iremos referir como plataforma de simulação). Esta ferramenta permite que os estudantes apliquem, de forma interativa, os conhecimentos adquiridos ao longo do curso, colocando-os em situações de tomada de decisão semelhantes às que enfrentariam num ambiente real. Deste modo, o simulador não só reforça os conteúdos teóricos, como também reforça o desenvolvimento das competências aprendidas. 
 
 Neste contexto, a análise eficiente de dados torna-se essencial para a tomada de decisões e tem impacto na avaliação final dos alunos, no entanto, a complexidade e a falta de uma ferramenta visual que ajude a perceber as informações apresentadas pode representar um desafio grande para os estudantes.
 
@@ -48,11 +48,11 @@ Pretende-se também que a aplicação adote uma arquitetura simples de manter e 
 \label{ch:trabalhoRelacionado}
 %%________________________________________________________________________
 
-O projeto que desenvolvemos insere-se num contexto mais geral de ferramentas pedagógicas e de \gls{sad}, ainda que neste caso concreto, em ambientes simulados no ensino superior. No âmbito do \gls{iscal}, a utilização da plataforma \textit{Marketplace Simulations} \cite{MarketplaceSim_2025} permite aos estudantes desenvolver competências práticas em ambientes virtuais de negócios, simulando o funcionamento de mercados reais. A necessidade de suporte à análise e simulação motivou o desenvolvimento de outras ferramentas auxiliares, com destaque para um projeto também realizado em parceria com o \gls{iscal}, focado em simulações de modelos económicos.
+O projeto que desenvolvemos insere-se num contexto mais geral de ferramentas pedagógicas e de \gls{sad}, ainda que neste caso concreto, em ambientes simulados no ensino superior. No âmbito do \gls{iscal}, a utilização da plataforma \textit{International Corporate Management} \cite{MarketplaceSim_2025} permite aos estudantes desenvolver competências práticas em ambientes virtuais de negócios, simulando o funcionamento de mercados reais. A necessidade de suporte à análise e simulação motivou o desenvolvimento de outras ferramentas auxiliares, com destaque para um projeto também realizado em parceria com o \gls{iscal}, focado em simulações de modelos económicos.
 
-Esse projeto, embora partilhe uma motivação semelhante, segue uma abordagem diferente. Em particular, a aplicação referida acima permite simular cenários específicos com base em \textit{inputs} manuais, o que pode ser útil para quando se procura prever resultados com foco muito concreto (por exemplo, simular o impacto de uma única variável nos resultados). A nossa plataforma foca-se numa outra vertente, em que pretende ser uma ferramenta para auxiliar o ensino de forma prática.
+Esse projeto, embora partilhe uma motivação semelhante, segue uma abordagem diferente. Em particular, a aplicação referida acima permite simular cenários específicos com base em \textit{inputs} manuais, o que pode ser útil para quando se procura prever resultados com foco muito concreto (por exemplo, simular o impacto de uma única variável nos resultados). A nossa plataforma foca-se numa outra vertente, pois pretende ser uma ferramenta para auxiliar o ensino de forma prática.
 
-O projeto assume então o uso de dados extraídos diretamente da plataforma de simulação, e a valorização da experiência do utilizador na apresentação de dados. Não será uma plataforma de simulação, mas sim uma ferramenta para auxiliar o ensino de forma prática.
+O projeto recorre à extração de dados diretamente da plataforma de simulação, e à apresentação dos mesmos. Não será uma plataforma de simulação, mas sim uma ferramenta para auxiliar a tomada de decisão.
 
 \noindent \textbf{Sistemas de apoio à decisão}
 \label{sec:sad}
@@ -63,7 +63,7 @@ Na prática, um \gls{sad} é responsável por recolher, organizar e processar gr
 
 Estes sistemas são particularmente úteis em contextos onde há grande complexidade como por exemplo, na gestão empresarial, em análises financeiras, ou na análise de mercados. Num ambiente académico, como é o caso da plataforma usada neste projeto, um \gls{sad} ajuda os estudantes a perceber que decisões tomar, mostrando dados históricos para que possam ser identificadas tendências ou padrões.
 
-É importante reforçar que o \gls{sad} não substitui o utilizador. Em vez disso, aumenta a capacidade do utilizador de interpretar a informação disponível e tomar decisões, reduzindo o risco de erro e aumentando a confiança. Estes sistemas podem ser plataformas criadas especificamente para o efeito, ou podem ser derivadas de outras plataformas como \textit{PowerBI}, \textit{Tableau}, \textit{Grafana}, ou outras ferramentas de visualização de dados.
+É importante reforçar que o \gls{sad} não substitui o utilizador. Em vez disso, aumenta a capacidade do utilizador de interpretar a informação disponível e tomar decisões, reduzindo o risco de erro e aumentando a confiança. Estes sistemas podem ser plataformas criadas especificamente para o efeito, ou podem ser derivadas de outras plataformas como \textit{PowerBI}\cite{powerbi}, \textit{Tableau}\cite{tableau}, \textit{Grafana}\cite{grafana}, ou outras ferramentas de visualização de dados.
 
 %%________________________________________________________________________
 \chapter{Modelo Proposto}
@@ -127,9 +127,9 @@ Com base nos requisitos funcionais e não funcionais identificados na secção~\
 
 Na figura~\ref{fig:umlCasosUtilizacao} podemos ver os atores e os casos de utilização da aplicação, que são os seguintes:
 \begin{itemize}
-    \item \textbf{Utilizador} É o ator principal, responsável por interagir com a aplicação. Pode criar conta, iniciar sessão, carregar ficheiros, visualizar gráficos, entre outras ações.
-    \item \textbf{Base de Dados (DB)} Responsável por armazenar dados dos ficheiros carregados e metadados associados, e os \textit{quarters} criados pelo utilizador.
-    \item \textbf{Sistema de Ficheiros} Responsável pelo armazenamento físico dos ficheiros carregados.
+    \item \textbf{Utilizador:} É o ator principal, responsável por interagir com a aplicação. Pode criar conta, iniciar sessão, carregar ficheiros, visualizar gráficos, entre outras ações.
+    \item \textbf{Base de Dados (DB):} Responsável por armazenar dados dos ficheiros carregados e metadados associados, e os \textit{quarters} criados pelo utilizador.
+    \item \textbf{Sistema de Ficheiros:} Responsável pelo armazenamento físico dos ficheiros carregados.
 \end{itemize}
 
 
@@ -162,12 +162,12 @@ Neste capitulo iremos descrever as bases nas quais fundamentamos o projeto, e al
 
 A \textit{Marketplace Simulations} \cite{MarketplaceSim_2025} é uma empresa que desenvolve plataformas de simulação para fins educativos, ou seja, ferramentas que colocam os estudantes numa espécie de jogo onde cada equipa gere a sua própria empresa e compete com os colegas em cenários simulados. Acabam então por funcionar como laboratórios virtuais que podem ser usados no ensino superior, onde os alunos aplicam os conceitos aprendidos numa experiência em contexto educativo.
 
-No caso concreto do projeto, a aplicação em questão chama-se \textit{International Corporate Management} (referida neste relatório como plataforma de simulação), e é utilizada tipicamente no último semestre, na cadeira Projeto de Simulação em Negócios Internacionais da Licenciatura de Comércio e Negócios Internacionais \cite{FUC_ISCAL_2025}, que tem a interface apresentada na figura \ref{fig:marketplace1}.
+No caso concreto do projeto, a plataforma de simulação é utilizada tipicamente no último semestre, na cadeira Projeto de Simulação em Negócios Internacionais da Licenciatura de Comércio e Negócios Internacionais \cite{FUC_ISCAL_2025}, que tem a interface apresentada na figura \ref{fig:marketplace1}.
 
 \begin{figure}[h]
     \centering
     \includegraphics[max width=\textwidth]{./img/marketplace1}
- \caption{Captura de ecrã da aplicação \textit{International Corporate Management}}
+ \caption{Captura de ecrã da aplicação de simulação}
  \label{fig:marketplace1}
  \end{figure}
 
@@ -179,16 +179,16 @@ A simulação está dividida em secções, cada uma representando uma área dist
 
 Cada secção representa também uma área onde os alunos têm de tomar decisões. As decisões variam consoante o tipo de secção, como por exemplo, na secção \textit{Customer Needs}, os alunos devem decidir que segmentos pretendem servir e com que marcas. Estas decisões são submetidas no final de cada \textit{quarter}, influenciando os resultados do seguinte periodo, que por sua vez geram novos dados para análise.
 
-A plataforma \textit{International Corporate Management} permite exportar os dados de cada secção em ficheiros \textit{Excel}, sendo que cada ficheiro está associado a uma destas secções como por exemplo a secção\textit{Customer Needs}, entre outras.
+A plataforma de simulação permite exportar os dados de cada secção em ficheiros \textit{Excel}, sendo que cada ficheiro está associado a uma destas secções como por exemplo a secção \textit{Customer Needs}, entre outras.
 
 Para a análise, os alunos têm à disposição os dados, na plataforma, nas várias secções disponiveis que na sua maioria são apresentados em tabelas, o que faz com que os alunos saltem entre secções, ou tenham de fazer gráficos à mão ou em último caso, extrair a informação da plataforma, não sendo então prático analisar a informação só pela plataforma de simulação.
 
-Esta plataforma apresenta outros desafios, não é de código aberto pelo que não dá para perceber os seus algoritmos internos e só no contexto da unidade curricular é que se percebe o seu propósito, tornando dificil explicar o seu funcionamento fora do contexto da unidade curricular.
+Esta plataforma levanta outros desafios. Como não é de código aberto, não é possível perceber como funcionam os seus algoritmos internos, e o seu propósito só se torna evidente no contexto da unidade curricular, o que dificulta bastante explicar o seu funcionamento fora desse contexto.
 
-\subsection{\textit{Pipelines Extract, Transform Load}}
+\subsection{\textit{Extract, Transform Load}}
 \label{ch:etl}
 
-Uma \textit{pipeline} \gls{etl} é um processo utilizado em sistemas de tratamento e integração de dados, com o objetivo de mover dados de uma ou mais fontes para um destino, geralmente uma base de dados ou plataformas específicos para a análise de dados \cite{vassiliadis2009survey}. Uma \textit{pipeline} \gls{etl} é composta por três fases principais:
+Uma \textit{pipeline} \gls{etl} é um padrão utilizado em sistemas de tratamento e integração de dados, com o objetivo de mover dados de uma ou mais fontes para um destino, geralmente uma base de dados ou plataformas específicos para a análise de dados \cite{vassiliadis2009survey}. Uma \textit{pipeline} \gls{etl} é composta por três fases principais:
 
 \begin{itemize}
   \item \textit{Extract} (Extrair): Consiste em recolher os dados das fontes de informação, que podem incluir bases de dados relacionais, APIs externas, sensores, entre outros. Esta fase preocupa-se com a capacidade de ler dados e de confirmar que são possíveis de extrair.  Exemplos de ferramentas que podem ser utilizadas nesta fase incluem o \textit{Apache NiFi} \cite{apache_nifi}, \textit{Fivetran} \cite{fivetran}, \textit{Airbyte} \cite{airbyte} e o \textit{Google Cloud Dataflow} \cite{dataflow}.
@@ -436,15 +436,15 @@ Para a persistência de dados, utilizámos a aplicação de gestão de bases de 
 
 \subsection{Docker}
 
-O \textit{Docker} foi utilizado neste projeto, tanto para desenvolvimento como para ambientes de produção. A principal vantagem é a criação de ambientes de execução consistentes e isolados, garantindo que a aplicação corre da mesma forma em diferentes máquinas, sem conflitos de dependências ou configurações, e consistente em vários sistemas operativos. 
+O \textit{Docker}\cite{docker} foi utilizado neste projeto, tanto para desenvolvimento como para ambientes de produção. A principal vantagem é a criação de ambientes de execução consistentes e isolados, garantindo que a aplicação corre da mesma forma em diferentes máquinas, sem conflitos de dependências ou configurações, e consistente em vários sistemas operativos. 
 
-Existem vários \textit{runtimes} compatíveis com \textit{Docker}, e devido ao modelo de negócio da empresa \textit{Docker} (que adotou um modelo pago), optámos por usar o \textit{Rancher} (uma aplicação com uma \gls{api} compatível com \textit{Docker}) para o desenvolvimento, e o \textit{Docker Engine} para ambientes de produção.
+Existem vários \textit{runtimes} compatíveis com \textit{Docker}\cite{docker}, e devido ao modelo de negócio da empresa \textit{Docker}\cite{docker} (que adotou um modelo pago), optámos por usar o \textit{Rancher Desktop}\cite{rancherdesktop} (uma aplicação com uma \gls{api} compatível com \textit{Docker}) para o desenvolvimento, e o \textit{Docker Engine}\cite{docker} para ambientes de produção.
 
 Durante o desenvolvimento, o \textit{Docker} facilitou a orquestração dos vários serviços usados (a aplicação \textit{Django}, a base de dados, e o servidor \gls{http} \textit{Nginx} configurado como \textit{reverse proxy}), através de ficheiros \texttt{Dockerfile} e \texttt{docker-compose.yml}. Isto permitiu-nos montar o ambiente da aplicação, sem necessidade de instalações manuais.
 
 Para produção, o \textit{Docker} permite recriar um ambiente de produção sempre com a mesma configuração e gerir os vários serviços que a aplicação utiliza, o que facilita o processo de \textit{deploy}, e escalabilidade futura. Esta abordagem garante que o código testado é exatamente o que será executado em produção, reduzindo erros e aumentando a estabilidade da aplicação.
 
-O \textit{Docker} foi também utilizado durante o desenvolvimento deste relatório, porque permitiu-nos ter um ambiente \textit{LaTex} configurado com todas as extensões apenas com um único comando no terminal sem instalar aplicações.
+O \textit{Docker}\cite{docker} foi também utilizado durante o desenvolvimento deste relatório, porque permitiu-nos ter um ambiente \textit{LaTex} configurado com todas as extensões apenas com um único comando no terminal sem instalar aplicações.
 
 \section{Outras ferramentas utilizadas}
 \label{sec:tools}
@@ -454,7 +454,7 @@ Além das tecnologias centrais utilizadas no projeto, foi também fundamental a 
 \begin{itemize}
     \item \textbf{Git \cite{git} e Github \cite{github}}: Para assegurar o controlo de versões, foi utilizado a aplicação \textit{Git}, em conjunto com a plataforma \textit{Github}. Esta combinação permitiu não só manter um histórico das alterações feitas e reverter alterações que podiam ter introduzido defeitos na aplicação
 
-    \item \textbf{Notion \cite{notion}}: A rganização do trabalho foi feita na plataforma \textit{Notion}. Esta aplicação é prática de fácil de usar e permitiu-nos para planear as tarefas e acompanhar o progresso das diferentes fases do projeto e também tirar notas durante o desenvolvimento, que foram importantes para o desenvolvimento do relatório.
+    \item \textbf{Notion \cite{notion}}: A organização do trabalho foi feita na plataforma \textit{Notion}. Esta aplicação é prática de fácil de usar e permitiu-nos para planear as tarefas e acompanhar o progresso das diferentes fases do projeto e também tirar notas durante o desenvolvimento, que foram importantes para o desenvolvimento do relatório.
 
     \item \textbf{\gls{vscode}\cite{vscode}}: Como editor, foi utilizado o editor \gls{vscode}. Através da instalação de extensões, foi possível adaptar o \gls{vscode} às necessidades do projeto, melhorando a experiência de programação.
 \end{itemize}
