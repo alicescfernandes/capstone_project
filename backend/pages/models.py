@@ -127,7 +127,8 @@ class ExcelFile(models.Model):
                         ChartData.objects
                         .filter(
                             quarter_file__quarter=quarter,
-                            sheet_name_slug=slug
+                            sheet_name_slug=slug,
+                            user=self.user,
                         )
                         .exclude(quarter_file__id=excel_file_id)
                         .order_by('-quarter_file__uploaded_at') 

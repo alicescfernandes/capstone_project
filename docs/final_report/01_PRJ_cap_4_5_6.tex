@@ -165,7 +165,6 @@ A aplicação utiliza três modelos, cada um com um papel específico na gestão
  \label{fig:er-diagram}
  \end{figure}
 
-
 O nosso modelo de dados é composto por três modelos principais: \textit{Quarter}, \textit{ExcelFile} e \textit{ChartData}, cada um com um papel específico no contexto da aplicação.
 
 \textbf{Quarter:} Representa um trimestre específico para um utilizador. Cada \textit{quarter} tem:
@@ -194,6 +193,21 @@ O nosso modelo de dados é composto por três modelos principais: \textit{Quarte
 \end{itemize}
 
 A utilização de identificadores \gls{uuid} foi importante uma vez que, para além de identificar unicamente cada instância da entidade, faz com que não seja possível aceder aos dados só a aumentar o identificador, como se fosse o caso se o identificador fosse um número inteiro sequencial. O \textit{Django} já disponibiliza uma chave primária em cada modelo por omissão, que é um número sequencial inteiro.
+
+A consistência é assegurada através da estrutura hierárquica dos modelos: cada \textit{Quarter} pertence unicamente a um \textit{User}, e cada \textit{ExcelFile} pertence a um \textit{Quarter}. A lógica da aplicação impede que um utilizador associe ficheiros a \textit{Quarters} que não lhe pertencem, reforçando a integridade através do controlo de permissões e da autenticação. Esta arquitetura garante que não existam associações inválidas ou dados soltos no sistema.  
+
+A associação utilizador e \textit{quarters} foi nao só como forma de organização, mas também como para controlar o acesso. Esta relação permite à aplicação apresentar \textit{quarters} de forma independente dos ficheiros carregados, o que é útil, por exemplo, para preparar a interface mesmo antes de existirem dados disponíveis (utilizadores podem criar \textit{quarters} mesmo sem ter ficheiros carregados). Além disso, ao filtrar os \textit{quarters} diretamente pelo utilizador autenticado, garante que cada utilizador só consegue visualizar e editar os seus próprios \textit{quarters}, evitando que um aluno consiga ver dados que não foram carregados pelo mesmo.
+
+\begin{lstlisting}[language=Python, caption={Excerto do código \textit{Python} do \textit{endpoint} para listagem de \textit{quarters} }]
+class QuarterListAPIView(APIView):
+    def get(self, request):
+        # Obter todos os quarters do utilizador, para poder mostrar ao utilizador os quarters para onde pode carregar ficheiros
+        quarters = Quarter.objects.filter(user=request.user)
+        last_quarter = quarters[0]
+       
+        # restante código que valida parâmetros e retorna resposta JSON com os dados do quarter
+\end{lstlisting}
+
 
 \subsubsection{Gestão de Utilizadores}
 
