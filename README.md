@@ -2,8 +2,6 @@
 
 The final project for my degree, that is a dashboard to help visualize data.
 
-![](./demo.mov)
-
 <video width="500" controls>
   <source src="demo.mov" type="video/mp4">
 </video>
