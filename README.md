@@ -2,7 +2,9 @@
 
 The final project for my degree, that is a dashboard to help visualize data.
 
+<img src="image.png" width=800>
 <video width="500" controls>
+
   <source src="demo.mp4" type="video/mp4">
 </video>
 
