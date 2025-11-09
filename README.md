@@ -1,6 +1,8 @@
 # Django Final Project
 
-A modern, responsive Django website with multiple pages and clean design.
+The final project for my degree, that is a dashboard to help visualize data.
+
+![](./demo.mov)
 
 ## Requirements
 
@@ -13,10 +15,10 @@ You must have a **Docker runtime** installed, you can either install **Docker De
 ## Quick Start
 
 1. Setup a `.env.dev` on the `infra` folder
-Copy the contents of `infra/.env.example` and save the changes as a new file. Use the name `.env.dev`
+   Copy the contents of `infra/.env.example` and save the changes as a new file. Use the name `.env.dev`
 
 2. Start the development environment
-This will ensure that you get the correct dependencies installed and also a Postgres DB ready to go.
+   This will ensure that you get the correct dependencies installed and also a Postgres DB ready to go.
 
 ```bash
 docker-compose up --build
@@ -25,7 +27,7 @@ docker-compose up --build
 3. Visit <http://localhost:8000/> in your browser
 
 4. Build assets if changing JS or CSS
-Assets are built separately
+   Assets are built separately
 
 ```sh
 cd backend
@@ -83,13 +85,16 @@ python3 manage.py runserver
 ## Troubleshooting
 
 1. If scripts are not executable:
+
    - Run `chmod +x *.sh` to make scripts executable
 
 2. If Django is not found:
+
    - Make sure your virtual environment is activated
    - Run `pip3 install -r requirements.txt`
 
 3. If migrations fail:
+
    - Run `python3 manage.py makemigrations`
    - Then `python3 manage.py migrate`
 
