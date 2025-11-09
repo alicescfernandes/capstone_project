@@ -4,6 +4,8 @@ The final project for my degree, that is a dashboard to help visualize data.
 
 ![](./demo.mov)
 
+<video src="./demo.mov"  width=500></video>
+
 ## Requirements
 
 You must have installed a **Python** version bigger than 3.9. For this project, the development was done under **3.12**
